@@ -1,0 +1,484 @@
+openapi: "3.0.2"
+info:
+  title: GoCommerce
+  version: "1.0"
+
+servers:
+  - url: http://localhost:8090
+  - url: https://backend.bjoetiek-y.be
+
+paths:
+  /public/categories:
+    get:
+      description: List categories
+      tags: ["Categories"]
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
+  /public/categories/{id}:
+    get:
+      description: Get category details
+      tags: ["Categories"]
+      security: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of the category
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+
+  /admin/categories:
+    get:
+      description: List categories
+      tags: ["Categories"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
+    post:
+      description: Add category
+      tags: ["Categories"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+
+  /admin/categories/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: ID of the category
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      description: Get category details
+      tags: ["Categories"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+
+    put:
+      description: Update category
+      tags: ["Categories"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+
+    delete:
+      description: Delete category
+      tags: ["Categories"]
+      responses:
+        "200":
+          description: OK
+
+  /admin/images/{id}:
+    put:
+      description: Upload image for object (Category, Manufacturer, ...)
+      tags: ["Images"]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the object
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        "200":
+          description: OK
+
+  /public/manufacturers:
+    get:
+      description: List manufacturers
+      tags: ["Manufacturers"]
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Manufacturer"
+
+  /public/manufacturers/{id}:
+    get:
+      description: Get manufacturer details
+      tags: ["Manufacturers"]
+      security: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of the manufacturer
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Manufacturer"
+
+  /admin/manufacturers:
+    get:
+      description: List manufacturers
+      tags: ["Manufacturers"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Manufacturer"
+
+    post:
+      description: Add manufacturer
+      tags: ["Manufacturers"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Manufacturer"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Manufacturer"
+
+  /admin/manufacturers/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: ID of the manufacturer
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      description: Get manufacturer details
+      tags: ["Manufacturers"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Manufacturer"
+
+    put:
+      description: Update manufacturer
+      tags: ["Manufacturers"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Manufacturer"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Manufacturer"
+
+    delete:
+      description: Delete manufacturer
+      tags: ["Manufacturers"]
+      responses:
+        "200":
+          description: OK
+
+  /public/products:
+    get:
+      description: List products
+      tags: ["Products"]
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+  /public/products/{id}:
+    get:
+      description: Get product details
+      tags: ["Products"]
+      security: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of the product
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Product"
+                  - type: object
+                    properties:
+                      manufacturer:
+                        $ref: "#/components/schemas/Manufacturer"
+
+  /admin/products:
+    get:
+      description: List products
+      tags: ["Products"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+    post:
+      description: Add product
+      tags: ["Products"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /admin/products/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: ID of the product
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      description: Get product details
+      tags: ["Products"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Product"
+                  - type: object
+                    properties:
+                      manufacturer:
+                        $ref: "#/components/schemas/Manufacturer"
+
+    put:
+      description: Update product
+      tags: ["Products"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+    delete:
+      description: Delete product
+      tags: ["Products"]
+      responses:
+        "200":
+          description: OK
+
+components:
+  schemas:
+    Header:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "9ec47752-b691-4eb1-967a-99cdb3930de3"
+          readOnly: True
+
+    TimestampedHeader:
+      allOf:
+        - $ref: "#/components/schemas/Header"
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+              example: "2020-12-23T10:00:00Z"
+              readOnly: True
+            updated_at:
+              type: string
+              format: date-time
+              example: "2020-12-24T11:30:00Z"
+              readOnly: True
+
+    Product:
+      allOf:
+        - $ref: "#/components/schemas/TimestampedHeader"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: Gezichtsmasker
+            slug:
+              type: string
+              example: gezichtsmasker-14f291d3
+            description_short:
+              type: string
+            description_long:
+              type: string
+            price:
+              description: Price in cents
+              type: integer
+              example: 1500
+            category_ids:
+              type: array
+              items:
+                type: string
+                format: uuid
+            manufacturer_id:
+              type: string
+              format: uuid
+            status:
+              type: string
+              enum:
+                - AVAILABLE
+                - ARCHIVED
+            stock_count:
+              type: integer
+
+    Manufacturer:
+      allOf:
+        - $ref: "#/components/schemas/Header"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: Bjoetiek Y
+            website_url:
+              type: string
+              format: url
+              example: https://bjoetiek-y.be
+
+    Category:
+      allOf:
+        - $ref: "#/components/schemas/Header"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: Makeup & Cosmetica
+            description:
+              type: string
+            sort_order:
+              description: Should be sorted ascending by this column
+              type: integer
+            product_ids:
+              type: array
+              items:
+                type: string
+                format: uuid
+              readOnly: True
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+security:
+  - basicAuth: []
