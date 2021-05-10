@@ -35,7 +35,8 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
+            example: "9ec47752-b691-4eb1-967a-99cdb3930de3"
+
       responses:
         "200":
           description: OK
@@ -83,7 +84,7 @@ paths:
         required: true
         schema:
           type: string
-          format: uuid
+          example: "9ec47752-b691-4eb1-967a-99cdb3930de3"
 
     get:
       description: Get category details
@@ -131,7 +132,7 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
+            example: "9ec47752-b691-4eb1-967a-99cdb3930de3"
       requestBody:
         content:
           multipart/form-data:
@@ -173,7 +174,7 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
+            example: "9ec47752-b691-4eb1-967a-99cdb3930de3"
       responses:
         "200":
           description: OK
@@ -221,7 +222,7 @@ paths:
         required: true
         schema:
           type: string
-          format: uuid
+          example: "9ec47752-b691-4eb1-967a-99cdb3930de3"
 
     get:
       description: Get manufacturer details
@@ -285,7 +286,7 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
+            example: "9ec47752-b691-4eb1-967a-99cdb3930de3"
       responses:
         "200":
           description: OK
@@ -338,7 +339,7 @@ paths:
         required: true
         schema:
           type: string
-          format: uuid
+          example: "9ec47752-b691-4eb1-967a-99cdb3930de3"
 
     get:
       description: Get product details
