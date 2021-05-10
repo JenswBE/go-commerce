@@ -8,7 +8,7 @@ servers:
   - url: https://backend.bjoetiek-y.be
 
 paths:
-  /public/categories:
+  /public/categories/:
     get:
       description: List categories
       tags: ["Categories"]
@@ -23,7 +23,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Category"
 
-  /public/categories/{id}:
+  /public/categories/{id}/:
     get:
       description: Get category details
       tags: ["Categories"]
@@ -44,7 +44,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Category"
 
-  /admin/categories:
+  /admin/categories/:
     get:
       description: List categories
       tags: ["Categories"]
@@ -75,7 +75,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Category"
 
-  /admin/categories/{id}:
+  /admin/categories/{id}/:
     parameters:
       - name: id
         in: path
@@ -120,7 +120,7 @@ paths:
         "200":
           description: OK
 
-  /admin/images/{id}:
+  /admin/images/{id}/:
     put:
       description: Upload image for object (Category, Manufacturer, ...)
       tags: ["Images"]
@@ -146,7 +146,7 @@ paths:
         "200":
           description: OK
 
-  /public/manufacturers:
+  /public/manufacturers/:
     get:
       description: List manufacturers
       tags: ["Manufacturers"]
@@ -161,7 +161,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Manufacturer"
 
-  /public/manufacturers/{id}:
+  /public/manufacturers/{id}/:
     get:
       description: Get manufacturer details
       tags: ["Manufacturers"]
@@ -182,7 +182,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Manufacturer"
 
-  /admin/manufacturers:
+  /admin/manufacturers/:
     get:
       description: List manufacturers
       tags: ["Manufacturers"]
@@ -213,7 +213,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Manufacturer"
 
-  /admin/manufacturers/{id}:
+  /admin/manufacturers/{id}/:
     parameters:
       - name: id
         in: path
@@ -258,7 +258,7 @@ paths:
         "200":
           description: OK
 
-  /public/products:
+  /public/products/:
     get:
       description: List products
       tags: ["Products"]
@@ -273,7 +273,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Product"
 
-  /public/products/{id}:
+  /public/products/{id}/:
     get:
       description: Get product details
       tags: ["Products"]
@@ -299,7 +299,7 @@ paths:
                       manufacturer:
                         $ref: "#/components/schemas/Manufacturer"
 
-  /admin/products:
+  /admin/products/:
     get:
       description: List products
       tags: ["Products"]
@@ -330,7 +330,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Product"
 
-  /admin/products/{id}:
+  /admin/products/{id}/:
     parameters:
       - name: id
         in: path

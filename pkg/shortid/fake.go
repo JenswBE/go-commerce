@@ -13,8 +13,8 @@ func NewFakeService() *Fake {
 }
 
 // Encode converts an UUID to a short ID
-func (f *Fake) Encode(input uuid.UUID) (string, error) {
-	return input.String(), nil
+func (f *Fake) Encode(input uuid.UUID) string {
+	return input.String()
 }
 
 // Decode converts a short ID to an UUID

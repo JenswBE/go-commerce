@@ -1,6 +1,8 @@
 package shortid
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/itchyny/base58-go"
 )
@@ -18,12 +20,14 @@ func NewBase58Service() *Base58 {
 }
 
 // Encode converts an UUID to a short ID
-func (b *Base58) Encode(input uuid.UUID) (string, error) {
-	encoded, err := b.encoding.Encode(input[:])
+func (b *Base58) Encode(input uuid.UUID) string {
+	// Can't fail with enforced UUID input
+	inputString := fmt.Sprintf("%x", input[:])
+	encoded, err := b.encoding.Encode([]byte(inputString))
 	if err != nil {
-		return "", err
+		panic(err.Error())
 	}
-	return string(encoded), nil
+	return string(encoded)
 }
 
 // Decode converts a short ID to an UUID
