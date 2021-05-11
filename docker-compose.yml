@@ -1,0 +1,11 @@
+version: "2.4"
+
+services:
+  db:
+    image: postgres:13-alpine
+    container_name: db
+    environment:
+      - "POSTGRES_USER=go_commerce"
+      - "POSTGRES_PASSWORD=go_commerce"
+    ports:
+      - "5432:5432"
