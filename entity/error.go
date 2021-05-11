@@ -1,6 +1,31 @@
 package entity
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
+
+// GoComError allows to bundle a status with the original error.
+// This allows to fine-grained response codes at the API level.
+type GoComError struct {
+	// HTTP status code
+	Status int
+
+	// Original error
+	Err error
+}
+
+func (e *GoComError) Error() string {
+	return fmt.Sprintf("%d - %s", e.Status, e.Err.Error())
+}
+
+// NewError returns a new GoComError
+func NewError(status int, err error) error {
+	return &GoComError{
+		Status: status,
+		Err:    err,
+	}
+}
 
 // ErrInvalidEntity indicates the provided entity is invalid
 var ErrInvalidEntity = errors.New("invalid entity")

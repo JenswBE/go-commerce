@@ -5,7 +5,6 @@ type Category struct {
 	ID          ID
 	Name        string
 	Description string
-	children    []*Category
 }
 
 // NewCategory creates a new category
@@ -15,7 +14,7 @@ func NewCategory(name, description string) (*Category, error) {
 	}
 	err := b.Validate()
 	if err != nil {
-		return nil, ErrInvalidEntity
+		return nil, NewError(400, ErrInvalidEntity)
 	}
 	return b, nil
 }

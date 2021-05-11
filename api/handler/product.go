@@ -7,20 +7,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AddProductReadRoutes(rg *gin.RouterGroup, service product.Usecase) {
+func AddProductReadRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service product.Usecase) {
 	group := rg.Group("/manufacturers")
-	group.GET("/", listManufacturers(service))
-	group.GET("/:id", getManufacturer(service))
+	group.GET("/", listManufacturers(p, service))
+	group.GET("/:id", getManufacturer(p, service))
 }
 
-func AddProductWriteRoutes(rg *gin.RouterGroup, service product.Usecase) {
+func AddProductWriteRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service product.Usecase) {
 	group := rg.Group("/manufacturers")
-	group.POST("/", createManufacturer(service))
-	group.PUT("/:id", updateManufacturer(service))
-	group.DELETE("/:id", deleteManufacturer(service))
+	group.POST("/", createManufacturer(p, service))
+	group.PUT("/:id", updateManufacturer(p, service))
+	group.DELETE("/:id", deleteManufacturer(p, service))
 }
 
-func listManufacturers(service product.Usecase) gin.HandlerFunc {
+func listManufacturers(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Call service
 		search := c.Query("s")
@@ -34,20 +34,18 @@ func listManufacturers(service product.Usecase) gin.HandlerFunc {
 
 		// Handle errors
 		if err != nil {
-			c.String(400, err.Error())
+			c.String(errToResponse(err))
 			return
 		}
 
 		// Handle success
-		p := presenter.New()
 		c.JSON(200, p.ManufacturersListFromEntity(result))
 	}
 }
 
-func getManufacturer(service product.Usecase) gin.HandlerFunc {
+func getManufacturer(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		p := presenter.New()
 		id, ok := parseParamID(c, p)
 		if !ok {
 			return // Response already set on Gin context
@@ -56,7 +54,7 @@ func getManufacturer(service product.Usecase) gin.HandlerFunc {
 		// Call service
 		manufacturer, err := service.GetManufacturer(id)
 		if err != nil {
-			c.String(400, err.Error())
+			c.String(errToResponse(err))
 			return
 		}
 
@@ -65,32 +63,30 @@ func getManufacturer(service product.Usecase) gin.HandlerFunc {
 	}
 }
 
-func createManufacturer(service product.Usecase) gin.HandlerFunc {
+func createManufacturer(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse body
 		body := &presenter.ManufacturerData{}
 		if err := c.BindJSON(body); err != nil {
-			c.String(400, err.Error())
+			c.String(errToResponse(err))
 			return
 		}
 
 		// Call service
 		manufacturer, err := service.CreateManufacturer(body.Name, body.WebsiteURL)
 		if err != nil {
-			c.String(400, err.Error())
+			c.String(errToResponse(err))
 			return
 		}
 
 		// Handle success
-		p := presenter.New()
 		c.JSON(200, p.ManufacturerFromEntity(manufacturer))
 	}
 }
 
-func updateManufacturer(service product.Usecase) gin.HandlerFunc {
+func updateManufacturer(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		p := presenter.New()
 		id, ok := parseParamID(c, p)
 		if !ok {
 			return // Response already set on Gin context
@@ -99,21 +95,21 @@ func updateManufacturer(service product.Usecase) gin.HandlerFunc {
 		// Parse body
 		body := &presenter.ManufacturerData{}
 		if err := c.BindJSON(body); err != nil {
-			c.String(400, err.Error())
+			c.String(errToResponse(err))
 			return
 		}
 
 		// Build entity
 		e, err := p.ManufacturerToEntity(id, *body)
 		if err != nil {
-			c.String(400, err.Error())
+			c.String(errToResponse(err))
 			return
 		}
 
 		// Call service
 		manufacturer, err := service.UpdateManufacturer(e)
 		if err != nil {
-			c.String(400, err.Error())
+			c.String(errToResponse(err))
 			return
 		}
 
@@ -122,10 +118,9 @@ func updateManufacturer(service product.Usecase) gin.HandlerFunc {
 	}
 }
 
-func deleteManufacturer(service product.Usecase) gin.HandlerFunc {
+func deleteManufacturer(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		p := presenter.New()
 		id, ok := parseParamID(c, p)
 		if !ok {
 			return // Response already set on Gin context
@@ -134,7 +129,7 @@ func deleteManufacturer(service product.Usecase) gin.HandlerFunc {
 		// Call service
 		err := service.DeleteManufacturer(id)
 		if err != nil {
-			c.String(400, err.Error())
+			c.String(errToResponse(err))
 			return
 		}
 
