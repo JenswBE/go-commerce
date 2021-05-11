@@ -15,6 +15,14 @@ x-param_id: &param_id
   schema:
     type: string
 
+x-param_search: &param_search
+  name: s
+  in: query
+  description: Search objects
+  required: false
+  schema:
+    type: string
+
 x-404_not_found: &404_not_found
   "404":
     description: Not Found
@@ -30,6 +38,8 @@ paths:
       description: List categories
       tags: ["Categories"]
       security: []
+      parameters:
+        - *param_search
       responses:
         "200":
           description: OK
@@ -60,6 +70,8 @@ paths:
     get:
       description: List categories
       tags: ["Categories"]
+      parameters:
+        - *param_search
       responses:
         "200":
           description: OK
@@ -155,6 +167,8 @@ paths:
       description: List manufacturers
       tags: ["Manufacturers"]
       security: []
+      parameters:
+        - *param_search
       responses:
         "200":
           description: OK
@@ -185,6 +199,8 @@ paths:
     get:
       description: List manufacturers
       tags: ["Manufacturers"]
+      parameters:
+        - *param_search
       responses:
         "200":
           description: OK
@@ -259,6 +275,8 @@ paths:
       description: List products
       tags: ["Products"]
       security: []
+      parameters:
+        - *param_search
       responses:
         "200":
           description: OK
@@ -294,6 +312,8 @@ paths:
     get:
       description: List products
       tags: ["Products"]
+      parameters:
+        - *param_search
       responses:
         "200":
           description: OK
@@ -376,7 +396,12 @@ components:
         id:
           type: string
           format: uuid
-          example: "9ec47752-b691-4eb1-967a-99cdb3930de3"
+          example: "4f41ce59-912d-49ea-a2b5-5a19d8f0ea3f"
+          readOnly: True
+        short_id:
+          type: string
+          description: Compressed representation of ID
+          example: "AneTxNh7GB5uD2HoXvwF2E"
           readOnly: True
 
     TimestampedHeader:
