@@ -7,13 +7,63 @@ import (
 )
 
 type Inmem struct {
+	categories    map[entity.ID]*entity.Category
 	manufacturers map[entity.ID]*entity.Manufacturer
 }
 
 func NewInmem() *Inmem {
 	return &Inmem{
+		categories:    map[entity.ID]*entity.Category{},
 		manufacturers: map[entity.ID]*entity.Manufacturer{},
 	}
+}
+
+func (r *Inmem) GetCategory(id entity.ID) (*entity.Category, error) {
+	// Get entity
+	e, ok := r.categories[id]
+	if !ok {
+		return nil, entity.ErrNotFound
+	}
+
+	// Return clone
+	clone := *e
+	return &clone, nil
+}
+
+func (r *Inmem) ListCategories() ([]*entity.Category, error) {
+	list := make([]*entity.Category, 0, len(r.categories))
+	for _, category := range r.categories {
+		clone := *category
+		list = append(list, &clone)
+	}
+	return list, nil
+}
+
+func (r *Inmem) CreateCategory(e *entity.Category) (*entity.Category, error) {
+	clone := *e
+	r.categories[e.ID] = &clone
+	return &clone, nil
+}
+
+func (r *Inmem) UpdateCategory(e *entity.Category) (*entity.Category, error) {
+	// Fetch category
+	_, err := r.GetCategory(e.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Replace with clone
+	clone := *e
+	r.categories[e.ID] = &clone
+	return &clone, nil
+}
+
+func (r *Inmem) DeleteCategory(id entity.ID) error {
+	if r.categories[id] == nil {
+		return entity.ErrNotFound
+	}
+	r.categories[id] = nil
+	return nil
 }
 
 func (r *Inmem) GetManufacturer(id entity.ID) (*entity.Manufacturer, error) {

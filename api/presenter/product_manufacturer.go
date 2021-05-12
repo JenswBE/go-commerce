@@ -6,8 +6,7 @@ import (
 )
 
 type Manufacturer struct {
-	ID      entity.ID `json:"id"`
-	ShortID string    `json:"short_id"`
+	ID string `json:"id"`
 	ManufacturerData
 }
 
@@ -18,8 +17,7 @@ type ManufacturerData struct {
 
 func (p *Presenter) ManufacturerFromEntity(e *entity.Manufacturer) Manufacturer {
 	return Manufacturer{
-		ID:      e.ID,
-		ShortID: p.shortIDService.Encode(e.ID),
+		ID: p.shortIDService.Encode(e.ID),
 		ManufacturerData: ManufacturerData{
 			Name:       e.Name,
 			WebsiteURL: e.WebsiteURL,
@@ -35,11 +33,11 @@ func (p *Presenter) ManufacturersListFromEntity(input []*entity.Manufacturer) []
 	return output
 }
 
-func (p *Presenter) ManufacturerToEntity(id uuid.UUID, data ManufacturerData) (*entity.Manufacturer, error) {
+func (p *Presenter) ManufacturerToEntity(id uuid.UUID, data ManufacturerData) *entity.Manufacturer {
 	// Build entity
 	return &entity.Manufacturer{
 		ID:         id,
 		Name:       data.Name,
 		WebsiteURL: data.WebsiteURL,
-	}, nil
+	}
 }

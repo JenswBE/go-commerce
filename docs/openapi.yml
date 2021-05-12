@@ -38,8 +38,6 @@ paths:
       description: List categories
       tags: ["Categories"]
       security: []
-      parameters:
-        - *param_search
       responses:
         "200":
           description: OK
@@ -55,8 +53,6 @@ paths:
       description: Get category details
       tags: ["Categories"]
       security: []
-      parameters:
-        - *param_id
       responses:
         "200":
           description: OK
@@ -137,7 +133,7 @@ paths:
       description: Delete category
       tags: ["Categories"]
       responses:
-        "200":
+        "204":
           description: OK
         <<: *404_not_found
 
@@ -266,7 +262,7 @@ paths:
       description: Delete manufacturer
       tags: ["Manufacturers"]
       responses:
-        "200":
+        "204":
           description: OK
         <<: *404_not_found
 
@@ -384,21 +380,21 @@ paths:
       description: Delete product
       tags: ["Products"]
       responses:
-        "200":
+        "204":
           description: OK
         <<: *404_not_found
 
 components:
   schemas:
+    ShortID:
+      type: string
+      description: Compressed representation of ID
+      example: "AneTxNh7GB5uD2HoXvwF2E"
+
     Header:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-          example: "4f41ce59-912d-49ea-a2b5-5a19d8f0ea3f"
-          readOnly: True
-        short_id:
           type: string
           description: Compressed representation of ID
           example: "AneTxNh7GB5uD2HoXvwF2E"
@@ -478,6 +474,8 @@ components:
               example: Makeup & Cosmetica
             description:
               type: string
+            parent_id:
+              $ref: "#/components/schemas/ShortID"
             sort_order:
               description: Should be sorted ascending by this column
               type: integer

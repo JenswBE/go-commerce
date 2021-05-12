@@ -5,12 +5,19 @@ type Category struct {
 	ID          ID
 	Name        string
 	Description string
+
+	// ID of the parent.
+	// uuid.Nil means it's a root category
+	ParentID ID
 }
 
 // NewCategory creates a new category
-func NewCategory(name, description string) (*Category, error) {
+func NewCategory(name, description string, parentID ID) (*Category, error) {
 	b := &Category{
-		Name: name,
+		ID:          NewID(),
+		Name:        name,
+		Description: description,
+		ParentID:    parentID,
 	}
 	err := b.Validate()
 	if err != nil {

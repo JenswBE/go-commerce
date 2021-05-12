@@ -7,19 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AddProductReadRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service product.Usecase) {
-	group := rg.Group("/manufacturers")
-	group.GET("/", listManufacturers(p, service))
-	group.GET("/:id", getManufacturer(p, service))
-}
-
-func AddProductWriteRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service product.Usecase) {
-	group := rg.Group("/manufacturers")
-	group.POST("/", createManufacturer(p, service))
-	group.PUT("/:id", updateManufacturer(p, service))
-	group.DELETE("/:id", deleteManufacturer(p, service))
-}
-
 func listManufacturers(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Call service
@@ -99,14 +86,8 @@ func updateManufacturer(p *presenter.Presenter, service product.Usecase) gin.Han
 			return
 		}
 
-		// Build entity
-		e, err := p.ManufacturerToEntity(id, *body)
-		if err != nil {
-			c.String(errToResponse(err))
-			return
-		}
-
 		// Call service
+		e := p.ManufacturerToEntity(id, *body)
 		manufacturer, err := service.UpdateManufacturer(e)
 		if err != nil {
 			c.String(errToResponse(err))
