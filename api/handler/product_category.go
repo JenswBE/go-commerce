@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/usecase/product"
 	"github.com/gin-gonic/gin"
@@ -46,7 +47,7 @@ func getCategory(p *presenter.Presenter, service product.Usecase) gin.HandlerFun
 func createCategory(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse body
-		body := &presenter.CategoryData{}
+		body := &openapi.Category{}
 		if err := c.BindJSON(body); err != nil {
 			c.String(errToResponse(err))
 			return
@@ -80,7 +81,7 @@ func updateCategory(p *presenter.Presenter, service product.Usecase) gin.Handler
 		}
 
 		// Parse body
-		body := &presenter.CategoryData{}
+		body := &openapi.Category{}
 		if err := c.BindJSON(body); err != nil {
 			c.String(errToResponse(err))
 			return

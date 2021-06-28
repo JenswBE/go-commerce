@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
-	"github.com/JenswBE/go-commerce/entity"
 	"github.com/JenswBE/go-commerce/usecase/product"
 	"github.com/gin-gonic/gin"
 )
@@ -10,16 +10,7 @@ import (
 func listManufacturers(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Call service
-		search := c.Query("s")
-		var err error
-		var result []*entity.Manufacturer
-		if search != "" {
-			result, err = service.SearchManufacturers(search)
-		} else {
-			result, err = service.ListManufacturers()
-		}
-
-		// Handle errors
+		result, err := service.ListManufacturers()
 		if err != nil {
 			c.String(errToResponse(err))
 			return
@@ -53,14 +44,14 @@ func getManufacturer(p *presenter.Presenter, service product.Usecase) gin.Handle
 func createManufacturer(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse body
-		body := &presenter.ManufacturerData{}
+		body := &openapi.Manufacturer{}
 		if err := c.BindJSON(body); err != nil {
 			c.String(errToResponse(err))
 			return
 		}
 
 		// Call service
-		manufacturer, err := service.CreateManufacturer(body.Name, body.WebsiteURL)
+		manufacturer, err := service.CreateManufacturer(body.GetName(), body.GetWebsiteUrl())
 		if err != nil {
 			c.String(errToResponse(err))
 			return
@@ -80,7 +71,7 @@ func updateManufacturer(p *presenter.Presenter, service product.Usecase) gin.Han
 		}
 
 		// Parse body
-		body := &presenter.ManufacturerData{}
+		body := &openapi.Manufacturer{}
 		if err := c.BindJSON(body); err != nil {
 			c.String(errToResponse(err))
 			return
