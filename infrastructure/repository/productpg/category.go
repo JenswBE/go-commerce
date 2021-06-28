@@ -1,8 +1,6 @@
 package productpg
 
 import (
-	"log"
-
 	"github.com/JenswBE/go-commerce/entity"
 	"github.com/JenswBE/go-commerce/infrastructure/repository/productpg/internal"
 	"github.com/google/uuid"
@@ -31,14 +29,13 @@ func (r *ProductPostgres) CreateCategory(e *entity.Category) (*entity.Category, 
 	if e.ParentID != uuid.Nil {
 		_, err := r.GetCategory(e.ParentID)
 		if err != nil {
-			return nil, translatePgError(err, "category")
+			return nil, err
 		}
 	}
 
 	// Create category
 	m := internal.CategoryEntityToPg(e)
 	err := r.db.Create(m).Error
-	log.Printf("CreateCategory error type: %T", err)
 	if err != nil {
 		return nil, translatePgError(err, "category")
 	}
@@ -50,7 +47,7 @@ func (r *ProductPostgres) UpdateCategory(e *entity.Category) (*entity.Category, 
 	if e.ParentID != uuid.Nil {
 		_, err := r.GetCategory(e.ParentID)
 		if err != nil {
-			return nil, translatePgError(err, "category")
+			return nil, err
 		}
 	}
 

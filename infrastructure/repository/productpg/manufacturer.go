@@ -23,15 +23,6 @@ func (r *ProductPostgres) ListManufacturers() ([]*entity.Manufacturer, error) {
 	return internal.ManufacturersListPgToEntity(manufacturers), nil
 }
 
-func (r *ProductPostgres) SearchManufacturers(query string) ([]*entity.Manufacturer, error) {
-	manufacturers := []*internal.Manufacturer{}
-	err := r.db.Where("name ILIKE ?", "%"+query+"%").Find(&manufacturers).Error
-	if err != nil {
-		return nil, translatePgError(err, "manufacturer")
-	}
-	return internal.ManufacturersListPgToEntity(manufacturers), nil
-}
-
 func (r *ProductPostgres) CreateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error) {
 	m := internal.ManufacturerEntityToPg(e)
 	err := r.db.Create(m).Error

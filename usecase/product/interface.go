@@ -8,7 +8,9 @@ type Reader interface {
 
 	GetManufacturer(id entity.ID) (*entity.Manufacturer, error)
 	ListManufacturers() ([]*entity.Manufacturer, error)
-	SearchManufacturers(query string) ([]*entity.Manufacturer, error)
+
+	GetProduct(id entity.ID) (*entity.Product, error)
+	ListProducts() ([]*entity.Product, error)
 }
 
 type Writer interface {
@@ -19,6 +21,10 @@ type Writer interface {
 	CreateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error)
 	UpdateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error)
 	DeleteManufacturer(id entity.ID) error
+
+	CreateProduct(e *entity.Product) (*entity.Product, error)
+	UpdateProduct(e *entity.Product) (*entity.Product, error)
+	DeleteProduct(id entity.ID) error
 }
 
 type Repository interface {
@@ -35,8 +41,13 @@ type Usecase interface {
 
 	GetManufacturer(id entity.ID) (*entity.Manufacturer, error)
 	ListManufacturers() ([]*entity.Manufacturer, error)
-	SearchManufacturers(query string) ([]*entity.Manufacturer, error)
 	CreateManufacturer(name, websiteURL string) (*entity.Manufacturer, error)
 	UpdateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error)
 	DeleteManufacturer(id entity.ID) error
+
+	GetProduct(id entity.ID) (*entity.Product, error)
+	ListProducts() ([]*entity.Product, error)
+	CreateProduct(name string, price int) (*entity.Product, error)
+	UpdateProduct(e *entity.Product) (*entity.Product, error)
+	DeleteProduct(id entity.ID) error
 }

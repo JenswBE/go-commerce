@@ -14,11 +14,6 @@ func (s *Service) ListManufacturers() ([]*entity.Manufacturer, error) {
 	return s.repo.ListManufacturers()
 }
 
-// SearchManufacturers searches for a manufacturer
-func (s *Service) SearchManufacturers(query string) ([]*entity.Manufacturer, error) {
-	return s.repo.SearchManufacturers(query)
-}
-
 // CreateManufacturer creates a new manufacturer
 func (s *Service) CreateManufacturer(name, websiteURL string) (*entity.Manufacturer, error) {
 	// Create entity

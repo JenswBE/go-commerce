@@ -1,20 +1,20 @@
 package product
 
 import (
-	"strings"
-
 	"github.com/JenswBE/go-commerce/entity"
 )
 
 type Inmem struct {
 	categories    map[entity.ID]*entity.Category
 	manufacturers map[entity.ID]*entity.Manufacturer
+	products      map[entity.ID]*entity.Product
 }
 
 func NewInmem() *Inmem {
 	return &Inmem{
 		categories:    map[entity.ID]*entity.Category{},
 		manufacturers: map[entity.ID]*entity.Manufacturer{},
+		products:      map[entity.ID]*entity.Product{},
 	}
 }
 
@@ -87,19 +87,6 @@ func (r *Inmem) ListManufacturers() ([]*entity.Manufacturer, error) {
 	return list, nil
 }
 
-func (r *Inmem) SearchManufacturers(query string) ([]*entity.Manufacturer, error) {
-	query = strings.ToLower(query)
-	list, _ := r.ListManufacturers()
-	var result []*entity.Manufacturer
-	for _, manufacturer := range list {
-		if strings.Contains(strings.ToLower(manufacturer.Name), query) {
-			// Found, no clone needed as ListManufacturers already returns a cloned list
-			result = append(result, manufacturer)
-		}
-	}
-	return result, nil
-}
-
 func (r *Inmem) CreateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error) {
 	clone := *e
 	r.manufacturers[e.ID] = &clone
@@ -124,5 +111,53 @@ func (r *Inmem) DeleteManufacturer(id entity.ID) error {
 		return entity.ErrNotFound
 	}
 	r.manufacturers[id] = nil
+	return nil
+}
+
+func (r *Inmem) GetProduct(id entity.ID) (*entity.Product, error) {
+	// Get entity
+	e, ok := r.products[id]
+	if !ok {
+		return nil, entity.ErrNotFound
+	}
+
+	// Return clone
+	clone := *e
+	return &clone, nil
+}
+
+func (r *Inmem) ListProducts() ([]*entity.Product, error) {
+	list := make([]*entity.Product, 0, len(r.products))
+	for _, product := range r.products {
+		clone := *product
+		list = append(list, &clone)
+	}
+	return list, nil
+}
+
+func (r *Inmem) CreateProduct(e *entity.Product) (*entity.Product, error) {
+	clone := *e
+	r.products[e.ID] = &clone
+	return &clone, nil
+}
+
+func (r *Inmem) UpdateProduct(e *entity.Product) (*entity.Product, error) {
+	// Fetch product
+	_, err := r.GetProduct(e.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Replace with clone
+	clone := *e
+	r.products[e.ID] = &clone
+	return &clone, nil
+}
+
+func (r *Inmem) DeleteProduct(id entity.ID) error {
+	if r.products[id] == nil {
+		return entity.ErrNotFound
+	}
+	r.products[id] = nil
 	return nil
 }
