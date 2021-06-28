@@ -15,14 +15,6 @@ x-param_id: &param_id
   schema:
     type: string
 
-x-param_search: &param_search
-  name: s
-  in: query
-  description: Search objects
-  required: false
-  schema:
-    type: string
-
 x-404_not_found: &404_not_found
   "404":
     description: Not Found
@@ -49,6 +41,9 @@ paths:
                   $ref: "#/components/schemas/Category"
 
   /public/categories/{id}/:
+    parameters:
+      - *param_id
+
     get:
       description: Get category details
       tags: ["Categories"]
@@ -66,8 +61,6 @@ paths:
     get:
       description: List categories
       tags: ["Categories"]
-      parameters:
-        - *param_search
       responses:
         "200":
           description: OK
@@ -163,8 +156,6 @@ paths:
       description: List manufacturers
       tags: ["Manufacturers"]
       security: []
-      parameters:
-        - *param_search
       responses:
         "200":
           description: OK
@@ -195,8 +186,6 @@ paths:
     get:
       description: List manufacturers
       tags: ["Manufacturers"]
-      parameters:
-        - *param_search
       responses:
         "200":
           description: OK
@@ -271,8 +260,6 @@ paths:
       description: List products
       tags: ["Products"]
       security: []
-      parameters:
-        - *param_search
       responses:
         "200":
           description: OK
@@ -308,8 +295,6 @@ paths:
     get:
       description: List products
       tags: ["Products"]
-      parameters:
-        - *param_search
       responses:
         "200":
           description: OK
