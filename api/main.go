@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/JenswBE/go-commerce/api/handler"
 	"github.com/JenswBE/go-commerce/api/presenter"
@@ -15,8 +16,14 @@ import (
 )
 
 func main() {
+	// Parse config
+	config, err := parseConfig()
+	if err != nil {
+		log.Fatalf("Failed to parse config: %s", err)
+	}
+
 	// DB
-	dsn := "host=localhost user=go_commerce password=go_commerce dbname=go_commerce port=5432"
+	dsn := buildDSN(config)
 	productDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to db: %s", err.Error())
@@ -44,5 +51,6 @@ func main() {
 	handler.AddProductWriteRoutes(admin, presenter, productService)
 
 	// Start Gin
-	router.Run(":8090")
+	port := strconv.Itoa(config.Server.Port)
+	router.Run(":" + port)
 }

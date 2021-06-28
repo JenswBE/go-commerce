@@ -1,2 +1,2 @@
 # go-commerce
-KISS backend for an ecommerce
+KISS backend for an e-commerce
