@@ -8,7 +8,7 @@ import (
 
 func (p *Presenter) ManufacturerFromEntity(e *entity.Manufacturer) openapi.Manufacturer {
 	m := openapi.NewManufacturer()
-	m.SetId(p.shortIDService.Encode(e.ID))
+	m.SetId(p.EncodeID(e.ID))
 	m.SetName(e.Name)
 	m.SetWebsiteUrl(e.WebsiteURL)
 	return *m

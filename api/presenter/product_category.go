@@ -10,12 +10,12 @@ import (
 
 func (p *Presenter) CategoryFromEntity(e *entity.Category) openapi.Category {
 	c := openapi.NewCategory()
-	c.SetId(p.shortIDService.Encode(e.ID))
+	c.SetId(p.EncodeID(e.ID))
 	c.SetName(e.Name)
 	c.SetDescription(e.Description)
 	c.SetParentId("")
 	if e.ParentID != uuid.Nil {
-		c.SetParentId(p.shortIDService.Encode(e.ParentID))
+		c.SetParentId(p.EncodeID(e.ParentID))
 	}
 	return *c
 }
@@ -39,7 +39,7 @@ func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*
 
 	// Parse parent ID
 	if category.GetParentId() != "" {
-		pID, err := p.shortIDService.Decode(category.GetParentId())
+		pID, err := p.ParseID(category.GetParentId())
 		if err != nil {
 			return nil, entity.NewError(400, errors.New("parent_id is invalid"))
 		}

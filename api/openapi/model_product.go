@@ -22,7 +22,6 @@ type Product struct {
 	CreatedAt        *time.Time `json:"created_at,omitempty"`
 	UpdatedAt        *time.Time `json:"updated_at,omitempty"`
 	Name             *string    `json:"name,omitempty"`
-	Slug             *string    `json:"slug,omitempty"`
 	DescriptionShort *string    `json:"description_short,omitempty"`
 	DescriptionLong  *string    `json:"description_long,omitempty"`
 	// Price in cents
@@ -176,38 +175,6 @@ func (o *Product) HasName() bool {
 // SetName gets a reference to the given string and assigns it to the Name field.
 func (o *Product) SetName(v string) {
 	o.Name = &v
-}
-
-// GetSlug returns the Slug field value if set, zero value otherwise.
-func (o *Product) GetSlug() string {
-	if o == nil || o.Slug == nil {
-		var ret string
-		return ret
-	}
-	return *o.Slug
-}
-
-// GetSlugOk returns a tuple with the Slug field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *Product) GetSlugOk() (*string, bool) {
-	if o == nil || o.Slug == nil {
-		return nil, false
-	}
-	return o.Slug, true
-}
-
-// HasSlug returns a boolean if a field has been set.
-func (o *Product) HasSlug() bool {
-	if o != nil && o.Slug != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetSlug gets a reference to the given string and assigns it to the Slug field.
-func (o *Product) SetSlug(v string) {
-	o.Slug = &v
 }
 
 // GetDescriptionShort returns the DescriptionShort field value if set, zero value otherwise.
@@ -447,9 +414,6 @@ func (o Product) MarshalJSON() ([]byte, error) {
 	}
 	if o.Name != nil {
 		toSerialize["name"] = o.Name
-	}
-	if o.Slug != nil {
-		toSerialize["slug"] = o.Slug
 	}
 	if o.DescriptionShort != nil {
 		toSerialize["description_short"] = o.DescriptionShort

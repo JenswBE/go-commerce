@@ -14,6 +14,10 @@ func AddProductReadRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service p
 	groupManufacturers := rg.Group("/manufacturers")
 	groupManufacturers.GET("/", listManufacturers(p, service))
 	groupManufacturers.GET("/:id", getManufacturer(p, service))
+
+	groupProducts := rg.Group("/products")
+	groupProducts.GET("/", listProducts(p, service))
+	groupProducts.GET("/:id", getProduct(p, service))
 }
 
 func AddProductWriteRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service product.Usecase) {
@@ -26,4 +30,9 @@ func AddProductWriteRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service 
 	groupManufacturers.POST("/", createManufacturer(p, service))
 	groupManufacturers.PUT("/:id", updateManufacturer(p, service))
 	groupManufacturers.DELETE("/:id", deleteManufacturer(p, service))
+
+	groupProducts := rg.Group("/products")
+	groupProducts.POST("/", createProduct(p, service))
+	groupProducts.PUT("/:id", updateProduct(p, service))
+	groupProducts.DELETE("/:id", deleteProduct(p, service))
 }
