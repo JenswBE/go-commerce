@@ -16,12 +16,12 @@ import (
 
 // CategoryAllOf struct for CategoryAllOf
 type CategoryAllOf struct {
-	Name        *string `json:"name,omitempty"`
+	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
 	// Compressed representation of ID
 	ParentId *string `json:"parent_id,omitempty"`
 	// Should be sorted ascending by this column
-	SortOrder  *int32    `json:"sort_order,omitempty"`
+	Order      int32     `json:"order"`
 	ProductIds *[]string `json:"product_ids,omitempty"`
 }
 
@@ -29,8 +29,10 @@ type CategoryAllOf struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCategoryAllOf() *CategoryAllOf {
+func NewCategoryAllOf(name string, order int32) *CategoryAllOf {
 	this := CategoryAllOf{}
+	this.Name = name
+	this.Order = order
 	return &this
 }
 
@@ -42,36 +44,28 @@ func NewCategoryAllOfWithDefaults() *CategoryAllOf {
 	return &this
 }
 
-// GetName returns the Name field value if set, zero value otherwise.
+// GetName returns the Name field value
 func (o *CategoryAllOf) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Name
+
+	return o.Name
 }
 
-// GetNameOk returns a tuple with the Name field value if set, nil otherwise
+// GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *CategoryAllOf) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil {
 		return nil, false
 	}
-	return o.Name, true
+	return &o.Name, true
 }
 
-// HasName returns a boolean if a field has been set.
-func (o *CategoryAllOf) HasName() bool {
-	if o != nil && o.Name != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetName gets a reference to the given string and assigns it to the Name field.
+// SetName sets field value
 func (o *CategoryAllOf) SetName(v string) {
-	o.Name = &v
+	o.Name = v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
@@ -138,36 +132,28 @@ func (o *CategoryAllOf) SetParentId(v string) {
 	o.ParentId = &v
 }
 
-// GetSortOrder returns the SortOrder field value if set, zero value otherwise.
-func (o *CategoryAllOf) GetSortOrder() int32 {
-	if o == nil || o.SortOrder == nil {
+// GetOrder returns the Order field value
+func (o *CategoryAllOf) GetOrder() int32 {
+	if o == nil {
 		var ret int32
 		return ret
 	}
-	return *o.SortOrder
+
+	return o.Order
 }
 
-// GetSortOrderOk returns a tuple with the SortOrder field value if set, nil otherwise
+// GetOrderOk returns a tuple with the Order field value
 // and a boolean to check if the value has been set.
-func (o *CategoryAllOf) GetSortOrderOk() (*int32, bool) {
-	if o == nil || o.SortOrder == nil {
+func (o *CategoryAllOf) GetOrderOk() (*int32, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return o.SortOrder, true
+	return &o.Order, true
 }
 
-// HasSortOrder returns a boolean if a field has been set.
-func (o *CategoryAllOf) HasSortOrder() bool {
-	if o != nil && o.SortOrder != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetSortOrder gets a reference to the given int32 and assigns it to the SortOrder field.
-func (o *CategoryAllOf) SetSortOrder(v int32) {
-	o.SortOrder = &v
+// SetOrder sets field value
+func (o *CategoryAllOf) SetOrder(v int32) {
+	o.Order = v
 }
 
 // GetProductIds returns the ProductIds field value if set, zero value otherwise.
@@ -204,7 +190,7 @@ func (o *CategoryAllOf) SetProductIds(v []string) {
 
 func (o CategoryAllOf) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Name != nil {
+	if true {
 		toSerialize["name"] = o.Name
 	}
 	if o.Description != nil {
@@ -213,8 +199,8 @@ func (o CategoryAllOf) MarshalJSON() ([]byte, error) {
 	if o.ParentId != nil {
 		toSerialize["parent_id"] = o.ParentId
 	}
-	if o.SortOrder != nil {
-		toSerialize["sort_order"] = o.SortOrder
+	if true {
+		toSerialize["order"] = o.Order
 	}
 	if o.ProductIds != nil {
 		toSerialize["product_ids"] = o.ProductIds

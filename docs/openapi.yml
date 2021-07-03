@@ -457,7 +457,7 @@ components:
               type: string
             parent_id:
               $ref: "#/components/schemas/ShortID"
-            sort_order:
+            order:
               description: Should be sorted ascending by this column
               type: integer
             product_ids:
@@ -466,6 +466,9 @@ components:
                 type: string
                 format: uuid
               readOnly: True
+          required:
+            - name
+            - order
 
   securitySchemes:
     basicAuth:
