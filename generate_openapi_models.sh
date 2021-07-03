@@ -3,10 +3,15 @@
 set -euo pipefail
 
 # Expand YAML
-docker run --rm -v "$(pwd):/local" python bash -c "pip install ruamel.yaml.cmd && yaml merge-expand /local/docs/openapi.yml /local/docs/openapi.yml.tmp"
+docker run --rm -v "$(pwd):/local" \
+python bash -c "pip install ruamel.yaml.cmd && yaml merge-expand /local/docs/openapi.yml /local/docs/openapi.yml.tmp"
 
 # Generate models
-docker run --user ${UID} --rm -v "$(pwd):/local" openapitools/openapi-generator-cli generate -i /local/docs/openapi.yml.tmp -g go -o /local/api/openapi
+docker run --user ${UID} --rm -v "$(pwd):/local" \
+openapitools/openapi-generator-cli generate \
+-i /local/docs/openapi.yml.tmp \
+-g go \
+-o /local/api/openapi
 
 # Remove unused files
 rm -f docs/openapi.yml.tmp
