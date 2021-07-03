@@ -15,27 +15,30 @@ func (s *Service) ListManufacturers() ([]*entity.Manufacturer, error) {
 }
 
 // CreateManufacturer creates a new manufacturer
-func (s *Service) CreateManufacturer(name, websiteURL string) (*entity.Manufacturer, error) {
-	// Create entity
-	m, err := entity.NewManufacturer(name, websiteURL)
+func (s *Service) CreateManufacturer(manufacturer *entity.Manufacturer) (*entity.Manufacturer, error) {
+	// Generate new ID
+	manufacturer.ID = entity.NewID()
+
+	// Validate entity
+	err := manufacturer.Validate()
 	if err != nil {
 		return nil, err
 	}
 
 	// Persist entity
-	return s.repo.CreateManufacturer(m)
+	return s.repo.CreateManufacturer(manufacturer)
 }
 
 // UpdateManufacturer persists the provided manufacturer
-func (s *Service) UpdateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error) {
+func (s *Service) UpdateManufacturer(manufacturer *entity.Manufacturer) (*entity.Manufacturer, error) {
 	// Validate entity
-	err := e.Validate()
+	err := manufacturer.Validate()
 	if err != nil {
 		return nil, err
 	}
 
 	// Persist entity
-	return s.repo.UpdateManufacturer(e)
+	return s.repo.UpdateManufacturer(manufacturer)
 }
 
 // DeleteManufacturer deletes a single manufacturer by ID

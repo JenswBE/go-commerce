@@ -15,27 +15,30 @@ func (s *Service) ListCategories() ([]*entity.Category, error) {
 }
 
 // CreateCategory creates a new category
-func (s *Service) CreateCategory(name, description string, parentID entity.ID) (*entity.Category, error) {
-	// Create entity
-	m, err := entity.NewCategory(name, description, parentID)
+func (s *Service) CreateCategory(category *entity.Category) (*entity.Category, error) {
+	// Generate new ID
+	category.ID = entity.NewID()
+
+	// Validate entity
+	err := category.Validate()
 	if err != nil {
 		return nil, err
 	}
 
 	// Persist entity
-	return s.repo.CreateCategory(m)
+	return s.repo.CreateCategory(category)
 }
 
 // UpdateCategory persists the provided category
-func (s *Service) UpdateCategory(e *entity.Category) (*entity.Category, error) {
+func (s *Service) UpdateCategory(category *entity.Category) (*entity.Category, error) {
 	// Validate entity
-	err := e.Validate()
+	err := category.Validate()
 	if err != nil {
 		return nil, err
 	}
 
 	// Persist entity
-	return s.repo.UpdateCategory(e)
+	return s.repo.UpdateCategory(category)
 }
 
 // DeleteCategory deletes a single category by ID

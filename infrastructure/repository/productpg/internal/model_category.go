@@ -12,6 +12,7 @@ type Category struct {
 	ParentID    *string    `gorm:"type:uuid"`
 	Children    []Category `gorm:"foreignkey:ParentID"`
 	Products    []*Product `gorm:"many2many:product_categories;"`
+	Order       int
 }
 
 func CategoryPgToEntity(c *Category) *entity.Category {
@@ -20,6 +21,7 @@ func CategoryPgToEntity(c *Category) *entity.Category {
 		Name:        c.Name,
 		Description: c.Description,
 		ParentID:    uuid.Nil,
+		Order:       c.Order,
 	}
 	if c.ParentID != nil {
 		cat.ParentID = uuid.MustParse(*c.ParentID)
@@ -43,6 +45,7 @@ func CategoryEntityToPg(e *entity.Category) *Category {
 		ParentID:    nil,
 		Children:    nil,
 		Products:    nil,
+		Order:       e.Order,
 	}
 	if e.ParentID != uuid.Nil {
 		id := e.ParentID.String()

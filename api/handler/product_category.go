@@ -61,7 +61,7 @@ func createCategory(p *presenter.Presenter, service product.Usecase) gin.Handler
 		}
 
 		// Call service
-		category, err := service.CreateCategory(e.Name, e.Description, e.ParentID)
+		category, err := service.CreateCategory(e)
 		if err != nil {
 			c.String(errToResponse(err))
 			return

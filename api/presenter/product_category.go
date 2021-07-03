@@ -9,9 +9,8 @@ import (
 )
 
 func (p *Presenter) CategoryFromEntity(e *entity.Category) openapi.Category {
-	c := openapi.NewCategory()
+	c := openapi.NewCategory(e.Name, int32(e.Order))
 	c.SetId(p.EncodeID(e.ID))
-	c.SetName(e.Name)
 	c.SetDescription(e.Description)
 	c.SetParentId("")
 	if e.ParentID != uuid.Nil {
@@ -35,6 +34,7 @@ func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*
 		Name:        category.GetName(),
 		Description: category.GetDescription(),
 		ParentID:    uuid.Nil,
+		Order:       int(category.Order),
 	}
 
 	// Parse parent ID

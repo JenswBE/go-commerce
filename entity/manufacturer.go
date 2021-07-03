@@ -9,20 +9,6 @@ type Manufacturer struct {
 	WebsiteURL string
 }
 
-// NewManufacturer creates a new manufacturer
-func NewManufacturer(name, websiteURL string) (*Manufacturer, error) {
-	b := &Manufacturer{
-		ID:         NewID(),
-		Name:       name,
-		WebsiteURL: websiteURL,
-	}
-	err := b.Validate()
-	if err != nil {
-		return nil, ErrInvalidEntity
-	}
-	return b, nil
-}
-
 // Validate validates the manufacturer data
 func (m *Manufacturer) Validate() error {
 	// Validate simple fields

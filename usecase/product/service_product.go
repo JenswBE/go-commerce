@@ -15,27 +15,30 @@ func (s *Service) ListProducts() ([]*entity.Product, error) {
 }
 
 // CreateProduct creates a new product
-func (s *Service) CreateProduct(name string, price int) (*entity.Product, error) {
-	// Create entity
-	m, err := entity.NewProduct(name, price)
+func (s *Service) CreateProduct(product *entity.Product) (*entity.Product, error) {
+	// Generate new ID
+	product.ID = entity.NewID()
+
+	// Validate entity
+	err := product.Validate()
 	if err != nil {
 		return nil, err
 	}
 
 	// Persist entity
-	return s.repo.CreateProduct(m)
+	return s.repo.CreateProduct(product)
 }
 
 // UpdateProduct persists the provided product
-func (s *Service) UpdateProduct(e *entity.Product) (*entity.Product, error) {
+func (s *Service) UpdateProduct(product *entity.Product) (*entity.Product, error) {
 	// Validate entity
-	err := e.Validate()
+	err := product.Validate()
 	if err != nil {
 		return nil, err
 	}
 
 	// Persist entity
-	return s.repo.UpdateProduct(e)
+	return s.repo.UpdateProduct(product)
 }
 
 // DeleteProduct deletes a single product by ID

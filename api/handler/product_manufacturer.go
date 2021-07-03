@@ -5,6 +5,7 @@ import (
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/usecase/product"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func listManufacturers(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
@@ -51,7 +52,8 @@ func createManufacturer(p *presenter.Presenter, service product.Usecase) gin.Han
 		}
 
 		// Call service
-		manufacturer, err := service.CreateManufacturer(body.GetName(), body.GetWebsiteUrl())
+		e := p.ManufacturerToEntity(uuid.Nil, *body)
+		manufacturer, err := service.CreateManufacturer(e)
 		if err != nil {
 			c.String(errToResponse(err))
 			return

@@ -5,6 +5,7 @@ import (
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/usecase/product"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func listProducts(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
@@ -50,8 +51,15 @@ func createProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerF
 			return
 		}
 
+		// Convert to entity
+		e, err := p.ProductToEntity(uuid.Nil, *body)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
 		// Call service
-		product, err := service.CreateProduct(body.GetName(), int(body.GetPrice()))
+		product, err := service.CreateProduct(e)
 		if err != nil {
 			c.String(errToResponse(err))
 			return
