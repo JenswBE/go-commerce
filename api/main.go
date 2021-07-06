@@ -6,9 +6,9 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/handler"
 	"github.com/JenswBE/go-commerce/api/presenter"
-	"github.com/JenswBE/go-commerce/infrastructure/repository/productpg"
-	"github.com/JenswBE/go-commerce/pkg/shortid"
+	"github.com/JenswBE/go-commerce/repository/productpg"
 	"github.com/JenswBE/go-commerce/usecase/product"
+	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"

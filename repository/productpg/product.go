@@ -2,7 +2,7 @@ package productpg
 
 import (
 	"github.com/JenswBE/go-commerce/entity"
-	"github.com/JenswBE/go-commerce/infrastructure/repository/productpg/internal"
+	"github.com/JenswBE/go-commerce/repository/productpg/internal"
 	"github.com/google/uuid"
 )
 

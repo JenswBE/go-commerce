@@ -2,7 +2,7 @@ package presenter
 
 import (
 	"github.com/JenswBE/go-commerce/entity"
-	"github.com/JenswBE/go-commerce/pkg/shortid"
+	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/google/uuid"
 )
 
