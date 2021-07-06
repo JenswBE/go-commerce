@@ -15,6 +15,8 @@ type Category struct {
 	// Order (priority) of the category.
 	// 1 = highest, inf = lowest
 	Order int
+
+	ProductIDs []ID
 }
 
 // Validate validates the category data

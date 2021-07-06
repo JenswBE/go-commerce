@@ -8,7 +8,7 @@ import (
 
 func (r *ProductPostgres) GetProduct(id entity.ID) (*entity.Product, error) {
 	product := &internal.Product{}
-	err := r.db.First(product, "id = ?", id).Error
+	err := r.db.Preload("Categories").First(product, "id = ?", id).Error
 	if err != nil {
 		return nil, translatePgError(err, "product")
 	}
@@ -17,7 +17,7 @@ func (r *ProductPostgres) GetProduct(id entity.ID) (*entity.Product, error) {
 
 func (r *ProductPostgres) ListProducts() ([]*entity.Product, error) {
 	products := []*internal.Product{}
-	err := r.db.Find(&products).Error
+	err := r.db.Preload("Categories").Find(&products).Error
 	if err != nil {
 		return nil, translatePgError(err, "product")
 	}
@@ -53,7 +53,11 @@ func (r *ProductPostgres) UpdateProduct(e *entity.Product) (*entity.Product, err
 
 	// Update product
 	m := internal.ProductEntityToPg(e)
-	err := r.db.Model(m).Updates(m).Error
+	err := r.db.Model(m).Save(m).Error
+	if err != nil {
+		return nil, translatePgError(err, "product")
+	}
+	err = r.db.Model(m).Association("Categories").Replace(m.Categories)
 	if err != nil {
 		return nil, translatePgError(err, "product")
 	}

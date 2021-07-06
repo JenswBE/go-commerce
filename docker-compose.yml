@@ -5,9 +5,9 @@ services:
   #   build: .
   #   ports:
   #     - "8090:8090"
-  #   volumes: 
+  #   volumes:
   #     - "./config.yml:/go-commerce/config.yml"
-  #   environment: 
+  #   environment:
   #     - "DATABASE_HOST=db"
 
   db:
@@ -16,4 +16,10 @@ services:
       - "POSTGRES_USER=go_commerce"
       - "POSTGRES_PASSWORD=go_commerce"
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "127.0.0.1:8032:8080"

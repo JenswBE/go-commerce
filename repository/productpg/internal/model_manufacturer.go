@@ -9,7 +9,6 @@ type Manufacturer struct {
 	Base
 	Name       string
 	WebsiteURL string
-	Products   []Product
 }
 
 func ManufacturerPgToEntity(m *Manufacturer) *entity.Manufacturer {
@@ -33,6 +32,5 @@ func ManufacturerEntityToPg(e *entity.Manufacturer) *Manufacturer {
 		Base:       Base{ID: e.ID.String()},
 		Name:       e.Name,
 		WebsiteURL: e.WebsiteURL,
-		Products:   nil,
 	}
 }

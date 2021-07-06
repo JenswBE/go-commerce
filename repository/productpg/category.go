@@ -8,7 +8,7 @@ import (
 
 func (r *ProductPostgres) GetCategory(id entity.ID) (*entity.Category, error) {
 	category := &internal.Category{}
-	err := r.db.First(category, "id = ?", id).Error
+	err := r.db.Preload("Products").First(category, "id = ?", id).Error
 	if err != nil {
 		return nil, translatePgError(err, "category")
 	}
@@ -17,7 +17,7 @@ func (r *ProductPostgres) GetCategory(id entity.ID) (*entity.Category, error) {
 
 func (r *ProductPostgres) ListCategories() ([]*entity.Category, error) {
 	categories := []*internal.Category{}
-	err := r.db.Find(&categories).Error
+	err := r.db.Preload("Products").Find(&categories).Error
 	if err != nil {
 		return nil, translatePgError(err, "category")
 	}
@@ -53,7 +53,7 @@ func (r *ProductPostgres) UpdateCategory(e *entity.Category) (*entity.Category, 
 
 	// Update category
 	m := internal.CategoryEntityToPg(e)
-	err := r.db.Model(m).Updates(m).Error
+	err := r.db.Model(m).Save(m).Error
 	if err != nil {
 		return nil, translatePgError(err, "category")
 	}

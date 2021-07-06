@@ -16,6 +16,7 @@ func (p *Presenter) CategoryFromEntity(e *entity.Category) openapi.Category {
 	if e.ParentID != uuid.Nil {
 		c.SetParentId(p.EncodeID(e.ParentID))
 	}
+	c.SetProductIds(p.EncodeIDList(e.ProductIDs))
 	return *c
 }
 
@@ -35,6 +36,7 @@ func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*
 		Description: category.GetDescription(),
 		ParentID:    uuid.Nil,
 		Order:       int(category.Order),
+		ProductIDs:  nil, // read-only
 	}
 
 	// Parse parent ID

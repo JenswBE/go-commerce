@@ -22,9 +22,16 @@ func CategoryPgToEntity(c *Category) *entity.Category {
 		Description: c.Description,
 		ParentID:    uuid.Nil,
 		Order:       c.Order,
+		ProductIDs:  nil,
 	}
 	if c.ParentID != nil {
 		cat.ParentID = uuid.MustParse(*c.ParentID)
+	}
+	if len(c.Products) > 0 {
+		cat.ProductIDs = make([]uuid.UUID, 0, len(c.Products))
+		for _, product := range c.Products {
+			cat.ProductIDs = append(cat.ProductIDs, uuid.MustParse(product.ID))
+		}
 	}
 	return cat
 }
@@ -44,7 +51,7 @@ func CategoryEntityToPg(e *entity.Category) *Category {
 		Description: e.Description,
 		ParentID:    nil,
 		Children:    nil,
-		Products:    nil,
+		Products:    nil, // Read-only
 		Order:       e.Order,
 	}
 	if e.ParentID != uuid.Nil {
