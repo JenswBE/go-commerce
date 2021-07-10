@@ -1,5 +1,6 @@
 # GoCommerce specific
 *.tmp
+files/
 
 # Binaries for programs and plugins
 *.exe

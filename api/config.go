@@ -20,12 +20,18 @@ type Config struct {
 	Server struct {
 		Port int
 	}
+	Storage struct {
+		Path         string
+		ImagesFolder string
+	}
 }
 
 func parseConfig() (*Config, error) {
 	// Set defaults
-	viper.SetDefault("database.port", 5432)
-	viper.SetDefault("server.port", 8090)
+	viper.SetDefault("Database.Port", 5432)
+	viper.SetDefault("Server.Port", 8090)
+	viper.SetDefault("Storage.Path", "./files")
+	viper.SetDefault("Storage.ImagesFolder", "images")
 
 	// Parse config file
 	viper.SetConfigName("config")
@@ -41,12 +47,14 @@ func parseConfig() (*Config, error) {
 	}
 
 	// Bind ENV variables
-	viper.BindEnv("database.host", "DATABASE_HOST")
-	viper.BindEnv("database.port", "DATABASE_PORT")
-	viper.BindEnv("database.user", "DATABASE_USER")
-	viper.BindEnv("database.password", "DATABASE_PASSWORD")
-	viper.BindEnv("database.database", "DATABASE_DATABASE")
-	viper.BindEnv("server.port", "GOCOM_PORT")
+	viper.BindEnv("Database.Host", "DATABASE_HOST")
+	viper.BindEnv("Database.Port", "DATABASE_PORT")
+	viper.BindEnv("Database.User", "DATABASE_USER")
+	viper.BindEnv("Database.Password", "DATABASE_PASSWORD")
+	viper.BindEnv("Database.Database", "DATABASE_DATABASE")
+	viper.BindEnv("Server.Port", "GOCOM_PORT")
+	viper.BindEnv("Storage.Path", "STORAGE_PATH")
+	viper.BindEnv("Storage.ImagesFolder", "STORAGE_IMAGES_FOLDER")
 
 	// Unmarshal to Config struct
 	var config Config

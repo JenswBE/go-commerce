@@ -6,12 +6,12 @@ import (
 
 // GetCategory fetches a single category by ID
 func (s *Service) GetCategory(id entity.ID) (*entity.Category, error) {
-	return s.repo.GetCategory(id)
+	return s.db.GetCategory(id)
 }
 
 // ListCategories fetches all categories
 func (s *Service) ListCategories() ([]*entity.Category, error) {
-	return s.repo.ListCategories()
+	return s.db.ListCategories()
 }
 
 // CreateCategory creates a new category
@@ -26,7 +26,7 @@ func (s *Service) CreateCategory(category *entity.Category) (*entity.Category, e
 	}
 
 	// Persist entity
-	return s.repo.CreateCategory(category)
+	return s.db.CreateCategory(category)
 }
 
 // UpdateCategory persists the provided category
@@ -38,10 +38,10 @@ func (s *Service) UpdateCategory(category *entity.Category) (*entity.Category, e
 	}
 
 	// Persist entity
-	return s.repo.UpdateCategory(category)
+	return s.db.UpdateCategory(category)
 }
 
 // DeleteCategory deletes a single category by ID
 func (s *Service) DeleteCategory(id entity.ID) error {
-	return s.repo.DeleteCategory(id)
+	return s.db.DeleteCategory(id)
 }

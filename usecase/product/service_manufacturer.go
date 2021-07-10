@@ -6,12 +6,12 @@ import (
 
 // GetManufacturer fetches a single manufacturer by ID
 func (s *Service) GetManufacturer(id entity.ID) (*entity.Manufacturer, error) {
-	return s.repo.GetManufacturer(id)
+	return s.db.GetManufacturer(id)
 }
 
 // ListManufacturers fetches all manufacturers
 func (s *Service) ListManufacturers() ([]*entity.Manufacturer, error) {
-	return s.repo.ListManufacturers()
+	return s.db.ListManufacturers()
 }
 
 // CreateManufacturer creates a new manufacturer
@@ -26,7 +26,7 @@ func (s *Service) CreateManufacturer(manufacturer *entity.Manufacturer) (*entity
 	}
 
 	// Persist entity
-	return s.repo.CreateManufacturer(manufacturer)
+	return s.db.CreateManufacturer(manufacturer)
 }
 
 // UpdateManufacturer persists the provided manufacturer
@@ -38,10 +38,10 @@ func (s *Service) UpdateManufacturer(manufacturer *entity.Manufacturer) (*entity
 	}
 
 	// Persist entity
-	return s.repo.UpdateManufacturer(manufacturer)
+	return s.db.UpdateManufacturer(manufacturer)
 }
 
 // DeleteManufacturer deletes a single manufacturer by ID
 func (s *Service) DeleteManufacturer(id entity.ID) error {
-	return s.repo.DeleteManufacturer(id)
+	return s.db.DeleteManufacturer(id)
 }

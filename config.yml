@@ -3,3 +3,5 @@ database:
   user: go_commerce
   password: go_commerce
   database: go_commerce
+storage:
+  path: ../files

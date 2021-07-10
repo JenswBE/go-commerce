@@ -1,11 +1,13 @@
 package product
 
 type Service struct {
-	repo Repository
+	db      DatabaseRepository
+	storage StorageRepository
 }
 
-func NewService(r Repository) *Service {
+func NewService(db DatabaseRepository, storage StorageRepository) *Service {
 	return &Service{
-		repo: r,
+		db:      db,
+		storage: storage,
 	}
 }

@@ -6,12 +6,12 @@ import (
 
 // GetProduct fetches a single product by ID
 func (s *Service) GetProduct(id entity.ID) (*entity.Product, error) {
-	return s.repo.GetProduct(id)
+	return s.db.GetProduct(id)
 }
 
 // ListProducts fetches all products
 func (s *Service) ListProducts() ([]*entity.Product, error) {
-	return s.repo.ListProducts()
+	return s.db.ListProducts()
 }
 
 // CreateProduct creates a new product
@@ -26,7 +26,7 @@ func (s *Service) CreateProduct(product *entity.Product) (*entity.Product, error
 	}
 
 	// Persist entity
-	return s.repo.CreateProduct(product)
+	return s.db.CreateProduct(product)
 }
 
 // UpdateProduct persists the provided product
@@ -38,10 +38,10 @@ func (s *Service) UpdateProduct(product *entity.Product) (*entity.Product, error
 	}
 
 	// Persist entity
-	return s.repo.UpdateProduct(product)
+	return s.db.UpdateProduct(product)
 }
 
 // DeleteProduct deletes a single product by ID
 func (s *Service) DeleteProduct(id entity.ID) error {
-	return s.repo.DeleteProduct(id)
+	return s.db.DeleteProduct(id)
 }

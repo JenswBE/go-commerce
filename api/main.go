@@ -6,6 +6,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/handler"
 	"github.com/JenswBE/go-commerce/api/presenter"
+	"github.com/JenswBE/go-commerce/repository/localstorage"
 	"github.com/JenswBE/go-commerce/repository/productpg"
 	"github.com/JenswBE/go-commerce/usecase/product"
 	"github.com/JenswBE/go-commerce/utils/shortid"
@@ -30,8 +31,12 @@ func main() {
 	}
 
 	// Services
-	productRepo := productpg.NewProductPostgres(productDB)
-	productService := product.NewService(productRepo)
+	productDatabase := productpg.NewProductPostgres(productDB)
+	localStorage, err := localstorage.NewLocalStorage(config.Storage.Path)
+	if err != nil {
+		log.Fatalf("Failed to create local storage repository: %s", err.Error())
+	}
+	productService := product.NewService(productDatabase, localStorage)
 	shortIDService := shortid.NewBase58Service()
 	presenter := presenter.New(shortIDService)
 
