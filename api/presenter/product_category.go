@@ -9,7 +9,7 @@ import (
 )
 
 func (p *Presenter) CategoryFromEntity(e *entity.Category) openapi.Category {
-	c := openapi.NewCategory(e.Name, int32(e.Order))
+	c := openapi.NewCategory(e.Name, int64(e.Order))
 	c.SetId(p.EncodeID(e.ID))
 	c.SetDescription(e.Description)
 	c.SetParentId("")

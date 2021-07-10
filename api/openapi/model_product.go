@@ -25,11 +25,12 @@ type Product struct {
 	DescriptionShort *string    `json:"description_short,omitempty"`
 	DescriptionLong  *string    `json:"description_long,omitempty"`
 	// Price in cents
-	Price          *int32    `json:"price,omitempty"`
+	Price          *int64    `json:"price,omitempty"`
 	CategoryIds    *[]string `json:"category_ids,omitempty"`
 	ManufacturerId *string   `json:"manufacturer_id,omitempty"`
 	Status         *string   `json:"status,omitempty"`
-	StockCount     *int32    `json:"stock_count,omitempty"`
+	StockCount     *int64    `json:"stock_count,omitempty"`
+	ImageUrls      *[]string `json:"image_urls,omitempty"`
 }
 
 // NewProduct instantiates a new Product object
@@ -242,9 +243,9 @@ func (o *Product) SetDescriptionLong(v string) {
 }
 
 // GetPrice returns the Price field value if set, zero value otherwise.
-func (o *Product) GetPrice() int32 {
+func (o *Product) GetPrice() int64 {
 	if o == nil || o.Price == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 	return *o.Price
@@ -252,7 +253,7 @@ func (o *Product) GetPrice() int32 {
 
 // GetPriceOk returns a tuple with the Price field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Product) GetPriceOk() (*int32, bool) {
+func (o *Product) GetPriceOk() (*int64, bool) {
 	if o == nil || o.Price == nil {
 		return nil, false
 	}
@@ -268,8 +269,8 @@ func (o *Product) HasPrice() bool {
 	return false
 }
 
-// SetPrice gets a reference to the given int32 and assigns it to the Price field.
-func (o *Product) SetPrice(v int32) {
+// SetPrice gets a reference to the given int64 and assigns it to the Price field.
+func (o *Product) SetPrice(v int64) {
 	o.Price = &v
 }
 
@@ -370,9 +371,9 @@ func (o *Product) SetStatus(v string) {
 }
 
 // GetStockCount returns the StockCount field value if set, zero value otherwise.
-func (o *Product) GetStockCount() int32 {
+func (o *Product) GetStockCount() int64 {
 	if o == nil || o.StockCount == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 	return *o.StockCount
@@ -380,7 +381,7 @@ func (o *Product) GetStockCount() int32 {
 
 // GetStockCountOk returns a tuple with the StockCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Product) GetStockCountOk() (*int32, bool) {
+func (o *Product) GetStockCountOk() (*int64, bool) {
 	if o == nil || o.StockCount == nil {
 		return nil, false
 	}
@@ -396,9 +397,41 @@ func (o *Product) HasStockCount() bool {
 	return false
 }
 
-// SetStockCount gets a reference to the given int32 and assigns it to the StockCount field.
-func (o *Product) SetStockCount(v int32) {
+// SetStockCount gets a reference to the given int64 and assigns it to the StockCount field.
+func (o *Product) SetStockCount(v int64) {
 	o.StockCount = &v
+}
+
+// GetImageUrls returns the ImageUrls field value if set, zero value otherwise.
+func (o *Product) GetImageUrls() []string {
+	if o == nil || o.ImageUrls == nil {
+		var ret []string
+		return ret
+	}
+	return *o.ImageUrls
+}
+
+// GetImageUrlsOk returns a tuple with the ImageUrls field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Product) GetImageUrlsOk() (*[]string, bool) {
+	if o == nil || o.ImageUrls == nil {
+		return nil, false
+	}
+	return o.ImageUrls, true
+}
+
+// HasImageUrls returns a boolean if a field has been set.
+func (o *Product) HasImageUrls() bool {
+	if o != nil && o.ImageUrls != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetImageUrls gets a reference to the given []string and assigns it to the ImageUrls field.
+func (o *Product) SetImageUrls(v []string) {
+	o.ImageUrls = &v
 }
 
 func (o Product) MarshalJSON() ([]byte, error) {
@@ -435,6 +468,9 @@ func (o Product) MarshalJSON() ([]byte, error) {
 	}
 	if o.StockCount != nil {
 		toSerialize["stock_count"] = o.StockCount
+	}
+	if o.ImageUrls != nil {
+		toSerialize["image_urls"] = o.ImageUrls
 	}
 	return json.Marshal(toSerialize)
 }

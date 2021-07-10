@@ -23,15 +23,17 @@ type Category struct {
 	// Compressed representation of ID
 	ParentId *string `json:"parent_id,omitempty"`
 	// Should be sorted ascending by this column
-	Order      int32     `json:"order"`
+	Order      int64     `json:"order"`
 	ProductIds *[]string `json:"product_ids,omitempty"`
+	// Signed URL pointing to the image
+	ImageUrl *string `json:"image_url,omitempty"`
 }
 
 // NewCategory instantiates a new Category object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCategory(name string, order int32) *Category {
+func NewCategory(name string, order int64) *Category {
 	this := Category{}
 	this.Name = name
 	this.Order = order
@@ -167,9 +169,9 @@ func (o *Category) SetParentId(v string) {
 }
 
 // GetOrder returns the Order field value
-func (o *Category) GetOrder() int32 {
+func (o *Category) GetOrder() int64 {
 	if o == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 
@@ -178,7 +180,7 @@ func (o *Category) GetOrder() int32 {
 
 // GetOrderOk returns a tuple with the Order field value
 // and a boolean to check if the value has been set.
-func (o *Category) GetOrderOk() (*int32, bool) {
+func (o *Category) GetOrderOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -186,7 +188,7 @@ func (o *Category) GetOrderOk() (*int32, bool) {
 }
 
 // SetOrder sets field value
-func (o *Category) SetOrder(v int32) {
+func (o *Category) SetOrder(v int64) {
 	o.Order = v
 }
 
@@ -222,6 +224,38 @@ func (o *Category) SetProductIds(v []string) {
 	o.ProductIds = &v
 }
 
+// GetImageUrl returns the ImageUrl field value if set, zero value otherwise.
+func (o *Category) GetImageUrl() string {
+	if o == nil || o.ImageUrl == nil {
+		var ret string
+		return ret
+	}
+	return *o.ImageUrl
+}
+
+// GetImageUrlOk returns a tuple with the ImageUrl field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Category) GetImageUrlOk() (*string, bool) {
+	if o == nil || o.ImageUrl == nil {
+		return nil, false
+	}
+	return o.ImageUrl, true
+}
+
+// HasImageUrl returns a boolean if a field has been set.
+func (o *Category) HasImageUrl() bool {
+	if o != nil && o.ImageUrl != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetImageUrl gets a reference to the given string and assigns it to the ImageUrl field.
+func (o *Category) SetImageUrl(v string) {
+	o.ImageUrl = &v
+}
+
 func (o Category) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Id != nil {
@@ -241,6 +275,9 @@ func (o Category) MarshalJSON() ([]byte, error) {
 	}
 	if o.ProductIds != nil {
 		toSerialize["product_ids"] = o.ProductIds
+	}
+	if o.ImageUrl != nil {
+		toSerialize["image_url"] = o.ImageUrl
 	}
 	return json.Marshal(toSerialize)
 }

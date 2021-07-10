@@ -3,7 +3,7 @@ package shortid_test
 import (
 	"testing"
 
-	"github.com/JenswBE/go-commerce/pkg/shortid"
+	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )

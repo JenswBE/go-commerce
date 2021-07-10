@@ -16,11 +16,11 @@ func (p *Presenter) ProductFromEntity(e *entity.Product) openapi.Product {
 	m.SetName(e.Name)
 	m.SetDescriptionShort(e.DescriptionShort)
 	m.SetDescriptionLong(e.DescriptionLong)
-	m.SetPrice(int32(e.Price))
+	m.SetPrice(int64(e.Price))
 	m.SetCategoryIds(p.EncodeIDList(e.CategoryIDs))
 	m.SetManufacturerId(p.EncodeID(e.ManufacturerID))
 	m.SetStatus(string(e.Status))
-	m.SetStockCount(int32(e.StockCount))
+	m.SetStockCount(int64(e.StockCount))
 	return *m
 }
 
