@@ -9,6 +9,7 @@ type Manufacturer struct {
 	Base
 	Name       string
 	WebsiteURL string
+	Image      Image `gorm:"polymorphic:Owner;"`
 }
 
 func ManufacturerPgToEntity(m *Manufacturer) *entity.Manufacturer {

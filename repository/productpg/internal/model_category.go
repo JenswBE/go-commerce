@@ -13,6 +13,7 @@ type Category struct {
 	Children    []Category `gorm:"foreignkey:ParentID"`
 	Products    []*Product `gorm:"many2many:product_categories;"`
 	Order       int
+	Image       Image `gorm:"polymorphic:Owner;"`
 }
 
 func CategoryPgToEntity(c *Category) *entity.Category {

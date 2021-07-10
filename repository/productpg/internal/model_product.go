@@ -15,6 +15,7 @@ type Product struct {
 	ManufacturerID   *string    `gorm:"type:uuid"`
 	Status           string
 	StockCount       int
+	Images           []Image `gorm:"polymorphic:Owner;"`
 }
 
 func ProductPgToEntity(c *Product) *entity.Product {
