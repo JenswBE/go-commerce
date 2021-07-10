@@ -6,14 +6,6 @@ info:
 servers:
   - url: http://localhost:8090
 
-x-param_id: &param_id
-  name: id
-  in: path
-  description: ID
-  required: true
-  schema:
-    type: string
-
 x-404_not_found: &404_not_found
   "404":
     description: Not Found
@@ -29,6 +21,10 @@ paths:
       description: List categories
       tags: ["Categories"]
       security: []
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -41,12 +37,16 @@ paths:
 
   /public/categories/{id}/:
     parameters:
-      - *param_id
+      - $ref: "#/components/parameters/pathID"
 
     get:
       description: Get category details
       tags: ["Categories"]
       security: []
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -60,6 +60,10 @@ paths:
     get:
       description: List categories
       tags: ["Categories"]
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -89,11 +93,15 @@ paths:
 
   /admin/categories/{id}/:
     parameters:
-      - *param_id
+      - $ref: "#/components/parameters/pathID"
 
     get:
       description: Get category details
       tags: ["Categories"]
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -129,25 +137,42 @@ paths:
           description: OK
         <<: *404_not_found
 
-  /admin/images/{id}/:
+  /admin/categories/{id}/image:
+    parameters:
+      - $ref: "#/components/parameters/pathID"
+
     put:
-      description: Upload image for object (Category, Manufacturer, ...)
-      tags: ["Images"]
+      description: Upsert image
+      tags: ["Categories"]
       parameters:
-        - *param_id
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       requestBody:
         content:
           multipart/form-data:
             schema:
               type: object
               properties:
-                image:
+                file:
                   type: string
                   format: binary
         required: true
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Image"
+        <<: *404_not_found
+
+    delete:
+      description: Delete image
+      tags: ["Categories"]
+      responses:
+        "204":
+          description: No Content
         <<: *404_not_found
 
   /public/manufacturers/:
@@ -155,6 +180,10 @@ paths:
       description: List manufacturers
       tags: ["Manufacturers"]
       security: []
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -166,12 +195,17 @@ paths:
                   $ref: "#/components/schemas/Manufacturer"
 
   /public/manufacturers/{id}/:
+    parameters:
+      - $ref: "#/components/parameters/pathID"
+
     get:
       description: Get manufacturer details
       tags: ["Manufacturers"]
       security: []
       parameters:
-        - *param_id
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -185,6 +219,10 @@ paths:
     get:
       description: List manufacturers
       tags: ["Manufacturers"]
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -214,11 +252,15 @@ paths:
 
   /admin/manufacturers/{id}/:
     parameters:
-      - *param_id
+      - $ref: "#/components/parameters/pathID"
 
     get:
       description: Get manufacturer details
       tags: ["Manufacturers"]
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -251,7 +293,45 @@ paths:
       tags: ["Manufacturers"]
       responses:
         "204":
+          description: No Content
+        <<: *404_not_found
+
+  /admin/manufacturers/{id}/image:
+    parameters:
+      - $ref: "#/components/parameters/pathID"
+
+    put:
+      description: Upsert image
+      tags: ["Manufacturers"]
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Image"
+        <<: *404_not_found
+
+    delete:
+      description: Delete image
+      tags: ["Manufacturers"]
+      responses:
+        "204":
+          description: No Content
         <<: *404_not_found
 
   /public/products/:
@@ -259,6 +339,10 @@ paths:
       description: List products
       tags: ["Products"]
       security: []
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -270,12 +354,17 @@ paths:
                   $ref: "#/components/schemas/Product"
 
   /public/products/{id}/:
+    parameters:
+      - $ref: "#/components/parameters/pathID"
+
     get:
       description: Get product details
       tags: ["Products"]
       security: []
       parameters:
-        - *param_id
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -294,6 +383,10 @@ paths:
     get:
       description: List products
       tags: ["Products"]
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -323,11 +416,15 @@ paths:
 
   /admin/products/{id}/:
     parameters:
-      - *param_id
+      - $ref: "#/components/parameters/pathID"
 
     get:
       description: Get product details
       tags: ["Products"]
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
       responses:
         "200":
           description: OK
@@ -368,12 +465,117 @@ paths:
           description: OK
         <<: *404_not_found
 
+  /admin/products/{id}/images:
+    parameters:
+      - $ref: "#/components/parameters/pathID"
+
+    post:
+      description: Add images
+      tags: ["Products"]
+      parameters:
+        - $ref: "#/components/parameters/queryImgHeight"
+        - $ref: "#/components/parameters/queryImgResize"
+        - $ref: "#/components/parameters/queryImgWidth"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Image"
+        <<: *404_not_found
+
+    delete:
+      description: Delete product
+      tags: ["Products"]
+      responses:
+        "204":
+          description: OK
+        <<: *404_not_found
+
 components:
+  parameters:
+    pathID:
+      name: id
+      in: path
+      description: ID
+      required: true
+      schema:
+        type: string
+    
+    queryImgHeight:
+      name: img_h
+      in: query
+      description: Image height
+      required: false
+      schema:
+        type: integer
+        format: int64
+        example: 200
+    
+    queryImgResize:
+      name: img_r
+      in: query
+      description: Image resize mode
+      required: false
+      schema:
+        type: string
+        default: fit
+        enum:
+          - fill
+          - fit
+
+    queryImgWidth:
+      name: img_w
+      in: query
+      description: Image width
+      required: false
+      schema:
+        type: integer
+        format: int64
+        example: 300
+
   schemas:
-    ShortID:
-      type: string
-      description: Compressed representation of ID
-      example: "AneTxNh7GB5uD2HoXvwF2E"
+    Category:
+      allOf:
+        - $ref: "#/components/schemas/Header"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: Makeup & Cosmetica
+            description:
+              type: string
+            parent_id:
+              $ref: "#/components/schemas/ShortID"
+            order:
+              description: Should be sorted ascending by this column
+              type: integer
+              format: int64
+            product_ids:
+              type: array
+              items:
+                type: string
+                format: uuid
+              readOnly: True
+            image_url:
+              $ref: "#/components/schemas/ImageUrl"
+          required:
+            - name
+            - order
 
     Header:
       type: object
@@ -384,7 +586,7 @@ components:
           example: "AneTxNh7GB5uD2HoXvwF2E"
           readOnly: True
 
-    TimestampedHeader:
+    HeaderTimestamped:
       allOf:
         - $ref: "#/components/schemas/Header"
         - type: object
@@ -400,9 +602,49 @@ components:
               example: "2020-12-24T11:30:00Z"
               readOnly: True
 
+    Image:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        ext:
+          type: string
+          description: Extension of the image
+          example: png
+          readOnly: true
+        url:
+          $ref: "#/components/schemas/ImageUrl"
+        order:
+          description: Should be sorted ascending by this column
+          type: integer
+          format: int64
+
+    ImageUrl:
+      type: string
+      description: Signed URL pointing to the image
+      example: "https://images.jensw.be/.../fill/300/400/.../anBn.png"
+      readOnly: true
+
+    Manufacturer:
+      allOf:
+        - $ref: "#/components/schemas/Header"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: Bjoetiek Y
+            website_url:
+              type: string
+              format: url
+              example: https://bjoetiek-y.be
+            image_url:
+              $ref: "#/components/schemas/ImageUrl"
+
     Product:
       allOf:
-        - $ref: "#/components/schemas/TimestampedHeader"
+        - $ref: "#/components/schemas/HeaderTimestamped"
         - type: object
           properties:
             name:
@@ -415,6 +657,7 @@ components:
             price:
               description: Price in cents
               type: integer
+              format: int64
               example: 1500
             category_ids:
               type: array
@@ -431,44 +674,16 @@ components:
                 - ARCHIVED
             stock_count:
               type: integer
-
-    Manufacturer:
-      allOf:
-        - $ref: "#/components/schemas/Header"
-        - type: object
-          properties:
-            name:
-              type: string
-              example: Bjoetiek Y
-            website_url:
-              type: string
-              format: url
-              example: https://bjoetiek-y.be
-
-    Category:
-      allOf:
-        - $ref: "#/components/schemas/Header"
-        - type: object
-          properties:
-            name:
-              type: string
-              example: Makeup & Cosmetica
-            description:
-              type: string
-            parent_id:
-              $ref: "#/components/schemas/ShortID"
-            order:
-              description: Should be sorted ascending by this column
-              type: integer
-            product_ids:
+              format: int64
+            image_urls:
               type: array
               items:
-                type: string
-                format: uuid
-              readOnly: True
-          required:
-            - name
-            - order
+                $ref: "#/components/schemas/ImageUrl"
+
+    ShortID:
+      type: string
+      description: Compressed representation of ID
+      example: "AneTxNh7GB5uD2HoXvwF2E"
 
   securitySchemes:
     basicAuth:
