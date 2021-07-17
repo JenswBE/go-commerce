@@ -31,9 +31,16 @@ func ProductPgToEntity(c *Product) *entity.Product {
 		ManufacturerID:   uuid.Nil,
 		Status:           entity.ProductStatus(c.Status),
 		StockCount:       c.StockCount,
+		Images:           ImagesListPgToEntity(c.Images),
 	}
 	if c.ManufacturerID != nil {
 		product.ManufacturerID = uuid.MustParse(*c.ManufacturerID)
+	}
+	if len(c.Categories) > 0 {
+		product.CategoryIDs = make([]uuid.UUID, len(c.Categories))
+		for i, cat := range c.Categories {
+			product.CategoryIDs[i] = uuid.MustParse(cat.ID)
+		}
 	}
 	if len(c.Categories) > 0 {
 		product.CategoryIDs = make([]uuid.UUID, len(c.Categories))
@@ -61,6 +68,7 @@ func ProductEntityToPg(e *entity.Product) *Product {
 		Price:            e.Price,
 		Categories:       nil,
 		ManufacturerID:   nil,
+		Images:           ImagesListEntityToPg(e.Images),
 	}
 	if e.ManufacturerID != uuid.Nil {
 		id := e.ManufacturerID.String()

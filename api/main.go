@@ -32,11 +32,11 @@ func main() {
 
 	// Services
 	productDatabase := productpg.NewProductPostgres(productDB)
-	localStorage, err := localstorage.NewLocalStorage(config.Storage.Path)
+	localImageStorage, err := localstorage.NewLocalStorage(config.Storage.Path)
 	if err != nil {
 		log.Fatalf("Failed to create local storage repository: %s", err.Error())
 	}
-	productService := product.NewService(productDatabase, localStorage)
+	productService := product.NewService(productDatabase, localImageStorage)
 	shortIDService := shortid.NewBase58Service()
 	presenter := presenter.New(shortIDService)
 

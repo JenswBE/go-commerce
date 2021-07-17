@@ -123,3 +123,30 @@ func deleteProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerF
 		c.String(204, "")
 	}
 }
+
+func addProductImages(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Parse params
+		id, ok := parseParamID(c, p)
+		if !ok {
+			return // Response already set on Gin context
+		}
+
+		// Parse body
+		images, err := parseFilesFromMultipart(c.Request)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
+		// Call service
+		product, err := service.AddProductImages(id, images)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
+		// Handle success
+		c.JSON(200, p.ImagesListFromEntity(product.Images))
+	}
+}

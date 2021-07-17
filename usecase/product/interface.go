@@ -45,4 +45,5 @@ type Usecase interface {
 	CreateProduct(*entity.Product) (*entity.Product, error)
 	UpdateProduct(e *entity.Product) (*entity.Product, error)
 	DeleteProduct(id entity.ID) error
+	AddProductImages(id entity.ID, images map[string][]byte) (*entity.Product, error)
 }

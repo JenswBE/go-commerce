@@ -15,8 +15,10 @@ type ProductPostgres struct {
 
 func NewProductPostgres(db *gorm.DB) *ProductPostgres {
 	db.AutoMigrate(
+		&internal.Image{},
 		&internal.Category{},
 		&internal.Manufacturer{},
+		&internal.Product{},
 	)
 
 	return &ProductPostgres{db: db}

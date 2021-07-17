@@ -1,7 +1,11 @@
 package product
 
 import (
+	"errors"
+	"path/filepath"
+
 	"github.com/JenswBE/go-commerce/entity"
+	"github.com/google/uuid"
 )
 
 // GetProduct fetches a single product by ID
@@ -44,4 +48,43 @@ func (s *Service) UpdateProduct(product *entity.Product) (*entity.Product, error
 // DeleteProduct deletes a single product by ID
 func (s *Service) DeleteProduct(id entity.ID) error {
 	return s.db.DeleteProduct(id)
+}
+
+// AddProductImages adds multiple images to a product
+func (s *Service) AddProductImages(productID entity.ID, images map[string][]byte) (*entity.Product, error) {
+	// Fetch product
+	product, err := s.db.GetProduct(productID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Add images
+	for filename, imageBytes := range images {
+		// Extract extension from filename
+		imageExt := filepath.Ext(filename)
+		if imageExt == "" {
+			return nil, errors.New("cannot save image without knowing extension")
+		}
+
+		// Save images as files
+		imageID := uuid.New()
+		s.imageStorage.SaveFile(imageID.String()+imageExt, imageBytes)
+
+		// Add image to product
+		imageEntity := &entity.Image{
+			ID:        imageID,
+			Extension: imageExt,
+			Order:     len(product.Images),
+		}
+		product.Images = append(product.Images, imageEntity)
+	}
+
+	// Save product
+	product, err = s.db.UpdateProduct(product)
+	if err != nil {
+		return nil, err
+	}
+
+	// Add images successful
+	return product, nil
 }

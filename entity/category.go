@@ -17,6 +17,8 @@ type Category struct {
 	Order int
 
 	ProductIDs []ID
+
+	Image *Image
 }
 
 // Validate validates the category data

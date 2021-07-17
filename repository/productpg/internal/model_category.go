@@ -13,7 +13,7 @@ type Category struct {
 	Children    []Category `gorm:"foreignkey:ParentID"`
 	Products    []*Product `gorm:"many2many:product_categories;"`
 	Order       int
-	Image       Image `gorm:"polymorphic:Owner;"`
+	Image       *Image `gorm:"polymorphic:Owner;"`
 }
 
 func CategoryPgToEntity(c *Category) *entity.Category {
@@ -24,6 +24,7 @@ func CategoryPgToEntity(c *Category) *entity.Category {
 		ParentID:    uuid.Nil,
 		Order:       c.Order,
 		ProductIDs:  nil,
+		Image:       ImagePgToEntity(c.Image),
 	}
 	if c.ParentID != nil {
 		cat.ParentID = uuid.MustParse(*c.ParentID)
@@ -54,6 +55,7 @@ func CategoryEntityToPg(e *entity.Category) *Category {
 		Children:    nil,
 		Products:    nil, // Read-only
 		Order:       e.Order,
+		Image:       ImageEntityToPg(e.Image),
 	}
 	if e.ParentID != uuid.Nil {
 		id := e.ParentID.String()

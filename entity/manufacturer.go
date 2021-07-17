@@ -7,6 +7,7 @@ type Manufacturer struct {
 	ID         ID
 	Name       string
 	WebsiteURL string
+	Image      *Image
 }
 
 // Validate validates the manufacturer data

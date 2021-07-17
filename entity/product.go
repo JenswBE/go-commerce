@@ -21,6 +21,7 @@ type Product struct {
 	ManufacturerID ID
 	Status         ProductStatus
 	StockCount     int
+	Images         []*Image
 }
 
 type ProductStatus string

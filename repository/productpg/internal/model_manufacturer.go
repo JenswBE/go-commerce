@@ -9,7 +9,7 @@ type Manufacturer struct {
 	Base
 	Name       string
 	WebsiteURL string
-	Image      Image `gorm:"polymorphic:Owner;"`
+	Image      *Image `gorm:"polymorphic:Owner;"`
 }
 
 func ManufacturerPgToEntity(m *Manufacturer) *entity.Manufacturer {
@@ -17,6 +17,7 @@ func ManufacturerPgToEntity(m *Manufacturer) *entity.Manufacturer {
 		ID:         uuid.MustParse(m.ID),
 		Name:       m.Name,
 		WebsiteURL: m.WebsiteURL,
+		Image:      ImagePgToEntity(m.Image),
 	}
 }
 
@@ -33,5 +34,6 @@ func ManufacturerEntityToPg(e *entity.Manufacturer) *Manufacturer {
 		Base:       Base{ID: e.ID.String()},
 		Name:       e.Name,
 		WebsiteURL: e.WebsiteURL,
+		Image:      ImageEntityToPg(e.Image),
 	}
 }

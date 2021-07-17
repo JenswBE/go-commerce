@@ -6,15 +6,6 @@ info:
 servers:
   - url: http://localhost:8090
 
-x-404_not_found: &404_not_found
-  "404":
-    description: Not Found
-    content:
-      text/plain:
-        schema:
-          type: string
-          example: "not found"
-
 paths:
   /public/categories/:
     get:
@@ -54,7 +45,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Category"
-        <<: *404_not_found
 
   /admin/categories/:
     get:
@@ -109,7 +99,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Category"
-        <<: *404_not_found
 
     put:
       description: Update category
@@ -127,7 +116,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Category"
-        <<: *404_not_found
 
     delete:
       description: Delete category
@@ -135,7 +123,6 @@ paths:
       responses:
         "204":
           description: OK
-        <<: *404_not_found
 
   /admin/categories/{id}/image:
     parameters:
@@ -165,7 +152,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Image"
-        <<: *404_not_found
 
     delete:
       description: Delete image
@@ -173,7 +159,6 @@ paths:
       responses:
         "204":
           description: No Content
-        <<: *404_not_found
 
   /public/manufacturers/:
     get:
@@ -213,7 +198,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Manufacturer"
-        <<: *404_not_found
 
   /admin/manufacturers/:
     get:
@@ -268,7 +252,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Manufacturer"
-        <<: *404_not_found
 
     put:
       description: Update manufacturer
@@ -286,7 +269,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Manufacturer"
-        <<: *404_not_found
 
     delete:
       description: Delete manufacturer
@@ -294,7 +276,6 @@ paths:
       responses:
         "204":
           description: No Content
-        <<: *404_not_found
 
   /admin/manufacturers/{id}/image:
     parameters:
@@ -324,7 +305,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Image"
-        <<: *404_not_found
 
     delete:
       description: Delete image
@@ -332,7 +312,6 @@ paths:
       responses:
         "204":
           description: No Content
-        <<: *404_not_found
 
   /public/products/:
     get:
@@ -377,7 +356,6 @@ paths:
                     properties:
                       manufacturer:
                         $ref: "#/components/schemas/Manufacturer"
-        <<: *404_not_found
 
   /admin/products/:
     get:
@@ -437,7 +415,6 @@ paths:
                     properties:
                       manufacturer:
                         $ref: "#/components/schemas/Manufacturer"
-        <<: *404_not_found
 
     put:
       description: Update product
@@ -455,7 +432,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Product"
-        <<: *404_not_found
 
     delete:
       description: Delete product
@@ -463,19 +439,30 @@ paths:
       responses:
         "204":
           description: OK
-        <<: *404_not_found
 
   /admin/products/{id}/images:
     parameters:
       - $ref: "#/components/parameters/pathID"
+      - $ref: "#/components/parameters/queryImgHeight"
+      - $ref: "#/components/parameters/queryImgResize"
+      - $ref: "#/components/parameters/queryImgWidth"
+
+    get:
+      description: Get images
+      tags: ["Products"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Image"
 
     post:
       description: Add images
       tags: ["Products"]
-      parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
       requestBody:
         content:
           multipart/form-data:
@@ -496,15 +483,35 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Image"
-        <<: *404_not_found
+
+  /admin/products/{id}/images/{image_id}:
+    parameters:
+      - $ref: "#/components/parameters/pathID"
+      - $ref: "#/components/parameters/pathImageID"
+
+    put:
+      description: Update image
+      tags: ["Products"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Image"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Image"
 
     delete:
-      description: Delete product
+      description: Delete image
       tags: ["Products"]
       responses:
         "204":
           description: OK
-        <<: *404_not_found
 
 components:
   parameters:
@@ -514,7 +521,15 @@ components:
       description: ID
       required: true
       schema:
-        type: string
+        $ref: "#/components/schemas/ShortID"
+    
+    pathImageID:
+      name: image_id
+      in: path
+      description: Image ID
+      required: true
+      schema:
+        $ref: "#/components/schemas/ShortID"
     
     queryImgHeight:
       name: img_h
@@ -679,6 +694,7 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ImageUrl"
+              readOnly: true
 
     ShortID:
       type: string
