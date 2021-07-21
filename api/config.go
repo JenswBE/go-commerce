@@ -21,17 +21,23 @@ type Config struct {
 		Port int
 	}
 	Storage struct {
-		Path         string
-		ImagesFolder string
+		Images Storage
 	}
 }
+
+type Storage struct {
+	Type string
+	Path string
+}
+
+const StorageTypeFS = "fs"
 
 func parseConfig() (*Config, error) {
 	// Set defaults
 	viper.SetDefault("Database.Port", 5432)
 	viper.SetDefault("Server.Port", 8090)
-	viper.SetDefault("Storage.Path", "./files")
-	viper.SetDefault("Storage.ImagesFolder", "images")
+	viper.SetDefault("Storage.Images.Type", StorageTypeFS)
+	viper.SetDefault("Storage.Images.Path", "./files/images")
 
 	// Parse config file
 	viper.SetConfigName("config")
@@ -53,8 +59,8 @@ func parseConfig() (*Config, error) {
 	viper.BindEnv("Database.Password", "DATABASE_PASSWORD")
 	viper.BindEnv("Database.Database", "DATABASE_DATABASE")
 	viper.BindEnv("Server.Port", "GOCOM_PORT")
-	viper.BindEnv("Storage.Path", "STORAGE_PATH")
-	viper.BindEnv("Storage.ImagesFolder", "STORAGE_IMAGES_FOLDER")
+	viper.BindEnv("Storage.Images.Type", "STORAGE_IMAGES_TYPE")
+	viper.BindEnv("Storage.Images.Path", "STORAGE_IMAGES_PATH")
 
 	// Unmarshal to Config struct
 	var config Config

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
@@ -32,11 +33,11 @@ func main() {
 
 	// Services
 	productDatabase := productpg.NewProductPostgres(productDB)
-	localImageStorage, err := localstorage.NewLocalStorage(config.Storage.Path)
+	imageStorage, err := getStorageRepo(config.Storage.Images)
 	if err != nil {
-		log.Fatalf("Failed to create local storage repository: %s", err.Error())
+		log.Fatalf("Failed to create image storage repository: %s", err.Error())
 	}
-	productService := product.NewService(productDatabase, localImageStorage)
+	productService := product.NewService(productDatabase, imageStorage)
 	shortIDService := shortid.NewBase58Service()
 	presenter := presenter.New(shortIDService)
 
@@ -62,4 +63,13 @@ func main() {
 	// Start Gin
 	port := strconv.Itoa(config.Server.Port)
 	router.Run(":" + port)
+}
+
+func getStorageRepo(config Storage) (product.StorageRepository, error) {
+	switch config.Type {
+	case StorageTypeFS:
+		return localstorage.NewLocalStorage(config.Path)
+	default:
+		return nil, fmt.Errorf(`unknown storage type "%s"`, config.Type)
+	}
 }

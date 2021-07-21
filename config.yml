@@ -4,4 +4,5 @@ database:
   password: go_commerce
   database: go_commerce
 storage:
-  path: ../files
+  images:
+    path: ../files/images
