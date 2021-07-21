@@ -7,6 +7,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/usecase/product"
+	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/gin-gonic/gin"
 )
 
@@ -72,4 +73,24 @@ func parseFilesFromMultipart(req *http.Request) (map[string][]byte, error) {
 
 	// Parsing successful
 	return images, nil
+}
+
+func parseImageConfigParams(c *gin.Context) (*imageproxy.ImageConfig, error) {
+	// Extract params
+	width := c.Query("img_w")
+	height := c.Query("img_h")
+	resizingType := c.Query("img_r")
+
+	// Only process when any param is set
+	if width == "" && height == "" && resizingType == "" {
+		return nil, nil
+	}
+
+	// Set defaults
+	if resizingType == "" {
+		resizingType = string(imageproxy.ResizingTypeFit)
+	}
+
+	// Parse config
+	return imageproxy.ParseImageConfig(width, height, resizingType)
 }

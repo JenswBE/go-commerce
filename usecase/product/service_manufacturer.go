@@ -2,15 +2,16 @@ package product
 
 import (
 	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/utils/imageproxy"
 )
 
 // GetManufacturer fetches a single manufacturer by ID
-func (s *Service) GetManufacturer(id entity.ID) (*entity.Manufacturer, error) {
+func (s *Service) GetManufacturer(id entity.ID, imageConfig *imageproxy.ImageConfig) (*entity.Manufacturer, error) {
 	return s.db.GetManufacturer(id)
 }
 
 // ListManufacturers fetches all manufacturers
-func (s *Service) ListManufacturers() ([]*entity.Manufacturer, error) {
+func (s *Service) ListManufacturers(imageConfig *imageproxy.ImageConfig) ([]*entity.Manufacturer, error) {
 	return s.db.ListManufacturers()
 }
 

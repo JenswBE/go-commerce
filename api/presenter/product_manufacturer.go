@@ -7,10 +7,16 @@ import (
 )
 
 func (p *Presenter) ManufacturerFromEntity(e *entity.Manufacturer) openapi.Manufacturer {
+	// Set basic fields
 	m := openapi.NewManufacturer()
 	m.SetId(p.EncodeID(e.ID))
 	m.SetName(e.Name)
 	m.SetWebsiteUrl(e.WebsiteURL)
+
+	// Set image URL
+	if e.Image != nil && e.Image.URL != "" {
+		m.SetImageUrl(e.Image.URL)
+	}
 	return *m
 }
 

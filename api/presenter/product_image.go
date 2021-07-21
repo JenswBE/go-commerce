@@ -23,6 +23,16 @@ func (p *Presenter) ImagesListFromEntity(input []*entity.Image) []openapi.Image 
 	return output
 }
 
+func (p *Presenter) ImageURLListFromEntity(input []*entity.Image) []string {
+	output := make([]string, 0, len(input))
+	for _, image := range input {
+		if image.URL != "" {
+			output = append(output, image.URL)
+		}
+	}
+	return output
+}
+
 func (p *Presenter) ImageToEntity(id uuid.UUID, image openapi.Image) (*entity.Image, error) {
 	// Build entity
 	e := &entity.Image{

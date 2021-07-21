@@ -10,8 +10,15 @@ import (
 
 func listManufacturers(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Parse params
+		imageConfig, err := parseImageConfigParams(c)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
 		// Call service
-		result, err := service.ListManufacturers()
+		result, err := service.ListManufacturers(imageConfig)
 		if err != nil {
 			c.String(errToResponse(err))
 			return
@@ -29,9 +36,14 @@ func getManufacturer(p *presenter.Presenter, service product.Usecase) gin.Handle
 		if !ok {
 			return // Response already set on Gin context
 		}
+		imageConfig, err := parseImageConfigParams(c)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
 
 		// Call service
-		manufacturer, err := service.GetManufacturer(id)
+		manufacturer, err := service.GetManufacturer(id, imageConfig)
 		if err != nil {
 			c.String(errToResponse(err))
 			return

@@ -5,17 +5,50 @@ import (
 	"path/filepath"
 
 	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/google/uuid"
 )
 
 // GetProduct fetches a single product by ID
-func (s *Service) GetProduct(id entity.ID) (*entity.Product, error) {
-	return s.db.GetProduct(id)
+func (s *Service) GetProduct(id entity.ID, imageConfig *imageproxy.ImageConfig) (*entity.Product, error) {
+	// Fetch product
+	product, err := s.db.GetProduct(id)
+	if err != nil {
+		return nil, err
+	}
+
+	// Generate URL's
+	if imageConfig != nil {
+		err := s.setImageURLsFromConfig(product.Images, *imageConfig)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	// Get successful
+	return product, nil
 }
 
 // ListProducts fetches all products
-func (s *Service) ListProducts() ([]*entity.Product, error) {
-	return s.db.ListProducts()
+func (s *Service) ListProducts(imageConfig *imageproxy.ImageConfig) ([]*entity.Product, error) {
+	// Fetch product
+	products, err := s.db.ListProducts()
+	if err != nil {
+		return nil, err
+	}
+
+	// Generate URL's
+	if imageConfig != nil {
+		for _, product := range products {
+			err := s.setImageURLsFromConfig(product.Images, *imageConfig)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	// Get successful
+	return products, nil
 }
 
 // CreateProduct creates a new product
@@ -51,7 +84,7 @@ func (s *Service) DeleteProduct(id entity.ID) error {
 }
 
 // AddProductImages adds multiple images to a product
-func (s *Service) AddProductImages(productID entity.ID, images map[string][]byte) (*entity.Product, error) {
+func (s *Service) AddProductImages(productID entity.ID, images map[string][]byte, imageConfig *imageproxy.ImageConfig) (*entity.Product, error) {
 	// Fetch product
 	product, err := s.db.GetProduct(productID)
 	if err != nil {
@@ -83,6 +116,14 @@ func (s *Service) AddProductImages(productID entity.ID, images map[string][]byte
 	product, err = s.db.UpdateProduct(product)
 	if err != nil {
 		return nil, err
+	}
+
+	// Generate URL's
+	if imageConfig != nil {
+		err := s.setImageURLsFromConfig(product.Images, *imageConfig)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// Add images successful

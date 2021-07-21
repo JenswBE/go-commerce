@@ -2,15 +2,16 @@ package product
 
 import (
 	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/utils/imageproxy"
 )
 
 // GetCategory fetches a single category by ID
-func (s *Service) GetCategory(id entity.ID) (*entity.Category, error) {
+func (s *Service) GetCategory(id entity.ID, imageConfig *imageproxy.ImageConfig) (*entity.Category, error) {
 	return s.db.GetCategory(id)
 }
 
 // ListCategories fetches all categories
-func (s *Service) ListCategories() ([]*entity.Category, error) {
+func (s *Service) ListCategories(imageConfig *imageproxy.ImageConfig) ([]*entity.Category, error) {
 	return s.db.ListCategories()
 }
 

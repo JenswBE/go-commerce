@@ -5,6 +5,15 @@
 
 KISS backend for an e-commerce
 
+# Running locally
+
+```bash
+./dc-up.sh
+cd api
+go run .
+./dc-down.sh
+```
+
 ## Links
 
 - GitHub: https://github.com/JenswBE/go-commerce

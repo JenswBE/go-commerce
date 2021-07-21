@@ -9,6 +9,7 @@ import (
 )
 
 func (p *Presenter) ProductFromEntity(e *entity.Product) openapi.Product {
+	// Set basic fields
 	m := openapi.NewProduct()
 	m.SetId(p.EncodeID(e.ID))
 	m.SetCreatedAt(e.CreatedAt)
@@ -18,9 +19,14 @@ func (p *Presenter) ProductFromEntity(e *entity.Product) openapi.Product {
 	m.SetDescriptionLong(e.DescriptionLong)
 	m.SetPrice(int64(e.Price))
 	m.SetCategoryIds(p.EncodeIDList(e.CategoryIDs))
-	m.SetManufacturerId(p.EncodeID(e.ManufacturerID))
 	m.SetStatus(string(e.Status))
 	m.SetStockCount(int64(e.StockCount))
+	m.SetImageUrls(p.ImageURLListFromEntity(e.Images))
+
+	// Set manufacturer ID
+	if e.ManufacturerID != uuid.Nil {
+		m.SetManufacturerId(p.EncodeID(e.ManufacturerID))
+	}
 	return *m
 }
 

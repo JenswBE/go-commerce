@@ -9,14 +9,21 @@ import (
 )
 
 func (p *Presenter) CategoryFromEntity(e *entity.Category) openapi.Category {
+	// Set basic fields
 	c := openapi.NewCategory(e.Name, int64(e.Order))
 	c.SetId(p.EncodeID(e.ID))
 	c.SetDescription(e.Description)
-	c.SetParentId("")
+	c.SetProductIds(p.EncodeIDList(e.ProductIDs))
+
+	// Set parent ID
 	if e.ParentID != uuid.Nil {
 		c.SetParentId(p.EncodeID(e.ParentID))
 	}
-	c.SetProductIds(p.EncodeIDList(e.ProductIDs))
+
+	// Set image URL
+	if e.Image != nil && e.Image.URL != "" {
+		c.SetImageUrl(e.Image.URL)
+	}
 	return *c
 }
 

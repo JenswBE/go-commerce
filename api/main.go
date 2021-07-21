@@ -10,6 +10,7 @@ import (
 	"github.com/JenswBE/go-commerce/repository/localstorage"
 	"github.com/JenswBE/go-commerce/repository/productpg"
 	"github.com/JenswBE/go-commerce/usecase/product"
+	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -37,7 +38,15 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create image storage repository: %s", err.Error())
 	}
-	productService := product.NewService(productDatabase, imageStorage)
+	allowedImageConfigs, err := parseAllowedImageConfigs(config.ImageProxy.AllowedConfigs)
+	if err != nil {
+		log.Fatalf("Failed to parse allowed image configs: %s", err.Error())
+	}
+	imageProxyService, err := imageproxy.NewImgProxyService(config.ImageProxy.BaseURL, config.ImageProxy.Key, config.ImageProxy.Salt, allowedImageConfigs)
+	if err != nil {
+		log.Fatalf("Failed to create image proxy service: %s", err.Error())
+	}
+	productService := product.NewService(productDatabase, imageProxyService, imageStorage)
 	shortIDService := shortid.NewBase58Service()
 	presenter := presenter.New(shortIDService)
 

@@ -10,8 +10,15 @@ import (
 
 func listProducts(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Parse params
+		imageConfig, err := parseImageConfigParams(c)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
 		// Call service
-		result, err := service.ListProducts()
+		result, err := service.ListProducts(imageConfig)
 		if err != nil {
 			c.String(errToResponse(err))
 			return
@@ -29,9 +36,14 @@ func getProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc
 		if !ok {
 			return // Response already set on Gin context
 		}
+		imageConfig, err := parseImageConfigParams(c)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
 
 		// Call service
-		product, err := service.GetProduct(id)
+		product, err := service.GetProduct(id, imageConfig)
 		if err != nil {
 			c.String(errToResponse(err))
 			return
@@ -131,6 +143,11 @@ func addProductImages(p *presenter.Presenter, service product.Usecase) gin.Handl
 		if !ok {
 			return // Response already set on Gin context
 		}
+		imageConfig, err := parseImageConfigParams(c)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
 
 		// Parse body
 		images, err := parseFilesFromMultipart(c.Request)
@@ -140,7 +157,7 @@ func addProductImages(p *presenter.Presenter, service product.Usecase) gin.Handl
 		}
 
 		// Call service
-		product, err := service.AddProductImages(id, images)
+		product, err := service.AddProductImages(id, images, imageConfig)
 		if err != nil {
 			c.String(errToResponse(err))
 			return

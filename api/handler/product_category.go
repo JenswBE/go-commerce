@@ -10,8 +10,15 @@ import (
 
 func listCategories(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Parse params
+		imageConfig, err := parseImageConfigParams(c)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
 		// Call service
-		result, err := service.ListCategories()
+		result, err := service.ListCategories(imageConfig)
 
 		// Handle errors
 		if err != nil {
@@ -31,9 +38,14 @@ func getCategory(p *presenter.Presenter, service product.Usecase) gin.HandlerFun
 		if !ok {
 			return // Response already set on Gin context
 		}
+		imageConfig, err := parseImageConfigParams(c)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
 
 		// Call service
-		category, err := service.GetCategory(id)
+		category, err := service.GetCategory(id, imageConfig)
 		if err != nil {
 			c.String(errToResponse(err))
 			return

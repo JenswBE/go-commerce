@@ -1,11 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"strconv"
 	"strings"
 
+	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/spf13/viper"
 )
 
@@ -16,6 +18,15 @@ type Config struct {
 		User     string
 		Password string
 		Database string
+	}
+	ImageProxy struct {
+		BaseURL string
+		Key     string
+		Salt    string
+
+		// Comma-separated list of allowed configs in format width:height:resizingType.
+		// Example "100:100:fill,300:200:fit". Use "*" if not limiting the configs.
+		AllowedConfigs string
 	}
 	Server struct {
 		Port int
@@ -35,6 +46,7 @@ const StorageTypeFS = "fs"
 func parseConfig() (*Config, error) {
 	// Set defaults
 	viper.SetDefault("Database.Port", 5432)
+	viper.SetDefault("ImageProxy.BaseURL", "/images/")
 	viper.SetDefault("Server.Port", 8090)
 	viper.SetDefault("Storage.Images.Type", StorageTypeFS)
 	viper.SetDefault("Storage.Images.Path", "./files/images")
@@ -89,4 +101,41 @@ func buildDSN(config *Config) string {
 		options = append(options, "dbname="+config.Database.Database)
 	}
 	return strings.Join(options, " ")
+}
+
+func parseAllowedImageConfigs(configs string) ([]imageproxy.ImageConfig, error) {
+	// Configs cannot be empty, wildcard should be used in this case
+	if configs == "" {
+		return nil, errors.New(`allowed image configs cannot be empty, use wildcard * instead`)
+	}
+
+	// Return empty list on wildcard
+	if configs == "*" {
+		return []imageproxy.ImageConfig{}, nil
+	}
+
+	// Split config string in chunks
+	configChunks := strings.Split(configs, ",")
+
+	// Build image configs
+	imgConfigs := make([]imageproxy.ImageConfig, 0, len(configChunks))
+	for _, chunk := range configChunks {
+		// Split chunk in parts
+		parts := strings.Split(chunk, ":")
+
+		// Each chunk must consist of 3 parts (width:height:resizingType)
+		if len(parts) != 3 {
+			return nil, fmt.Errorf(`chunk should consist of 3 parts width:height:resizingType, received %s`, chunk)
+		}
+
+		// Parse config
+		config, err := imageproxy.ParseImageConfig(parts[0], parts[1], parts[2])
+		if err != nil {
+			return nil, err
+		}
+		imgConfigs = append(imgConfigs, *config)
+	}
+
+	// Parse successful
+	return imgConfigs, nil
 }
