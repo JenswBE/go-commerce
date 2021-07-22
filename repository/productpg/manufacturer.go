@@ -34,7 +34,7 @@ func (r *ProductPostgres) CreateManufacturer(e *entity.Manufacturer) (*entity.Ma
 
 func (r *ProductPostgres) UpdateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error) {
 	m := internal.ManufacturerEntityToPg(e)
-	err := r.db.Model(m).Save(m).Error
+	err := r.db.Save(m).Error
 	if err != nil {
 		return nil, translatePgError(err, "manufacturer")
 	}

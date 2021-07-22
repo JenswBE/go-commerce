@@ -145,6 +145,11 @@ func (s *Service) AddProductImages(productID entity.ID, images map[string][]byte
 	return product, nil
 }
 
+// Update product image
+func (s *Service) UpdateProductImage(productID, imageID entity.ID, order int) ([]*entity.Image, error) {
+	return s.db.UpdateImage(imageID, productID, order)
+}
+
 // DeleteProductImage deletes a single image for a product
 func (s *Service) DeleteProductImage(productID, imageID entity.ID) error {
 	// Fetch product

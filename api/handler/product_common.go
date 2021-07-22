@@ -24,6 +24,7 @@ func AddProductReadRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service p
 	groupProducts.GET("", listProducts(p, service))
 	groupProducts.GET("/:id", getProduct(p, service))
 	groupProducts.GET("/:id/images", listProductImages(p, service))
+	groupProducts.PUT("/:id/images/:image_id", updateProductImage(p, service))
 	groupProducts.DELETE("/:id/images/:image_id", deleteProductImage(p, service))
 }
 

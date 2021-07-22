@@ -53,7 +53,7 @@ func (r *ProductPostgres) UpdateProduct(e *entity.Product) (*entity.Product, err
 
 	// Update product
 	m := internal.ProductEntityToPg(e)
-	err := r.db.Model(m).Save(m).Error
+	err := r.db.Save(m).Error
 	if err != nil {
 		return nil, translatePgError(err, "product")
 	}

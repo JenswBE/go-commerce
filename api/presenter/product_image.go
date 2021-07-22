@@ -7,11 +7,10 @@ import (
 )
 
 func (p *Presenter) ImageFromEntity(e *entity.Image) openapi.Image {
-	m := openapi.NewImage()
+	m := openapi.NewImage(int64(e.Order))
 	m.SetId(p.EncodeID(e.ID))
 	m.SetExt(e.Extension)
 	m.SetUrl(e.URL)
-	m.SetOrder(int64(e.Order))
 	return *m
 }
 

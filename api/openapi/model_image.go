@@ -22,15 +22,16 @@ type Image struct {
 	// Signed URL pointing to the image
 	Url *string `json:"url,omitempty"`
 	// Should be sorted ascending by this column
-	Order *int64 `json:"order,omitempty"`
+	Order int64 `json:"order"`
 }
 
 // NewImage instantiates a new Image object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewImage() *Image {
+func NewImage(order int64) *Image {
 	this := Image{}
+	this.Order = order
 	return &this
 }
 
@@ -138,36 +139,28 @@ func (o *Image) SetUrl(v string) {
 	o.Url = &v
 }
 
-// GetOrder returns the Order field value if set, zero value otherwise.
+// GetOrder returns the Order field value
 func (o *Image) GetOrder() int64 {
-	if o == nil || o.Order == nil {
+	if o == nil {
 		var ret int64
 		return ret
 	}
-	return *o.Order
+
+	return o.Order
 }
 
-// GetOrderOk returns a tuple with the Order field value if set, nil otherwise
+// GetOrderOk returns a tuple with the Order field value
 // and a boolean to check if the value has been set.
 func (o *Image) GetOrderOk() (*int64, bool) {
-	if o == nil || o.Order == nil {
+	if o == nil {
 		return nil, false
 	}
-	return o.Order, true
+	return &o.Order, true
 }
 
-// HasOrder returns a boolean if a field has been set.
-func (o *Image) HasOrder() bool {
-	if o != nil && o.Order != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetOrder gets a reference to the given int64 and assigns it to the Order field.
+// SetOrder sets field value
 func (o *Image) SetOrder(v int64) {
-	o.Order = &v
+	o.Order = v
 }
 
 func (o Image) MarshalJSON() ([]byte, error) {
@@ -181,7 +174,7 @@ func (o Image) MarshalJSON() ([]byte, error) {
 	if o.Url != nil {
 		toSerialize["url"] = o.Url
 	}
-	if o.Order != nil {
+	if true {
 		toSerialize["order"] = o.Order
 	}
 	return json.Marshal(toSerialize)

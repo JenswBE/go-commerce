@@ -448,7 +448,7 @@ paths:
       - $ref: "#/components/parameters/queryImgWidth"
 
     get:
-      description: Get images
+      description: Get product images
       tags: ["Products"]
       responses:
         "200":
@@ -461,7 +461,7 @@ paths:
                   $ref: "#/components/schemas/Image"
 
     post:
-      description: Add images
+      description: Add product images
       tags: ["Products"]
       requestBody:
         content:
@@ -490,7 +490,11 @@ paths:
       - $ref: "#/components/parameters/pathImageID"
 
     put:
-      description: Update image
+      description: >-
+        Update product image.
+        In case the new order matches another image, the orders are swapped.
+        Therefore, this call will return all impacted images (1 or 2).
+        First the image on which the request was called and optionally second the swapped image. 
       tags: ["Products"]
       requestBody:
         content:
@@ -504,10 +508,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Image"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Image"
 
     delete:
-      description: Delete image
+      description: Delete product image
       tags: ["Products"]
       responses:
         "204":
@@ -635,6 +641,8 @@ components:
           description: Should be sorted ascending by this column
           type: integer
           format: int64
+      required:
+        - order
 
     ImageUrl:
       type: string

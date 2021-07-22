@@ -53,7 +53,7 @@ func (r *ProductPostgres) UpdateCategory(e *entity.Category) (*entity.Category, 
 
 	// Update category
 	m := internal.CategoryEntityToPg(e)
-	err := r.db.Model(m).Save(m).Error
+	err := r.db.Save(m).Error
 	if err != nil {
 		return nil, translatePgError(err, "category")
 	}

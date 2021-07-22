@@ -193,6 +193,37 @@ func addProductImages(p *presenter.Presenter, service product.Usecase) gin.Handl
 	}
 }
 
+func updateProductImage(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Parse params
+		productID, ok := parseIDParam(c, "id", p)
+		if !ok {
+			return // Response already set on Gin context
+		}
+		imageID, ok := parseIDParam(c, "image_id", p)
+		if !ok {
+			return // Response already set on Gin context
+		}
+
+		// Parse body
+		body := &openapi.Image{}
+		if err := c.BindJSON(body); err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
+		// Call service
+		images, err := service.UpdateProductImage(productID, imageID, int(body.Order))
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
+		// Handle success
+		c.JSON(200, p.ImagesListFromEntity(images))
+	}
+}
+
 func deleteProductImage(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params

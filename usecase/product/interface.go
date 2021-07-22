@@ -25,6 +25,7 @@ type DatabaseRepository interface {
 	DeleteProduct(id entity.ID) error
 
 	GetImage(id entity.ID) (*entity.Image, error)
+	UpdateImage(id entity.ID, ownerID entity.ID, newOrder int) ([]*entity.Image, error)
 	DeleteImage(id entity.ID) error
 }
 
@@ -52,5 +53,6 @@ type Usecase interface {
 	UpdateProduct(e *entity.Product) (*entity.Product, error)
 	DeleteProduct(id entity.ID) error
 	AddProductImages(id entity.ID, images map[string][]byte, imageConfig *imageproxy.ImageConfig) (*entity.Product, error)
+	UpdateProductImage(productID, imageID entity.ID, order int) ([]*entity.Image, error)
 	DeleteProductImage(productID, imageID entity.ID) error
 }
