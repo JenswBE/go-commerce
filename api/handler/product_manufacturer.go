@@ -32,7 +32,7 @@ func listManufacturers(p *presenter.Presenter, service product.Usecase) gin.Hand
 func getManufacturer(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}
@@ -79,7 +79,7 @@ func createManufacturer(p *presenter.Presenter, service product.Usecase) gin.Han
 func updateManufacturer(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}
@@ -107,7 +107,7 @@ func updateManufacturer(p *presenter.Presenter, service product.Usecase) gin.Han
 func deleteManufacturer(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}

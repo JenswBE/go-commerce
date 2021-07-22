@@ -28,3 +28,15 @@ func (s *Service) setImageURLsFromConfig(images []*entity.Image, config imagepro
 	}
 	return nil
 }
+
+// deleteImage deletes a single image
+func (s *Service) deleteImage(image *entity.Image) error {
+	// Delete from DB first as it has the highest risk to fail
+	err := s.db.DeleteImage(image.ID)
+	if err != nil {
+		return err
+	}
+
+	// Delete from storage
+	return s.imageStorage.DeleteFile(image.ID.String() + image.Extension)
+}

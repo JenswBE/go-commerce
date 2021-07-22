@@ -129,3 +129,27 @@ func (s *Service) AddProductImages(productID entity.ID, images map[string][]byte
 	// Add images successful
 	return product, nil
 }
+
+// DeleteProductImage deletes a single image for a product
+func (s *Service) DeleteProductImage(productID, imageID entity.ID) error {
+	// Fetch product
+	product, err := s.db.GetProduct(productID)
+	if err != nil {
+		return err
+	}
+
+	// Check if image owned by product
+	var image *entity.Image
+	for _, productImage := range product.Images {
+		if productImage.ID == imageID {
+			image = productImage
+			break
+		}
+	}
+	if image == nil {
+		return entity.NewError(404, errors.New("product has no image with this ID"))
+	}
+
+	// Delete image
+	return s.deleteImage(image)
+}

@@ -8,7 +8,7 @@ import (
 
 func (r *ProductPostgres) GetProduct(id entity.ID) (*entity.Product, error) {
 	product := &internal.Product{}
-	err := r.db.Preload("Categories").Preload("Images").First(product, "id = ?", id).Error
+	err := r.db.Preload("Categories").Preload("Images").Take(product, "id = ?", id).Error
 	if err != nil {
 		return nil, translatePgError(err, "product")
 	}
@@ -69,7 +69,7 @@ func (r *ProductPostgres) UpdateProduct(e *entity.Product) (*entity.Product, err
 }
 
 func (r *ProductPostgres) DeleteProduct(id entity.ID) error {
-	err := r.db.Delete(&internal.Product{}, "id = ?", id).Error
+	err := r.db.Select("Images").Delete(&internal.Product{}, "id = ?", id).Error
 	if err != nil {
 		return translatePgError(err, "product")
 	}

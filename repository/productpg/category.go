@@ -8,7 +8,7 @@ import (
 
 func (r *ProductPostgres) GetCategory(id entity.ID) (*entity.Category, error) {
 	category := &internal.Category{}
-	err := r.db.Preload("Products").First(category, "id = ?", id).Error
+	err := r.db.Preload("Products").Take(category, "id = ?", id).Error
 	if err != nil {
 		return nil, translatePgError(err, "category")
 	}

@@ -23,6 +23,8 @@ func AddProductReadRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service p
 	groupProducts := rg.Group("/products")
 	groupProducts.GET("", listProducts(p, service))
 	groupProducts.GET("/:id", getProduct(p, service))
+	groupProducts.GET("/:id/images", listProductImages(p, service))
+	groupProducts.DELETE("/:id/images/:image_id", deleteProductImage(p, service))
 }
 
 func AddProductWriteRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service product.Usecase) {

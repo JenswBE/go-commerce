@@ -7,7 +7,7 @@ import (
 
 func (r *ProductPostgres) GetManufacturer(id entity.ID) (*entity.Manufacturer, error) {
 	manufacturer := &internal.Manufacturer{}
-	err := r.db.First(manufacturer, "id = ?", id).Error
+	err := r.db.Take(manufacturer, "id = ?", id).Error
 	if err != nil {
 		return nil, translatePgError(err, "manufacturer")
 	}

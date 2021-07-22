@@ -23,6 +23,9 @@ type DatabaseRepository interface {
 	CreateProduct(e *entity.Product) (*entity.Product, error)
 	UpdateProduct(e *entity.Product) (*entity.Product, error)
 	DeleteProduct(id entity.ID) error
+
+	GetImage(id entity.ID) (*entity.Image, error)
+	DeleteImage(id entity.ID) error
 }
 
 type StorageRepository interface {
@@ -49,4 +52,5 @@ type Usecase interface {
 	UpdateProduct(e *entity.Product) (*entity.Product, error)
 	DeleteProduct(id entity.ID) error
 	AddProductImages(id entity.ID, images map[string][]byte, imageConfig *imageproxy.ImageConfig) (*entity.Product, error)
+	DeleteProductImage(productID, imageID entity.ID) error
 }

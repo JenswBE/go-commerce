@@ -32,7 +32,7 @@ func listProducts(p *presenter.Presenter, service product.Usecase) gin.HandlerFu
 func getProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}
@@ -51,6 +51,31 @@ func getProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc
 
 		// Handle success
 		c.JSON(200, p.ProductFromEntity(product))
+	}
+}
+
+func listProductImages(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Parse params
+		id, ok := parseIDParam(c, "id", p)
+		if !ok {
+			return // Response already set on Gin context
+		}
+		imageConfig, err := parseImageConfigParams(c)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
+		// Call service
+		product, err := service.GetProduct(id, imageConfig)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
+		// Handle success
+		c.JSON(200, p.ImagesListFromEntity(product.Images))
 	}
 }
 
@@ -85,7 +110,7 @@ func createProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerF
 func updateProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}
@@ -119,7 +144,7 @@ func updateProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerF
 func deleteProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}
@@ -139,7 +164,7 @@ func deleteProduct(p *presenter.Presenter, service product.Usecase) gin.HandlerF
 func addProductImages(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}
@@ -165,5 +190,29 @@ func addProductImages(p *presenter.Presenter, service product.Usecase) gin.Handl
 
 		// Handle success
 		c.JSON(200, p.ImagesListFromEntity(product.Images))
+	}
+}
+
+func deleteProductImage(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Parse params
+		productID, ok := parseIDParam(c, "id", p)
+		if !ok {
+			return // Response already set on Gin context
+		}
+		imageID, ok := parseIDParam(c, "image_id", p)
+		if !ok {
+			return // Response already set on Gin context
+		}
+
+		// Call service
+		err := service.DeleteProductImage(productID, imageID)
+		if err != nil {
+			c.String(errToResponse(err))
+			return
+		}
+
+		// Handle success
+		c.String(204, "")
 	}
 }

@@ -7,19 +7,19 @@ import (
 	"github.com/google/uuid"
 )
 
-// parseParamID tries to parse parameter "id" as an UUID or short ID.
+// parseIDParam tries to parse parameter with the given name as an UUID or short ID.
 // On failure, an error is set on the Gin context.
 //
 //   p := presenter.New()
-//   id, ok := parseParamID(c, p)
+//   id, ok := parseIDParam(c, "id", p)
 //   if !ok {
 // 	   return // Response already set on Gin context
 //   }
-func parseParamID(c *gin.Context, p *presenter.Presenter) (uuid.UUID, bool) {
+func parseIDParam(c *gin.Context, name string, p *presenter.Presenter) (uuid.UUID, bool) {
 	// Parse param
-	pID, ok := c.Params.Get("id")
+	pID, ok := c.Params.Get(name)
 	if !ok {
-		c.String(400, "Parameter id is mandatory")
+		c.String(400, "Parameter "+name+" is mandatory")
 		return uuid.Nil, false
 	}
 

@@ -34,7 +34,7 @@ func listCategories(p *presenter.Presenter, service product.Usecase) gin.Handler
 func getCategory(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}
@@ -87,7 +87,7 @@ func createCategory(p *presenter.Presenter, service product.Usecase) gin.Handler
 func updateCategory(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}
@@ -121,7 +121,7 @@ func updateCategory(p *presenter.Presenter, service product.Usecase) gin.Handler
 func deleteCategory(p *presenter.Presenter, service product.Usecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse params
-		id, ok := parseParamID(c, p)
+		id, ok := parseIDParam(c, "id", p)
 		if !ok {
 			return // Response already set on Gin context
 		}
