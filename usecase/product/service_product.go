@@ -80,6 +80,21 @@ func (s *Service) UpdateProduct(product *entity.Product) (*entity.Product, error
 
 // DeleteProduct deletes a single product by ID
 func (s *Service) DeleteProduct(id entity.ID) error {
+	// Fetch product
+	product, err := s.db.GetProduct(id)
+	if err != nil {
+		return err
+	}
+
+	// Delete all images
+	for _, image := range product.Images {
+		err := s.deleteImage(image)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Delete product
 	return s.db.DeleteProduct(id)
 }
 
