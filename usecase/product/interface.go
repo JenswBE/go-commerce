@@ -40,12 +40,16 @@ type Usecase interface {
 	CreateCategory(*entity.Category) (*entity.Category, error)
 	UpdateCategory(e *entity.Category) (*entity.Category, error)
 	DeleteCategory(id entity.ID) error
+	UpsertCategoryImage(categoryID entity.ID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entity.Category, error)
+	DeleteCategoryImage(categoryID entity.ID) error
 
 	GetManufacturer(id entity.ID, imageConfig *imageproxy.ImageConfig) (*entity.Manufacturer, error)
 	ListManufacturers(imageConfig *imageproxy.ImageConfig) ([]*entity.Manufacturer, error)
 	CreateManufacturer(*entity.Manufacturer) (*entity.Manufacturer, error)
 	UpdateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error)
 	DeleteManufacturer(id entity.ID) error
+	UpsertManufacturerImage(manufacturerID entity.ID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entity.Manufacturer, error)
+	DeleteManufacturerImage(manufacturerID entity.ID) error
 
 	GetProduct(id entity.ID, imageConfig *imageproxy.ImageConfig) (*entity.Product, error)
 	ListProducts(imageConfig *imageproxy.ImageConfig) ([]*entity.Product, error)

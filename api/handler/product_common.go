@@ -24,8 +24,6 @@ func AddProductReadRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service p
 	groupProducts.GET("", listProducts(p, service))
 	groupProducts.GET("/:id", getProduct(p, service))
 	groupProducts.GET("/:id/images", listProductImages(p, service))
-	groupProducts.PUT("/:id/images/:image_id", updateProductImage(p, service))
-	groupProducts.DELETE("/:id/images/:image_id", deleteProductImage(p, service))
 }
 
 func AddProductWriteRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service product.Usecase) {
@@ -33,17 +31,23 @@ func AddProductWriteRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service 
 	groupCategories.POST("", createCategory(p, service))
 	groupCategories.PUT("/:id", updateCategory(p, service))
 	groupCategories.DELETE("/:id", deleteCategory(p, service))
+	groupCategories.PUT("/:id/image", upsertCategoryImage(p, service))
+	groupCategories.DELETE("/:id/image", deleteCategoryImage(p, service))
 
 	groupManufacturers := rg.Group("/manufacturers")
 	groupManufacturers.POST("", createManufacturer(p, service))
 	groupManufacturers.PUT("/:id", updateManufacturer(p, service))
 	groupManufacturers.DELETE("/:id", deleteManufacturer(p, service))
+	groupManufacturers.PUT("/:id/image", upsertManufacturerImage(p, service))
+	groupManufacturers.DELETE("/:id/image", deleteManufacturerImage(p, service))
 
 	groupProducts := rg.Group("/products")
 	groupProducts.POST("", createProduct(p, service))
 	groupProducts.PUT("/:id", updateProduct(p, service))
 	groupProducts.DELETE("/:id", deleteProduct(p, service))
 	groupProducts.POST("/:id/images", addProductImages(p, service))
+	groupProducts.PUT("/:id/images/:image_id", updateProductImage(p, service))
+	groupProducts.DELETE("/:id/images/:image_id", deleteProductImage(p, service))
 }
 
 func parseFilesFromMultipart(req *http.Request) (map[string][]byte, error) {

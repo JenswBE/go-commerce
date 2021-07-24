@@ -1,8 +1,12 @@
 package product
 
 import (
+	"errors"
+	"path/filepath"
+
 	"github.com/JenswBE/go-commerce/entity"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
+	"github.com/google/uuid"
 )
 
 type Service struct {
@@ -27,6 +31,29 @@ func (s *Service) setImageURLsFromConfig(images []*entity.Image, config imagepro
 		}
 	}
 	return nil
+}
+
+// saveImage saves a single image
+func (s *Service) saveImage(filename string, content []byte) (*entity.Image, error) {
+	// Extract extension from filename
+	imageExt := filepath.Ext(filename)
+	if imageExt == "" {
+		return nil, errors.New("cannot save image without knowing extension")
+	}
+
+	// Save images as files
+	imageID := uuid.New()
+	err := s.imageStorage.SaveFile(imageID.String()+imageExt, content)
+	if err != nil {
+		return nil, err
+	}
+
+	// Build and return image entity
+	image := &entity.Image{
+		ID:        imageID,
+		Extension: imageExt,
+	}
+	return image, nil
 }
 
 // deleteImage deletes a single image

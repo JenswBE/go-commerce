@@ -2,11 +2,9 @@ package product
 
 import (
 	"errors"
-	"path/filepath"
 
 	"github.com/JenswBE/go-commerce/entity"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
-	"github.com/google/uuid"
 )
 
 // GetProduct fetches a single product by ID
@@ -108,22 +106,11 @@ func (s *Service) AddProductImages(productID entity.ID, images map[string][]byte
 
 	// Add images
 	for filename, imageBytes := range images {
-		// Extract extension from filename
-		imageExt := filepath.Ext(filename)
-		if imageExt == "" {
-			return nil, errors.New("cannot save image without knowing extension")
+		imageEntity, err := s.saveImage(filename, imageBytes)
+		if err != nil {
+			return nil, err
 		}
-
-		// Save images as files
-		imageID := uuid.New()
-		s.imageStorage.SaveFile(imageID.String()+imageExt, imageBytes)
-
-		// Add image to product
-		imageEntity := &entity.Image{
-			ID:        imageID,
-			Extension: imageExt,
-			Order:     len(product.Images),
-		}
+		imageEntity.Order = len(product.Images)
 		product.Images = append(product.Images, imageEntity)
 	}
 
