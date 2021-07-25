@@ -2,6 +2,6 @@ package imageproxy
 
 //Service interface
 type Service interface {
-	// Encode converts an UUID to a short ID
+	// GenerateURL generates a signed URL for the image proxy
 	GenerateURL(sourceURL string, config ImageConfig) (string, error)
 }

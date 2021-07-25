@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
-	"github.com/JenswBE/go-commerce/usecase/product"
+	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )

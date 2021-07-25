@@ -3,12 +3,12 @@ package productpg
 import (
 	"errors"
 
-	"github.com/JenswBE/go-commerce/entity"
-	"github.com/JenswBE/go-commerce/repository/productpg/internal"
+	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 	"gorm.io/gorm"
 )
 
-func (r *ProductPostgres) GetImage(id entity.ID) (*entity.Image, error) {
+func (r *ProductPostgres) GetImage(id entities.ID) (*entities.Image, error) {
 	image := &internal.Image{}
 	err := r.db.Take(image, "id = ?", id).Error
 	if err != nil {
@@ -17,7 +17,7 @@ func (r *ProductPostgres) GetImage(id entity.ID) (*entity.Image, error) {
 	return internal.ImagePgToEntity(image), nil
 }
 
-func (r *ProductPostgres) UpdateImage(id entity.ID, ownerID entity.ID, newOrder int) ([]*entity.Image, error) {
+func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOrder int) ([]*entities.Image, error) {
 	// Fetch image
 	image := &internal.Image{}
 	err := r.db.Take(image, "id = ? AND owner_id = ?", id, ownerID).Error
@@ -27,7 +27,7 @@ func (r *ProductPostgres) UpdateImage(id entity.ID, ownerID entity.ID, newOrder 
 
 	// Order is the same => Ignore update request
 	if image.Order == newOrder {
-		return []*entity.Image{internal.ImagePgToEntity(image)}, nil
+		return []*entities.Image{internal.ImagePgToEntity(image)}, nil
 	}
 
 	// Fetch image with same new order (if any)
@@ -56,10 +56,10 @@ func (r *ProductPostgres) UpdateImage(id entity.ID, ownerID entity.ID, newOrder 
 	// Update successful
 	if imageSameOrder.ID == "" {
 		// No order swapped
-		return []*entity.Image{internal.ImagePgToEntity(image)}, nil
+		return []*entities.Image{internal.ImagePgToEntity(image)}, nil
 	} else {
 		// Order swapped
-		images := []*entity.Image{
+		images := []*entities.Image{
 			internal.ImagePgToEntity(image),
 			internal.ImagePgToEntity(imageSameOrder),
 		}
@@ -67,7 +67,7 @@ func (r *ProductPostgres) UpdateImage(id entity.ID, ownerID entity.ID, newOrder 
 	}
 }
 
-func (r *ProductPostgres) DeleteImage(id entity.ID) error {
+func (r *ProductPostgres) DeleteImage(id entities.ID) error {
 	err := r.db.Delete(&internal.Image{}, "id = ?", id).Error
 	if err != nil {
 		return translatePgError(err, "image")

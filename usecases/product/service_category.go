@@ -3,24 +3,24 @@ package product
 import (
 	"log"
 
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 )
 
 // GetCategory fetches a single category by ID
-func (s *Service) GetCategory(id entity.ID, imageConfig *imageproxy.ImageConfig) (*entity.Category, error) {
+func (s *Service) GetCategory(id entities.ID, imageConfig *imageproxy.ImageConfig) (*entities.Category, error) {
 	return s.db.GetCategory(id)
 }
 
 // ListCategories fetches all categories
-func (s *Service) ListCategories(imageConfig *imageproxy.ImageConfig) ([]*entity.Category, error) {
+func (s *Service) ListCategories(imageConfig *imageproxy.ImageConfig) ([]*entities.Category, error) {
 	return s.db.ListCategories()
 }
 
 // CreateCategory creates a new category
-func (s *Service) CreateCategory(category *entity.Category) (*entity.Category, error) {
+func (s *Service) CreateCategory(category *entities.Category) (*entities.Category, error) {
 	// Generate new ID
-	category.ID = entity.NewID()
+	category.ID = entities.NewID()
 
 	// Validate entity
 	err := category.Validate()
@@ -33,7 +33,7 @@ func (s *Service) CreateCategory(category *entity.Category) (*entity.Category, e
 }
 
 // UpdateCategory persists the provided category
-func (s *Service) UpdateCategory(category *entity.Category) (*entity.Category, error) {
+func (s *Service) UpdateCategory(category *entities.Category) (*entities.Category, error) {
 	// Validate entity
 	err := category.Validate()
 	if err != nil {
@@ -45,7 +45,7 @@ func (s *Service) UpdateCategory(category *entity.Category) (*entity.Category, e
 }
 
 // DeleteCategory deletes a single category by ID
-func (s *Service) DeleteCategory(id entity.ID) error {
+func (s *Service) DeleteCategory(id entities.ID) error {
 	// Fetch category
 	category, err := s.db.GetCategory(id)
 	if err != nil {
@@ -65,7 +65,7 @@ func (s *Service) DeleteCategory(id entity.ID) error {
 }
 
 // UpsertCategoryImage adds/updates the image of the category with the provided one.
-func (s *Service) UpsertCategoryImage(categoryID entity.ID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entity.Category, error) {
+func (s *Service) UpsertCategoryImage(categoryID entities.ID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entities.Category, error) {
 	// Fetch category
 	category, err := s.db.GetCategory(categoryID)
 	if err != nil {
@@ -106,7 +106,7 @@ func (s *Service) UpsertCategoryImage(categoryID entity.ID, imageName string, im
 }
 
 // DeleteCategoryImage cleares the image of the category
-func (s *Service) DeleteCategoryImage(categoryID entity.ID) error {
+func (s *Service) DeleteCategoryImage(categoryID entities.ID) error {
 	// Fetch category
 	category, err := s.db.GetCategory(categoryID)
 	if err != nil {

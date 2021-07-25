@@ -2,11 +2,11 @@ package presenter
 
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
 )
 
-func (p *Presenter) ManufacturerFromEntity(e *entity.Manufacturer) openapi.Manufacturer {
+func (p *Presenter) ManufacturerFromEntity(e *entities.Manufacturer) openapi.Manufacturer {
 	// Set basic fields
 	m := openapi.NewManufacturer()
 	m.SetId(p.EncodeID(e.ID))
@@ -20,7 +20,7 @@ func (p *Presenter) ManufacturerFromEntity(e *entity.Manufacturer) openapi.Manuf
 	return *m
 }
 
-func (p *Presenter) ManufacturersListFromEntity(input []*entity.Manufacturer) []openapi.Manufacturer {
+func (p *Presenter) ManufacturersListFromEntity(input []*entities.Manufacturer) []openapi.Manufacturer {
 	output := make([]openapi.Manufacturer, 0, len(input))
 	for _, manufacturer := range input {
 		output = append(output, p.ManufacturerFromEntity(manufacturer))
@@ -28,9 +28,9 @@ func (p *Presenter) ManufacturersListFromEntity(input []*entity.Manufacturer) []
 	return output
 }
 
-func (p *Presenter) ManufacturerToEntity(id uuid.UUID, manufacturer openapi.Manufacturer) *entity.Manufacturer {
+func (p *Presenter) ManufacturerToEntity(id uuid.UUID, manufacturer openapi.Manufacturer) *entities.Manufacturer {
 	// Build entity
-	return &entity.Manufacturer{
+	return &entities.Manufacturer{
 		ID:         id,
 		Name:       manufacturer.GetName(),
 		WebsiteURL: manufacturer.GetWebsiteUrl(),

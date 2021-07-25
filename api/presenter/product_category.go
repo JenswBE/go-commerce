@@ -4,11 +4,11 @@ import (
 	"errors"
 
 	"github.com/JenswBE/go-commerce/api/openapi"
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
 )
 
-func (p *Presenter) CategoryFromEntity(e *entity.Category) openapi.Category {
+func (p *Presenter) CategoryFromEntity(e *entities.Category) openapi.Category {
 	// Set basic fields
 	c := openapi.NewCategory(e.Name, int64(e.Order))
 	c.SetId(p.EncodeID(e.ID))
@@ -27,7 +27,7 @@ func (p *Presenter) CategoryFromEntity(e *entity.Category) openapi.Category {
 	return *c
 }
 
-func (p *Presenter) CategoriesListFromEntity(input []*entity.Category) []openapi.Category {
+func (p *Presenter) CategoriesListFromEntity(input []*entities.Category) []openapi.Category {
 	output := make([]openapi.Category, 0, len(input))
 	for _, category := range input {
 		output = append(output, p.CategoryFromEntity(category))
@@ -35,9 +35,9 @@ func (p *Presenter) CategoriesListFromEntity(input []*entity.Category) []openapi
 	return output
 }
 
-func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*entity.Category, error) {
+func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*entities.Category, error) {
 	// Build entity
-	e := &entity.Category{
+	e := &entities.Category{
 		ID:          id,
 		Name:        category.GetName(),
 		Description: category.GetDescription(),
@@ -50,7 +50,7 @@ func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*
 	if category.GetParentId() != "" {
 		pID, err := p.ParseID(category.GetParentId())
 		if err != nil {
-			return nil, entity.NewError(400, errors.New("parent_id is invalid"))
+			return nil, entities.NewError(400, errors.New("parent_id is invalid"))
 		}
 		e.ParentID = pID
 	}

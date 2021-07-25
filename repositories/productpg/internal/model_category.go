@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
 )
 
@@ -16,8 +16,8 @@ type Category struct {
 	Image       *Image `gorm:"polymorphic:Owner;"`
 }
 
-func CategoryPgToEntity(c *Category) *entity.Category {
-	cat := &entity.Category{
+func CategoryPgToEntity(c *Category) *entities.Category {
+	cat := &entities.Category{
 		ID:          uuid.MustParse(c.ID),
 		Name:        c.Name,
 		Description: c.Description,
@@ -38,15 +38,15 @@ func CategoryPgToEntity(c *Category) *entity.Category {
 	return cat
 }
 
-func CategoriesListPgToEntity(c []*Category) []*entity.Category {
-	output := make([]*entity.Category, 0, len(c))
+func CategoriesListPgToEntity(c []*Category) []*entities.Category {
+	output := make([]*entities.Category, 0, len(c))
 	for _, cat := range c {
 		output = append(output, CategoryPgToEntity(cat))
 	}
 	return output
 }
 
-func CategoryEntityToPg(e *entity.Category) *Category {
+func CategoryEntityToPg(e *entities.Category) *Category {
 	cat := &Category{
 		Base:        Base{ID: e.ID.String()},
 		Name:        e.Name,

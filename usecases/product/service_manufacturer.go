@@ -3,24 +3,24 @@ package product
 import (
 	"log"
 
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 )
 
 // GetManufacturer fetches a single manufacturer by ID
-func (s *Service) GetManufacturer(id entity.ID, imageConfig *imageproxy.ImageConfig) (*entity.Manufacturer, error) {
+func (s *Service) GetManufacturer(id entities.ID, imageConfig *imageproxy.ImageConfig) (*entities.Manufacturer, error) {
 	return s.db.GetManufacturer(id)
 }
 
 // ListManufacturers fetches all manufacturers
-func (s *Service) ListManufacturers(imageConfig *imageproxy.ImageConfig) ([]*entity.Manufacturer, error) {
+func (s *Service) ListManufacturers(imageConfig *imageproxy.ImageConfig) ([]*entities.Manufacturer, error) {
 	return s.db.ListManufacturers()
 }
 
 // CreateManufacturer creates a new manufacturer
-func (s *Service) CreateManufacturer(manufacturer *entity.Manufacturer) (*entity.Manufacturer, error) {
+func (s *Service) CreateManufacturer(manufacturer *entities.Manufacturer) (*entities.Manufacturer, error) {
 	// Generate new ID
-	manufacturer.ID = entity.NewID()
+	manufacturer.ID = entities.NewID()
 
 	// Validate entity
 	err := manufacturer.Validate()
@@ -33,7 +33,7 @@ func (s *Service) CreateManufacturer(manufacturer *entity.Manufacturer) (*entity
 }
 
 // UpdateManufacturer persists the provided manufacturer
-func (s *Service) UpdateManufacturer(manufacturer *entity.Manufacturer) (*entity.Manufacturer, error) {
+func (s *Service) UpdateManufacturer(manufacturer *entities.Manufacturer) (*entities.Manufacturer, error) {
 	// Validate entity
 	err := manufacturer.Validate()
 	if err != nil {
@@ -45,7 +45,7 @@ func (s *Service) UpdateManufacturer(manufacturer *entity.Manufacturer) (*entity
 }
 
 // DeleteManufacturer deletes a single manufacturer by ID
-func (s *Service) DeleteManufacturer(id entity.ID) error {
+func (s *Service) DeleteManufacturer(id entities.ID) error {
 	// Fetch manufacturer
 	manufacturer, err := s.db.GetManufacturer(id)
 	if err != nil {
@@ -65,7 +65,7 @@ func (s *Service) DeleteManufacturer(id entity.ID) error {
 }
 
 // UpsertManufacturerImage adds/updates the image of the manufacturer with the provided one.
-func (s *Service) UpsertManufacturerImage(manufacturerID entity.ID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entity.Manufacturer, error) {
+func (s *Service) UpsertManufacturerImage(manufacturerID entities.ID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entities.Manufacturer, error) {
 	// Fetch manufacturer
 	manufacturer, err := s.db.GetManufacturer(manufacturerID)
 	if err != nil {
@@ -106,7 +106,7 @@ func (s *Service) UpsertManufacturerImage(manufacturerID entity.ID, imageName st
 }
 
 // DeleteManufacturerImage cleares the image of the manufacturer
-func (s *Service) DeleteManufacturerImage(manufacturerID entity.ID) error {
+func (s *Service) DeleteManufacturerImage(manufacturerID entities.ID) error {
 	// Fetch manufacturer
 	manufacturer, err := s.db.GetManufacturer(manufacturerID)
 	if err != nil {

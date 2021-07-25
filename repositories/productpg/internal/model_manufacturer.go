@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
 )
 
@@ -12,8 +12,8 @@ type Manufacturer struct {
 	Image      *Image `gorm:"polymorphic:Owner;"`
 }
 
-func ManufacturerPgToEntity(m *Manufacturer) *entity.Manufacturer {
-	return &entity.Manufacturer{
+func ManufacturerPgToEntity(m *Manufacturer) *entities.Manufacturer {
+	return &entities.Manufacturer{
 		ID:         uuid.MustParse(m.ID),
 		Name:       m.Name,
 		WebsiteURL: m.WebsiteURL,
@@ -21,15 +21,15 @@ func ManufacturerPgToEntity(m *Manufacturer) *entity.Manufacturer {
 	}
 }
 
-func ManufacturersListPgToEntity(m []*Manufacturer) []*entity.Manufacturer {
-	output := make([]*entity.Manufacturer, 0, len(m))
+func ManufacturersListPgToEntity(m []*Manufacturer) []*entities.Manufacturer {
+	output := make([]*entities.Manufacturer, 0, len(m))
 	for _, man := range m {
 		output = append(output, ManufacturerPgToEntity(man))
 	}
 	return output
 }
 
-func ManufacturerEntityToPg(e *entity.Manufacturer) *Manufacturer {
+func ManufacturerEntityToPg(e *entities.Manufacturer) *Manufacturer {
 	return &Manufacturer{
 		Base:       Base{ID: e.ID.String()},
 		Name:       e.Name,

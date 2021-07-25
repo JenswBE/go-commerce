@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/JenswBE/go-commerce/api/presenter"
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -38,7 +38,7 @@ func parseIDParam(c *gin.Context, name string, p *presenter.Presenter) (uuid.UUI
 // If yes, status and embedded error message are returned.
 // If no, status is 500 and provided error message are returned.
 func errToResponse(e error) (int, string) {
-	if err, ok := e.(*entity.GoComError); ok {
+	if err, ok := e.(*entities.GoComError); ok {
 		return err.Status, err.Err.Error()
 	}
 	return 500, e.Error()

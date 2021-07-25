@@ -3,8 +3,8 @@ package handler
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
-	"github.com/JenswBE/go-commerce/entity"
-	"github.com/JenswBE/go-commerce/usecase/product"
+	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -164,7 +164,7 @@ func upsertCategoryImage(p *presenter.Presenter, service product.Usecase) gin.Ha
 		}
 
 		// Call service
-		var category *entity.Category
+		var category *entities.Category
 		for imageName, imageContent := range images {
 			category, err = service.UpsertCategoryImage(id, imageName, imageContent, imageConfig)
 			if err != nil {

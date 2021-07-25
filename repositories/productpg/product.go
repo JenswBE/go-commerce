@@ -1,12 +1,12 @@
 package productpg
 
 import (
-	"github.com/JenswBE/go-commerce/entity"
-	"github.com/JenswBE/go-commerce/repository/productpg/internal"
+	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 	"github.com/google/uuid"
 )
 
-func (r *ProductPostgres) GetProduct(id entity.ID) (*entity.Product, error) {
+func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) {
 	product := &internal.Product{}
 	err := r.db.Preload("Categories").Preload("Images").Take(product, "id = ?", id).Error
 	if err != nil {
@@ -15,7 +15,7 @@ func (r *ProductPostgres) GetProduct(id entity.ID) (*entity.Product, error) {
 	return internal.ProductPgToEntity(product), nil
 }
 
-func (r *ProductPostgres) ListProducts() ([]*entity.Product, error) {
+func (r *ProductPostgres) ListProducts() ([]*entities.Product, error) {
 	products := []*internal.Product{}
 	err := r.db.Preload("Categories").Preload("Images").Find(&products).Error
 	if err != nil {
@@ -24,7 +24,7 @@ func (r *ProductPostgres) ListProducts() ([]*entity.Product, error) {
 	return internal.ProductsListPgToEntity(products), nil
 }
 
-func (r *ProductPostgres) CreateProduct(e *entity.Product) (*entity.Product, error) {
+func (r *ProductPostgres) CreateProduct(e *entities.Product) (*entities.Product, error) {
 	// Check if provided manufacturer ID exists
 	if e.ManufacturerID != uuid.Nil {
 		_, err := r.GetManufacturer(e.ManufacturerID)
@@ -42,7 +42,7 @@ func (r *ProductPostgres) CreateProduct(e *entity.Product) (*entity.Product, err
 	return internal.ProductPgToEntity(m), nil
 }
 
-func (r *ProductPostgres) UpdateProduct(e *entity.Product) (*entity.Product, error) {
+func (r *ProductPostgres) UpdateProduct(e *entities.Product) (*entities.Product, error) {
 	// Check if provided manufacturer ID exists
 	if e.ManufacturerID != uuid.Nil {
 		_, err := r.GetManufacturer(e.ManufacturerID)
@@ -68,7 +68,7 @@ func (r *ProductPostgres) UpdateProduct(e *entity.Product) (*entity.Product, err
 	return internal.ProductPgToEntity(m), nil
 }
 
-func (r *ProductPostgres) DeleteProduct(id entity.ID) error {
+func (r *ProductPostgres) DeleteProduct(id entities.ID) error {
 	err := r.db.Select("Images").Delete(&internal.Product{}, "id = ?", id).Error
 	if err != nil {
 		return translatePgError(err, "product")

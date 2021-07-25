@@ -4,7 +4,7 @@ import (
 	"errors"
 	"path/filepath"
 
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/google/uuid"
 )
@@ -23,7 +23,7 @@ func NewService(db DatabaseRepository, imageProxy imageproxy.Service, imageStora
 	}
 }
 
-func (s *Service) setImageURLsFromConfig(images []*entity.Image, config imageproxy.ImageConfig) error {
+func (s *Service) setImageURLsFromConfig(images []*entities.Image, config imageproxy.ImageConfig) error {
 	for _, image := range images {
 		err := image.SetURLFromConfig(s.imageProxy, config)
 		if err != nil {
@@ -34,7 +34,7 @@ func (s *Service) setImageURLsFromConfig(images []*entity.Image, config imagepro
 }
 
 // saveImage saves a single image
-func (s *Service) saveImage(filename string, content []byte) (*entity.Image, error) {
+func (s *Service) saveImage(filename string, content []byte) (*entities.Image, error) {
 	// Extract extension from filename
 	imageExt := filepath.Ext(filename)
 	if imageExt == "" {
@@ -49,7 +49,7 @@ func (s *Service) saveImage(filename string, content []byte) (*entity.Image, err
 	}
 
 	// Build and return image entity
-	image := &entity.Image{
+	image := &entities.Image{
 		ID:        imageID,
 		Extension: imageExt,
 	}
@@ -57,7 +57,7 @@ func (s *Service) saveImage(filename string, content []byte) (*entity.Image, err
 }
 
 // deleteImage deletes a single image
-func (s *Service) deleteImage(image *entity.Image) error {
+func (s *Service) deleteImage(image *entities.Image) error {
 	// Delete from DB first as it has the highest risk to fail
 	err := s.db.DeleteImage(image.ID)
 	if err != nil {

@@ -4,11 +4,11 @@ import (
 	"errors"
 
 	"github.com/JenswBE/go-commerce/api/openapi"
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
 )
 
-func (p *Presenter) ProductFromEntity(e *entity.Product) openapi.Product {
+func (p *Presenter) ProductFromEntity(e *entities.Product) openapi.Product {
 	// Set basic fields
 	m := openapi.NewProduct()
 	m.SetId(p.EncodeID(e.ID))
@@ -30,7 +30,7 @@ func (p *Presenter) ProductFromEntity(e *entity.Product) openapi.Product {
 	return *m
 }
 
-func (p *Presenter) ProductsListFromEntity(input []*entity.Product) []openapi.Product {
+func (p *Presenter) ProductsListFromEntity(input []*entities.Product) []openapi.Product {
 	output := make([]openapi.Product, 0, len(input))
 	for _, product := range input {
 		output = append(output, p.ProductFromEntity(product))
@@ -38,9 +38,9 @@ func (p *Presenter) ProductsListFromEntity(input []*entity.Product) []openapi.Pr
 	return output
 }
 
-func (p *Presenter) ProductToEntity(id uuid.UUID, product openapi.Product) (*entity.Product, error) {
+func (p *Presenter) ProductToEntity(id uuid.UUID, product openapi.Product) (*entities.Product, error) {
 	// Build entity
-	e := &entity.Product{
+	e := &entities.Product{
 		ID:               id,
 		Name:             product.GetName(),
 		DescriptionShort: product.GetDescriptionShort(),
@@ -48,7 +48,7 @@ func (p *Presenter) ProductToEntity(id uuid.UUID, product openapi.Product) (*ent
 		Price:            int(product.GetPrice()),
 		CategoryIDs:      nil,
 		ManufacturerID:   uuid.Nil,
-		Status:           entity.ProductStatus(product.GetStatus()),
+		Status:           entities.ProductStatus(product.GetStatus()),
 		StockCount:       int(product.GetStockCount()),
 	}
 
@@ -56,7 +56,7 @@ func (p *Presenter) ProductToEntity(id uuid.UUID, product openapi.Product) (*ent
 	if len(product.GetCategoryIds()) > 0 {
 		catIDs, err := p.ParseIDList(product.GetCategoryIds())
 		if err != nil {
-			return nil, entity.NewError(400, errors.New("category_ids is invalid"))
+			return nil, entities.NewError(400, errors.New("category_ids is invalid"))
 		}
 		e.CategoryIDs = catIDs
 	}
@@ -65,7 +65,7 @@ func (p *Presenter) ProductToEntity(id uuid.UUID, product openapi.Product) (*ent
 	if product.GetManufacturerId() != "" {
 		manID, err := p.ParseID(product.GetManufacturerId())
 		if err != nil {
-			return nil, entity.NewError(400, errors.New("manufacturer_id is invalid"))
+			return nil, entities.NewError(400, errors.New("manufacturer_id is invalid"))
 		}
 		e.ManufacturerID = manID
 	}

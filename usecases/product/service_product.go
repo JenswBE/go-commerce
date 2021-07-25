@@ -3,12 +3,12 @@ package product
 import (
 	"errors"
 
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 )
 
 // GetProduct fetches a single product by ID
-func (s *Service) GetProduct(id entity.ID, imageConfig *imageproxy.ImageConfig) (*entity.Product, error) {
+func (s *Service) GetProduct(id entities.ID, imageConfig *imageproxy.ImageConfig) (*entities.Product, error) {
 	// Fetch product
 	product, err := s.db.GetProduct(id)
 	if err != nil {
@@ -28,7 +28,7 @@ func (s *Service) GetProduct(id entity.ID, imageConfig *imageproxy.ImageConfig) 
 }
 
 // ListProducts fetches all products
-func (s *Service) ListProducts(imageConfig *imageproxy.ImageConfig) ([]*entity.Product, error) {
+func (s *Service) ListProducts(imageConfig *imageproxy.ImageConfig) ([]*entities.Product, error) {
 	// Fetch product
 	products, err := s.db.ListProducts()
 	if err != nil {
@@ -50,9 +50,9 @@ func (s *Service) ListProducts(imageConfig *imageproxy.ImageConfig) ([]*entity.P
 }
 
 // CreateProduct creates a new product
-func (s *Service) CreateProduct(product *entity.Product) (*entity.Product, error) {
+func (s *Service) CreateProduct(product *entities.Product) (*entities.Product, error) {
 	// Generate new ID
-	product.ID = entity.NewID()
+	product.ID = entities.NewID()
 
 	// Validate entity
 	err := product.Validate()
@@ -65,7 +65,7 @@ func (s *Service) CreateProduct(product *entity.Product) (*entity.Product, error
 }
 
 // UpdateProduct persists the provided product
-func (s *Service) UpdateProduct(product *entity.Product) (*entity.Product, error) {
+func (s *Service) UpdateProduct(product *entities.Product) (*entities.Product, error) {
 	// Validate entity
 	err := product.Validate()
 	if err != nil {
@@ -77,7 +77,7 @@ func (s *Service) UpdateProduct(product *entity.Product) (*entity.Product, error
 }
 
 // DeleteProduct deletes a single product by ID
-func (s *Service) DeleteProduct(id entity.ID) error {
+func (s *Service) DeleteProduct(id entities.ID) error {
 	// Fetch product
 	product, err := s.db.GetProduct(id)
 	if err != nil {
@@ -97,7 +97,7 @@ func (s *Service) DeleteProduct(id entity.ID) error {
 }
 
 // AddProductImages adds multiple images to a product
-func (s *Service) AddProductImages(productID entity.ID, images map[string][]byte, imageConfig *imageproxy.ImageConfig) (*entity.Product, error) {
+func (s *Service) AddProductImages(productID entities.ID, images map[string][]byte, imageConfig *imageproxy.ImageConfig) (*entities.Product, error) {
 	// Fetch product
 	product, err := s.db.GetProduct(productID)
 	if err != nil {
@@ -133,12 +133,12 @@ func (s *Service) AddProductImages(productID entity.ID, images map[string][]byte
 }
 
 // Update product image
-func (s *Service) UpdateProductImage(productID, imageID entity.ID, order int) ([]*entity.Image, error) {
+func (s *Service) UpdateProductImage(productID, imageID entities.ID, order int) ([]*entities.Image, error) {
 	return s.db.UpdateImage(imageID, productID, order)
 }
 
 // DeleteProductImage deletes a single image for a product
-func (s *Service) DeleteProductImage(productID, imageID entity.ID) error {
+func (s *Service) DeleteProductImage(productID, imageID entities.ID) error {
 	// Fetch product
 	product, err := s.db.GetProduct(productID)
 	if err != nil {
@@ -146,7 +146,7 @@ func (s *Service) DeleteProductImage(productID, imageID entity.ID) error {
 	}
 
 	// Check if image owned by product
-	var image *entity.Image
+	var image *entities.Image
 	for _, productImage := range product.Images {
 		if productImage.ID == imageID {
 			image = productImage
@@ -154,7 +154,7 @@ func (s *Service) DeleteProductImage(productID, imageID entity.ID) error {
 		}
 	}
 	if image == nil {
-		return entity.NewError(404, errors.New("product has no image with this ID"))
+		return entities.NewError(404, errors.New("product has no image with this ID"))
 	}
 
 	// Delete image

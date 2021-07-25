@@ -2,11 +2,11 @@ package presenter
 
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
 )
 
-func (p *Presenter) ImageFromEntity(e *entity.Image) openapi.Image {
+func (p *Presenter) ImageFromEntity(e *entities.Image) openapi.Image {
 	m := openapi.NewImage(int64(e.Order))
 	m.SetId(p.EncodeID(e.ID))
 	m.SetExt(e.Extension)
@@ -14,7 +14,7 @@ func (p *Presenter) ImageFromEntity(e *entity.Image) openapi.Image {
 	return *m
 }
 
-func (p *Presenter) ImagesListFromEntity(input []*entity.Image) []openapi.Image {
+func (p *Presenter) ImagesListFromEntity(input []*entities.Image) []openapi.Image {
 	output := make([]openapi.Image, 0, len(input))
 	for _, image := range input {
 		output = append(output, p.ImageFromEntity(image))
@@ -22,7 +22,7 @@ func (p *Presenter) ImagesListFromEntity(input []*entity.Image) []openapi.Image 
 	return output
 }
 
-func (p *Presenter) ImageURLListFromEntity(input []*entity.Image) []string {
+func (p *Presenter) ImageURLListFromEntity(input []*entities.Image) []string {
 	output := make([]string, 0, len(input))
 	for _, image := range input {
 		if image.URL != "" {
@@ -32,9 +32,9 @@ func (p *Presenter) ImageURLListFromEntity(input []*entity.Image) []string {
 	return output
 }
 
-func (p *Presenter) ImageToEntity(id uuid.UUID, image openapi.Image) (*entity.Image, error) {
+func (p *Presenter) ImageToEntity(id uuid.UUID, image openapi.Image) (*entities.Image, error) {
 	// Build entity
-	e := &entity.Image{
+	e := &entities.Image{
 		ID:    id,
 		Order: int(image.GetOrder()),
 	}

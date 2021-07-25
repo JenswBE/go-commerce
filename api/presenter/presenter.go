@@ -1,7 +1,7 @@
 package presenter
 
 import (
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/google/uuid"
 )
@@ -17,7 +17,7 @@ func New(shortIDService shortid.Service) *Presenter {
 func (p *Presenter) ParseID(id string) (uuid.UUID, error) {
 	pID, err := p.shortIDService.Decode(id)
 	if err != nil {
-		return uuid.Nil, entity.NewError(400, err)
+		return uuid.Nil, entities.NewError(400, err)
 	}
 	return pID, nil
 }

@@ -7,9 +7,9 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/handler"
 	"github.com/JenswBE/go-commerce/api/presenter"
-	"github.com/JenswBE/go-commerce/repository/localstorage"
-	"github.com/JenswBE/go-commerce/repository/productpg"
-	"github.com/JenswBE/go-commerce/usecase/product"
+	"github.com/JenswBE/go-commerce/repositories/localstorage"
+	"github.com/JenswBE/go-commerce/repositories/productpg"
+	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/gin-contrib/cors"

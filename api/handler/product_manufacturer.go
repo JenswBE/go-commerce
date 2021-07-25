@@ -3,8 +3,8 @@ package handler
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
-	"github.com/JenswBE/go-commerce/entity"
-	"github.com/JenswBE/go-commerce/usecase/product"
+	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -150,7 +150,7 @@ func upsertManufacturerImage(p *presenter.Presenter, service product.Usecase) gi
 		}
 
 		// Call service
-		var manufacturer *entity.Manufacturer
+		var manufacturer *entities.Manufacturer
 		for imageName, imageContent := range images {
 			manufacturer, err = service.UpsertManufacturerImage(id, imageName, imageContent, imageConfig)
 			if err != nil {

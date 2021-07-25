@@ -1,11 +1,11 @@
 package productpg
 
 import (
-	"github.com/JenswBE/go-commerce/entity"
-	"github.com/JenswBE/go-commerce/repository/productpg/internal"
+	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 )
 
-func (r *ProductPostgres) GetManufacturer(id entity.ID) (*entity.Manufacturer, error) {
+func (r *ProductPostgres) GetManufacturer(id entities.ID) (*entities.Manufacturer, error) {
 	manufacturer := &internal.Manufacturer{}
 	err := r.db.Take(manufacturer, "id = ?", id).Error
 	if err != nil {
@@ -14,7 +14,7 @@ func (r *ProductPostgres) GetManufacturer(id entity.ID) (*entity.Manufacturer, e
 	return internal.ManufacturerPgToEntity(manufacturer), nil
 }
 
-func (r *ProductPostgres) ListManufacturers() ([]*entity.Manufacturer, error) {
+func (r *ProductPostgres) ListManufacturers() ([]*entities.Manufacturer, error) {
 	manufacturers := []*internal.Manufacturer{}
 	err := r.db.Find(&manufacturers).Error
 	if err != nil {
@@ -23,7 +23,7 @@ func (r *ProductPostgres) ListManufacturers() ([]*entity.Manufacturer, error) {
 	return internal.ManufacturersListPgToEntity(manufacturers), nil
 }
 
-func (r *ProductPostgres) CreateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error) {
+func (r *ProductPostgres) CreateManufacturer(e *entities.Manufacturer) (*entities.Manufacturer, error) {
 	m := internal.ManufacturerEntityToPg(e)
 	err := r.db.Create(m).Error
 	if err != nil {
@@ -32,7 +32,7 @@ func (r *ProductPostgres) CreateManufacturer(e *entity.Manufacturer) (*entity.Ma
 	return internal.ManufacturerPgToEntity(m), nil
 }
 
-func (r *ProductPostgres) UpdateManufacturer(e *entity.Manufacturer) (*entity.Manufacturer, error) {
+func (r *ProductPostgres) UpdateManufacturer(e *entities.Manufacturer) (*entities.Manufacturer, error) {
 	m := internal.ManufacturerEntityToPg(e)
 	err := r.db.Save(m).Error
 	if err != nil {
@@ -41,7 +41,7 @@ func (r *ProductPostgres) UpdateManufacturer(e *entity.Manufacturer) (*entity.Ma
 	return internal.ManufacturerPgToEntity(m), nil
 }
 
-func (r *ProductPostgres) DeleteManufacturer(id entity.ID) error {
+func (r *ProductPostgres) DeleteManufacturer(id entities.ID) error {
 	err := r.db.Delete(&internal.Manufacturer{}, "id = ?", id).Error
 	if err != nil {
 		return translatePgError(err, "manufacturer")

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/JenswBE/go-commerce/entity"
-	"github.com/JenswBE/go-commerce/repository/productpg/internal"
+	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 	"gorm.io/gorm"
 )
 
@@ -29,7 +29,7 @@ func NewProductPostgres(db *gorm.DB) *ProductPostgres {
 // as-is.
 func translatePgError(err error, object string) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return entity.NewError(404, fmt.Errorf(`%s not found`, object))
+		return entities.NewError(404, fmt.Errorf(`%s not found`, object))
 	}
 	return err
 }

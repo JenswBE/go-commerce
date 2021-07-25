@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"github.com/JenswBE/go-commerce/entity"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
 )
 
@@ -18,8 +18,8 @@ type Product struct {
 	Images           []Image `gorm:"polymorphic:Owner;"`
 }
 
-func ProductPgToEntity(c *Product) *entity.Product {
-	product := &entity.Product{
+func ProductPgToEntity(c *Product) *entities.Product {
+	product := &entities.Product{
 		ID:               uuid.MustParse(c.ID),
 		CreatedAt:        c.CreatedAt,
 		UpdatedAt:        c.UpdatedAt,
@@ -29,7 +29,7 @@ func ProductPgToEntity(c *Product) *entity.Product {
 		Price:            c.Price,
 		CategoryIDs:      nil,
 		ManufacturerID:   uuid.Nil,
-		Status:           entity.ProductStatus(c.Status),
+		Status:           entities.ProductStatus(c.Status),
 		StockCount:       c.StockCount,
 		Images:           ImagesListPgToEntity(c.Images),
 	}
@@ -51,15 +51,15 @@ func ProductPgToEntity(c *Product) *entity.Product {
 	return product
 }
 
-func ProductsListPgToEntity(p []*Product) []*entity.Product {
-	output := make([]*entity.Product, 0, len(p))
+func ProductsListPgToEntity(p []*Product) []*entities.Product {
+	output := make([]*entities.Product, 0, len(p))
 	for _, product := range p {
 		output = append(output, ProductPgToEntity(product))
 	}
 	return output
 }
 
-func ProductEntityToPg(e *entity.Product) *Product {
+func ProductEntityToPg(e *entities.Product) *Product {
 	product := &Product{
 		Base:             Base{ID: e.ID.String()},
 		Name:             e.Name,

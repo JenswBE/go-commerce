@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/JenswBE/go-commerce/api/presenter"
-	"github.com/JenswBE/go-commerce/usecase/product"
+	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/gin-gonic/gin"
 )
