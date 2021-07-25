@@ -1,5 +1,6 @@
 [![GitHub](https://img.shields.io/github/license/JenswBE/go-commerce)](https://github.com/JenswBE/go-commerce)
 [![Docker Pulls](https://img.shields.io/docker/pulls/jenswbe/go-commerce)](https://hub.docker.com/r/jenswbe/go-commerce)
+[![codecov](https://codecov.io/gh/JenswBE/go-commerce/branch/master/graph/badge.svg?token=S2oyV1sTWU)](https://codecov.io/gh/JenswBE/go-commerce)
 
 # GoCommerce
 
