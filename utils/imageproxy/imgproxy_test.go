@@ -6,6 +6,30 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func Test_NewImgProxyService_Success(t *testing.T) {
+	service, err := NewImgProxyService("http://localhost", "736563726574", "68656C6C6F", nil)
+	require.NoError(t, err)
+	require.NotNil(t, service)
+}
+
+func Test_NewImgProxyService_InvalidBaseURL_Failure(t *testing.T) {
+	service, err := NewImgProxyService("\n", "736563726574", "68656C6C6F", nil)
+	require.Error(t, err)
+	require.Nil(t, service)
+}
+
+func Test_NewImgProxyService_InvalidKey_Failure(t *testing.T) {
+	service, err := NewImgProxyService("http://localhost", "invalid", "68656C6C6F", nil)
+	require.Error(t, err)
+	require.Nil(t, service)
+}
+
+func Test_NewImgProxyService_InvalidSalt_Failure(t *testing.T) {
+	service, err := NewImgProxyService("http://localhost", "736563726574", "invalid", nil)
+	require.Error(t, err)
+	require.Nil(t, service)
+}
+
 func Test_GenerateURL_Success(t *testing.T) {
 	// Test based on example at https://docs.imgproxy.net/signing_the_url
 
