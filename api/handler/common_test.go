@@ -23,7 +23,7 @@ func Test_parseIDParam_Success(t *testing.T) {
 	value := uuid.New()
 	c, _ := setupGinTest("", "", gin.Params{{Key: "test_id", Value: value.String()}}, "")
 
-	// Call helper
+	// Call function
 	result, success := parseIDParam(c, "test_id", presenter)
 
 	// Assert results
@@ -36,7 +36,7 @@ func Test_parseIDParam_ParamNotProvided_Failure(t *testing.T) {
 	presenter := presenter.New(shortid.NewFakeService())
 	c, w := setupGinTest("", "", nil, "")
 
-	// Call helper
+	// Call function
 	result, success := parseIDParam(c, "test_id", presenter)
 
 	// Assert results

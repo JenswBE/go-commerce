@@ -11,43 +11,55 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AddProductReadRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service product.Usecase) {
-	groupCategories := rg.Group("/categories")
-	groupCategories.GET("", listCategories(p, service))
-	groupCategories.GET("/:id", getCategory(p, service))
-
-	groupManufacturers := rg.Group("/manufacturers")
-	groupManufacturers.GET("", listManufacturers(p, service))
-	groupManufacturers.GET("/:id", getManufacturer(p, service))
-
-	groupProducts := rg.Group("/products")
-	groupProducts.GET("", listProducts(p, service))
-	groupProducts.GET("/:id", getProduct(p, service))
-	groupProducts.GET("/:id/images", listProductImages(p, service))
+type ProductHandler struct {
+	presenter *presenter.Presenter
+	service   product.Usecase
 }
 
-func AddProductWriteRoutes(rg *gin.RouterGroup, p *presenter.Presenter, service product.Usecase) {
+func NewProductHandler(p *presenter.Presenter, service product.Usecase) *ProductHandler {
+	return &ProductHandler{
+		presenter: p,
+		service:   service,
+	}
+}
+
+func (h *ProductHandler) RegisterReadRoutes(rg *gin.RouterGroup) {
 	groupCategories := rg.Group("/categories")
-	groupCategories.POST("", createCategory(p, service))
-	groupCategories.PUT("/:id", updateCategory(p, service))
-	groupCategories.DELETE("/:id", deleteCategory(p, service))
-	groupCategories.PUT("/:id/image", upsertCategoryImage(p, service))
-	groupCategories.DELETE("/:id/image", deleteCategoryImage(p, service))
+	groupCategories.GET("", h.listCategories)
+	groupCategories.GET("/:id", h.getCategory)
 
 	groupManufacturers := rg.Group("/manufacturers")
-	groupManufacturers.POST("", createManufacturer(p, service))
-	groupManufacturers.PUT("/:id", updateManufacturer(p, service))
-	groupManufacturers.DELETE("/:id", deleteManufacturer(p, service))
-	groupManufacturers.PUT("/:id/image", upsertManufacturerImage(p, service))
-	groupManufacturers.DELETE("/:id/image", deleteManufacturerImage(p, service))
+	groupManufacturers.GET("", h.listManufacturers)
+	groupManufacturers.GET("/:id", h.getManufacturer)
 
 	groupProducts := rg.Group("/products")
-	groupProducts.POST("", createProduct(p, service))
-	groupProducts.PUT("/:id", updateProduct(p, service))
-	groupProducts.DELETE("/:id", deleteProduct(p, service))
-	groupProducts.POST("/:id/images", addProductImages(p, service))
-	groupProducts.PUT("/:id/images/:image_id", updateProductImage(p, service))
-	groupProducts.DELETE("/:id/images/:image_id", deleteProductImage(p, service))
+	groupProducts.GET("", h.listProducts)
+	groupProducts.GET("/:id", h.getProduct)
+	groupProducts.GET("/:id/images", h.listProductImages)
+}
+
+func (h *ProductHandler) RegisterWriteRoutes(rg *gin.RouterGroup) {
+	groupCategories := rg.Group("/categories")
+	groupCategories.POST("", h.createCategory)
+	groupCategories.PUT("/:id", h.updateCategory)
+	groupCategories.DELETE("/:id", h.deleteCategory)
+	groupCategories.PUT("/:id/image", h.upsertCategoryImage)
+	groupCategories.DELETE("/:id/image", h.deleteCategoryImage)
+
+	groupManufacturers := rg.Group("/manufacturers")
+	groupManufacturers.POST("", h.createManufacturer)
+	groupManufacturers.PUT("/:id", h.updateManufacturer)
+	groupManufacturers.DELETE("/:id", h.deleteManufacturer)
+	groupManufacturers.PUT("/:id/image", h.upsertManufacturerImage)
+	groupManufacturers.DELETE("/:id/image", h.deleteManufacturerImage)
+
+	groupProducts := rg.Group("/products")
+	groupProducts.POST("", h.createProduct)
+	groupProducts.PUT("/:id", h.updateProduct)
+	groupProducts.DELETE("/:id", h.deleteProduct)
+	groupProducts.POST("/:id/images", h.addProductImages)
+	groupProducts.PUT("/:id/images/:image_id", h.updateProductImage)
+	groupProducts.DELETE("/:id/images/:image_id", h.deleteProductImage)
 }
 
 func parseFilesFromMultipart(req *http.Request) (map[string][]byte, error) {

@@ -70,14 +70,17 @@ func main() {
 	router.StaticFile("/", "../docs/index.html")
 	router.StaticFile("/openapi.yml", "../docs/openapi.yml")
 
+	// Setup handlers
+	productHandler := handler.NewProductHandler(presenter, productService)
+
 	// Public routes
 	public := router.Group("/public")
-	handler.AddProductReadRoutes(public, presenter, productService)
+	productHandler.RegisterReadRoutes(public)
 
 	// Admin routes
 	admin := router.Group("/admin")
-	handler.AddProductReadRoutes(admin, presenter, productService)
-	handler.AddProductWriteRoutes(admin, presenter, productService)
+	productHandler.RegisterReadRoutes(admin)
+	productHandler.RegisterWriteRoutes(admin)
 
 	// Start Gin
 	port := strconv.Itoa(config.Server.Port)
