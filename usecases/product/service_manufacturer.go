@@ -1,10 +1,9 @@
 package product
 
 import (
-	"log"
-
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
+	"github.com/rs/zerolog/log"
 )
 
 // GetManufacturer fetches a single manufacturer by ID
@@ -89,7 +88,7 @@ func (s *Service) UpsertManufacturerImage(manufacturerID entities.ID, imageName 
 	if oldImage != nil {
 		err = s.deleteImage(oldImage)
 		if err != nil {
-			log.Printf(`Failed to delete old image for category: %s`, err.Error())
+			log.Warn().Err(err).Msg("Failed to delete old image for category")
 		}
 	}
 

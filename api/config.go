@@ -3,11 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
@@ -61,7 +61,7 @@ func parseConfig() (*Config, error) {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
 			return nil, fmt.Errorf("failed reading config file: %w", err)
 		}
-		log.Printf("Warning: No config file found, expecting configuration through ENV variables %s", err)
+		log.Warn().Err(err).Msg("No config file found, expecting configuration through ENV variables")
 	}
 
 	// Bind ENV variables

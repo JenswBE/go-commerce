@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"os"
 	"strconv"
+	"time"
 
 	"github.com/JenswBE/go-commerce/api/handler"
 	"github.com/JenswBE/go-commerce/api/presenter"
@@ -14,37 +15,43 @@ import (
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func main() {
+	// Setup logging
+	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}
+	log.Logger = log.Output(output)
+
 	// Parse config
 	config, err := parseConfig()
 	if err != nil {
-		log.Fatalf("Failed to parse config: %s", err)
+		log.Fatal().Err(err).Msg("Failed to parse config")
 	}
 
 	// DB
 	dsn := buildDSN(config)
 	productDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Failed to connect to db: %s", err.Error())
+		log.Fatal().Err(err).Msg("Failed to connect to db")
 	}
 
 	// Services
 	productDatabase := productpg.NewProductPostgres(productDB)
 	imageStorage, err := getStorageRepo(config.Storage.Images)
 	if err != nil {
-		log.Fatalf("Failed to create image storage repository: %s", err.Error())
+		log.Fatal().Err(err).Msg("Failed to create image storage repository")
 	}
 	allowedImageConfigs, err := parseAllowedImageConfigs(config.ImageProxy.AllowedConfigs)
 	if err != nil {
-		log.Fatalf("Failed to parse allowed image configs: %s", err.Error())
+		log.Fatal().Err(err).Msg("Failed to parse allowed image configs")
 	}
 	imageProxyService, err := imageproxy.NewImgProxyService(config.ImageProxy.BaseURL, config.ImageProxy.Key, config.ImageProxy.Salt, allowedImageConfigs)
 	if err != nil {
-		log.Fatalf("Failed to create image proxy service: %s", err.Error())
+		log.Fatal().Err(err).Msg("Failed to create image proxy service")
 	}
 	productService := product.NewService(productDatabase, imageProxyService, imageStorage)
 	shortIDService := shortid.NewBase58Service()
