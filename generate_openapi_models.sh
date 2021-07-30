@@ -2,6 +2,9 @@
 # Bash strict mode: http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+# Run linter
+docker run --user ${UID} --rm -v "$(pwd)/docs:/data" jamescooke/openapi-validator -ev openapi.yml
+
 # Generate models
 docker run --user ${UID} --rm -v "$(pwd):/local" \
 openapitools/openapi-generator-cli generate \
