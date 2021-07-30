@@ -36,11 +36,14 @@ func main() {
 	dsn := buildDSN(config)
 	productDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to connect to db")
+		log.Fatal().Err(err).Msg("Failed to connect to DB")
 	}
 
 	// Services
-	productDatabase := productpg.NewProductPostgres(productDB)
+	productDatabase, err := productpg.NewProductPostgres(productDB)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to migrate DB and create products repository")
+	}
 	imageStorage, err := getStorageRepo(config.Storage.Images)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create image storage repository")

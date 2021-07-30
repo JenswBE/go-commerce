@@ -6,6 +6,7 @@ require (
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.1
+	github.com/go-gormigrate/gormigrate/v2 v2.0.0
 	github.com/google/uuid v1.2.0
 	github.com/rs/zerolog v1.23.0
 	github.com/spf13/viper v1.8.1

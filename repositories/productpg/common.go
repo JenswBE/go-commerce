@@ -13,15 +13,15 @@ type ProductPostgres struct {
 	db *gorm.DB
 }
 
-func NewProductPostgres(db *gorm.DB) *ProductPostgres {
-	db.AutoMigrate(
-		&internal.Image{},
-		&internal.Category{},
-		&internal.Manufacturer{},
-		&internal.Product{},
-	)
+func NewProductPostgres(db *gorm.DB) (*ProductPostgres, error) {
+	// Migrate database
+	err := internal.Migrate(db)
+	if err != nil {
+		return nil, err
+	}
 
-	return &ProductPostgres{db: db}
+	// Build repository
+	return &ProductPostgres{db: db}, nil
 }
 
 // translatePgError converts well-known errors (e.g. ErrRecordNotFound)
