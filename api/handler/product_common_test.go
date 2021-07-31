@@ -48,7 +48,7 @@ func Test_parseFilesFromMultipart_Failure(t *testing.T) {
 
 func Test_parseImageConfigParams_AllParamsSet_Success(t *testing.T) {
 	// Setup test
-	c, _ := setupGinTest("", "/?img_w=300&img_h=200&img_r=fit", nil, "")
+	c, _ := setupGinTest("", "/?img_w=300&img_h=200&img_r=fit", nil, nil)
 
 	// Call function
 	result, err := parseImageConfigParams(c)
@@ -65,7 +65,7 @@ func Test_parseImageConfigParams_AllParamsSet_Success(t *testing.T) {
 
 func Test_parseImageConfigParams_NoParamsSet_Success(t *testing.T) {
 	// Setup test
-	c, _ := setupGinTest("", "", nil, "")
+	c, _ := setupGinTest("", "", nil, nil)
 
 	// Call function
 	result, err := parseImageConfigParams(c)
