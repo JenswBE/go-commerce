@@ -74,7 +74,7 @@ func (h *ProductHandler) createCategory(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.CategoryFromEntity(category))
+	c.JSON(201, h.presenter.CategoryFromEntity(category))
 }
 
 func (h *ProductHandler) updateCategory(c *gin.Context) {

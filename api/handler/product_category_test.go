@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"net/http"
 	"testing"
 
 	"github.com/JenswBE/go-commerce/entities"
@@ -24,6 +25,7 @@ func Test_listCategories_Success(t *testing.T) {
 
 	// Assert result
 	requireEqualJSON(t, fixtures.CategoryOpenAPISlice(), r)
+	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
 	usecaseMock.AssertCalled(t, "ListCategories", *new(*imageproxy.ImageConfig))
@@ -41,6 +43,7 @@ func Test_getCategory_Success(t *testing.T) {
 
 	// Assert result
 	requireEqualJSON(t, fixtures.CategoryOpenAPI(), r)
+	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
 	usecaseMock.AssertCalled(t, "GetCategory", uuid.MustParse(fixtures.CategoryID), *new(*imageproxy.ImageConfig))
@@ -59,6 +62,7 @@ func Test_createCategory_Success(t *testing.T) {
 
 	// Assert result
 	requireEqualJSON(t, fixtures.CategoryOpenAPI(), r)
+	require.Equal(t, http.StatusCreated, r.Code)
 
 	// Assert mock calls
 	usecaseMock.AssertCalled(t, "CreateCategory", mock.MatchedBy(func(cat *entities.Category) bool {
@@ -68,4 +72,47 @@ func Test_createCategory_Success(t *testing.T) {
 		require.Equal(t, expected, cat)
 		return true
 	}))
+}
+
+func Test_updateCategory_Success(t *testing.T) {
+	// Setup test
+	params := gin.Params{{Key: "id", Value: fixtures.CategoryID}}
+	body, err := json.Marshal(fixtures.CategoryOpenAPI())
+	require.NoError(t, err)
+	c, r := setupGinTest("", "", params, body)
+	handler, usecaseMock := setupHandlerTest()
+	usecaseMock.On("UpdateCategory", mock.Anything).Return(fixtures.Category(), nil)
+
+	// Call handler
+	handler.updateCategory(c)
+
+	// Assert result
+	requireEqualJSON(t, fixtures.CategoryOpenAPI(), r)
+	require.Equal(t, http.StatusOK, r.Code)
+
+	// Assert mock calls
+	usecaseMock.AssertCalled(t, "UpdateCategory", mock.MatchedBy(func(cat *entities.Category) bool {
+		expected := fixtures.Category()
+		expected.Image = nil
+		require.Equal(t, expected, cat)
+		return true
+	}))
+}
+
+func Test_deleteCategory_Success(t *testing.T) {
+	// Setup test
+	params := gin.Params{{Key: "id", Value: fixtures.CategoryID}}
+	c, r := setupGinTest("", "", params, nil)
+	handler, usecaseMock := setupHandlerTest()
+	usecaseMock.On("DeleteCategory", mock.Anything).Return(nil)
+
+	// Call handler
+	handler.deleteCategory(c)
+
+	// Assert result
+	require.Empty(t, r.Body.String())
+	require.Equal(t, http.StatusNoContent, r.Code)
+
+	// Assert mock calls
+	usecaseMock.AssertCalled(t, "DeleteCategory", uuid.MustParse(fixtures.CategoryID))
 }
