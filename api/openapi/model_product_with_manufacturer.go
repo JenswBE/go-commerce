@@ -12,10 +12,15 @@ package openapi
 
 import (
 	"encoding/json"
+	"time"
 )
 
-// ProductAllOf struct for ProductAllOf
-type ProductAllOf struct {
+// ProductWithManufacturer struct for ProductWithManufacturer
+type ProductWithManufacturer struct {
+	// Compressed representation of ID
+	Id *string `json:"id,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 	Name *string `json:"name,omitempty"`
 	DescriptionShort *string `json:"description_short,omitempty"`
 	DescriptionLong *string `json:"description_long,omitempty"`
@@ -26,27 +31,124 @@ type ProductAllOf struct {
 	Status *string `json:"status,omitempty"`
 	StockCount *int64 `json:"stock_count,omitempty"`
 	ImageUrls *[]string `json:"image_urls,omitempty"`
+	Manufacturer *Manufacturer `json:"manufacturer,omitempty"`
 }
 
-// NewProductAllOf instantiates a new ProductAllOf object
+// NewProductWithManufacturer instantiates a new ProductWithManufacturer object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProductAllOf() *ProductAllOf {
-	this := ProductAllOf{}
+func NewProductWithManufacturer() *ProductWithManufacturer {
+	this := ProductWithManufacturer{}
 	return &this
 }
 
-// NewProductAllOfWithDefaults instantiates a new ProductAllOf object
+// NewProductWithManufacturerWithDefaults instantiates a new ProductWithManufacturer object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewProductAllOfWithDefaults() *ProductAllOf {
-	this := ProductAllOf{}
+func NewProductWithManufacturerWithDefaults() *ProductWithManufacturer {
+	this := ProductWithManufacturer{}
 	return &this
+}
+
+// GetId returns the Id field value if set, zero value otherwise.
+func (o *ProductWithManufacturer) GetId() string {
+	if o == nil || o.Id == nil {
+		var ret string
+		return ret
+	}
+	return *o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProductWithManufacturer) GetIdOk() (*string, bool) {
+	if o == nil || o.Id == nil {
+		return nil, false
+	}
+	return o.Id, true
+}
+
+// HasId returns a boolean if a field has been set.
+func (o *ProductWithManufacturer) HasId() bool {
+	if o != nil && o.Id != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetId gets a reference to the given string and assigns it to the Id field.
+func (o *ProductWithManufacturer) SetId(v string) {
+	o.Id = &v
+}
+
+// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
+func (o *ProductWithManufacturer) GetCreatedAt() time.Time {
+	if o == nil || o.CreatedAt == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.CreatedAt
+}
+
+// GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProductWithManufacturer) GetCreatedAtOk() (*time.Time, bool) {
+	if o == nil || o.CreatedAt == nil {
+		return nil, false
+	}
+	return o.CreatedAt, true
+}
+
+// HasCreatedAt returns a boolean if a field has been set.
+func (o *ProductWithManufacturer) HasCreatedAt() bool {
+	if o != nil && o.CreatedAt != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *ProductWithManufacturer) SetCreatedAt(v time.Time) {
+	o.CreatedAt = &v
+}
+
+// GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
+func (o *ProductWithManufacturer) GetUpdatedAt() time.Time {
+	if o == nil || o.UpdatedAt == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.UpdatedAt
+}
+
+// GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProductWithManufacturer) GetUpdatedAtOk() (*time.Time, bool) {
+	if o == nil || o.UpdatedAt == nil {
+		return nil, false
+	}
+	return o.UpdatedAt, true
+}
+
+// HasUpdatedAt returns a boolean if a field has been set.
+func (o *ProductWithManufacturer) HasUpdatedAt() bool {
+	if o != nil && o.UpdatedAt != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *ProductWithManufacturer) SetUpdatedAt(v time.Time) {
+	o.UpdatedAt = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
-func (o *ProductAllOf) GetName() string {
+func (o *ProductWithManufacturer) GetName() string {
 	if o == nil || o.Name == nil {
 		var ret string
 		return ret
@@ -56,7 +158,7 @@ func (o *ProductAllOf) GetName() string {
 
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductAllOf) GetNameOk() (*string, bool) {
+func (o *ProductWithManufacturer) GetNameOk() (*string, bool) {
 	if o == nil || o.Name == nil {
 		return nil, false
 	}
@@ -64,7 +166,7 @@ func (o *ProductAllOf) GetNameOk() (*string, bool) {
 }
 
 // HasName returns a boolean if a field has been set.
-func (o *ProductAllOf) HasName() bool {
+func (o *ProductWithManufacturer) HasName() bool {
 	if o != nil && o.Name != nil {
 		return true
 	}
@@ -73,12 +175,12 @@ func (o *ProductAllOf) HasName() bool {
 }
 
 // SetName gets a reference to the given string and assigns it to the Name field.
-func (o *ProductAllOf) SetName(v string) {
+func (o *ProductWithManufacturer) SetName(v string) {
 	o.Name = &v
 }
 
 // GetDescriptionShort returns the DescriptionShort field value if set, zero value otherwise.
-func (o *ProductAllOf) GetDescriptionShort() string {
+func (o *ProductWithManufacturer) GetDescriptionShort() string {
 	if o == nil || o.DescriptionShort == nil {
 		var ret string
 		return ret
@@ -88,7 +190,7 @@ func (o *ProductAllOf) GetDescriptionShort() string {
 
 // GetDescriptionShortOk returns a tuple with the DescriptionShort field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductAllOf) GetDescriptionShortOk() (*string, bool) {
+func (o *ProductWithManufacturer) GetDescriptionShortOk() (*string, bool) {
 	if o == nil || o.DescriptionShort == nil {
 		return nil, false
 	}
@@ -96,7 +198,7 @@ func (o *ProductAllOf) GetDescriptionShortOk() (*string, bool) {
 }
 
 // HasDescriptionShort returns a boolean if a field has been set.
-func (o *ProductAllOf) HasDescriptionShort() bool {
+func (o *ProductWithManufacturer) HasDescriptionShort() bool {
 	if o != nil && o.DescriptionShort != nil {
 		return true
 	}
@@ -105,12 +207,12 @@ func (o *ProductAllOf) HasDescriptionShort() bool {
 }
 
 // SetDescriptionShort gets a reference to the given string and assigns it to the DescriptionShort field.
-func (o *ProductAllOf) SetDescriptionShort(v string) {
+func (o *ProductWithManufacturer) SetDescriptionShort(v string) {
 	o.DescriptionShort = &v
 }
 
 // GetDescriptionLong returns the DescriptionLong field value if set, zero value otherwise.
-func (o *ProductAllOf) GetDescriptionLong() string {
+func (o *ProductWithManufacturer) GetDescriptionLong() string {
 	if o == nil || o.DescriptionLong == nil {
 		var ret string
 		return ret
@@ -120,7 +222,7 @@ func (o *ProductAllOf) GetDescriptionLong() string {
 
 // GetDescriptionLongOk returns a tuple with the DescriptionLong field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductAllOf) GetDescriptionLongOk() (*string, bool) {
+func (o *ProductWithManufacturer) GetDescriptionLongOk() (*string, bool) {
 	if o == nil || o.DescriptionLong == nil {
 		return nil, false
 	}
@@ -128,7 +230,7 @@ func (o *ProductAllOf) GetDescriptionLongOk() (*string, bool) {
 }
 
 // HasDescriptionLong returns a boolean if a field has been set.
-func (o *ProductAllOf) HasDescriptionLong() bool {
+func (o *ProductWithManufacturer) HasDescriptionLong() bool {
 	if o != nil && o.DescriptionLong != nil {
 		return true
 	}
@@ -137,12 +239,12 @@ func (o *ProductAllOf) HasDescriptionLong() bool {
 }
 
 // SetDescriptionLong gets a reference to the given string and assigns it to the DescriptionLong field.
-func (o *ProductAllOf) SetDescriptionLong(v string) {
+func (o *ProductWithManufacturer) SetDescriptionLong(v string) {
 	o.DescriptionLong = &v
 }
 
 // GetPrice returns the Price field value if set, zero value otherwise.
-func (o *ProductAllOf) GetPrice() int64 {
+func (o *ProductWithManufacturer) GetPrice() int64 {
 	if o == nil || o.Price == nil {
 		var ret int64
 		return ret
@@ -152,7 +254,7 @@ func (o *ProductAllOf) GetPrice() int64 {
 
 // GetPriceOk returns a tuple with the Price field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductAllOf) GetPriceOk() (*int64, bool) {
+func (o *ProductWithManufacturer) GetPriceOk() (*int64, bool) {
 	if o == nil || o.Price == nil {
 		return nil, false
 	}
@@ -160,7 +262,7 @@ func (o *ProductAllOf) GetPriceOk() (*int64, bool) {
 }
 
 // HasPrice returns a boolean if a field has been set.
-func (o *ProductAllOf) HasPrice() bool {
+func (o *ProductWithManufacturer) HasPrice() bool {
 	if o != nil && o.Price != nil {
 		return true
 	}
@@ -169,12 +271,12 @@ func (o *ProductAllOf) HasPrice() bool {
 }
 
 // SetPrice gets a reference to the given int64 and assigns it to the Price field.
-func (o *ProductAllOf) SetPrice(v int64) {
+func (o *ProductWithManufacturer) SetPrice(v int64) {
 	o.Price = &v
 }
 
 // GetCategoryIds returns the CategoryIds field value if set, zero value otherwise.
-func (o *ProductAllOf) GetCategoryIds() []string {
+func (o *ProductWithManufacturer) GetCategoryIds() []string {
 	if o == nil || o.CategoryIds == nil {
 		var ret []string
 		return ret
@@ -184,7 +286,7 @@ func (o *ProductAllOf) GetCategoryIds() []string {
 
 // GetCategoryIdsOk returns a tuple with the CategoryIds field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductAllOf) GetCategoryIdsOk() (*[]string, bool) {
+func (o *ProductWithManufacturer) GetCategoryIdsOk() (*[]string, bool) {
 	if o == nil || o.CategoryIds == nil {
 		return nil, false
 	}
@@ -192,7 +294,7 @@ func (o *ProductAllOf) GetCategoryIdsOk() (*[]string, bool) {
 }
 
 // HasCategoryIds returns a boolean if a field has been set.
-func (o *ProductAllOf) HasCategoryIds() bool {
+func (o *ProductWithManufacturer) HasCategoryIds() bool {
 	if o != nil && o.CategoryIds != nil {
 		return true
 	}
@@ -201,12 +303,12 @@ func (o *ProductAllOf) HasCategoryIds() bool {
 }
 
 // SetCategoryIds gets a reference to the given []string and assigns it to the CategoryIds field.
-func (o *ProductAllOf) SetCategoryIds(v []string) {
+func (o *ProductWithManufacturer) SetCategoryIds(v []string) {
 	o.CategoryIds = &v
 }
 
 // GetManufacturerId returns the ManufacturerId field value if set, zero value otherwise.
-func (o *ProductAllOf) GetManufacturerId() string {
+func (o *ProductWithManufacturer) GetManufacturerId() string {
 	if o == nil || o.ManufacturerId == nil {
 		var ret string
 		return ret
@@ -216,7 +318,7 @@ func (o *ProductAllOf) GetManufacturerId() string {
 
 // GetManufacturerIdOk returns a tuple with the ManufacturerId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductAllOf) GetManufacturerIdOk() (*string, bool) {
+func (o *ProductWithManufacturer) GetManufacturerIdOk() (*string, bool) {
 	if o == nil || o.ManufacturerId == nil {
 		return nil, false
 	}
@@ -224,7 +326,7 @@ func (o *ProductAllOf) GetManufacturerIdOk() (*string, bool) {
 }
 
 // HasManufacturerId returns a boolean if a field has been set.
-func (o *ProductAllOf) HasManufacturerId() bool {
+func (o *ProductWithManufacturer) HasManufacturerId() bool {
 	if o != nil && o.ManufacturerId != nil {
 		return true
 	}
@@ -233,12 +335,12 @@ func (o *ProductAllOf) HasManufacturerId() bool {
 }
 
 // SetManufacturerId gets a reference to the given string and assigns it to the ManufacturerId field.
-func (o *ProductAllOf) SetManufacturerId(v string) {
+func (o *ProductWithManufacturer) SetManufacturerId(v string) {
 	o.ManufacturerId = &v
 }
 
 // GetStatus returns the Status field value if set, zero value otherwise.
-func (o *ProductAllOf) GetStatus() string {
+func (o *ProductWithManufacturer) GetStatus() string {
 	if o == nil || o.Status == nil {
 		var ret string
 		return ret
@@ -248,7 +350,7 @@ func (o *ProductAllOf) GetStatus() string {
 
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductAllOf) GetStatusOk() (*string, bool) {
+func (o *ProductWithManufacturer) GetStatusOk() (*string, bool) {
 	if o == nil || o.Status == nil {
 		return nil, false
 	}
@@ -256,7 +358,7 @@ func (o *ProductAllOf) GetStatusOk() (*string, bool) {
 }
 
 // HasStatus returns a boolean if a field has been set.
-func (o *ProductAllOf) HasStatus() bool {
+func (o *ProductWithManufacturer) HasStatus() bool {
 	if o != nil && o.Status != nil {
 		return true
 	}
@@ -265,12 +367,12 @@ func (o *ProductAllOf) HasStatus() bool {
 }
 
 // SetStatus gets a reference to the given string and assigns it to the Status field.
-func (o *ProductAllOf) SetStatus(v string) {
+func (o *ProductWithManufacturer) SetStatus(v string) {
 	o.Status = &v
 }
 
 // GetStockCount returns the StockCount field value if set, zero value otherwise.
-func (o *ProductAllOf) GetStockCount() int64 {
+func (o *ProductWithManufacturer) GetStockCount() int64 {
 	if o == nil || o.StockCount == nil {
 		var ret int64
 		return ret
@@ -280,7 +382,7 @@ func (o *ProductAllOf) GetStockCount() int64 {
 
 // GetStockCountOk returns a tuple with the StockCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductAllOf) GetStockCountOk() (*int64, bool) {
+func (o *ProductWithManufacturer) GetStockCountOk() (*int64, bool) {
 	if o == nil || o.StockCount == nil {
 		return nil, false
 	}
@@ -288,7 +390,7 @@ func (o *ProductAllOf) GetStockCountOk() (*int64, bool) {
 }
 
 // HasStockCount returns a boolean if a field has been set.
-func (o *ProductAllOf) HasStockCount() bool {
+func (o *ProductWithManufacturer) HasStockCount() bool {
 	if o != nil && o.StockCount != nil {
 		return true
 	}
@@ -297,12 +399,12 @@ func (o *ProductAllOf) HasStockCount() bool {
 }
 
 // SetStockCount gets a reference to the given int64 and assigns it to the StockCount field.
-func (o *ProductAllOf) SetStockCount(v int64) {
+func (o *ProductWithManufacturer) SetStockCount(v int64) {
 	o.StockCount = &v
 }
 
 // GetImageUrls returns the ImageUrls field value if set, zero value otherwise.
-func (o *ProductAllOf) GetImageUrls() []string {
+func (o *ProductWithManufacturer) GetImageUrls() []string {
 	if o == nil || o.ImageUrls == nil {
 		var ret []string
 		return ret
@@ -312,7 +414,7 @@ func (o *ProductAllOf) GetImageUrls() []string {
 
 // GetImageUrlsOk returns a tuple with the ImageUrls field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductAllOf) GetImageUrlsOk() (*[]string, bool) {
+func (o *ProductWithManufacturer) GetImageUrlsOk() (*[]string, bool) {
 	if o == nil || o.ImageUrls == nil {
 		return nil, false
 	}
@@ -320,7 +422,7 @@ func (o *ProductAllOf) GetImageUrlsOk() (*[]string, bool) {
 }
 
 // HasImageUrls returns a boolean if a field has been set.
-func (o *ProductAllOf) HasImageUrls() bool {
+func (o *ProductWithManufacturer) HasImageUrls() bool {
 	if o != nil && o.ImageUrls != nil {
 		return true
 	}
@@ -329,12 +431,53 @@ func (o *ProductAllOf) HasImageUrls() bool {
 }
 
 // SetImageUrls gets a reference to the given []string and assigns it to the ImageUrls field.
-func (o *ProductAllOf) SetImageUrls(v []string) {
+func (o *ProductWithManufacturer) SetImageUrls(v []string) {
 	o.ImageUrls = &v
 }
 
-func (o ProductAllOf) MarshalJSON() ([]byte, error) {
+// GetManufacturer returns the Manufacturer field value if set, zero value otherwise.
+func (o *ProductWithManufacturer) GetManufacturer() Manufacturer {
+	if o == nil || o.Manufacturer == nil {
+		var ret Manufacturer
+		return ret
+	}
+	return *o.Manufacturer
+}
+
+// GetManufacturerOk returns a tuple with the Manufacturer field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProductWithManufacturer) GetManufacturerOk() (*Manufacturer, bool) {
+	if o == nil || o.Manufacturer == nil {
+		return nil, false
+	}
+	return o.Manufacturer, true
+}
+
+// HasManufacturer returns a boolean if a field has been set.
+func (o *ProductWithManufacturer) HasManufacturer() bool {
+	if o != nil && o.Manufacturer != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetManufacturer gets a reference to the given Manufacturer and assigns it to the Manufacturer field.
+func (o *ProductWithManufacturer) SetManufacturer(v Manufacturer) {
+	o.Manufacturer = &v
+}
+
+func (o ProductWithManufacturer) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if o.Id != nil {
+		toSerialize["id"] = o.Id
+	}
+	if o.CreatedAt != nil {
+		toSerialize["created_at"] = o.CreatedAt
+	}
+	if o.UpdatedAt != nil {
+		toSerialize["updated_at"] = o.UpdatedAt
+	}
 	if o.Name != nil {
 		toSerialize["name"] = o.Name
 	}
@@ -362,41 +505,44 @@ func (o ProductAllOf) MarshalJSON() ([]byte, error) {
 	if o.ImageUrls != nil {
 		toSerialize["image_urls"] = o.ImageUrls
 	}
+	if o.Manufacturer != nil {
+		toSerialize["manufacturer"] = o.Manufacturer
+	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableProductAllOf struct {
-	value *ProductAllOf
+type NullableProductWithManufacturer struct {
+	value *ProductWithManufacturer
 	isSet bool
 }
 
-func (v NullableProductAllOf) Get() *ProductAllOf {
+func (v NullableProductWithManufacturer) Get() *ProductWithManufacturer {
 	return v.value
 }
 
-func (v *NullableProductAllOf) Set(val *ProductAllOf) {
+func (v *NullableProductWithManufacturer) Set(val *ProductWithManufacturer) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableProductAllOf) IsSet() bool {
+func (v NullableProductWithManufacturer) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableProductAllOf) Unset() {
+func (v *NullableProductWithManufacturer) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableProductAllOf(val *ProductAllOf) *NullableProductAllOf {
-	return &NullableProductAllOf{value: val, isSet: true}
+func NewNullableProductWithManufacturer(val *ProductWithManufacturer) *NullableProductWithManufacturer {
+	return &NullableProductWithManufacturer{value: val, isSet: true}
 }
 
-func (v NullableProductAllOf) MarshalJSON() ([]byte, error) {
+func (v NullableProductWithManufacturer) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableProductAllOf) UnmarshalJSON(src []byte) error {
+func (v *NullableProductWithManufacturer) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

@@ -9,6 +9,7 @@ servers:
 paths:
   /public/categories/:
     get:
+      operationId: public_list_categories
       description: List categories
       tags: ["Categories"]
       security: []
@@ -22,15 +23,13 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Category"
+                $ref: "#/components/schemas/CategoryList"
 
   /public/categories/{id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
-
     get:
+      operationId: public_get_category
       description: Get category details
       tags: ["Categories"]
       security: []
@@ -48,6 +47,7 @@ paths:
 
   /admin/categories/:
     get:
+      operationId: admin_list_categories
       description: List categories
       tags: ["Categories"]
       parameters:
@@ -60,11 +60,9 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Category"
-
+                $ref: "#/components/schemas/CategoryList"
     post:
+      operationId: admin_add_category
       description: Add category
       tags: ["Categories"]
       requestBody:
@@ -84,8 +82,8 @@ paths:
   /admin/categories/{id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
-
     get:
+      operationId: admin_get_category
       description: Get category details
       tags: ["Categories"]
       parameters:
@@ -99,8 +97,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Category"
-
     put:
+      operationId: admin_update_category
       description: Update category
       tags: ["Categories"]
       requestBody:
@@ -116,8 +114,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Category"
-
     delete:
+      operationId: admin_delete_category
       description: Delete category
       tags: ["Categories"]
       responses:
@@ -127,8 +125,8 @@ paths:
   /admin/categories/{id}/image:
     parameters:
       - $ref: "#/components/parameters/pathID"
-
     put:
+      operationId: admin_upsert_category_image
       description: Upsert image
       tags: ["Categories"]
       parameters:
@@ -152,8 +150,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Image"
-
     delete:
+      operationId: admin_delete_category_image
       description: Delete image
       tags: ["Categories"]
       responses:
@@ -162,6 +160,7 @@ paths:
 
   /public/manufacturers/:
     get:
+      operationId: public_list_manufacturers
       description: List manufacturers
       tags: ["Manufacturers"]
       security: []
@@ -175,15 +174,13 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Manufacturer"
+                $ref: "#/components/schemas/ManufacturerList"
 
   /public/manufacturers/{id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
-
     get:
+      operationId: public_get_manufacturer
       description: Get manufacturer details
       tags: ["Manufacturers"]
       security: []
@@ -201,6 +198,7 @@ paths:
 
   /admin/manufacturers/:
     get:
+      operationId: admin_list_manufacturers
       description: List manufacturers
       tags: ["Manufacturers"]
       parameters:
@@ -213,11 +211,9 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Manufacturer"
-
+                $ref: "#/components/schemas/ManufacturerList"
     post:
+      operationId: admin_add_manufacturer
       description: Add manufacturer
       tags: ["Manufacturers"]
       requestBody:
@@ -237,8 +233,8 @@ paths:
   /admin/manufacturers/{id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
-
     get:
+      operationId: admin_get_manufacturer
       description: Get manufacturer details
       tags: ["Manufacturers"]
       parameters:
@@ -252,8 +248,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Manufacturer"
-
     put:
+      operationId: admin_update_manufacturer
       description: Update manufacturer
       tags: ["Manufacturers"]
       requestBody:
@@ -269,8 +265,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Manufacturer"
-
     delete:
+      operationId: admin_delete_manufacturer
       description: Delete manufacturer
       tags: ["Manufacturers"]
       responses:
@@ -280,8 +276,8 @@ paths:
   /admin/manufacturers/{id}/image:
     parameters:
       - $ref: "#/components/parameters/pathID"
-
     put:
+      operationId: admin_upsert_manufacturer_image
       description: Upsert image
       tags: ["Manufacturers"]
       parameters:
@@ -305,8 +301,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Image"
-
     delete:
+      operationId: admin_delete_manufacturer_image
       description: Delete image
       tags: ["Manufacturers"]
       responses:
@@ -315,6 +311,7 @@ paths:
 
   /public/products/:
     get:
+      operationId: public_list_products
       description: List products
       tags: ["Products"]
       security: []
@@ -328,15 +325,13 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Product"
+                $ref: "#/components/schemas/ProductList"
 
   /public/products/{id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
-
     get:
+      operationId: public_get_product
       description: Get product details
       tags: ["Products"]
       security: []
@@ -350,15 +345,11 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/Product"
-                  - type: object
-                    properties:
-                      manufacturer:
-                        $ref: "#/components/schemas/Manufacturer"
+                $ref: "#/components/schemas/ProductWithManufacturer"
 
   /admin/products/:
     get:
+      operationId: admin_list_products
       description: List products
       tags: ["Products"]
       parameters:
@@ -371,11 +362,9 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Product"
-
+                $ref: "#/components/schemas/ProductList"
     post:
+      operationId: admin_add_product
       description: Add product
       tags: ["Products"]
       requestBody:
@@ -395,8 +384,8 @@ paths:
   /admin/products/{id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
-
     get:
+      operationId: admin_get_product
       description: Get product details
       tags: ["Products"]
       parameters:
@@ -409,14 +398,9 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/Product"
-                  - type: object
-                    properties:
-                      manufacturer:
-                        $ref: "#/components/schemas/Manufacturer"
-
+                $ref: "#/components/schemas/ProductWithManufacturer"
     put:
+      operationId: admin_update_product
       description: Update product
       tags: ["Products"]
       requestBody:
@@ -432,8 +416,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Product"
-
     delete:
+      operationId: admin_delete_product
       description: Delete product
       tags: ["Products"]
       responses:
@@ -446,8 +430,8 @@ paths:
       - $ref: "#/components/parameters/queryImgHeight"
       - $ref: "#/components/parameters/queryImgResize"
       - $ref: "#/components/parameters/queryImgWidth"
-
     get:
+      operationId: admin_list_product_images
       description: Get product images
       tags: ["Products"]
       responses:
@@ -456,11 +440,9 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Image"
-
+                $ref: "#/components/schemas/ImageList"
     post:
+      operationId: admin_add_product_images
       description: Add product images
       tags: ["Products"]
       requestBody:
@@ -480,21 +462,19 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Image"
+                $ref: "#/components/schemas/ImageList"
 
   /admin/products/{id}/images/{image_id}:
     parameters:
       - $ref: "#/components/parameters/pathID"
       - $ref: "#/components/parameters/pathImageID"
-
     put:
+      operationId: admin_update_product_image
       description: >-
         Update product image.
         In case the new order matches another image, the orders are swapped.
         Therefore, this call will return all impacted images (1 or 2).
-        First the image on which the request was called and optionally second the swapped image. 
+        First the image on which the request was called and optionally second the swapped image.
       tags: ["Products"]
       requestBody:
         content:
@@ -508,11 +488,9 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Image"
-
+                $ref: "#/components/schemas/ImageList"
     delete:
+      operationId: admin_delete_product_image
       description: Delete product image
       tags: ["Products"]
       responses:
@@ -528,7 +506,7 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/ShortID"
-    
+
     pathImageID:
       name: image_id
       in: path
@@ -536,7 +514,7 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/ShortID"
-    
+
     queryImgHeight:
       name: img_h
       in: query
@@ -546,7 +524,7 @@ components:
         type: integer
         format: int64
         example: 200
-    
+
     queryImgResize:
       name: img_r
       in: query
@@ -554,10 +532,10 @@ components:
       required: false
       schema:
         type: string
-        default: fit
+        default: FIT
         enum:
-          - fill
-          - fit
+          - FILL
+          - FIT
 
     queryImgWidth:
       name: img_w
@@ -597,6 +575,16 @@ components:
           required:
             - name
             - order
+
+    CategoryList:
+      type: object
+      required:
+        - categories
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
 
     Header:
       type: object
@@ -650,7 +638,19 @@ components:
       example: "https://images.jensw.be/.../fill/300/400/.../anBn.png"
       readOnly: true
 
+    ImageList:
+      type: object
+      required:
+        - images
+      properties:
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/Image"
+
     Manufacturer:
+      required:
+        - name
       allOf:
         - $ref: "#/components/schemas/Header"
         - type: object
@@ -664,6 +664,16 @@ components:
               example: https://bjoetiek-y.be
             image_url:
               $ref: "#/components/schemas/ImageUrl"
+
+    ManufacturerList:
+      type: object
+      required:
+        - manufacturers
+      properties:
+        manufacturers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Manufacturer"
 
     Product:
       allOf:
@@ -703,6 +713,24 @@ components:
               items:
                 $ref: "#/components/schemas/ImageUrl"
               readOnly: true
+
+    ProductWithManufacturer:
+      allOf:
+        - $ref: "#/components/schemas/Product"
+        - type: object
+          properties:
+            manufacturer:
+              $ref: "#/components/schemas/Manufacturer"
+
+    ProductList:
+      type: object
+      required:
+        - products
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
 
     ShortID:
       type: string

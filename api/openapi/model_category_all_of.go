@@ -16,12 +16,12 @@ import (
 
 // CategoryAllOf struct for CategoryAllOf
 type CategoryAllOf struct {
-	Name        string  `json:"name"`
+	Name string `json:"name"`
 	Description *string `json:"description,omitempty"`
 	// Compressed representation of ID
 	ParentId *string `json:"parent_id,omitempty"`
 	// Should be sorted ascending by this column
-	Order      int64     `json:"order"`
+	Order int64 `json:"order"`
 	ProductIds *[]string `json:"product_ids,omitempty"`
 	// Signed URL pointing to the image
 	ImageUrl *string `json:"image_url,omitempty"`
@@ -59,7 +59,7 @@ func (o *CategoryAllOf) GetName() string {
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *CategoryAllOf) GetNameOk() (*string, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Name, true
@@ -147,7 +147,7 @@ func (o *CategoryAllOf) GetOrder() int64 {
 // GetOrderOk returns a tuple with the Order field value
 // and a boolean to check if the value has been set.
 func (o *CategoryAllOf) GetOrderOk() (*int64, bool) {
-	if o == nil {
+	if o == nil  {
 		return nil, false
 	}
 	return &o.Order, true
@@ -280,3 +280,5 @@ func (v *NullableCategoryAllOf) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -18,7 +18,7 @@ import (
 // HeaderTimestamped struct for HeaderTimestamped
 type HeaderTimestamped struct {
 	// Compressed representation of ID
-	Id        *string    `json:"id,omitempty"`
+	Id *string `json:"id,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
@@ -185,3 +185,5 @@ func (v *NullableHeaderTimestamped) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

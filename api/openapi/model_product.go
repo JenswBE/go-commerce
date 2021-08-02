@@ -18,19 +18,19 @@ import (
 // Product struct for Product
 type Product struct {
 	// Compressed representation of ID
-	Id               *string    `json:"id,omitempty"`
-	CreatedAt        *time.Time `json:"created_at,omitempty"`
-	UpdatedAt        *time.Time `json:"updated_at,omitempty"`
-	Name             *string    `json:"name,omitempty"`
-	DescriptionShort *string    `json:"description_short,omitempty"`
-	DescriptionLong  *string    `json:"description_long,omitempty"`
+	Id *string `json:"id,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	Name *string `json:"name,omitempty"`
+	DescriptionShort *string `json:"description_short,omitempty"`
+	DescriptionLong *string `json:"description_long,omitempty"`
 	// Price in cents
-	Price          *int64    `json:"price,omitempty"`
-	CategoryIds    *[]string `json:"category_ids,omitempty"`
-	ManufacturerId *string   `json:"manufacturer_id,omitempty"`
-	Status         *string   `json:"status,omitempty"`
-	StockCount     *int64    `json:"stock_count,omitempty"`
-	ImageUrls      *[]string `json:"image_urls,omitempty"`
+	Price *int64 `json:"price,omitempty"`
+	CategoryIds *[]string `json:"category_ids,omitempty"`
+	ManufacturerId *string `json:"manufacturer_id,omitempty"`
+	Status *string `json:"status,omitempty"`
+	StockCount *int64 `json:"stock_count,omitempty"`
+	ImageUrls *[]string `json:"image_urls,omitempty"`
 }
 
 // NewProduct instantiates a new Product object
@@ -510,3 +510,5 @@ func (v *NullableProduct) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

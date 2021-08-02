@@ -16,7 +16,7 @@ import (
 
 // ManufacturerAllOf struct for ManufacturerAllOf
 type ManufacturerAllOf struct {
-	Name       *string `json:"name,omitempty"`
+	Name *string `json:"name,omitempty"`
 	WebsiteUrl *string `json:"website_url,omitempty"`
 	// Signed URL pointing to the image
 	ImageUrl *string `json:"image_url,omitempty"`
@@ -184,3 +184,5 @@ func (v *NullableManufacturerAllOf) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+
