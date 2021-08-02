@@ -66,7 +66,7 @@ func (h *ProductHandler) createManufacturer(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.ManufacturerFromEntity(manufacturer))
+	c.JSON(201, h.presenter.ManufacturerFromEntity(manufacturer))
 }
 
 func (h *ProductHandler) updateManufacturer(c *gin.Context) {
