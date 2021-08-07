@@ -38,8 +38,12 @@ func ManufacturerOpenAPI() *openapi.Manufacturer {
 	}
 }
 
-func ManufacturerOpenAPISlice() []*openapi.Manufacturer {
-	return []*openapi.Manufacturer{
-		ManufacturerOpenAPI(),
+func ManufacturerOpenAPISlice() []openapi.Manufacturer {
+	return []openapi.Manufacturer{
+		*ManufacturerOpenAPI(),
 	}
+}
+
+func ManufacturerListOpenAPI() *openapi.ManufacturerList {
+	return openapi.NewManufacturerList(ManufacturerOpenAPISlice())
 }

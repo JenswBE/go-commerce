@@ -27,12 +27,16 @@ func (p *Presenter) CategoryFromEntity(e *entities.Category) openapi.Category {
 	return *c
 }
 
-func (p *Presenter) CategoriesListFromEntity(input []*entities.Category) []openapi.Category {
+func (p *Presenter) CategorySliceFromEntity(input []*entities.Category) []openapi.Category {
 	output := make([]openapi.Category, 0, len(input))
 	for _, category := range input {
 		output = append(output, p.CategoryFromEntity(category))
 	}
 	return output
+}
+
+func (p *Presenter) CategoryListFromEntity(input []*entities.Category) openapi.CategoryList {
+	return *openapi.NewCategoryList(p.CategorySliceFromEntity(input))
 }
 
 func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*entities.Category, error) {

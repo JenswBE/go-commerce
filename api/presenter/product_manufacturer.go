@@ -19,12 +19,16 @@ func (p *Presenter) ManufacturerFromEntity(e *entities.Manufacturer) openapi.Man
 	return *m
 }
 
-func (p *Presenter) ManufacturersListFromEntity(input []*entities.Manufacturer) []openapi.Manufacturer {
+func (p *Presenter) ManufacturerSliceFromEntity(input []*entities.Manufacturer) []openapi.Manufacturer {
 	output := make([]openapi.Manufacturer, 0, len(input))
 	for _, manufacturer := range input {
 		output = append(output, p.ManufacturerFromEntity(manufacturer))
 	}
 	return output
+}
+
+func (p *Presenter) ManufacturerListFromEntity(input []*entities.Manufacturer) openapi.ManufacturerList {
+	return *openapi.NewManufacturerList(p.ManufacturerSliceFromEntity(input))
 }
 
 func (p *Presenter) ManufacturerToEntity(id uuid.UUID, manufacturer openapi.Manufacturer) *entities.Manufacturer {

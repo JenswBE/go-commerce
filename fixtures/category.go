@@ -41,8 +41,12 @@ func CategoryOpenAPI() *openapi.Category {
 	}
 }
 
-func CategoryOpenAPISlice() []*openapi.Category {
-	return []*openapi.Category{
-		CategoryOpenAPI(),
+func CategoryOpenAPISlice() []openapi.Category {
+	return []openapi.Category{
+		*CategoryOpenAPI(),
 	}
+}
+
+func CategoryListOpenAPI() *openapi.CategoryList {
+	return openapi.NewCategoryList(CategoryOpenAPISlice())
 }

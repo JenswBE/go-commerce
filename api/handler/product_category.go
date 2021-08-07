@@ -25,7 +25,7 @@ func (h *ProductHandler) listCategories(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.CategoriesListFromEntity(result))
+	c.JSON(200, h.presenter.CategoryListFromEntity(result))
 }
 
 func (h *ProductHandler) getCategory(c *gin.Context) {

@@ -22,7 +22,7 @@ func (h *ProductHandler) listProducts(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.ProductsListFromEntity(result))
+	c.JSON(200, h.presenter.ProductListFromEntity(result))
 }
 
 func (h *ProductHandler) getProduct(c *gin.Context) {
@@ -144,7 +144,7 @@ func (h *ProductHandler) listProductImages(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.ImagesListFromEntity(product.Images))
+	c.JSON(200, h.presenter.ImageListFromEntity(product.Images))
 }
 
 func (h *ProductHandler) addProductImages(c *gin.Context) {
@@ -174,7 +174,7 @@ func (h *ProductHandler) addProductImages(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.ImagesListFromEntity(product.Images))
+	c.JSON(200, h.presenter.ImageListFromEntity(product.Images))
 }
 
 func (h *ProductHandler) updateProductImage(c *gin.Context) {
@@ -203,7 +203,7 @@ func (h *ProductHandler) updateProductImage(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.ImagesListFromEntity(images))
+	c.JSON(200, h.presenter.ImageSliceFromEntity(images))
 }
 
 func (h *ProductHandler) deleteProductImage(c *gin.Context) {

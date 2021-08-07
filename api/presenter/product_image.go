@@ -15,7 +15,7 @@ func (p *Presenter) ImageFromEntity(e *entities.Image) openapi.Image {
 	)
 }
 
-func (p *Presenter) ImagesListFromEntity(input []*entities.Image) []openapi.Image {
+func (p *Presenter) ImageSliceFromEntity(input []*entities.Image) []openapi.Image {
 	output := make([]openapi.Image, 0, len(input))
 	for _, image := range input {
 		output = append(output, p.ImageFromEntity(image))
@@ -23,7 +23,11 @@ func (p *Presenter) ImagesListFromEntity(input []*entities.Image) []openapi.Imag
 	return output
 }
 
-func (p *Presenter) ImageURLListFromEntity(input []*entities.Image) []string {
+func (p *Presenter) ImageListFromEntity(input []*entities.Image) openapi.ImageList {
+	return *openapi.NewImageList(p.ImageSliceFromEntity(input))
+}
+
+func (p *Presenter) ImageURLSliceFromEntity(input []*entities.Image) []string {
 	output := make([]string, 0, len(input))
 	for _, image := range input {
 		if image.URL != "" {

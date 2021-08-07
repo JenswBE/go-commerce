@@ -49,8 +49,12 @@ func ImageOpenAPI() *openapi.Image {
 	}
 }
 
-func ImageOpenAPISlice() []*openapi.Image {
-	return []*openapi.Image{
-		ImageOpenAPI(),
+func ImageOpenAPISlice() []openapi.Image {
+	return []openapi.Image{
+		*ImageOpenAPI(),
 	}
+}
+
+func ImageListOpenAPI() *openapi.ImageList {
+	return openapi.NewImageList(ImageOpenAPISlice())
 }

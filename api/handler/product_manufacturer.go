@@ -23,7 +23,7 @@ func (h *ProductHandler) listManufacturers(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.ManufacturersListFromEntity(result))
+	c.JSON(200, h.presenter.ManufacturerListFromEntity(result))
 }
 
 func (h *ProductHandler) getManufacturer(c *gin.Context) {

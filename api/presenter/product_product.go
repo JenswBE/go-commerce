@@ -19,7 +19,7 @@ func (p *Presenter) ProductFromEntity(e *entities.Product) openapi.Product {
 	m.SetDescriptionLong(e.DescriptionLong)
 	m.SetCategoryIds(p.EncodeIDList(e.CategoryIDs))
 	m.SetStockCount(int64(e.StockCount))
-	m.SetImageUrls(p.ImageURLListFromEntity(e.Images))
+	m.SetImageUrls(p.ImageURLSliceFromEntity(e.Images))
 
 	// Set status
 	status, err := openapi.NewProductStatusFromValue(e.Status.String())
@@ -37,12 +37,16 @@ func (p *Presenter) ProductFromEntity(e *entities.Product) openapi.Product {
 	return *m
 }
 
-func (p *Presenter) ProductsListFromEntity(input []*entities.Product) []openapi.Product {
+func (p *Presenter) ProductSliceFromEntity(input []*entities.Product) []openapi.Product {
 	output := make([]openapi.Product, 0, len(input))
 	for _, product := range input {
 		output = append(output, p.ProductFromEntity(product))
 	}
 	return output
+}
+
+func (p *Presenter) ProductListFromEntity(input []*entities.Product) openapi.ProductList {
+	return *openapi.NewProductList(p.ProductSliceFromEntity(input))
 }
 
 func (p *Presenter) ProductToEntity(id uuid.UUID, product openapi.Product) (*entities.Product, error) {

@@ -24,7 +24,7 @@ func Test_listCategories_Success(t *testing.T) {
 	handler.listCategories(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.CategoryOpenAPISlice(), r)
+	requireEqualJSON(t, fixtures.CategoryListOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls

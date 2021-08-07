@@ -56,8 +56,12 @@ func ProductOpenAPI() *openapi.Product {
 	}
 }
 
-func ProductOpenAPISlice() []*openapi.Product {
-	return []*openapi.Product{
-		ProductOpenAPI(),
+func ProductOpenAPISlice() []openapi.Product {
+	return []openapi.Product{
+		*ProductOpenAPI(),
 	}
+}
+
+func ProductListOpenAPI() *openapi.ProductList {
+	return openapi.NewProductList(ProductOpenAPISlice())
 }

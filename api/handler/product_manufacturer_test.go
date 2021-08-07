@@ -24,7 +24,7 @@ func Test_listManufacturers_Success(t *testing.T) {
 	handler.listManufacturers(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ManufacturerOpenAPISlice(), r)
+	requireEqualJSON(t, fixtures.ManufacturerListOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls

@@ -26,7 +26,7 @@ func Test_listProducts_Success(t *testing.T) {
 	handler.listProducts(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ProductOpenAPISlice(), r)
+	requireEqualJSON(t, fixtures.ProductListOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
@@ -134,7 +134,7 @@ func Test_listProductImages_Success(t *testing.T) {
 	handler.listProductImages(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ImageOpenAPISlice(), r)
+	requireEqualJSON(t, fixtures.ImageListOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
@@ -154,7 +154,7 @@ func Test_addProductImages_Success(t *testing.T) {
 	handler.addProductImages(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ImageOpenAPISlice(), r)
+	requireEqualJSON(t, fixtures.ImageListOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
