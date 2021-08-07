@@ -9,7 +9,7 @@ import (
 
 func Test_parseAllowedImageConfigs_MultipleConfigs_Success(t *testing.T) {
 	// Call helper
-	input := "100:100:fit,300:200:fit,512:512:fill"
+	input := "100:100:FIT,300:200:FIT,512:512:FILL"
 	result, err := parseAllowedImageConfigs(input)
 
 	// Assert results

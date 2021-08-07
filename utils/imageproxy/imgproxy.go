@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 // ImgProxy provides helper functions for working with imgproxy.
@@ -69,7 +70,8 @@ func (imgproxy *ImgProxy) GenerateURL(sourceURL string, config ImageConfig) (str
 
 	// Build path
 	encodedURL := base64.RawURLEncoding.EncodeToString([]byte(sourceURL))
-	path := fmt.Sprintf("/%s/%d/%d/%s/%d/%s.%s", config.ResizingType, config.Width, config.Height, gravity, enlarge, encodedURL, extension)
+	resizingType := strings.ToLower(string(config.ResizingType))
+	path := fmt.Sprintf("/%s/%d/%d/%s/%d/%s.%s", resizingType, config.Width, config.Height, gravity, enlarge, encodedURL, extension)
 
 	// Calculate signature
 	mac := hmac.New(sha256.New, imgproxy.key)

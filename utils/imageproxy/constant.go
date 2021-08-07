@@ -4,8 +4,8 @@ import "fmt"
 
 type ResizingType string
 
-const ResizingTypeFit ResizingType = "fit"
-const ResizingTypeFill ResizingType = "fill"
+const ResizingTypeFit ResizingType = "FIT"
+const ResizingTypeFill ResizingType = "FILL"
 
 func ParseResizingType(input string) (ResizingType, error) {
 	switch ResizingType(input) {

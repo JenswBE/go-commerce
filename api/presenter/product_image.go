@@ -7,11 +7,12 @@ import (
 )
 
 func (p *Presenter) ImageFromEntity(e *entities.Image) openapi.Image {
-	m := openapi.NewImage(int64(e.Order))
-	m.SetId(p.EncodeID(e.ID))
-	m.SetExt(e.Extension)
-	m.SetUrl(e.URL)
-	return *m
+	return *openapi.NewImage(
+		p.EncodeID(e.ID),
+		e.Extension,
+		e.URL,
+		int64(e.Order),
+	)
 }
 
 func (p *Presenter) ImagesListFromEntity(input []*entities.Image) []openapi.Image {

@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"bytes"
 	"encoding/json"
+	"mime/multipart"
 	"net/http"
 	"testing"
 
@@ -16,7 +18,7 @@ import (
 
 func Test_listManufacturers_Success(t *testing.T) {
 	// Setup test
-	c, r := setupGinTest("", "", nil, nil)
+	c, r := setupGinTest(t, "", "", nil, nil)
 	handler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("ListManufacturers", mock.Anything).Return(fixtures.ManufacturerSlice(), nil)
 
@@ -34,7 +36,7 @@ func Test_listManufacturers_Success(t *testing.T) {
 func Test_getManufacturer_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
-	c, r := setupGinTest("", "", params, nil)
+	c, r := setupGinTest(t, "", "", params, nil)
 	handler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("GetManufacturer", mock.Anything, mock.Anything).Return(fixtures.Manufacturer(), nil)
 
@@ -53,7 +55,7 @@ func Test_createManufacturer_Success(t *testing.T) {
 	// Setup test
 	body, err := json.Marshal(fixtures.ManufacturerOpenAPI())
 	require.NoError(t, err)
-	c, r := setupGinTest("", "", nil, body)
+	c, r := setupGinTest(t, "", "", nil, body)
 	handler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("CreateManufacturer", mock.Anything).Return(fixtures.Manufacturer(), nil)
 
@@ -79,7 +81,7 @@ func Test_updateManufacturer_Success(t *testing.T) {
 	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
 	body, err := json.Marshal(fixtures.ManufacturerOpenAPI())
 	require.NoError(t, err)
-	c, r := setupGinTest("", "", params, body)
+	c, r := setupGinTest(t, "", "", params, body)
 	handler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("UpdateManufacturer", mock.Anything).Return(fixtures.Manufacturer(), nil)
 
@@ -102,7 +104,7 @@ func Test_updateManufacturer_Success(t *testing.T) {
 func Test_deleteManufacturer_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
-	c, r := setupGinTest("", "", params, nil)
+	c, r := setupGinTest(t, "", "", params, nil)
 	handler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("DeleteManufacturer", mock.Anything).Return(nil)
 
@@ -115,4 +117,46 @@ func Test_deleteManufacturer_Success(t *testing.T) {
 
 	// Assert mock calls
 	usecaseMock.AssertCalled(t, "DeleteManufacturer", uuid.MustParse(fixtures.ManufacturerID))
+}
+
+func Test_upsertManufacturerImage_Success(t *testing.T) {
+	// Setup test
+	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	image, _ := writer.CreateFormFile("file", "image.jpg")
+	image.Write([]byte("test-image-jpg"))
+	writer.Close()
+	c, r := setupGinTest(t, "PUT", "?"+fixtures.ImageConfigQuery, params, body.Bytes())
+	c.Request.Header.Set("Content-Type", writer.FormDataContentType())
+	handler, usecaseMock := setupHandlerTest()
+	usecaseMock.On("UpsertManufacturerImage", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(fixtures.Manufacturer(), nil)
+
+	// Call handler
+	handler.upsertManufacturerImage(c)
+
+	// Assert result
+	requireEqualJSON(t, fixtures.ImageOpenAPI(), r)
+	require.Equal(t, http.StatusOK, r.Code)
+
+	// Assert mock calls
+	usecaseMock.AssertCalled(t, "UpsertManufacturerImage", uuid.MustParse(fixtures.ManufacturerID), "image.jpg", []byte("test-image-jpg"), fixtures.ImageConfig())
+}
+
+func Test_deleteManufacturerImage_Success(t *testing.T) {
+	// Setup test
+	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
+	c, r := setupGinTest(t, "DELETE", "", params, nil)
+	handler, usecaseMock := setupHandlerTest()
+	usecaseMock.On("DeleteManufacturerImage", mock.Anything).Return(nil)
+
+	// Call handler
+	handler.deleteManufacturerImage(c)
+
+	// Assert result
+	require.Empty(t, r.Body.String())
+	require.Equal(t, http.StatusNoContent, r.Code)
+
+	// Assert mock calls
+	usecaseMock.AssertCalled(t, "DeleteManufacturerImage", uuid.MustParse(fixtures.ManufacturerID))
 }

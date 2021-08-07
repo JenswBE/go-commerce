@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/JenswBE/go-commerce/fixtures"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/stretchr/testify/require"
 )
@@ -48,7 +49,7 @@ func Test_parseFilesFromMultipart_Failure(t *testing.T) {
 
 func Test_parseImageConfigParams_AllParamsSet_Success(t *testing.T) {
 	// Setup test
-	c, _ := setupGinTest("", "/?img_w=300&img_h=200&img_r=fit", nil, nil)
+	c, _ := setupGinTest(t, "", "?"+fixtures.ImageConfigQuery, nil, nil)
 
 	// Call function
 	result, err := parseImageConfigParams(c)
@@ -58,14 +59,14 @@ func Test_parseImageConfigParams_AllParamsSet_Success(t *testing.T) {
 	expected := &imageproxy.ImageConfig{
 		Width:        300,
 		Height:       200,
-		ResizingType: imageproxy.ResizingTypeFit,
+		ResizingType: imageproxy.ResizingTypeFill,
 	}
 	require.Equal(t, expected, result)
 }
 
 func Test_parseImageConfigParams_NoParamsSet_Success(t *testing.T) {
 	// Setup test
-	c, _ := setupGinTest("", "", nil, nil)
+	c, _ := setupGinTest(t, "", "", nil, nil)
 
 	// Call function
 	result, err := parseImageConfigParams(c)

@@ -25,7 +25,7 @@ type Config struct {
 		Salt    string
 
 		// Comma-separated list of allowed configs in format width:height:resizingType.
-		// Example "100:100:fill,300:200:fit". Use "*" if not limiting the configs.
+		// Example "100:100:FILL,300:200:FIT". Use "*" if not limiting the configs.
 		AllowedConfigs string
 	}
 	Server struct {

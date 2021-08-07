@@ -16,11 +16,11 @@ import (
 
 // Image struct for Image
 type Image struct {
-	Id *string `json:"id,omitempty"`
+	Id string `json:"id"`
 	// Extension of the image
-	Ext *string `json:"ext,omitempty"`
+	Ext string `json:"ext"`
 	// Signed URL pointing to the image
-	Url *string `json:"url,omitempty"`
+	Url string `json:"url"`
 	// Should be sorted ascending by this column
 	Order int64 `json:"order"`
 }
@@ -29,8 +29,11 @@ type Image struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewImage(order int64) *Image {
+func NewImage(id string, ext string, url string, order int64) *Image {
 	this := Image{}
+	this.Id = id
+	this.Ext = ext
+	this.Url = url
 	this.Order = order
 	return &this
 }
@@ -43,100 +46,76 @@ func NewImageWithDefaults() *Image {
 	return &this
 }
 
-// GetId returns the Id field value if set, zero value otherwise.
+// GetId returns the Id field value
 func (o *Image) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Id
+
+	return o.Id
 }
 
-// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *Image) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.Id, true
+	return &o.Id, true
 }
 
-// HasId returns a boolean if a field has been set.
-func (o *Image) HasId() bool {
-	if o != nil && o.Id != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetId gets a reference to the given string and assigns it to the Id field.
+// SetId sets field value
 func (o *Image) SetId(v string) {
-	o.Id = &v
+	o.Id = v
 }
 
-// GetExt returns the Ext field value if set, zero value otherwise.
+// GetExt returns the Ext field value
 func (o *Image) GetExt() string {
-	if o == nil || o.Ext == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Ext
+
+	return o.Ext
 }
 
-// GetExtOk returns a tuple with the Ext field value if set, nil otherwise
+// GetExtOk returns a tuple with the Ext field value
 // and a boolean to check if the value has been set.
 func (o *Image) GetExtOk() (*string, bool) {
-	if o == nil || o.Ext == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.Ext, true
+	return &o.Ext, true
 }
 
-// HasExt returns a boolean if a field has been set.
-func (o *Image) HasExt() bool {
-	if o != nil && o.Ext != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetExt gets a reference to the given string and assigns it to the Ext field.
+// SetExt sets field value
 func (o *Image) SetExt(v string) {
-	o.Ext = &v
+	o.Ext = v
 }
 
-// GetUrl returns the Url field value if set, zero value otherwise.
+// GetUrl returns the Url field value
 func (o *Image) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Url
+
+	return o.Url
 }
 
-// GetUrlOk returns a tuple with the Url field value if set, nil otherwise
+// GetUrlOk returns a tuple with the Url field value
 // and a boolean to check if the value has been set.
 func (o *Image) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.Url, true
+	return &o.Url, true
 }
 
-// HasUrl returns a boolean if a field has been set.
-func (o *Image) HasUrl() bool {
-	if o != nil && o.Url != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetUrl gets a reference to the given string and assigns it to the Url field.
+// SetUrl sets field value
 func (o *Image) SetUrl(v string) {
-	o.Url = &v
+	o.Url = v
 }
 
 // GetOrder returns the Order field value
@@ -165,13 +144,13 @@ func (o *Image) SetOrder(v int64) {
 
 func (o Image) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
+	if true {
 		toSerialize["id"] = o.Id
 	}
-	if o.Ext != nil {
+	if true {
 		toSerialize["ext"] = o.Ext
 	}
-	if o.Url != nil {
+	if true {
 		toSerialize["url"] = o.Url
 	}
 	if true {

@@ -24,7 +24,7 @@ func Test_parseIDParam_Success(t *testing.T) {
 	// Setup test
 	presenter := presenter.New(shortid.NewFakeService())
 	value := uuid.New()
-	c, _ := setupGinTest("", "", gin.Params{{Key: "test_id", Value: value.String()}}, nil)
+	c, _ := setupGinTest(t, "", "", gin.Params{{Key: "test_id", Value: value.String()}}, nil)
 
 	// Call function
 	result, success := parseIDParam(c, "test_id", presenter)
@@ -37,7 +37,7 @@ func Test_parseIDParam_Success(t *testing.T) {
 func Test_parseIDParam_ParamNotProvided_Failure(t *testing.T) {
 	// Setup test
 	presenter := presenter.New(shortid.NewFakeService())
-	c, w := setupGinTest("", "", nil, nil)
+	c, w := setupGinTest(t, "", "", nil, nil)
 
 	// Call function
 	result, success := parseIDParam(c, "test_id", presenter)
@@ -53,11 +53,13 @@ func Test_parseIDParam_ParamNotProvided_Failure(t *testing.T) {
 // #         HELPERS         #
 // ###########################
 
-func setupGinTest(method, path string, params gin.Params, body []byte) (*gin.Context, *httptest.ResponseRecorder) {
+func setupGinTest(t *testing.T, method, path string, params gin.Params, body []byte) (*gin.Context, *httptest.ResponseRecorder) {
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
 	bodyReader := bytes.NewReader(body)
-	c.Request, _ = http.NewRequest(method, path, bodyReader)
+	var err error
+	c.Request, err = http.NewRequest(method, path, bodyReader)
+	require.NoError(t, err)
 	c.Request.Header.Set("Content-Type", "application/json")
 	c.Params = params
 	return c, w
