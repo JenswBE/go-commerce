@@ -16,7 +16,8 @@ docker run --user ${UID} --rm -v "$(pwd):/local" \
 openapitools/openapi-generator-cli generate \
 --input-spec /local/docs/openapi.yml \
 --generator-name go \
---output /local/api/openapi
+--output /local/api/openapi \
+--additional-properties enumClassPrefix=true
 
 # Remove unused files
 find api/openapi -mindepth 1 -not -iname "model_*.go" -not -name utils.go -delete

@@ -48,29 +48,6 @@ func (h *ProductHandler) getProduct(c *gin.Context) {
 	c.JSON(200, h.presenter.ProductFromEntity(product))
 }
 
-func (h *ProductHandler) listProductImages(c *gin.Context) {
-	// Parse params
-	id, ok := parseIDParam(c, "id", h.presenter)
-	if !ok {
-		return // Response already set on Gin context
-	}
-	imageConfig, err := parseImageConfigParams(c)
-	if err != nil {
-		c.String(errToResponse(err))
-		return
-	}
-
-	// Call service
-	product, err := h.service.GetProduct(id, imageConfig)
-	if err != nil {
-		c.String(errToResponse(err))
-		return
-	}
-
-	// Handle success
-	c.JSON(200, h.presenter.ImagesListFromEntity(product.Images))
-}
-
 func (h *ProductHandler) createProduct(c *gin.Context) {
 	// Parse body
 	body := &openapi.Product{}
@@ -94,7 +71,7 @@ func (h *ProductHandler) createProduct(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.ProductFromEntity(product))
+	c.JSON(201, h.presenter.ProductFromEntity(product))
 }
 
 func (h *ProductHandler) updateProduct(c *gin.Context) {
@@ -145,6 +122,29 @@ func (h *ProductHandler) deleteProduct(c *gin.Context) {
 
 	// Handle success
 	c.String(204, "")
+}
+
+func (h *ProductHandler) listProductImages(c *gin.Context) {
+	// Parse params
+	id, ok := parseIDParam(c, "id", h.presenter)
+	if !ok {
+		return // Response already set on Gin context
+	}
+	imageConfig, err := parseImageConfigParams(c)
+	if err != nil {
+		c.String(errToResponse(err))
+		return
+	}
+
+	// Call service
+	product, err := h.service.GetProduct(id, imageConfig)
+	if err != nil {
+		c.String(errToResponse(err))
+		return
+	}
+
+	// Handle success
+	c.JSON(200, h.presenter.ImagesListFromEntity(product.Images))
 }
 
 func (h *ProductHandler) addProductImages(c *gin.Context) {

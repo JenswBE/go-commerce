@@ -704,10 +704,7 @@ components:
               type: string
               format: uuid
             status:
-              type: string
-              enum:
-                - AVAILABLE
-                - ARCHIVED
+              $ref: "#/components/schemas/ProductStatus"
             stock_count:
               type: integer
               format: int64
@@ -716,6 +713,15 @@ components:
               items:
                 $ref: "#/components/schemas/ImageUrl"
               readOnly: true
+          required:
+            - name
+            - price
+
+    ProductStatus:
+      type: string
+      enum:
+        - AVAILABLE
+        - ARCHIVED
 
     ProductWithManufacturer:
       allOf:

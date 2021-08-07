@@ -6,22 +6,29 @@ import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
 )
 
 func (p *Presenter) ProductFromEntity(e *entities.Product) openapi.Product {
 	// Set basic fields
-	m := openapi.NewProduct()
+	m := openapi.NewProduct(e.Name, int64(e.Price))
 	m.SetId(p.EncodeID(e.ID))
 	m.SetCreatedAt(e.CreatedAt)
 	m.SetUpdatedAt(e.UpdatedAt)
-	m.SetName(e.Name)
 	m.SetDescriptionShort(e.DescriptionShort)
 	m.SetDescriptionLong(e.DescriptionLong)
-	m.SetPrice(int64(e.Price))
 	m.SetCategoryIds(p.EncodeIDList(e.CategoryIDs))
-	m.SetStatus(string(e.Status))
 	m.SetStockCount(int64(e.StockCount))
 	m.SetImageUrls(p.ImageURLListFromEntity(e.Images))
+
+	// Set status
+	status, err := openapi.NewProductStatusFromValue(e.Status.String())
+	if err != nil {
+		defaultStatus := openapi.PRODUCTSTATUS_ARCHIVED
+		log.Warn().Err(err).Stringer("status", e.Status).Msgf("Unknown product status received from entity, defaulting to %s", defaultStatus)
+		status = defaultStatus.Ptr()
+	}
+	m.SetStatus(*status)
 
 	// Set manufacturer ID
 	if e.ManufacturerID != uuid.Nil {

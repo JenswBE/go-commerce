@@ -55,6 +55,7 @@ func Test_parseIDParam_ParamNotProvided_Failure(t *testing.T) {
 
 func setupGinTest(t *testing.T, method, path string, params gin.Params, body []byte) (*gin.Context, *httptest.ResponseRecorder) {
 	w := httptest.NewRecorder()
+	gin.SetMode(gin.ReleaseMode)
 	c, _ := gin.CreateTestContext(w)
 	bodyReader := bytes.NewReader(body)
 	var err error

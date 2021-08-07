@@ -27,6 +27,11 @@ type Product struct {
 type ProductStatus string
 
 const ProductStatusAvailable = "AVAILABLE"
+const ProductStatusArchived = "ARCHIVED"
+
+func (status ProductStatus) String() string {
+	return string(status)
+}
 
 // Validate validates the product data
 func (c *Product) Validate() error {

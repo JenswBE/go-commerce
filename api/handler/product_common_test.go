@@ -2,7 +2,6 @@ package handler
 
 import (
 	"bytes"
-	"mime/multipart"
 	"net/http"
 	"testing"
 
@@ -13,13 +12,7 @@ import (
 
 func Test_parseFilesFromMultipart_Success(t *testing.T) {
 	// Setup test
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-	test1, _ := writer.CreateFormFile("file", "test1.jpg")
-	test1.Write([]byte("test-1-jpg"))
-	test2, _ := writer.CreateFormFile("file", "test2.png")
-	test2.Write([]byte("test-2-png"))
-	writer.Close()
+	body, writer := fixtures.MultipartMultipleFiles()
 	req, _ := http.NewRequest("", "", body)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
@@ -28,11 +21,7 @@ func Test_parseFilesFromMultipart_Success(t *testing.T) {
 
 	// Assert results
 	require.NoError(t, err)
-	expected := map[string][]byte{
-		"test1.jpg": []byte("test-1-jpg"),
-		"test2.png": []byte("test-2-png"),
-	}
-	require.Equal(t, expected, files)
+	require.Equal(t, fixtures.MultipartMultipleFilesMap(), files)
 }
 
 func Test_parseFilesFromMultipart_Failure(t *testing.T) {

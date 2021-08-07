@@ -20,6 +20,12 @@ func Image() *entities.Image {
 	}
 }
 
+func ImageSlice() []*entities.Image {
+	return []*entities.Image{
+		Image(),
+	}
+}
+
 func ImageConfig() *imageproxy.ImageConfig {
 	return &imageproxy.ImageConfig{
 		Width:        300,
@@ -40,5 +46,11 @@ func ImageOpenAPI() *openapi.Image {
 		Ext:   ".jpg",
 		Url:   "http://image.test",
 		Order: 1,
+	}
+}
+
+func ImageOpenAPISlice() []*openapi.Image {
+	return []*openapi.Image{
+		ImageOpenAPI(),
 	}
 }

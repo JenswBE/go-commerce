@@ -1,9 +1,7 @@
 package handler
 
 import (
-	"bytes"
 	"encoding/json"
-	"mime/multipart"
 	"net/http"
 	"testing"
 
@@ -122,11 +120,7 @@ func Test_deleteCategory_Success(t *testing.T) {
 func Test_upsertCategoryImage_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.CategoryID}}
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-	image, _ := writer.CreateFormFile("file", "image.jpg")
-	image.Write([]byte("test-image-jpg"))
-	writer.Close()
+	body, writer := fixtures.MultipartSingleFile()
 	c, r := setupGinTest(t, "PUT", "?"+fixtures.ImageConfigQuery, params, body.Bytes())
 	c.Request.Header.Set("Content-Type", writer.FormDataContentType())
 	handler, usecaseMock := setupHandlerTest()
@@ -140,7 +134,7 @@ func Test_upsertCategoryImage_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "UpsertCategoryImage", uuid.MustParse(fixtures.CategoryID), "image.jpg", []byte("test-image-jpg"), fixtures.ImageConfig())
+	usecaseMock.AssertCalled(t, "UpsertCategoryImage", uuid.MustParse(fixtures.CategoryID), "test.jpg", []byte("test-jpg"), fixtures.ImageConfig())
 }
 
 func Test_deleteCategoryImage_Success(t *testing.T) {

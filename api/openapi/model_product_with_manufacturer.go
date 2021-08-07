@@ -21,14 +21,14 @@ type ProductWithManufacturer struct {
 	Id *string `json:"id,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 	DescriptionShort *string `json:"description_short,omitempty"`
 	DescriptionLong *string `json:"description_long,omitempty"`
 	// Price in cents
-	Price *int64 `json:"price,omitempty"`
+	Price int64 `json:"price"`
 	CategoryIds *[]string `json:"category_ids,omitempty"`
 	ManufacturerId *string `json:"manufacturer_id,omitempty"`
-	Status *string `json:"status,omitempty"`
+	Status *ProductStatus `json:"status,omitempty"`
 	StockCount *int64 `json:"stock_count,omitempty"`
 	ImageUrls *[]string `json:"image_urls,omitempty"`
 	Manufacturer *Manufacturer `json:"manufacturer,omitempty"`
@@ -38,8 +38,10 @@ type ProductWithManufacturer struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProductWithManufacturer() *ProductWithManufacturer {
+func NewProductWithManufacturer(name string, price int64) *ProductWithManufacturer {
 	this := ProductWithManufacturer{}
+	this.Name = name
+	this.Price = price
 	return &this
 }
 
@@ -147,36 +149,28 @@ func (o *ProductWithManufacturer) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 
-// GetName returns the Name field value if set, zero value otherwise.
+// GetName returns the Name field value
 func (o *ProductWithManufacturer) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Name
+
+	return o.Name
 }
 
-// GetNameOk returns a tuple with the Name field value if set, nil otherwise
+// GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *ProductWithManufacturer) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.Name, true
+	return &o.Name, true
 }
 
-// HasName returns a boolean if a field has been set.
-func (o *ProductWithManufacturer) HasName() bool {
-	if o != nil && o.Name != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetName gets a reference to the given string and assigns it to the Name field.
+// SetName sets field value
 func (o *ProductWithManufacturer) SetName(v string) {
-	o.Name = &v
+	o.Name = v
 }
 
 // GetDescriptionShort returns the DescriptionShort field value if set, zero value otherwise.
@@ -243,36 +237,28 @@ func (o *ProductWithManufacturer) SetDescriptionLong(v string) {
 	o.DescriptionLong = &v
 }
 
-// GetPrice returns the Price field value if set, zero value otherwise.
+// GetPrice returns the Price field value
 func (o *ProductWithManufacturer) GetPrice() int64 {
-	if o == nil || o.Price == nil {
+	if o == nil {
 		var ret int64
 		return ret
 	}
-	return *o.Price
+
+	return o.Price
 }
 
-// GetPriceOk returns a tuple with the Price field value if set, nil otherwise
+// GetPriceOk returns a tuple with the Price field value
 // and a boolean to check if the value has been set.
 func (o *ProductWithManufacturer) GetPriceOk() (*int64, bool) {
-	if o == nil || o.Price == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.Price, true
+	return &o.Price, true
 }
 
-// HasPrice returns a boolean if a field has been set.
-func (o *ProductWithManufacturer) HasPrice() bool {
-	if o != nil && o.Price != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetPrice gets a reference to the given int64 and assigns it to the Price field.
+// SetPrice sets field value
 func (o *ProductWithManufacturer) SetPrice(v int64) {
-	o.Price = &v
+	o.Price = v
 }
 
 // GetCategoryIds returns the CategoryIds field value if set, zero value otherwise.
@@ -340,9 +326,9 @@ func (o *ProductWithManufacturer) SetManufacturerId(v string) {
 }
 
 // GetStatus returns the Status field value if set, zero value otherwise.
-func (o *ProductWithManufacturer) GetStatus() string {
+func (o *ProductWithManufacturer) GetStatus() ProductStatus {
 	if o == nil || o.Status == nil {
-		var ret string
+		var ret ProductStatus
 		return ret
 	}
 	return *o.Status
@@ -350,7 +336,7 @@ func (o *ProductWithManufacturer) GetStatus() string {
 
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductWithManufacturer) GetStatusOk() (*string, bool) {
+func (o *ProductWithManufacturer) GetStatusOk() (*ProductStatus, bool) {
 	if o == nil || o.Status == nil {
 		return nil, false
 	}
@@ -366,8 +352,8 @@ func (o *ProductWithManufacturer) HasStatus() bool {
 	return false
 }
 
-// SetStatus gets a reference to the given string and assigns it to the Status field.
-func (o *ProductWithManufacturer) SetStatus(v string) {
+// SetStatus gets a reference to the given ProductStatus and assigns it to the Status field.
+func (o *ProductWithManufacturer) SetStatus(v ProductStatus) {
 	o.Status = &v
 }
 
@@ -478,7 +464,7 @@ func (o ProductWithManufacturer) MarshalJSON() ([]byte, error) {
 	if o.UpdatedAt != nil {
 		toSerialize["updated_at"] = o.UpdatedAt
 	}
-	if o.Name != nil {
+	if true {
 		toSerialize["name"] = o.Name
 	}
 	if o.DescriptionShort != nil {
@@ -487,7 +473,7 @@ func (o ProductWithManufacturer) MarshalJSON() ([]byte, error) {
 	if o.DescriptionLong != nil {
 		toSerialize["description_long"] = o.DescriptionLong
 	}
-	if o.Price != nil {
+	if true {
 		toSerialize["price"] = o.Price
 	}
 	if o.CategoryIds != nil {
