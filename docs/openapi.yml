@@ -122,7 +122,7 @@ paths:
         "204":
           description: No Content
 
-  /admin/categories/{id}/image:
+  /admin/categories/{id}/image/:
     parameters:
       - $ref: "#/components/parameters/pathID"
     put:
@@ -273,7 +273,7 @@ paths:
         "204":
           description: No Content
 
-  /admin/manufacturers/{id}/image:
+  /admin/manufacturers/{id}/image/:
     parameters:
       - $ref: "#/components/parameters/pathID"
     put:
@@ -424,7 +424,7 @@ paths:
         "204":
           description: No Content
 
-  /admin/products/{id}/images:
+  /admin/products/{id}/images/:
     parameters:
       - $ref: "#/components/parameters/pathID"
       - $ref: "#/components/parameters/queryImgHeight"
@@ -464,7 +464,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ImageList"
 
-  /admin/products/{id}/images/{image_id}:
+  /admin/products/{id}/images/{image_id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
       - $ref: "#/components/parameters/pathImageID"
