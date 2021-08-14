@@ -36,7 +36,7 @@ func CategoryOpenAPI() *openapi.Category {
 		Name:        "test-name",
 		Description: openapi.PtrString("test-description"),
 		Order:       1,
-		ImageUrl:    &Image().URL,
+		ImageUrls:   &Image().URLs,
 		ProductIds:  &[]string{},
 	}
 }

@@ -16,7 +16,7 @@ func Image() *entities.Image {
 		ID:        uuid.MustParse(ImageID),
 		Extension: ".jpg",
 		Order:     1,
-		URL:       "http://image.test",
+		URLs:      map[string]string{ImageConfigString: "http://image.test"},
 	}
 }
 
@@ -26,15 +26,22 @@ func ImageSlice() []*entities.Image {
 	}
 }
 
-func ImageConfig() *imageproxy.ImageConfig {
-	return &imageproxy.ImageConfig{
+func ImageConfig() imageproxy.ImageConfig {
+	return imageproxy.ImageConfig{
 		Width:        300,
 		Height:       200,
 		ResizingType: imageproxy.ResizingTypeFill,
 	}
 }
 
-const ImageConfigQuery = "img_w=300&img_h=200&img_r=FILL"
+func ImageConfigMap() map[string]imageproxy.ImageConfig {
+	return map[string]imageproxy.ImageConfig{
+		ImageConfigString: ImageConfig(),
+	}
+}
+
+const ImageConfigString = "300_200_FILL"
+const ImageConfigQuery = "img=" + ImageConfigString
 
 // #############################
 // #          OPENAPI          #
@@ -44,7 +51,7 @@ func ImageOpenAPI() *openapi.Image {
 	return &openapi.Image{
 		Id:    ImageID,
 		Ext:   ".jpg",
-		Url:   "http://image.test",
+		Urls:  map[string]string{ImageConfigString: "http://image.test"},
 		Order: 1,
 	}
 }

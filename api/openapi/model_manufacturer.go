@@ -20,8 +20,7 @@ type Manufacturer struct {
 	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
 	WebsiteUrl *string `json:"website_url,omitempty"`
-	// Signed URL pointing to the image
-	ImageUrl *string `json:"image_url,omitempty"`
+	ImageUrls *map[string]string `json:"image_urls,omitempty"`
 }
 
 // NewManufacturer instantiates a new Manufacturer object
@@ -130,36 +129,36 @@ func (o *Manufacturer) SetWebsiteUrl(v string) {
 	o.WebsiteUrl = &v
 }
 
-// GetImageUrl returns the ImageUrl field value if set, zero value otherwise.
-func (o *Manufacturer) GetImageUrl() string {
-	if o == nil || o.ImageUrl == nil {
-		var ret string
+// GetImageUrls returns the ImageUrls field value if set, zero value otherwise.
+func (o *Manufacturer) GetImageUrls() map[string]string {
+	if o == nil || o.ImageUrls == nil {
+		var ret map[string]string
 		return ret
 	}
-	return *o.ImageUrl
+	return *o.ImageUrls
 }
 
-// GetImageUrlOk returns a tuple with the ImageUrl field value if set, nil otherwise
+// GetImageUrlsOk returns a tuple with the ImageUrls field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Manufacturer) GetImageUrlOk() (*string, bool) {
-	if o == nil || o.ImageUrl == nil {
+func (o *Manufacturer) GetImageUrlsOk() (*map[string]string, bool) {
+	if o == nil || o.ImageUrls == nil {
 		return nil, false
 	}
-	return o.ImageUrl, true
+	return o.ImageUrls, true
 }
 
-// HasImageUrl returns a boolean if a field has been set.
-func (o *Manufacturer) HasImageUrl() bool {
-	if o != nil && o.ImageUrl != nil {
+// HasImageUrls returns a boolean if a field has been set.
+func (o *Manufacturer) HasImageUrls() bool {
+	if o != nil && o.ImageUrls != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetImageUrl gets a reference to the given string and assigns it to the ImageUrl field.
-func (o *Manufacturer) SetImageUrl(v string) {
-	o.ImageUrl = &v
+// SetImageUrls gets a reference to the given map[string]string and assigns it to the ImageUrls field.
+func (o *Manufacturer) SetImageUrls(v map[string]string) {
+	o.ImageUrls = &v
 }
 
 func (o Manufacturer) MarshalJSON() ([]byte, error) {
@@ -173,8 +172,8 @@ func (o Manufacturer) MarshalJSON() ([]byte, error) {
 	if o.WebsiteUrl != nil {
 		toSerialize["website_url"] = o.WebsiteUrl
 	}
-	if o.ImageUrl != nil {
-		toSerialize["image_url"] = o.ImageUrl
+	if o.ImageUrls != nil {
+		toSerialize["image_urls"] = o.ImageUrls
 	}
 	return json.Marshal(toSerialize)
 }

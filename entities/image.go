@@ -9,7 +9,7 @@ import (
 type Image struct {
 	ID        ID
 	Extension string // File extension
-	URL       string
+	URLs      map[string]string
 	Order     int
 }
 
@@ -24,16 +24,22 @@ func (img *Image) Validate() error {
 	return nil
 }
 
-// SetURLFromConfig generates and sets an URL from the provided config
-func (img *Image) SetURLFromConfig(service imageproxy.Service, config imageproxy.ImageConfig) error {
-	// Generate URL
-	localSource := "local:///" + img.ID.String() + img.Extension
-	url, err := service.GenerateURL(localSource, config)
-	if err != nil {
-		return err
+// SetURLsFromConfigs generates and sets an URL from the provided config
+func (img *Image) SetURLsFromConfigs(service imageproxy.Service, configs map[string]imageproxy.ImageConfig) error {
+	// Skip if img is nil
+	if img == nil {
+		return nil
 	}
 
-	// Set URL
-	img.URL = url
+	// Generate URL's
+	img.URLs = make(map[string]string, len(configs))
+	localSource := "local:///" + img.ID.String() + img.Extension
+	var err error
+	for request, config := range configs {
+		img.URLs[request], err = service.GenerateURL(localSource, config)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }

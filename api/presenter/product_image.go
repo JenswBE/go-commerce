@@ -10,7 +10,7 @@ func (p *Presenter) ImageFromEntity(e *entities.Image) openapi.Image {
 	return *openapi.NewImage(
 		p.EncodeID(e.ID),
 		e.Extension,
-		e.URL,
+		e.URLs,
 		int64(e.Order),
 	)
 }
@@ -27,12 +27,10 @@ func (p *Presenter) ImageListFromEntity(input []*entities.Image) openapi.ImageLi
 	return *openapi.NewImageList(p.ImageSliceFromEntity(input))
 }
 
-func (p *Presenter) ImageURLSliceFromEntity(input []*entities.Image) []string {
-	output := make([]string, 0, len(input))
+func (p *Presenter) ImageURLsSliceFromEntity(input []*entities.Image) []map[string]string {
+	output := make([]map[string]string, 0, len(input))
 	for _, image := range input {
-		if image.URL != "" {
-			output = append(output, image.URL)
-		}
+		output = append(output, image.URLs)
 	}
 	return output
 }

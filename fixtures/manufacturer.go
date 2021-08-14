@@ -34,7 +34,7 @@ func ManufacturerOpenAPI() *openapi.Manufacturer {
 		Id:         openapi.PtrString(ManufacturerID),
 		Name:       "test-name",
 		WebsiteUrl: openapi.PtrString("https://manufacturer.test"),
-		ImageUrl:   openapi.PtrString("http://image.test"),
+		ImageUrls:  &Image().URLs,
 	}
 }
 

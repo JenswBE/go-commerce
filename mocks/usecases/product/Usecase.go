@@ -16,13 +16,13 @@ type Usecase struct {
 	mock.Mock
 }
 
-// AddProductImages provides a mock function with given fields: id, images, imageConfig
-func (_m *Usecase) AddProductImages(id uuid.UUID, images map[string][]byte, imageConfig *imageproxy.ImageConfig) (*entities.Product, error) {
-	ret := _m.Called(id, images, imageConfig)
+// AddProductImages provides a mock function with given fields: id, images, imageConfigs
+func (_m *Usecase) AddProductImages(id uuid.UUID, images map[string][]byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Product, error) {
+	ret := _m.Called(id, images, imageConfigs)
 
 	var r0 *entities.Product
-	if rf, ok := ret.Get(0).(func(uuid.UUID, map[string][]byte, *imageproxy.ImageConfig) *entities.Product); ok {
-		r0 = rf(id, images, imageConfig)
+	if rf, ok := ret.Get(0).(func(uuid.UUID, map[string][]byte, map[string]imageproxy.ImageConfig) *entities.Product); ok {
+		r0 = rf(id, images, imageConfigs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.Product)
@@ -30,8 +30,8 @@ func (_m *Usecase) AddProductImages(id uuid.UUID, images map[string][]byte, imag
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uuid.UUID, map[string][]byte, *imageproxy.ImageConfig) error); ok {
-		r1 = rf(id, images, imageConfig)
+	if rf, ok := ret.Get(1).(func(uuid.UUID, map[string][]byte, map[string]imageproxy.ImageConfig) error); ok {
+		r1 = rf(id, images, imageConfigs)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -192,13 +192,13 @@ func (_m *Usecase) DeleteProductImage(productID uuid.UUID, imageID uuid.UUID) er
 	return r0
 }
 
-// GetCategory provides a mock function with given fields: id, imageConfig
-func (_m *Usecase) GetCategory(id uuid.UUID, imageConfig *imageproxy.ImageConfig) (*entities.Category, error) {
-	ret := _m.Called(id, imageConfig)
+// GetCategory provides a mock function with given fields: id, imageConfigs
+func (_m *Usecase) GetCategory(id uuid.UUID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Category, error) {
+	ret := _m.Called(id, imageConfigs)
 
 	var r0 *entities.Category
-	if rf, ok := ret.Get(0).(func(uuid.UUID, *imageproxy.ImageConfig) *entities.Category); ok {
-		r0 = rf(id, imageConfig)
+	if rf, ok := ret.Get(0).(func(uuid.UUID, map[string]imageproxy.ImageConfig) *entities.Category); ok {
+		r0 = rf(id, imageConfigs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.Category)
@@ -206,8 +206,8 @@ func (_m *Usecase) GetCategory(id uuid.UUID, imageConfig *imageproxy.ImageConfig
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uuid.UUID, *imageproxy.ImageConfig) error); ok {
-		r1 = rf(id, imageConfig)
+	if rf, ok := ret.Get(1).(func(uuid.UUID, map[string]imageproxy.ImageConfig) error); ok {
+		r1 = rf(id, imageConfigs)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -215,13 +215,13 @@ func (_m *Usecase) GetCategory(id uuid.UUID, imageConfig *imageproxy.ImageConfig
 	return r0, r1
 }
 
-// GetManufacturer provides a mock function with given fields: id, imageConfig
-func (_m *Usecase) GetManufacturer(id uuid.UUID, imageConfig *imageproxy.ImageConfig) (*entities.Manufacturer, error) {
-	ret := _m.Called(id, imageConfig)
+// GetManufacturer provides a mock function with given fields: id, imageConfigs
+func (_m *Usecase) GetManufacturer(id uuid.UUID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Manufacturer, error) {
+	ret := _m.Called(id, imageConfigs)
 
 	var r0 *entities.Manufacturer
-	if rf, ok := ret.Get(0).(func(uuid.UUID, *imageproxy.ImageConfig) *entities.Manufacturer); ok {
-		r0 = rf(id, imageConfig)
+	if rf, ok := ret.Get(0).(func(uuid.UUID, map[string]imageproxy.ImageConfig) *entities.Manufacturer); ok {
+		r0 = rf(id, imageConfigs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.Manufacturer)
@@ -229,8 +229,8 @@ func (_m *Usecase) GetManufacturer(id uuid.UUID, imageConfig *imageproxy.ImageCo
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uuid.UUID, *imageproxy.ImageConfig) error); ok {
-		r1 = rf(id, imageConfig)
+	if rf, ok := ret.Get(1).(func(uuid.UUID, map[string]imageproxy.ImageConfig) error); ok {
+		r1 = rf(id, imageConfigs)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -238,13 +238,13 @@ func (_m *Usecase) GetManufacturer(id uuid.UUID, imageConfig *imageproxy.ImageCo
 	return r0, r1
 }
 
-// GetProduct provides a mock function with given fields: id, imageConfig
-func (_m *Usecase) GetProduct(id uuid.UUID, imageConfig *imageproxy.ImageConfig) (*entities.Product, error) {
-	ret := _m.Called(id, imageConfig)
+// GetProduct provides a mock function with given fields: id, imageConfigs
+func (_m *Usecase) GetProduct(id uuid.UUID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Product, error) {
+	ret := _m.Called(id, imageConfigs)
 
 	var r0 *entities.Product
-	if rf, ok := ret.Get(0).(func(uuid.UUID, *imageproxy.ImageConfig) *entities.Product); ok {
-		r0 = rf(id, imageConfig)
+	if rf, ok := ret.Get(0).(func(uuid.UUID, map[string]imageproxy.ImageConfig) *entities.Product); ok {
+		r0 = rf(id, imageConfigs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.Product)
@@ -252,8 +252,8 @@ func (_m *Usecase) GetProduct(id uuid.UUID, imageConfig *imageproxy.ImageConfig)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uuid.UUID, *imageproxy.ImageConfig) error); ok {
-		r1 = rf(id, imageConfig)
+	if rf, ok := ret.Get(1).(func(uuid.UUID, map[string]imageproxy.ImageConfig) error); ok {
+		r1 = rf(id, imageConfigs)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -261,13 +261,13 @@ func (_m *Usecase) GetProduct(id uuid.UUID, imageConfig *imageproxy.ImageConfig)
 	return r0, r1
 }
 
-// ListCategories provides a mock function with given fields: imageConfig
-func (_m *Usecase) ListCategories(imageConfig *imageproxy.ImageConfig) ([]*entities.Category, error) {
-	ret := _m.Called(imageConfig)
+// ListCategories provides a mock function with given fields: imageConfigs
+func (_m *Usecase) ListCategories(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Category, error) {
+	ret := _m.Called(imageConfigs)
 
 	var r0 []*entities.Category
-	if rf, ok := ret.Get(0).(func(*imageproxy.ImageConfig) []*entities.Category); ok {
-		r0 = rf(imageConfig)
+	if rf, ok := ret.Get(0).(func(map[string]imageproxy.ImageConfig) []*entities.Category); ok {
+		r0 = rf(imageConfigs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]*entities.Category)
@@ -275,8 +275,8 @@ func (_m *Usecase) ListCategories(imageConfig *imageproxy.ImageConfig) ([]*entit
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*imageproxy.ImageConfig) error); ok {
-		r1 = rf(imageConfig)
+	if rf, ok := ret.Get(1).(func(map[string]imageproxy.ImageConfig) error); ok {
+		r1 = rf(imageConfigs)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -284,13 +284,13 @@ func (_m *Usecase) ListCategories(imageConfig *imageproxy.ImageConfig) ([]*entit
 	return r0, r1
 }
 
-// ListManufacturers provides a mock function with given fields: imageConfig
-func (_m *Usecase) ListManufacturers(imageConfig *imageproxy.ImageConfig) ([]*entities.Manufacturer, error) {
-	ret := _m.Called(imageConfig)
+// ListManufacturers provides a mock function with given fields: imageConfigs
+func (_m *Usecase) ListManufacturers(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Manufacturer, error) {
+	ret := _m.Called(imageConfigs)
 
 	var r0 []*entities.Manufacturer
-	if rf, ok := ret.Get(0).(func(*imageproxy.ImageConfig) []*entities.Manufacturer); ok {
-		r0 = rf(imageConfig)
+	if rf, ok := ret.Get(0).(func(map[string]imageproxy.ImageConfig) []*entities.Manufacturer); ok {
+		r0 = rf(imageConfigs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]*entities.Manufacturer)
@@ -298,8 +298,8 @@ func (_m *Usecase) ListManufacturers(imageConfig *imageproxy.ImageConfig) ([]*en
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*imageproxy.ImageConfig) error); ok {
-		r1 = rf(imageConfig)
+	if rf, ok := ret.Get(1).(func(map[string]imageproxy.ImageConfig) error); ok {
+		r1 = rf(imageConfigs)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -307,13 +307,13 @@ func (_m *Usecase) ListManufacturers(imageConfig *imageproxy.ImageConfig) ([]*en
 	return r0, r1
 }
 
-// ListProducts provides a mock function with given fields: imageConfig
-func (_m *Usecase) ListProducts(imageConfig *imageproxy.ImageConfig) ([]*entities.Product, error) {
-	ret := _m.Called(imageConfig)
+// ListProducts provides a mock function with given fields: imageConfigs
+func (_m *Usecase) ListProducts(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Product, error) {
+	ret := _m.Called(imageConfigs)
 
 	var r0 []*entities.Product
-	if rf, ok := ret.Get(0).(func(*imageproxy.ImageConfig) []*entities.Product); ok {
-		r0 = rf(imageConfig)
+	if rf, ok := ret.Get(0).(func(map[string]imageproxy.ImageConfig) []*entities.Product); ok {
+		r0 = rf(imageConfigs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]*entities.Product)
@@ -321,8 +321,8 @@ func (_m *Usecase) ListProducts(imageConfig *imageproxy.ImageConfig) ([]*entitie
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*imageproxy.ImageConfig) error); ok {
-		r1 = rf(imageConfig)
+	if rf, ok := ret.Get(1).(func(map[string]imageproxy.ImageConfig) error); ok {
+		r1 = rf(imageConfigs)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -422,13 +422,13 @@ func (_m *Usecase) UpdateProductImage(productID uuid.UUID, imageID uuid.UUID, or
 	return r0, r1
 }
 
-// UpsertCategoryImage provides a mock function with given fields: categoryID, imageName, imageContent, imageConfig
-func (_m *Usecase) UpsertCategoryImage(categoryID uuid.UUID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entities.Category, error) {
-	ret := _m.Called(categoryID, imageName, imageContent, imageConfig)
+// UpsertCategoryImage provides a mock function with given fields: categoryID, imageName, imageContent, imageConfigs
+func (_m *Usecase) UpsertCategoryImage(categoryID uuid.UUID, imageName string, imageContent []byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Category, error) {
+	ret := _m.Called(categoryID, imageName, imageContent, imageConfigs)
 
 	var r0 *entities.Category
-	if rf, ok := ret.Get(0).(func(uuid.UUID, string, []byte, *imageproxy.ImageConfig) *entities.Category); ok {
-		r0 = rf(categoryID, imageName, imageContent, imageConfig)
+	if rf, ok := ret.Get(0).(func(uuid.UUID, string, []byte, map[string]imageproxy.ImageConfig) *entities.Category); ok {
+		r0 = rf(categoryID, imageName, imageContent, imageConfigs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.Category)
@@ -436,8 +436,8 @@ func (_m *Usecase) UpsertCategoryImage(categoryID uuid.UUID, imageName string, i
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uuid.UUID, string, []byte, *imageproxy.ImageConfig) error); ok {
-		r1 = rf(categoryID, imageName, imageContent, imageConfig)
+	if rf, ok := ret.Get(1).(func(uuid.UUID, string, []byte, map[string]imageproxy.ImageConfig) error); ok {
+		r1 = rf(categoryID, imageName, imageContent, imageConfigs)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -445,13 +445,13 @@ func (_m *Usecase) UpsertCategoryImage(categoryID uuid.UUID, imageName string, i
 	return r0, r1
 }
 
-// UpsertManufacturerImage provides a mock function with given fields: manufacturerID, imageName, imageContent, imageConfig
-func (_m *Usecase) UpsertManufacturerImage(manufacturerID uuid.UUID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entities.Manufacturer, error) {
-	ret := _m.Called(manufacturerID, imageName, imageContent, imageConfig)
+// UpsertManufacturerImage provides a mock function with given fields: manufacturerID, imageName, imageContent, imageConfigs
+func (_m *Usecase) UpsertManufacturerImage(manufacturerID uuid.UUID, imageName string, imageContent []byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Manufacturer, error) {
+	ret := _m.Called(manufacturerID, imageName, imageContent, imageConfigs)
 
 	var r0 *entities.Manufacturer
-	if rf, ok := ret.Get(0).(func(uuid.UUID, string, []byte, *imageproxy.ImageConfig) *entities.Manufacturer); ok {
-		r0 = rf(manufacturerID, imageName, imageContent, imageConfig)
+	if rf, ok := ret.Get(0).(func(uuid.UUID, string, []byte, map[string]imageproxy.ImageConfig) *entities.Manufacturer); ok {
+		r0 = rf(manufacturerID, imageName, imageContent, imageConfigs)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*entities.Manufacturer)
@@ -459,8 +459,8 @@ func (_m *Usecase) UpsertManufacturerImage(manufacturerID uuid.UUID, imageName s
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(uuid.UUID, string, []byte, *imageproxy.ImageConfig) error); ok {
-		r1 = rf(manufacturerID, imageName, imageContent, imageConfig)
+	if rf, ok := ret.Get(1).(func(uuid.UUID, string, []byte, map[string]imageproxy.ImageConfig) error); ok {
+		r1 = rf(manufacturerID, imageName, imageContent, imageConfigs)
 	} else {
 		r1 = ret.Error(1)
 	}

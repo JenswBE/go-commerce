@@ -9,14 +9,14 @@ import (
 
 func (h *ProductHandler) listCategories(c *gin.Context) {
 	// Parse params
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
 	}
 
 	// Call service
-	result, err := h.service.ListCategories(imageConfig)
+	result, err := h.service.ListCategories(imageConfigs)
 
 	// Handle errors
 	if err != nil {
@@ -34,14 +34,14 @@ func (h *ProductHandler) getCategory(c *gin.Context) {
 	if !ok {
 		return // Response already set on Gin context
 	}
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
 	}
 
 	// Call service
-	category, err := h.service.GetCategory(id, imageConfig)
+	category, err := h.service.GetCategory(id, imageConfigs)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
@@ -133,7 +133,7 @@ func (h *ProductHandler) upsertCategoryImage(c *gin.Context) {
 	if !ok {
 		return // Response already set on Gin context
 	}
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
@@ -153,7 +153,7 @@ func (h *ProductHandler) upsertCategoryImage(c *gin.Context) {
 	// Call service
 	var category *entities.Category
 	for imageName, imageContent := range images {
-		category, err = h.service.UpsertCategoryImage(id, imageName, imageContent, imageConfig)
+		category, err = h.service.UpsertCategoryImage(id, imageName, imageContent, imageConfigs)
 		if err != nil {
 			c.String(errToResponse(err))
 			return

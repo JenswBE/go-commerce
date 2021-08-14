@@ -30,7 +30,7 @@ type Product struct {
 	ManufacturerId *string `json:"manufacturer_id,omitempty"`
 	Status *ProductStatus `json:"status,omitempty"`
 	StockCount *int64 `json:"stock_count,omitempty"`
-	ImageUrls *[]string `json:"image_urls,omitempty"`
+	ImageUrls *[]map[string]string `json:"image_urls,omitempty"`
 }
 
 // NewProduct instantiates a new Product object
@@ -389,9 +389,9 @@ func (o *Product) SetStockCount(v int64) {
 }
 
 // GetImageUrls returns the ImageUrls field value if set, zero value otherwise.
-func (o *Product) GetImageUrls() []string {
+func (o *Product) GetImageUrls() []map[string]string {
 	if o == nil || o.ImageUrls == nil {
-		var ret []string
+		var ret []map[string]string
 		return ret
 	}
 	return *o.ImageUrls
@@ -399,7 +399,7 @@ func (o *Product) GetImageUrls() []string {
 
 // GetImageUrlsOk returns a tuple with the ImageUrls field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Product) GetImageUrlsOk() (*[]string, bool) {
+func (o *Product) GetImageUrlsOk() (*[]map[string]string, bool) {
 	if o == nil || o.ImageUrls == nil {
 		return nil, false
 	}
@@ -415,8 +415,8 @@ func (o *Product) HasImageUrls() bool {
 	return false
 }
 
-// SetImageUrls gets a reference to the given []string and assigns it to the ImageUrls field.
-func (o *Product) SetImageUrls(v []string) {
+// SetImageUrls gets a reference to the given []map[string]string and assigns it to the ImageUrls field.
+func (o *Product) SetImageUrls(v []map[string]string) {
 	o.ImageUrls = &v
 }
 

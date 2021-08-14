@@ -19,8 +19,7 @@ type Image struct {
 	Id string `json:"id"`
 	// Extension of the image
 	Ext string `json:"ext"`
-	// Signed URL pointing to the image
-	Url string `json:"url"`
+	Urls map[string]string `json:"urls"`
 	// Should be sorted ascending by this column
 	Order int64 `json:"order"`
 }
@@ -29,11 +28,11 @@ type Image struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewImage(id string, ext string, url string, order int64) *Image {
+func NewImage(id string, ext string, urls map[string]string, order int64) *Image {
 	this := Image{}
 	this.Id = id
 	this.Ext = ext
-	this.Url = url
+	this.Urls = urls
 	this.Order = order
 	return &this
 }
@@ -94,28 +93,28 @@ func (o *Image) SetExt(v string) {
 	o.Ext = v
 }
 
-// GetUrl returns the Url field value
-func (o *Image) GetUrl() string {
+// GetUrls returns the Urls field value
+func (o *Image) GetUrls() map[string]string {
 	if o == nil {
-		var ret string
+		var ret map[string]string
 		return ret
 	}
 
-	return o.Url
+	return o.Urls
 }
 
-// GetUrlOk returns a tuple with the Url field value
+// GetUrlsOk returns a tuple with the Urls field value
 // and a boolean to check if the value has been set.
-func (o *Image) GetUrlOk() (*string, bool) {
+func (o *Image) GetUrlsOk() (*map[string]string, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Url, true
+	return &o.Urls, true
 }
 
-// SetUrl sets field value
-func (o *Image) SetUrl(v string) {
-	o.Url = v
+// SetUrls sets field value
+func (o *Image) SetUrls(v map[string]string) {
+	o.Urls = v
 }
 
 // GetOrder returns the Order field value
@@ -151,7 +150,7 @@ func (o Image) MarshalJSON() ([]byte, error) {
 		toSerialize["ext"] = o.Ext
 	}
 	if true {
-		toSerialize["url"] = o.Url
+		toSerialize["urls"] = o.Urls
 	}
 	if true {
 		toSerialize["order"] = o.Order

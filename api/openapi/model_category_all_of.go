@@ -23,8 +23,7 @@ type CategoryAllOf struct {
 	// Should be sorted ascending by this column
 	Order int64 `json:"order"`
 	ProductIds *[]string `json:"product_ids,omitempty"`
-	// Signed URL pointing to the image
-	ImageUrl *string `json:"image_url,omitempty"`
+	ImageUrls *map[string]string `json:"image_urls,omitempty"`
 }
 
 // NewCategoryAllOf instantiates a new CategoryAllOf object
@@ -190,36 +189,36 @@ func (o *CategoryAllOf) SetProductIds(v []string) {
 	o.ProductIds = &v
 }
 
-// GetImageUrl returns the ImageUrl field value if set, zero value otherwise.
-func (o *CategoryAllOf) GetImageUrl() string {
-	if o == nil || o.ImageUrl == nil {
-		var ret string
+// GetImageUrls returns the ImageUrls field value if set, zero value otherwise.
+func (o *CategoryAllOf) GetImageUrls() map[string]string {
+	if o == nil || o.ImageUrls == nil {
+		var ret map[string]string
 		return ret
 	}
-	return *o.ImageUrl
+	return *o.ImageUrls
 }
 
-// GetImageUrlOk returns a tuple with the ImageUrl field value if set, nil otherwise
+// GetImageUrlsOk returns a tuple with the ImageUrls field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CategoryAllOf) GetImageUrlOk() (*string, bool) {
-	if o == nil || o.ImageUrl == nil {
+func (o *CategoryAllOf) GetImageUrlsOk() (*map[string]string, bool) {
+	if o == nil || o.ImageUrls == nil {
 		return nil, false
 	}
-	return o.ImageUrl, true
+	return o.ImageUrls, true
 }
 
-// HasImageUrl returns a boolean if a field has been set.
-func (o *CategoryAllOf) HasImageUrl() bool {
-	if o != nil && o.ImageUrl != nil {
+// HasImageUrls returns a boolean if a field has been set.
+func (o *CategoryAllOf) HasImageUrls() bool {
+	if o != nil && o.ImageUrls != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetImageUrl gets a reference to the given string and assigns it to the ImageUrl field.
-func (o *CategoryAllOf) SetImageUrl(v string) {
-	o.ImageUrl = &v
+// SetImageUrls gets a reference to the given map[string]string and assigns it to the ImageUrls field.
+func (o *CategoryAllOf) SetImageUrls(v map[string]string) {
+	o.ImageUrls = &v
 }
 
 func (o CategoryAllOf) MarshalJSON() ([]byte, error) {
@@ -239,8 +238,8 @@ func (o CategoryAllOf) MarshalJSON() ([]byte, error) {
 	if o.ProductIds != nil {
 		toSerialize["product_ids"] = o.ProductIds
 	}
-	if o.ImageUrl != nil {
-		toSerialize["image_url"] = o.ImageUrl
+	if o.ImageUrls != nil {
+		toSerialize["image_urls"] = o.ImageUrls
 	}
 	return json.Marshal(toSerialize)
 }

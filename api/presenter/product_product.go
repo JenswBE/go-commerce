@@ -19,7 +19,7 @@ func (p *Presenter) ProductFromEntity(e *entities.Product) openapi.Product {
 	m.SetDescriptionLong(e.DescriptionLong)
 	m.SetCategoryIds(p.EncodeIDList(e.CategoryIDs))
 	m.SetStockCount(int64(e.StockCount))
-	m.SetImageUrls(p.ImageURLSliceFromEntity(e.Images))
+	m.SetImageUrls(p.ImageURLsSliceFromEntity(e.Images))
 
 	// Set status
 	status, err := openapi.NewProductStatusFromValue(e.Status.String())

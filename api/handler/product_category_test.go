@@ -28,7 +28,7 @@ func Test_listCategories_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "ListCategories", *new(*imageproxy.ImageConfig))
+	usecaseMock.AssertCalled(t, "ListCategories", map[string]imageproxy.ImageConfig(nil))
 }
 
 func Test_getCategory_Success(t *testing.T) {
@@ -46,7 +46,7 @@ func Test_getCategory_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "GetCategory", uuid.MustParse(fixtures.CategoryID), *new(*imageproxy.ImageConfig))
+	usecaseMock.AssertCalled(t, "GetCategory", uuid.MustParse(fixtures.CategoryID), map[string]imageproxy.ImageConfig(nil))
 }
 
 func Test_createCategory_Success(t *testing.T) {
@@ -134,7 +134,7 @@ func Test_upsertCategoryImage_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "UpsertCategoryImage", uuid.MustParse(fixtures.CategoryID), "test.jpg", []byte("test-jpg"), fixtures.ImageConfig())
+	usecaseMock.AssertCalled(t, "UpsertCategoryImage", uuid.MustParse(fixtures.CategoryID), "test.jpg", []byte("test-jpg"), fixtures.ImageConfigMap())
 }
 
 func Test_deleteCategoryImage_Success(t *testing.T) {

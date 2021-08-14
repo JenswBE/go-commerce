@@ -52,7 +52,7 @@ func ProductOpenAPI() *openapi.Product {
 		CategoryIds:      &[]string{CategoryID},
 		Status:           openapi.PRODUCTSTATUS_AVAILABLE.Ptr(),
 		StockCount:       openapi.PtrInt64(5),
-		ImageUrls:        &[]string{Image().URL},
+		ImageUrls:        &[]map[string]string{Image().URLs},
 	}
 }
 

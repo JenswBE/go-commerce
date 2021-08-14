@@ -30,7 +30,7 @@ func Test_listProducts_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "ListProducts", *new(*imageproxy.ImageConfig))
+	usecaseMock.AssertCalled(t, "ListProducts", map[string]imageproxy.ImageConfig(nil))
 }
 
 func Test_getProduct_Success(t *testing.T) {
@@ -48,7 +48,7 @@ func Test_getProduct_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "GetProduct", uuid.MustParse(fixtures.ProductID), *new(*imageproxy.ImageConfig))
+	usecaseMock.AssertCalled(t, "GetProduct", uuid.MustParse(fixtures.ProductID), map[string]imageproxy.ImageConfig(nil))
 }
 
 func Test_createProduct_Success(t *testing.T) {
@@ -138,7 +138,7 @@ func Test_listProductImages_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "GetProduct", uuid.MustParse(fixtures.ProductID), fixtures.ImageConfig())
+	usecaseMock.AssertCalled(t, "GetProduct", uuid.MustParse(fixtures.ProductID), fixtures.ImageConfigMap())
 }
 
 func Test_addProductImages_Success(t *testing.T) {
@@ -158,7 +158,7 @@ func Test_addProductImages_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "AddProductImages", uuid.MustParse(fixtures.ProductID), fixtures.MultipartMultipleFilesMap(), fixtures.ImageConfig())
+	usecaseMock.AssertCalled(t, "AddProductImages", uuid.MustParse(fixtures.ProductID), fixtures.MultipartMultipleFilesMap(), fixtures.ImageConfigMap())
 }
 
 func Test_updateProductImage_Success(t *testing.T) {

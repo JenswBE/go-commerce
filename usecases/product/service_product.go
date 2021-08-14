@@ -8,7 +8,7 @@ import (
 )
 
 // GetProduct fetches a single product by ID
-func (s *Service) GetProduct(id entities.ID, imageConfig *imageproxy.ImageConfig) (*entities.Product, error) {
+func (s *Service) GetProduct(id entities.ID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Product, error) {
 	// Fetch product
 	product, err := s.db.GetProduct(id)
 	if err != nil {
@@ -16,8 +16,8 @@ func (s *Service) GetProduct(id entities.ID, imageConfig *imageproxy.ImageConfig
 	}
 
 	// Generate URL's
-	if imageConfig != nil {
-		err := s.setImageURLsFromConfig(product.Images, *imageConfig)
+	if len(imageConfigs) > 0 {
+		err := s.setImageURLsFromConfig(product.Images, imageConfigs)
 		if err != nil {
 			return nil, err
 		}
@@ -28,17 +28,17 @@ func (s *Service) GetProduct(id entities.ID, imageConfig *imageproxy.ImageConfig
 }
 
 // ListProducts fetches all products
-func (s *Service) ListProducts(imageConfig *imageproxy.ImageConfig) ([]*entities.Product, error) {
-	// Fetch product
+func (s *Service) ListProducts(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Product, error) {
+	// Fetch products
 	products, err := s.db.ListProducts()
 	if err != nil {
 		return nil, err
 	}
 
 	// Generate URL's
-	if imageConfig != nil {
+	if len(imageConfigs) > 0 {
 		for _, product := range products {
-			err := s.setImageURLsFromConfig(product.Images, *imageConfig)
+			err := s.setImageURLsFromConfig(product.Images, imageConfigs)
 			if err != nil {
 				return nil, err
 			}
@@ -97,7 +97,7 @@ func (s *Service) DeleteProduct(id entities.ID) error {
 }
 
 // AddProductImages adds multiple images to a product
-func (s *Service) AddProductImages(productID entities.ID, images map[string][]byte, imageConfig *imageproxy.ImageConfig) (*entities.Product, error) {
+func (s *Service) AddProductImages(productID entities.ID, images map[string][]byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Product, error) {
 	// Fetch product
 	product, err := s.db.GetProduct(productID)
 	if err != nil {
@@ -121,8 +121,8 @@ func (s *Service) AddProductImages(productID entities.ID, images map[string][]by
 	}
 
 	// Generate URL's
-	if imageConfig != nil {
-		err := s.setImageURLsFromConfig(product.Images, *imageConfig)
+	if len(imageConfigs) > 0 {
+		err := s.setImageURLsFromConfig(product.Images, imageConfigs)
 		if err != nil {
 			return nil, err
 		}

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"strings"
 
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/usecases/product"
@@ -94,22 +95,43 @@ func parseFilesFromMultipart(req *http.Request) (map[string][]byte, error) {
 	return images, nil
 }
 
-func parseImageConfigParams(c *gin.Context) (*imageproxy.ImageConfig, error) {
-	// Extract params
-	width := c.Query("img_w")
-	height := c.Query("img_h")
-	resizingType := c.Query("img_r")
-
-	// Only process when any param is set
-	if width == "" && height == "" && resizingType == "" {
+func parseImageConfigsParam(c *gin.Context) (map[string]imageproxy.ImageConfig, error) {
+	// No params on empty string
+	param := c.Query("img")
+	if param == "" {
 		return nil, nil
 	}
 
-	// Set defaults
-	if resizingType == "" {
-		resizingType = string(imageproxy.ResizingTypeFit)
+	// Split config strings
+	configStrings := strings.Split(param, ",")
+	configs := make(map[string]imageproxy.ImageConfig, len(configStrings))
+	for _, configString := range configStrings {
+		// Split config into parts
+		configParts := strings.Split(configString, "_")
+
+		// Set defaults
+		width := configParts[0]
+		height := width
+		resizingType := string(imageproxy.ResizingTypeFit)
+
+		// Set height if defined
+		if len(configParts) > 1 {
+			height = configParts[1]
+		}
+
+		// Set resize type if defined
+		if len(configParts) > 2 {
+			resizingType = configParts[2]
+		}
+
+		// Parse into config
+		var err error
+		configs[configString], err = imageproxy.ParseImageConfig(width, height, resizingType)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	// Parse config
-	return imageproxy.ParseImageConfig(width, height, resizingType)
+	// Parse successful
+	return configs, nil
 }

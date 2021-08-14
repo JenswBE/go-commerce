@@ -13,8 +13,8 @@ func (p *Presenter) ManufacturerFromEntity(e *entities.Manufacturer) openapi.Man
 	m.SetWebsiteUrl(e.WebsiteURL)
 
 	// Set image URL
-	if e.Image != nil && e.Image.URL != "" {
-		m.SetImageUrl(e.Image.URL)
+	if e.Image != nil && len(e.Image.URLs) > 0 {
+		m.SetImageUrls(e.Image.URLs)
 	}
 	return *m
 }

@@ -21,8 +21,8 @@ func (p *Presenter) CategoryFromEntity(e *entities.Category) openapi.Category {
 	}
 
 	// Set image URL
-	if e.Image != nil && e.Image.URL != "" {
-		c.SetImageUrl(e.Image.URL)
+	if e.Image != nil && len(e.Image.URLs) > 0 {
+		c.SetImageUrls(e.Image.URLs)
 	}
 	return *c
 }

@@ -28,7 +28,7 @@ func Test_listManufacturers_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "ListManufacturers", *new(*imageproxy.ImageConfig))
+	usecaseMock.AssertCalled(t, "ListManufacturers", map[string]imageproxy.ImageConfig(nil))
 }
 
 func Test_getManufacturer_Success(t *testing.T) {
@@ -46,7 +46,7 @@ func Test_getManufacturer_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "GetManufacturer", uuid.MustParse(fixtures.ManufacturerID), *new(*imageproxy.ImageConfig))
+	usecaseMock.AssertCalled(t, "GetManufacturer", uuid.MustParse(fixtures.ManufacturerID), map[string]imageproxy.ImageConfig(nil))
 }
 
 func Test_createManufacturer_Success(t *testing.T) {
@@ -134,7 +134,7 @@ func Test_upsertManufacturerImage_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "UpsertManufacturerImage", uuid.MustParse(fixtures.ManufacturerID), "test.jpg", []byte("test-jpg"), fixtures.ImageConfig())
+	usecaseMock.AssertCalled(t, "UpsertManufacturerImage", uuid.MustParse(fixtures.ManufacturerID), "test.jpg", []byte("test-jpg"), fixtures.ImageConfigMap())
 }
 
 func Test_deleteManufacturerImage_Success(t *testing.T) {

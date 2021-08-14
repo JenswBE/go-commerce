@@ -7,13 +7,45 @@ import (
 )
 
 // GetManufacturer fetches a single manufacturer by ID
-func (s *Service) GetManufacturer(id entities.ID, imageConfig *imageproxy.ImageConfig) (*entities.Manufacturer, error) {
-	return s.db.GetManufacturer(id)
+func (s *Service) GetManufacturer(id entities.ID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Manufacturer, error) {
+	// Fetch manufacturer
+	manufacturer, err := s.db.GetManufacturer(id)
+	if err != nil {
+		return nil, err
+	}
+
+	// Generate URL's
+	if len(imageConfigs) > 0 {
+		err = manufacturer.Image.SetURLsFromConfigs(s.imageProxy, imageConfigs)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	// Get successful
+	return manufacturer, nil
 }
 
 // ListManufacturers fetches all manufacturers
-func (s *Service) ListManufacturers(imageConfig *imageproxy.ImageConfig) ([]*entities.Manufacturer, error) {
-	return s.db.ListManufacturers()
+func (s *Service) ListManufacturers(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Manufacturer, error) {
+	// Fetch manufacturers
+	manufacturers, err := s.db.ListManufacturers()
+	if err != nil {
+		return nil, err
+	}
+
+	// Generate URL's
+	if len(imageConfigs) > 0 {
+		for _, manufacturer := range manufacturers {
+			err = manufacturer.Image.SetURLsFromConfigs(s.imageProxy, imageConfigs)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	// Get successful
+	return manufacturers, nil
 }
 
 // CreateManufacturer creates a new manufacturer
@@ -64,7 +96,7 @@ func (s *Service) DeleteManufacturer(id entities.ID) error {
 }
 
 // UpsertManufacturerImage adds/updates the image of the manufacturer with the provided one.
-func (s *Service) UpsertManufacturerImage(manufacturerID entities.ID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entities.Manufacturer, error) {
+func (s *Service) UpsertManufacturerImage(manufacturerID entities.ID, imageName string, imageContent []byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Manufacturer, error) {
 	// Fetch manufacturer
 	manufacturer, err := s.db.GetManufacturer(manufacturerID)
 	if err != nil {
@@ -93,8 +125,8 @@ func (s *Service) UpsertManufacturerImage(manufacturerID entities.ID, imageName 
 	}
 
 	// Generate URL's
-	if imageConfig != nil {
-		err := manufacturer.Image.SetURLFromConfig(s.imageProxy, *imageConfig)
+	if len(imageConfigs) > 0 {
+		err := manufacturer.Image.SetURLsFromConfigs(s.imageProxy, imageConfigs)
 		if err != nil {
 			return nil, err
 		}

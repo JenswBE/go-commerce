@@ -8,14 +8,14 @@ import (
 
 func (h *ProductHandler) listProducts(c *gin.Context) {
 	// Parse params
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
 	}
 
 	// Call service
-	result, err := h.service.ListProducts(imageConfig)
+	result, err := h.service.ListProducts(imageConfigs)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
@@ -31,14 +31,14 @@ func (h *ProductHandler) getProduct(c *gin.Context) {
 	if !ok {
 		return // Response already set on Gin context
 	}
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
 	}
 
 	// Call service
-	product, err := h.service.GetProduct(id, imageConfig)
+	product, err := h.service.GetProduct(id, imageConfigs)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
@@ -130,14 +130,14 @@ func (h *ProductHandler) listProductImages(c *gin.Context) {
 	if !ok {
 		return // Response already set on Gin context
 	}
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
 	}
 
 	// Call service
-	product, err := h.service.GetProduct(id, imageConfig)
+	product, err := h.service.GetProduct(id, imageConfigs)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
@@ -153,7 +153,7 @@ func (h *ProductHandler) addProductImages(c *gin.Context) {
 	if !ok {
 		return // Response already set on Gin context
 	}
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
@@ -167,7 +167,7 @@ func (h *ProductHandler) addProductImages(c *gin.Context) {
 	}
 
 	// Call service
-	product, err := h.service.AddProductImages(id, images, imageConfig)
+	product, err := h.service.AddProductImages(id, images, imageConfigs)
 	if err != nil {
 		c.String(errToResponse(err))
 		return

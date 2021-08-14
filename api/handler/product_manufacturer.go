@@ -9,14 +9,14 @@ import (
 
 func (h *ProductHandler) listManufacturers(c *gin.Context) {
 	// Parse params
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
 	}
 
 	// Call service
-	result, err := h.service.ListManufacturers(imageConfig)
+	result, err := h.service.ListManufacturers(imageConfigs)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
@@ -32,14 +32,14 @@ func (h *ProductHandler) getManufacturer(c *gin.Context) {
 	if !ok {
 		return // Response already set on Gin context
 	}
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
 	}
 
 	// Call service
-	manufacturer, err := h.service.GetManufacturer(id, imageConfig)
+	manufacturer, err := h.service.GetManufacturer(id, imageConfigs)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
@@ -119,7 +119,7 @@ func (h *ProductHandler) upsertManufacturerImage(c *gin.Context) {
 	if !ok {
 		return // Response already set on Gin context
 	}
-	imageConfig, err := parseImageConfigParams(c)
+	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
@@ -139,7 +139,7 @@ func (h *ProductHandler) upsertManufacturerImage(c *gin.Context) {
 	// Call service
 	var manufacturer *entities.Manufacturer
 	for imageName, imageContent := range images {
-		manufacturer, err = h.service.UpsertManufacturerImage(id, imageName, imageContent, imageConfig)
+		manufacturer, err = h.service.UpsertManufacturerImage(id, imageName, imageContent, imageConfigs)
 		if err != nil {
 			c.String(errToResponse(err))
 			return

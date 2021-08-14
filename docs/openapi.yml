@@ -14,9 +14,7 @@ paths:
       tags: ["Categories"]
       security: []
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -34,9 +32,7 @@ paths:
       tags: ["Categories"]
       security: []
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -51,9 +47,7 @@ paths:
       description: List categories
       tags: ["Categories"]
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -87,9 +81,7 @@ paths:
       description: Get category details
       tags: ["Categories"]
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -130,9 +122,7 @@ paths:
       description: Upsert image
       tags: ["Categories"]
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       requestBody:
         content:
           multipart/form-data:
@@ -165,9 +155,7 @@ paths:
       tags: ["Manufacturers"]
       security: []
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -185,9 +173,7 @@ paths:
       tags: ["Manufacturers"]
       security: []
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -202,9 +188,7 @@ paths:
       description: List manufacturers
       tags: ["Manufacturers"]
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -238,9 +222,7 @@ paths:
       description: Get manufacturer details
       tags: ["Manufacturers"]
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -281,9 +263,7 @@ paths:
       description: Upsert image
       tags: ["Manufacturers"]
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       requestBody:
         content:
           multipart/form-data:
@@ -316,9 +296,7 @@ paths:
       tags: ["Products"]
       security: []
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -336,9 +314,7 @@ paths:
       tags: ["Products"]
       security: []
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -353,9 +329,7 @@ paths:
       description: List products
       tags: ["Products"]
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -389,9 +363,7 @@ paths:
       description: Get product details
       tags: ["Products"]
       parameters:
-        - $ref: "#/components/parameters/queryImgHeight"
-        - $ref: "#/components/parameters/queryImgResize"
-        - $ref: "#/components/parameters/queryImgWidth"
+        - $ref: "#/components/parameters/queryImg"
       responses:
         "200":
           description: OK
@@ -427,9 +399,7 @@ paths:
   /admin/products/{id}/images/:
     parameters:
       - $ref: "#/components/parameters/pathID"
-      - $ref: "#/components/parameters/queryImgHeight"
-      - $ref: "#/components/parameters/queryImgResize"
-      - $ref: "#/components/parameters/queryImgWidth"
+      - $ref: "#/components/parameters/queryImg"
     get:
       operationId: admin_list_product_images
       description: Get product images
@@ -515,37 +485,18 @@ components:
       schema:
         $ref: "#/components/schemas/ShortID"
 
-    queryImgHeight:
-      name: img_h
+    queryImg:
+      name: img
       in: query
-      description: Image height
+      description: >-
+        Comma separated list of ImageConfig.
+        Check ImageConfig for exact format.
       required: false
       schema:
-        type: integer
-        format: int64
-        example: 200
-
-    queryImgResize:
-      name: img_r
-      in: query
-      description: Image resize mode
-      required: false
-      schema:
-        type: string
-        default: FIT
-        enum:
-          - FILL
-          - FIT
-
-    queryImgWidth:
-      name: img_w
-      in: query
-      description: Image width
-      required: false
-      schema:
-        type: integer
-        format: int64
-        example: 300
+        type: array
+        items:
+          $ref: "#/components/schemas/ImageConfig"
+      explode: false
 
   schemas:
     Category:
@@ -570,8 +521,8 @@ components:
                 type: string
                 format: uuid
               readOnly: True
-            image_url:
-              $ref: "#/components/schemas/ImageUrl"
+            image_urls:
+              $ref: "#/components/schemas/ImageUrlMap"
           required:
             - name
             - order
@@ -623,8 +574,8 @@ components:
           description: Extension of the image
           example: png
           readOnly: true
-        url:
-          $ref: "#/components/schemas/ImageUrl"
+        urls:
+          $ref: "#/components/schemas/ImageUrlMap"
         order:
           description: Should be sorted ascending by this column
           type: integer
@@ -632,13 +583,33 @@ components:
       required:
         - id
         - ext
-        - url
+        - urls
         - order
+
+    ImageConfig:
+      type: string
+      example: 300_200_FIT
+      description: |-
+        Comma separated list of image configs in format width_height_resizeMode.
+        - Width: Width of the image
+        - Height: Height of the image (optional, default = Width)
+        - Resize mode (optional, default = FIT):
+          - FIT:  Fits the image within the dimensions. Resulting image
+                  might be smaller than dimensions.
+          - FILL: Fill the dimensions with the image. Image might be cropped.
 
     ImageUrl:
       type: string
       description: Signed URL pointing to the image
-      example: "https://images.jensw.be/.../fill/300/400/.../anBn.png"
+      example: "https://images.jensw.be/.../fill/300/200/.../anBn.png"
+      readOnly: true
+
+    ImageUrlMap:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/ImageUrl"
+      example:
+        300_200_FIT: "https://images.jensw.be/.../fill/300/200/.../anBn.png"
       readOnly: true
 
     ImageList:
@@ -650,6 +621,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Image"
+      readOnly: true
 
     Manufacturer:
       required:
@@ -665,8 +637,8 @@ components:
               type: string
               format: url
               example: https://bjoetiek-y.be
-            image_url:
-              $ref: "#/components/schemas/ImageUrl"
+            image_urls:
+              $ref: "#/components/schemas/ImageUrlMap"
 
     ManufacturerList:
       type: object
@@ -711,7 +683,7 @@ components:
             image_urls:
               type: array
               items:
-                $ref: "#/components/schemas/ImageUrl"
+                $ref: "#/components/schemas/ImageUrlMap"
               readOnly: true
           required:
             - name

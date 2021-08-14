@@ -133,7 +133,7 @@ func parseAllowedImageConfigs(configs string) ([]imageproxy.ImageConfig, error) 
 		if err != nil {
 			return nil, err
 		}
-		imgConfigs = append(imgConfigs, *config)
+		imgConfigs = append(imgConfigs, config)
 	}
 
 	// Parse successful

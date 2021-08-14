@@ -23,9 +23,9 @@ func NewService(db DatabaseRepository, imageProxy imageproxy.Service, imageStora
 	}
 }
 
-func (s *Service) setImageURLsFromConfig(images []*entities.Image, config imageproxy.ImageConfig) error {
+func (s *Service) setImageURLsFromConfig(images []*entities.Image, configs map[string]imageproxy.ImageConfig) error {
 	for _, image := range images {
-		err := image.SetURLFromConfig(s.imageProxy, config)
+		err := image.SetURLsFromConfigs(s.imageProxy, configs)
 		if err != nil {
 			return err
 		}

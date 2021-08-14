@@ -7,13 +7,45 @@ import (
 )
 
 // GetCategory fetches a single category by ID
-func (s *Service) GetCategory(id entities.ID, imageConfig *imageproxy.ImageConfig) (*entities.Category, error) {
-	return s.db.GetCategory(id)
+func (s *Service) GetCategory(id entities.ID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Category, error) {
+	// Fetch category
+	category, err := s.db.GetCategory(id)
+	if err != nil {
+		return nil, err
+	}
+
+	// Generate URL's
+	if len(imageConfigs) > 0 {
+		err = category.Image.SetURLsFromConfigs(s.imageProxy, imageConfigs)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	// Get successful
+	return category, nil
 }
 
 // ListCategories fetches all categories
-func (s *Service) ListCategories(imageConfig *imageproxy.ImageConfig) ([]*entities.Category, error) {
-	return s.db.ListCategories()
+func (s *Service) ListCategories(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Category, error) {
+	// Fetch categories
+	categories, err := s.db.ListCategories()
+	if err != nil {
+		return nil, err
+	}
+
+	// Generate URL's
+	if len(imageConfigs) > 0 {
+		for _, category := range categories {
+			err = category.Image.SetURLsFromConfigs(s.imageProxy, imageConfigs)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	// Get successful
+	return categories, nil
 }
 
 // CreateCategory creates a new category
@@ -64,7 +96,7 @@ func (s *Service) DeleteCategory(id entities.ID) error {
 }
 
 // UpsertCategoryImage adds/updates the image of the category with the provided one.
-func (s *Service) UpsertCategoryImage(categoryID entities.ID, imageName string, imageContent []byte, imageConfig *imageproxy.ImageConfig) (*entities.Category, error) {
+func (s *Service) UpsertCategoryImage(categoryID entities.ID, imageName string, imageContent []byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Category, error) {
 	// Fetch category
 	category, err := s.db.GetCategory(categoryID)
 	if err != nil {
@@ -93,8 +125,8 @@ func (s *Service) UpsertCategoryImage(categoryID entities.ID, imageName string, 
 	}
 
 	// Generate URL's
-	if imageConfig != nil {
-		err := category.Image.SetURLFromConfig(s.imageProxy, *imageConfig)
+	if len(imageConfigs) > 0 {
+		err := category.Image.SetURLsFromConfigs(s.imageProxy, imageConfigs)
 		if err != nil {
 			return nil, err
 		}
