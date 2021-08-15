@@ -7,7 +7,7 @@ import (
 
 func (r *ProductPostgres) GetManufacturer(id entities.ID) (*entities.Manufacturer, error) {
 	manufacturer := &internal.Manufacturer{}
-	err := r.db.Take(manufacturer, "id = ?", id).Error
+	err := r.db.Preload("Image").Take(manufacturer, "id = ?", id).Error
 	if err != nil {
 		return nil, translatePgError(err, "manufacturer")
 	}
@@ -16,7 +16,7 @@ func (r *ProductPostgres) GetManufacturer(id entities.ID) (*entities.Manufacture
 
 func (r *ProductPostgres) ListManufacturers() ([]*entities.Manufacturer, error) {
 	manufacturers := []*internal.Manufacturer{}
-	err := r.db.Find(&manufacturers).Error
+	err := r.db.Preload("Image").Find(&manufacturers).Error
 	if err != nil {
 		return nil, translatePgError(err, "manufacturer")
 	}
