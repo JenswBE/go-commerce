@@ -1,3 +1,6 @@
+Authentication:
+  Username: admin
+  Password: admin
 Database:
   Host: localhost
   User: go_commerce

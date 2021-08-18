@@ -7,11 +7,16 @@ import (
 	"strings"
 
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
+	"github.com/go-playground/validator/v10"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
+	Authentication struct {
+		Username string `validate:"required"`
+		Password string `validate:"required"`
+	}
 	Database struct {
 		Host     string
 		Port     int
@@ -65,6 +70,8 @@ func parseConfig() (*Config, error) {
 	}
 
 	// Bind ENV variables
+	viper.BindEnv("Authentication.Username", "AUTH_USERNAME")
+	viper.BindEnv("Authentication.Password", "AUTH_PASSWORD")
 	viper.BindEnv("Database.Host", "DATABASE_HOST")
 	viper.BindEnv("Database.Port", "DATABASE_PORT")
 	viper.BindEnv("Database.User", "DATABASE_USER")
@@ -79,6 +86,12 @@ func parseConfig() (*Config, error) {
 	err = viper.Unmarshal(&config)
 	if err != nil {
 		return nil, fmt.Errorf("unable to decode config into struct: %w", err)
+	}
+
+	// Validate config
+	validate := validator.New()
+	if err := validate.Struct(&config); err != nil {
+		return nil, fmt.Errorf("config validation failed: %w", err)
 	}
 	return &config, nil
 }

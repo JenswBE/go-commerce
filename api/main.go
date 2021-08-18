@@ -77,8 +77,14 @@ func main() {
 	public := router.Group("/public")
 	productHandler.RegisterReadRoutes(public)
 
+	// Create basic auth account
+	accounts := gin.Accounts{
+		config.Authentication.Username: config.Authentication.Password,
+	}
+
 	// Admin routes
 	admin := router.Group("/admin")
+	admin.Use(gin.BasicAuth(accounts))
 	productHandler.RegisterReadRoutes(admin)
 	productHandler.RegisterWriteRoutes(admin)
 
