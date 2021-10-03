@@ -17,6 +17,9 @@ services:
       - "POSTGRES_PASSWORD=go_commerce"
     ports:
       - "127.0.0.1:5432:5432"
+    volumes:
+      - "./postgres-init-00-structure.sh:/docker-entrypoint-initdb.d/00-init-structure.sh"
+      - "./postgres-init-10-data.sh:/docker-entrypoint-initdb.d/10-init-data.sh"
 
   adminer:
     image: adminer
