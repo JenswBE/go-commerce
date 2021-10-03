@@ -1,6 +1,8 @@
 # GoCommerce specific
 *.tmp
-files/
+files/images/*
+!/files/images/2fc4513d-810b-42d3-8869-001a5b039aa6.jpg
+!/files/images/f6aca5c2-8aa8-4f14-ad71-26c697859716.jpg
 
 # Binaries for programs and plugins
 *.exe

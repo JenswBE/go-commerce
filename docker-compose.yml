@@ -37,5 +37,3 @@ services:
       - "127.0.0.1:8091:8080"
     volumes:
       - "./files/images:/images:ro"
-    labels:
-      - "${USE_DC_HELPERS_INSTEAD_OF_DIRECTLY_CALLING_DOCKER_COMPOSE:?}"

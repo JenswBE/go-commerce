@@ -5,6 +5,12 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     DELETE FROM "product_categories"
     WHERE "category_id" IN ('1e8d3b8d-fde6-4a66-ace2-14451f46607e');
 
+    DELETE FROM "images"
+    WHERE "id" IN (
+        '2fc4513d-810b-42d3-8869-001a5b039aa6',
+        'f6aca5c2-8aa8-4f14-ad71-26c697859716'
+    );
+
     DELETE FROM "products"
     WHERE "id" IN (
         '0de097d8-8a4f-48d0-8748-758949d27f34',
@@ -102,6 +108,28 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
                 "manufacturer_id": "eb2b656a-0451-4b1a-8ea7-35f213160b29",
                 "status": "ARCHIVED",
                 "stock_count": 0
+            }
+        ]'
+    );
+EOSQL
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    INSERT INTO "images"
+    SELECT * FROM json_populate_recordset (NULL::"images",
+        '[
+            {
+                "id": "2fc4513d-810b-42d3-8869-001a5b039aa6",
+                "owner_id": "0de097d8-8a4f-48d0-8748-758949d27f34",
+                "owner_type": "products",
+                "extension": ".jpg",
+                "order": 0
+            },
+            {
+                "id": "f6aca5c2-8aa8-4f14-ad71-26c697859716",
+                "owner_id": "0de097d8-8a4f-48d0-8748-758949d27f34",
+                "owner_type": "products",
+                "extension": ".jpg",
+                "order": 1
             }
         ]'
     );
