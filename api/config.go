@@ -52,7 +52,7 @@ func parseConfig() (*Config, error) {
 	// Set defaults
 	viper.SetDefault("Database.Port", 5432)
 	viper.SetDefault("ImageProxy.BaseURL", "/images/")
-	viper.SetDefault("Server.Port", 8090)
+	viper.SetDefault("Server.Port", 8080)
 	viper.SetDefault("Storage.Images.Type", StorageTypeFS)
 	viper.SetDefault("Storage.Images.Path", "./files/images")
 

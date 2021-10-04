@@ -1,0 +1,26 @@
+http:
+  services:
+    api:
+      loadBalancer:
+        servers:
+          - url: http://host.docker.internal:8091
+
+  routers:
+    api:
+      entrypoints: ["web"]
+      rule: "PathPrefix(`/api`)"
+      service: api
+      middlewares: ["strip-api-prefix"]
+
+  middlewares:
+    cors:
+      headers:
+        accessControlAllowCredentials: true
+        accessControlAllowHeaders: "*"
+        accessControlAllowMethods: "*"
+        accessControlAllowOriginListRegex: '^https?://localhost(:\d+)$'
+        addVaryHeader: true
+
+    strip-api-prefix:
+      stripPrefix:
+        prefixes: ["/api"]

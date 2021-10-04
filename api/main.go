@@ -13,7 +13,6 @@ import (
 	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/JenswBE/go-commerce/utils/shortid"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -62,11 +61,6 @@ func main() {
 
 	// Setup Gin
 	router := gin.Default()
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
-	corsConfig.AllowCredentials = true
-	corsConfig.AllowHeaders = append(corsConfig.AllowHeaders, "authorization")
-	router.Use(cors.New(corsConfig))
 	router.StaticFile("/", "../docs/index.html")
 	router.StaticFile("/openapi.yml", "../docs/openapi.yml")
 

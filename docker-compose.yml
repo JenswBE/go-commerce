@@ -1,5 +1,9 @@
 version: "2.4"
 
+x-defaults: &defaults
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+
 services:
   # backend:
   #   build: .
@@ -10,7 +14,32 @@ services:
   #   environment:
   #     - "DATABASE_HOST=db"
 
+  traefik:
+    <<: *defaults
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--api=true"
+      - "--api.insecure=true"
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--providers.docker.network=traefik"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.directory=/config"
+      - "--entrypoints.web.address=:8090"
+      - "--entrypoints.web.http.middlewares=cors@file"
+      - "--entrypoints.traefik.address=:9000"
+    ports:
+      - "8090:8090"
+      - "127.0.0.1:9000:9000"
+    networks:
+      - traefik
+    volumes:
+      - "./traefik.yml:/config/traefik.yml:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
   db:
+    <<: *defaults
     image: postgres:13-alpine
     environment:
       - "POSTGRES_USER=go_commerce"
@@ -22,18 +51,33 @@ services:
       - "./postgres-init-10-data.sh:/docker-entrypoint-initdb.d/10-init-data.sh"
 
   adminer:
+    <<: *defaults
     image: adminer
     ports:
       - "127.0.0.1:8032:8080"
 
   imgproxy:
+    <<: *defaults
     image: darthsim/imgproxy
     environment:
       - "IMGPROXY_KEY=8f2fd7184ad28abe1b2cd3b6bb0f74dff4765659260f72eff6bea4b9c065bb7d64cbe75e4cd89ca98693f6c24fd670d50b1556b1b307700c7bd4a7dc9e66a72d"
       - "IMGPROXY_SALT=efab808e2a395eb3032e7906bdc83efebe216a4fc05a833690b7f48b5f39c8ba78f651513beb08056510e71eeea951b9ce7fb50ce6dbac372ab1d8603d8ee9d4"
       - "IMGPROXY_LOCAL_FILESYSTEM_ROOT=/images"
       - "IMGPROXY_MAX_SRC_RESOLUTION=64"
-    ports:
-      - "127.0.0.1:8091:8080"
+    networks:
+      - traefik
     volumes:
       - "./files/images:/images:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.images.entrypoints=web"
+      - "traefik.http.routers.images.rule=PathPrefix(`/images`)"
+      - "traefik.http.routers.images.middlewares=strip-images-prefix"
+      - "traefik.http.middlewares.strip-images-prefix.stripPrefix.prefixes=/images"
+
+# #################################################################
+# #                            NETWORKS                           #
+# #################################################################
+networks:
+  traefik:
+    name: traefik
