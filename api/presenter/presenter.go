@@ -17,7 +17,13 @@ func New(shortIDService shortid.Service) *Presenter {
 func (p *Presenter) ParseID(id string) (uuid.UUID, error) {
 	pID, err := p.shortIDService.Decode(id)
 	if err != nil {
-		return uuid.Nil, entities.NewError(400, err)
+		// Parsing of short ID failed, try to parse as UUID
+		var uuidErr error
+		pID, uuidErr = uuid.Parse(id)
+		if uuidErr != nil {
+			// UUID parsing failed => Return original error
+			return uuid.Nil, entities.NewError(400, err)
+		}
 	}
 	return pID, nil
 }
