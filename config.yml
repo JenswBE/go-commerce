@@ -7,10 +7,10 @@ Database:
   Password: go_commerce
   Database: go_commerce
 ImageProxy:
-  BaseURL: "http://localhost:8090/images"
+  BaseURL: "http://localhost:8090/images/"
   Key: 8f2fd7184ad28abe1b2cd3b6bb0f74dff4765659260f72eff6bea4b9c065bb7d64cbe75e4cd89ca98693f6c24fd670d50b1556b1b307700c7bd4a7dc9e66a72d
   Salt: efab808e2a395eb3032e7906bdc83efebe216a4fc05a833690b7f48b5f39c8ba78f651513beb08056510e71eeea951b9ce7fb50ce6dbac372ab1d8603d8ee9d4
-  AllowedConfigs: "*"
+  AllowedConfigs: "100:100:FIT,150:150:FIT,400:400:FIT,550:550:FIT"
 Server:
   Port: 8091
 Storage:
