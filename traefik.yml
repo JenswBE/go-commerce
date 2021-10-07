@@ -18,7 +18,7 @@ http:
         accessControlAllowCredentials: true
         accessControlAllowHeaders: "*"
         accessControlAllowMethods: "*"
-        accessControlAllowOriginListRegex: '^https?://localhost(:\d+)$'
+        accessControlAllowOriginListRegex: '^https?://(localhost|192\.168\.\d+\.\d+)(:\d+)$'
         addVaryHeader: true
 
     strip-api-prefix:
