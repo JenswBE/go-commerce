@@ -6,6 +6,12 @@
 
 KISS backend for an e-commerce
 
+## Links
+
+- GitHub: https://github.com/JenswBE/go-commerce
+- DockerHub: https://hub.docker.com/r/jenswbe/go-commerce
+- Admin UI: https://github.com/JenswBE/go-commerce-admin
+
 ## Configuration
 
 GoCommerce can be configured in 2 ways:
@@ -41,9 +47,3 @@ cd api
 go run .
 ./dc-down.sh
 ```
-
-## Links
-
-- GitHub: https://github.com/JenswBE/go-commerce
-- DockerHub: https://hub.docker.com/r/jenswbe/go-commerce
-- Admin site: https://github.com/JenswBE/go-commerce-admin
