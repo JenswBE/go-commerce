@@ -66,15 +66,26 @@ SELECT
     category_id
 FROM "migrate"."category_products";
 
+-- # List all images
 -- sudo ls -1 /opt/appdata/bjoetiek/backend/images | grep -v fit | cut -d. -f1 > images.txt
--- sed 's/.*/uuidgen/e' images.txt | paste -d ' ' - images.txt | sed "s/ /', '/" | sed "s/^/INSERT INTO \"public\".\"images\" VALUES ('/" | sed "s/$/', 'products', '.png', 0);/" > migrate-images.sql
+
+-- # Add mapping to new UUID
+-- sed 's/.*/uuidgen/e' images.txt | paste -d '>' images.txt - > image-mapping.txt
+
+-- # Generate SQL migration
+-- sed -E "s#(.+)>(.+)#INSERT INTO \"public\".\"images\" VALUES ('\2', '\1', 'products', '.png', 0);#" image-mapping.txt > migrate-images.sql
+-- cat migrate-images.sql | docker exec -i bjoetiek-test-db psql bjoetiek-test bjoetiek-test
+
+-- # Generate file migration
+-- sed -E "s#(.+)>(.+)#cp /opt/appdata/bjoetiek/backend/images/\1.png /opt/appdata/bjoetiek/backend-test/images/\2.png#" image-mapping.txt > migrate-images.sh
+
 UPDATE images
 SET owner_type = 'manufacturers'
 WHERE id IN (
     SELECT i.id
     FROM images i
     JOIN manufacturers m ON i.owner_id = m.id
-)
+);
 
 UPDATE images
 SET owner_type = 'categories'
@@ -82,4 +93,4 @@ WHERE id IN (
     SELECT i.id
     FROM images i
     JOIN categories c ON i.owner_id = c.id
-)
+);
