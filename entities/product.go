@@ -46,3 +46,11 @@ func (c *Product) Validate() error {
 	// Entity is valid
 	return nil
 }
+
+// ResolvedProduct is a product for which related entities
+// are included. This way all information is immediately at hand.
+type ResolvedProduct struct {
+	Product
+	Manufacturer *Manufacturer
+	Categories   []*Category
+}

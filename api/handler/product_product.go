@@ -38,14 +38,21 @@ func (h *ProductHandler) getProduct(c *gin.Context) {
 	}
 
 	// Call service
-	product, err := h.service.GetProduct(id, imageConfigs)
+	product, err := h.service.GetProduct(id, true, imageConfigs)
+	if err != nil {
+		c.String(errToResponse(err))
+		return
+	}
+
+	// Convert to OpenAPI model
+	output, err := h.presenter.ResolvedProductFromEntity(product)
 	if err != nil {
 		c.String(errToResponse(err))
 		return
 	}
 
 	// Handle success
-	c.JSON(200, h.presenter.ProductFromEntity(product))
+	c.JSON(200, output)
 }
 
 func (h *ProductHandler) createProduct(c *gin.Context) {
@@ -137,7 +144,7 @@ func (h *ProductHandler) listProductImages(c *gin.Context) {
 	}
 
 	// Call service
-	product, err := h.service.GetProduct(id, imageConfigs)
+	product, err := h.service.GetProduct(id, false, imageConfigs)
 	if err != nil {
 		c.String(errToResponse(err))
 		return

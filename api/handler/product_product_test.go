@@ -38,17 +38,17 @@ func Test_getProduct_Success(t *testing.T) {
 	params := gin.Params{{Key: "id", Value: fixtures.ProductID}}
 	c, r := setupGinTest(t, "GET", "", params, nil)
 	handler, usecaseMock := setupHandlerTest()
-	usecaseMock.On("GetProduct", mock.Anything, mock.Anything).Return(fixtures.Product(), nil)
+	usecaseMock.On("GetProduct", mock.Anything, mock.Anything, mock.Anything).Return(fixtures.ResolvedProduct(), nil)
 
 	// Call handler
 	handler.getProduct(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ProductOpenAPI(), r)
+	requireEqualJSON(t, fixtures.ResolvedProductOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "GetProduct", uuid.MustParse(fixtures.ProductID), map[string]imageproxy.ImageConfig(nil))
+	usecaseMock.AssertCalled(t, "GetProduct", uuid.MustParse(fixtures.ProductID), true, map[string]imageproxy.ImageConfig(nil))
 }
 
 func Test_createProduct_Success(t *testing.T) {
@@ -128,7 +128,7 @@ func Test_listProductImages_Success(t *testing.T) {
 	params := gin.Params{{Key: "id", Value: fixtures.ProductID}}
 	c, r := setupGinTest(t, "GET", "?"+fixtures.ImageConfigQuery, params, nil)
 	handler, usecaseMock := setupHandlerTest()
-	usecaseMock.On("GetProduct", mock.Anything, mock.Anything).Return(fixtures.Product(), nil)
+	usecaseMock.On("GetProduct", mock.Anything, mock.Anything, mock.Anything).Return(fixtures.ResolvedProduct(), nil)
 
 	// Call handler
 	handler.listProductImages(c)
@@ -138,7 +138,7 @@ func Test_listProductImages_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "GetProduct", uuid.MustParse(fixtures.ProductID), fixtures.ImageConfigMap())
+	usecaseMock.AssertCalled(t, "GetProduct", uuid.MustParse(fixtures.ProductID), false, fixtures.ImageConfigMap())
 }
 
 func Test_addProductImages_Success(t *testing.T) {

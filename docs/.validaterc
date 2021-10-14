@@ -71,8 +71,7 @@
       "enum_case_convention": [
         "error",
         "upper_snake_case"
-      ],
-      "undefined_required_properties": "warning"
+      ]
     },
     "walker": {
       "no_empty_descriptions": "error",
@@ -102,8 +101,5 @@
     "schemas": {
       "json_or_param_binary_string": "warning"
     }
-  },
-  "spectral": {
-    "rules": {}
   }
 }

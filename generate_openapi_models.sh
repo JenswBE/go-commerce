@@ -10,6 +10,9 @@ jamescooke/openapi-validator \
 --verbose \
 openapi.yml
 
+# Clean directory if exists
+rm api/openapi/* || true
+
 # Generate models
 docker run --user ${UID} --rm -v "$(pwd):/local" \
 -e "GO_POST_PROCESS_FILE=gofmt -s -w" \

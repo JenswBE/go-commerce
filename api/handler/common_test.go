@@ -12,6 +12,7 @@ import (
 	mocks "github.com/JenswBE/go-commerce/mocks/usecases/product"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/gin-gonic/gin"
+	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )
@@ -80,5 +81,7 @@ func requireEqualJSON(t *testing.T, expected interface{}, recorder *httptest.Res
 	body := recorder.Body.Bytes()
 	err := json.Unmarshal(body, actual.Interface())
 	require.NoErrorf(t, err, `Response body: %s`, string(body))
-	require.Equal(t, expected, reflect.Indirect(actual).Interface())
+	// Has better support for time.Time than require.Equal
+	// See https://github.com/stretchr/testify/issues/1078 for more info
+	require.Empty(t, cmp.Diff(expected, reflect.Indirect(actual).Interface()))
 }

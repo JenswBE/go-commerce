@@ -322,7 +322,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductWithManufacturer"
+                $ref: "#/components/schemas/ResolvedProduct"
 
   /admin/products/:
     get:
@@ -371,7 +371,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductWithManufacturer"
+                $ref: "#/components/schemas/ResolvedProduct"
     put:
       operationId: admin_update_product
       description: Update product
@@ -696,13 +696,17 @@ components:
         - AVAILABLE
         - ARCHIVED
 
-    ProductWithManufacturer:
+    ResolvedProduct:
       allOf:
         - $ref: "#/components/schemas/Product"
         - type: object
           properties:
             manufacturer:
               $ref: "#/components/schemas/Manufacturer"
+            categories:
+              type: array
+              items:
+                $ref: "#/components/schemas/Category"
 
     ProductList:
       type: object

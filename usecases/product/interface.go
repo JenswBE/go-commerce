@@ -51,7 +51,7 @@ type Usecase interface {
 	UpsertManufacturerImage(manufacturerID entities.ID, imageName string, imageContent []byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Manufacturer, error)
 	DeleteManufacturerImage(manufacturerID entities.ID) error
 
-	GetProduct(id entities.ID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Product, error)
+	GetProduct(id entities.ID, resolved bool, imageConfigs map[string]imageproxy.ImageConfig) (*entities.ResolvedProduct, error)
 	ListProducts(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Product, error)
 	CreateProduct(*entities.Product) (*entities.Product, error)
 	UpdateProduct(e *entities.Product) (*entities.Product, error)

@@ -5,10 +5,11 @@ import (
 
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
+	"github.com/google/uuid"
 )
 
 // GetProduct fetches a single product by ID
-func (s *Service) GetProduct(id entities.ID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Product, error) {
+func (s *Service) GetProduct(id entities.ID, resolved bool, imageConfigs map[string]imageproxy.ImageConfig) (*entities.ResolvedProduct, error) {
 	// Fetch product
 	product, err := s.db.GetProduct(id)
 	if err != nil {
@@ -23,8 +24,27 @@ func (s *Service) GetProduct(id entities.ID, imageConfigs map[string]imageproxy.
 		}
 	}
 
+	// Resolve product
+	resolvedProduct := &entities.ResolvedProduct{Product: *product}
+	if resolved {
+		if product.ManufacturerID != uuid.Nil {
+			resolvedProduct.Manufacturer, err = s.db.GetManufacturer(product.ManufacturerID)
+			if err != nil {
+				return nil, err
+			}
+		}
+		resolvedProduct.Categories = make([]*entities.Category, 0, len(product.CategoryIDs))
+		for _, categoryID := range product.CategoryIDs {
+			category, err := s.db.GetCategory(categoryID)
+			if err != nil {
+				return nil, err
+			}
+			resolvedProduct.Categories = append(resolvedProduct.Categories, category)
+		}
+	}
+
 	// Get successful
-	return product, nil
+	return resolvedProduct, nil
 }
 
 // ListProducts fetches all products

@@ -35,6 +35,14 @@ func ProductSlice() []*entities.Product {
 	}
 }
 
+func ResolvedProduct() *entities.ResolvedProduct {
+	return &entities.ResolvedProduct{
+		Product:      *Product(),
+		Manufacturer: Manufacturer(),
+		Categories:   []*entities.Category{Category()},
+	}
+}
+
 // #############################
 // #          OPENAPI          #
 // #############################
@@ -64,4 +72,23 @@ func ProductOpenAPISlice() []openapi.Product {
 
 func ProductListOpenAPI() *openapi.ProductList {
 	return openapi.NewProductList(ProductOpenAPISlice())
+}
+
+func ResolvedProductOpenAPI() *openapi.ResolvedProduct {
+	return &openapi.ResolvedProduct{
+		Id:               openapi.PtrString(ProductID),
+		CreatedAt:        openapi.PtrTime(time.Date(2021, 8, 6, 10, 0, 0, 0, time.UTC)),
+		UpdatedAt:        openapi.PtrTime(time.Date(2021, 8, 7, 14, 0, 0, 0, time.UTC)),
+		Name:             "test-name",
+		DescriptionShort: openapi.PtrString("test-description-short"),
+		DescriptionLong:  openapi.PtrString("test-description-long"),
+		Price:            2050,
+		ManufacturerId:   openapi.PtrString(ManufacturerID),
+		CategoryIds:      &[]string{CategoryID},
+		Status:           openapi.PRODUCTSTATUS_AVAILABLE.Ptr(),
+		StockCount:       openapi.PtrInt64(5),
+		ImageUrls:        &[]map[string]string{Image().URLs},
+		Manufacturer:     ManufacturerOpenAPI(),
+		Categories:       &[]openapi.Category{*CategoryOpenAPI()},
+	}
 }
