@@ -36,7 +36,7 @@ func Test_listProducts_Success(t *testing.T) {
 func Test_getProduct_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.ProductID}}
-	c, r := setupGinTest(t, "GET", "", params, nil)
+	c, r := setupGinTest(t, "GET", "/?resolve=true", params, nil)
 	handler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("GetProduct", mock.Anything, mock.Anything, mock.Anything).Return(fixtures.ResolvedProduct(), nil)
 

@@ -36,9 +36,10 @@ func (h *ProductHandler) getProduct(c *gin.Context) {
 		c.String(errToResponse(err))
 		return
 	}
+	resolve := c.Query("resolve") == "true"
 
 	// Call service
-	product, err := h.service.GetProduct(id, true, imageConfigs)
+	product, err := h.service.GetProduct(id, resolve, imageConfigs)
 	if err != nil {
 		c.String(errToResponse(err))
 		return

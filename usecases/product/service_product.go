@@ -28,14 +28,14 @@ func (s *Service) GetProduct(id entities.ID, resolved bool, imageConfigs map[str
 	resolvedProduct := &entities.ResolvedProduct{Product: *product}
 	if resolved {
 		if product.ManufacturerID != uuid.Nil {
-			resolvedProduct.Manufacturer, err = s.db.GetManufacturer(product.ManufacturerID)
+			resolvedProduct.Manufacturer, err = s.GetManufacturer(product.ManufacturerID, imageConfigs)
 			if err != nil {
 				return nil, err
 			}
 		}
 		resolvedProduct.Categories = make([]*entities.Category, 0, len(product.CategoryIDs))
 		for _, categoryID := range product.CategoryIDs {
-			category, err := s.db.GetCategory(categoryID)
+			category, err := s.GetCategory(categoryID, imageConfigs)
 			if err != nil {
 				return nil, err
 			}
