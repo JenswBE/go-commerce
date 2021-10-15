@@ -23,8 +23,8 @@ If both are defined, the environment variables take precedence.
 
 | Config key                | Env variable                | Description                                                                          | Default value  |
 | ------------------------- | --------------------------- | ------------------------------------------------------------------------------------ | -------------- |
-| Authentication.Username   | AUTH_USERNAME               | Basic auth username for the `/admin` paths                                           |                |
-| Authentication.Password   | AUTH_PASSWORD               | Basic auth password for the `/admin` paths                                           |                |
+| Authentication.IssuerURL  | AUTH_ISSUER_URL             | URL to OpenID Configuration Issuer (without ".well-known/openid-configuration")      |                |
+| Authentication.ClientID   | AUTH_CLIENT_ID              | Client ID which started the OIDC authentication flow                                 |                |
 | Database.Host             | DATABASE_HOST               | Hostname of the Postgres datatabase                                                  |                |
 | Database.Port             | DATABASE_PORT               | Port of the Postgres datatabase                                                      | 5432           |
 | Database.User             | DATABASE_USER               | Username for the Postgres datatabase                                                 |                |

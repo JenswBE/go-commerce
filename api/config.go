@@ -14,8 +14,8 @@ import (
 
 type Config struct {
 	Authentication struct {
-		Username string `validate:"required"`
-		Password string `validate:"required"`
+		IssuerURL string `validate:"required"`
+		ClientID  string `validate:"required"`
 	}
 	Database struct {
 		Host     string
@@ -70,8 +70,8 @@ func parseConfig() (*Config, error) {
 	}
 
 	// Bind ENV variables
-	viper.BindEnv("Authentication.Username", "AUTH_USERNAME")
-	viper.BindEnv("Authentication.Password", "AUTH_PASSWORD")
+	viper.BindEnv("Authentication.IssuerURL", "AUTH_ISSUER_URL")
+	viper.BindEnv("Authentication.ClientID", "AUTH_CLIENT_ID")
 	viper.BindEnv("Database.Host", "DATABASE_HOST")
 	viper.BindEnv("Database.Port", "DATABASE_PORT")
 	viper.BindEnv("Database.User", "DATABASE_USER")

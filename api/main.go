@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/JenswBE/go-commerce/api/handler"
+	"github.com/JenswBE/go-commerce/api/middlewares"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/repositories/localstorage"
 	"github.com/JenswBE/go-commerce/repositories/productpg"
@@ -71,14 +72,13 @@ func main() {
 	public := router.Group("/public")
 	productHandler.RegisterReadRoutes(public)
 
-	// Create basic auth account
-	accounts := gin.Accounts{
-		config.Authentication.Username: config.Authentication.Password,
-	}
-
 	// Admin routes
+	authMW, err := middlewares.NewOIDCMiddleware(config.Authentication.IssuerURL, config.Authentication.ClientID)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
+	}
 	admin := router.Group("/admin")
-	admin.Use(gin.BasicAuth(accounts))
+	admin.Use(authMW.Handle)
 	productHandler.RegisterReadRoutes(admin)
 	productHandler.RegisterWriteRoutes(admin)
 

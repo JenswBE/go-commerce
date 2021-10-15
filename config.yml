@@ -1,6 +1,6 @@
 Authentication:
-  Username: admin
-  Password: admin
+  IssuerURL: "http://localhost:9001/application/o/go-commerce/"
+  ClientID: 2b40261247db3348dc43b4ccc866775fa7ae8965
 Database:
   Host: localhost
   User: go_commerce
