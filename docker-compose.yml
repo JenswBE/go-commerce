@@ -74,62 +74,44 @@ services:
       - "traefik.http.routers.images.middlewares=strip-images-prefix"
       - "traefik.http.middlewares.strip-images-prefix.stripPrefix.prefixes=/images"
 
-  # Username: akadmin
-  # Email: admin@go-commerce.local
-  # Password: admin
-  authentik-server:
-    image: goauthentik.io/server:2021.9.8 # Make a new DB dump and bump worker as well when bumping this!
-    command: server
-    environment:
-      - "AUTHENTIK_SECRET_KEY=fuebaik7leep6eeceeThiech4pooquouDiekeuwahQuafit0ai"
-      - "AUTHENTIK_REDIS__HOST=authentik-redis"
-      - "AUTHENTIK_POSTGRESQL__HOST=authentik-db"
-      - "AUTHENTIK_POSTGRESQL__USER=authentik"
-      - "AUTHENTIK_POSTGRESQL__PASSWORD=authentik"
-      - "AUTHENTIK_POSTGRESQL__NAME=authentik"
-    networks:
-      - authentik
-    ports:
-      - "9001:9000"
-
-  authentik-worker:
-    image: goauthentik.io/server:2021.9.8
-    command: worker
-    networks:
-      - authentik
-    environment:
-      - "AUTHENTIK_SECRET_KEY=fuebaik7leep6eeceeThiech4pooquouDiekeuwahQuafit0ai"
-      - "AUTHENTIK_REDIS__HOST=authentik-redis"
-      - "AUTHENTIK_POSTGRESQL__HOST=authentik-db"
-      - "AUTHENTIK_POSTGRESQL__USER=authentik"
-      - "AUTHENTIK_POSTGRESQL__PASSWORD=authentik"
-      - "AUTHENTIK_POSTGRESQL__NAME=authentik"
-
-  authentik-redis:
-    image: redis:alpine
-    networks:
-      - authentik
+  keycloak:
+      image: quay.io/keycloak/keycloak:latest
+      environment:
+        DB_VENDOR: POSTGRES
+        DB_ADDR: keycloak-db
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_SCHEMA: public
+        DB_PASSWORD: keycloak
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin
+      networks:
+        - keycloak
+      ports:
+        - 9001:8080
+      depends_on:
+        - keycloak-db
 
   # Update DB dump for init:
-  # docker compose exec authentik-db pg_dump -U authentik --format custom authentik > ./local/authentik.pgdump
-  authentik-db:
+  # docker compose exec keycloak-db pg_dump -U keycloak --format custom keycloak > ./local/keycloak.pgdump
+  keycloak-db:
     image: postgres:12-alpine
     networks:
-      - authentik
+      - keycloak
     environment:
-      - "POSTGRES_USER=authentik"
-      - "POSTGRES_PASSWORD=authentik"
-      - "POSTGRES_DB=authentik"
+      - "POSTGRES_USER=keycloak"
+      - "POSTGRES_PASSWORD=keycloak"
+      - "POSTGRES_DB=keycloak"
     volumes:
-      - "./local/authentik.pgdump:/init.pgdump:ro"
-      - "./local/authentik-db-restore.sh:/docker-entrypoint-initdb.d/restore.sh:ro"
+      - "./local/keycloak.pgdump:/init.pgdump:ro"
+      - "./local/keycloak-db-restore.sh:/docker-entrypoint-initdb.d/restore.sh:ro"
 
 # #################################################################
 # #                            NETWORKS                           #
 # #################################################################
 networks:
-  authentik:
-    name: authentik
+  keycloak:
+    name: keycloak
 
   traefik:
     name: traefik

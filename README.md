@@ -24,7 +24,6 @@ If both are defined, the environment variables take precedence.
 | Config key                | Env variable                | Description                                                                          | Default value  |
 | ------------------------- | --------------------------- | ------------------------------------------------------------------------------------ | -------------- |
 | Authentication.IssuerURL  | AUTH_ISSUER_URL             | URL to OpenID Configuration Issuer (without ".well-known/openid-configuration")      |                |
-| Authentication.ClientID   | AUTH_CLIENT_ID              | Client ID which started the OIDC authentication flow                                 |                |
 | Database.Host             | DATABASE_HOST               | Hostname of the Postgres datatabase                                                  |                |
 | Database.Port             | DATABASE_PORT               | Port of the Postgres datatabase                                                      | 5432           |
 | Database.User             | DATABASE_USER               | Username for the Postgres datatabase                                                 |                |
@@ -35,6 +34,7 @@ If both are defined, the environment variables take precedence.
 | ImageProxy.Salt           | IMAGE_PROXY_SALT            | [Salt for Imgproxy](https://docs.imgproxy.net/configuration?id=url-signature)        |                |
 | ImageProxy.AllowedConfigs | IMAGE_PROXY_ALLOWED_CONFIGS | Comma-separated list of allowed image configs in format width:height:resizingType.   |                |
 |                           |                             | Example "100:100:FILL,300:200:FIT". Use "\*" if not limiting the configs.            |                |
+| Server.Debug              | GOCOM_DEBUG                 | Set to true to enable debug logging and put API framework in debug mode.             | false          |
 | Server.Port               | GOCOM_PORT                  | HTTP port on which the GoCommerce API listens                                        | 8080           |
 | Storage.Images.Type       | STORAGE_IMAGES_TYPE         | Type of storage used for storing images. Currently only "fs" is supported.           | fs             |
 | Storage.Images.Path       | STORAGE_IMAGES_PATH         | Path for storing images                                                              | ./files/images |

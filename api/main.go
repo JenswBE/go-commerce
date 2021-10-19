@@ -25,11 +25,20 @@ func main() {
 	// Setup logging
 	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}
 	log.Logger = log.Output(output)
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	gin.SetMode(gin.ReleaseMode)
 
 	// Parse config
 	config, err := parseConfig()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to parse config")
+	}
+
+	// Setup Debug logging if enabled
+	if config.Server.Debug {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		gin.SetMode(gin.DebugMode)
+		log.Debug().Msg("Debug logging enabled")
 	}
 
 	// DB
@@ -73,7 +82,7 @@ func main() {
 	productHandler.RegisterReadRoutes(public)
 
 	// Admin routes
-	authMW, err := middlewares.NewOIDCMiddleware(config.Authentication.IssuerURL, config.Authentication.ClientID)
+	authMW, err := middlewares.NewOIDCMiddleware(config.Authentication.IssuerURL)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
 	}
@@ -84,7 +93,10 @@ func main() {
 
 	// Start Gin
 	port := strconv.Itoa(config.Server.Port)
-	router.Run(":" + port)
+	err = router.Run(":" + port)
+	if err != nil {
+		log.Fatal().Err(err).Int("port", config.Server.Port).Msg("Failed to start Gin server")
+	}
 }
 
 func getStorageRepo(config Storage) (product.StorageRepository, error) {

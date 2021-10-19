@@ -15,7 +15,6 @@ import (
 type Config struct {
 	Authentication struct {
 		IssuerURL string `validate:"required"`
-		ClientID  string `validate:"required"`
 	}
 	Database struct {
 		Host     string
@@ -34,7 +33,8 @@ type Config struct {
 		AllowedConfigs string
 	}
 	Server struct {
-		Port int
+		Debug bool
+		Port  int
 	}
 	Storage struct {
 		Images Storage
@@ -71,7 +71,6 @@ func parseConfig() (*Config, error) {
 
 	// Bind ENV variables
 	viper.BindEnv("Authentication.IssuerURL", "AUTH_ISSUER_URL")
-	viper.BindEnv("Authentication.ClientID", "AUTH_CLIENT_ID")
 	viper.BindEnv("Database.Host", "DATABASE_HOST")
 	viper.BindEnv("Database.Port", "DATABASE_PORT")
 	viper.BindEnv("Database.User", "DATABASE_USER")
@@ -81,6 +80,7 @@ func parseConfig() (*Config, error) {
 	viper.BindEnv("ImageProxy.Key", "IMAGE_PROXY_KEY")
 	viper.BindEnv("ImageProxy.Salt", "IMAGE_PROXY_SALT")
 	viper.BindEnv("ImageProxy.AllowedConfigs", "IMAGE_PROXY_ALLOWED_CONFIGS")
+	viper.BindEnv("Server.Debug", "GOCOM_DEBUG")
 	viper.BindEnv("Server.Port", "GOCOM_PORT")
 	viper.BindEnv("Storage.Images.Type", "STORAGE_IMAGES_TYPE")
 	viper.BindEnv("Storage.Images.Path", "STORAGE_IMAGES_PATH")

@@ -1,6 +1,5 @@
 Authentication:
-  IssuerURL: "http://localhost:9001/application/o/go-commerce/"
-  ClientID: 2b40261247db3348dc43b4ccc866775fa7ae8965
+  IssuerURL: "http://localhost:9001/auth/realms/bjoetiek"
 Database:
   Host: localhost
   User: go_commerce
@@ -12,6 +11,7 @@ ImageProxy:
   Salt: efab808e2a395eb3032e7906bdc83efebe216a4fc05a833690b7f48b5f39c8ba78f651513beb08056510e71eeea951b9ce7fb50ce6dbac372ab1d8603d8ee9d4
   AllowedConfigs: "100:100:FIT,150:150:FIT,400:400:FIT,550:550:FIT"
 Server:
+  Debug: true
   Port: 8091
 Storage:
   Images:
