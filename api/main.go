@@ -87,7 +87,7 @@ func main() {
 		log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
 	}
 	admin := router.Group("/admin")
-	admin.Use(authMW.Handle)
+	admin.Use(authMW.EnforceRoles([]string{"admin"}))
 	productHandler.RegisterReadRoutes(admin)
 	productHandler.RegisterWriteRoutes(admin)
 

@@ -25,13 +25,51 @@ func NewOIDCMiddleware(issuerURL string) (*OIDCMiddleware, error) {
 	return &OIDCMiddleware{verifier: provider.Verifier(config)}, nil
 }
 
-func (mw *OIDCMiddleware) Handle(c *gin.Context) {
-	token := strings.TrimPrefix(c.Request.Header.Get("Authorization"), "Bearer ")
-	_, err := mw.verifier.Verify(c.Request.Context(), token)
-	if err != nil {
-		log.Debug().Err(err).Msg("Token is invalid")
-		c.AbortWithStatus(401)
-		return
+func (mw *OIDCMiddleware) EnforceRoles(roles []string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Extract token
+		rawToken := strings.TrimPrefix(c.Request.Header.Get("Authorization"), "Bearer ")
+
+		// Validate token
+		token, err := mw.verifier.Verify(c.Request.Context(), rawToken)
+		if err != nil {
+			log.Debug().Err(err).Msg("VerifyToken: Token is invalid")
+			c.AbortWithStatus(401)
+			return
+		}
+
+		// Extract claims
+		var claims struct {
+			Roles []string `json:"roles"`
+		}
+		if err := token.Claims(&claims); err != nil {
+			log.Debug().Err(err).Msg("VerifyToken: Failed to extract custom claims")
+			c.AbortWithStatus(401)
+			return
+		}
+
+		// Verify roles
+		if !verifyRoles(claims.Roles, roles) {
+			log.Debug().Err(err).Strs("expected", roles).Strs("actual", claims.Roles).Msg("VerifyToken: Expected role missing")
+			c.AbortWithStatus(401)
+			return
+		}
+
+		// Verification successful
+		c.Next()
 	}
-	c.Next()
+}
+
+func verifyRoles(actualRoles, expectedRoles []string) bool {
+outer:
+	for _, expected := range expectedRoles {
+		for _, actual := range actualRoles {
+			if actual == expected {
+				continue outer
+			}
+		}
+		// Current expected not found in actual roles
+		return false
+	}
+	return true
 }
