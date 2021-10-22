@@ -1,11 +1,14 @@
 package handler
 
 import (
+	"reflect"
+
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
 )
 
 // parseIDParam tries to parse parameter with the given name as an UUID or short ID.
@@ -43,5 +46,6 @@ func errToResponse(e error) (int, *entities.GoComError) {
 	if err, ok := e.(*entities.GoComError); ok {
 		return err.Status, err
 	}
+	log.Warn().Err(e).Stringer("error_type", reflect.TypeOf(e)).Msg("API received an non-GoComError error")
 	return 500, entities.NewError(500, openapi.ERRORCODE_UNKNOWN_ERROR, "", e).(*entities.GoComError)
 }
