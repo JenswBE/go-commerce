@@ -1,6 +1,7 @@
 package presenter
 
 import (
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/google/uuid"
@@ -22,7 +23,7 @@ func (p *Presenter) ParseID(id string) (uuid.UUID, error) {
 		pID, uuidErr = uuid.Parse(id)
 		if uuidErr != nil {
 			// UUID parsing failed => Return original error
-			return uuid.Nil, entities.NewError(400, err)
+			return uuid.Nil, entities.NewError(400, openapi.ERRORCODE_INVALID_ID, id, err)
 		}
 	}
 	return pID, nil

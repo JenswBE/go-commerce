@@ -1,8 +1,9 @@
 package entities
 
 import (
-	"errors"
 	"time"
+
+	"github.com/JenswBE/go-commerce/api/openapi"
 )
 
 // Product data
@@ -37,10 +38,10 @@ func (status ProductStatus) String() string {
 func (c *Product) Validate() error {
 	// Validate simple fields
 	if c.Name == "" {
-		return NewError(400, errors.New("product name is mandatory"))
+		return NewError(400, openapi.ERRORCODE_PRODUCT_NAME_EMPTY, c.ID.String(), nil)
 	}
 	if c.Price < 0 {
-		return NewError(400, errors.New("product price cannot be negative"))
+		return NewError(400, openapi.ERRORCODE_PRODUCT_PRICE_NEGATIVE, c.ID.String(), nil)
 	}
 
 	// Entity is valid

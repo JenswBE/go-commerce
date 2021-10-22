@@ -12,7 +12,7 @@ func (r *ProductPostgres) GetImage(id entities.ID) (*entities.Image, error) {
 	image := &internal.Image{}
 	err := r.db.Take(image, "id = ?", id).Error
 	if err != nil {
-		return nil, translatePgError(err, "image")
+		return nil, translatePgError(err, image, id.String())
 	}
 	return internal.ImagePgToEntity(image), nil
 }
@@ -22,7 +22,7 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 	image := &internal.Image{}
 	err := r.db.Take(image, "id = ? AND owner_id = ?", id, ownerID).Error
 	if err != nil {
-		return nil, translatePgError(err, "image")
+		return nil, translatePgError(err, image, id.String())
 	}
 
 	// Order is the same => Ignore update request
@@ -34,7 +34,7 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 	imageSameOrder := &internal.Image{}
 	err = r.db.Take(imageSameOrder, `owner_id = ? AND "order" = ?`, ownerID, newOrder).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, translatePgError(err, "image")
+		return nil, translatePgError(err, imageSameOrder, "")
 	}
 
 	// Image with same new order exists => Update with old order
@@ -42,7 +42,7 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 		imageSameOrder.Order = image.Order
 		err = r.db.Save(imageSameOrder).Error
 		if err != nil {
-			return nil, translatePgError(err, "image")
+			return nil, translatePgError(err, imageSameOrder, imageSameOrder.ID)
 		}
 	}
 
@@ -50,7 +50,7 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 	image.Order = newOrder
 	err = r.db.Save(image).Error
 	if err != nil {
-		return nil, translatePgError(err, "image")
+		return nil, translatePgError(err, image, image.ID)
 	}
 
 	// Update successful
@@ -70,7 +70,7 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 func (r *ProductPostgres) DeleteImage(id entities.ID) error {
 	err := r.db.Delete(&internal.Image{}, "id = ?", id).Error
 	if err != nil {
-		return translatePgError(err, "image")
+		return translatePgError(err, &internal.Image{}, id.String())
 	}
 	return nil
 }

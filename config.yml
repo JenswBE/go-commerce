@@ -1,5 +1,5 @@
 Authentication:
-  IssuerURL: "http://localhost:9001/auth/realms/bjoetiek"
+  IssuerURL: "http://localhost:9001/auth/realms/go-commerce"
 Database:
   Host: localhost
   User: go_commerce

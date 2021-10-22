@@ -1,8 +1,6 @@
 package presenter
 
 import (
-	"errors"
-
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
@@ -56,7 +54,7 @@ func (p *Presenter) ResolvedProductFromEntity(e *entities.ResolvedProduct) (open
 	output := openapi.ResolvedProduct{}
 	err := copier.Copy(&output, &product)
 	if err != nil {
-		return openapi.ResolvedProduct{}, entities.NewError(500, err)
+		return openapi.ResolvedProduct{}, entities.NewError(500, openapi.ERRORCODE_UNKNOWN_ERROR, e.ID.String(), err)
 	}
 
 	// Set manufacturer
@@ -92,7 +90,7 @@ func (p *Presenter) ProductToEntity(id uuid.UUID, product openapi.Product) (*ent
 	if len(product.GetCategoryIds()) > 0 {
 		catIDs, err := p.ParseIDList(product.GetCategoryIds())
 		if err != nil {
-			return nil, entities.NewError(400, errors.New("category_ids is invalid"))
+			return nil, entities.NewError(400, openapi.ERRORCODE_PRODUCT_CATEGORY_IDS_INVALID, id.String(), err)
 		}
 		e.CategoryIDs = catIDs
 	}
@@ -101,7 +99,7 @@ func (p *Presenter) ProductToEntity(id uuid.UUID, product openapi.Product) (*ent
 	if product.GetManufacturerId() != "" {
 		manID, err := p.ParseID(product.GetManufacturerId())
 		if err != nil {
-			return nil, entities.NewError(400, errors.New("manufacturer_id is invalid"))
+			return nil, entities.NewError(400, openapi.ERRORCODE_PRODUCT_MANUFACTURER_ID_INVALID, id.String(), err)
 		}
 		e.ManufacturerID = manID
 	}

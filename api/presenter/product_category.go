@@ -1,8 +1,6 @@
 package presenter
 
 import (
-	"errors"
-
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
@@ -54,7 +52,7 @@ func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*
 	if category.GetParentId() != "" {
 		pID, err := p.ParseID(category.GetParentId())
 		if err != nil {
-			return nil, entities.NewError(400, errors.New("parent_id is invalid"))
+			return nil, entities.NewError(400, openapi.ERRORCODE_CATEGORY_PARENT_ID_INVALID, id.String(), err)
 		}
 		e.ParentID = pID
 	}

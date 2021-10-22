@@ -10,7 +10,7 @@ func (r *ProductPostgres) GetCategory(id entities.ID) (*entities.Category, error
 	category := &internal.Category{}
 	err := r.db.Preload("Products").Preload("Image").Take(category, "id = ?", id).Error
 	if err != nil {
-		return nil, translatePgError(err, "category")
+		return nil, translatePgError(err, category, id.String())
 	}
 	return internal.CategoryPgToEntity(category), nil
 }
@@ -19,7 +19,7 @@ func (r *ProductPostgres) ListCategories() ([]*entities.Category, error) {
 	categories := []*internal.Category{}
 	err := r.db.Preload("Products").Preload("Image").Find(&categories).Error
 	if err != nil {
-		return nil, translatePgError(err, "category")
+		return nil, translatePgError(err, categories, "")
 	}
 	return internal.CategoriesListPgToEntity(categories), nil
 }
@@ -37,7 +37,7 @@ func (r *ProductPostgres) CreateCategory(e *entities.Category) (*entities.Catego
 	m := internal.CategoryEntityToPg(e)
 	err := r.db.Create(m).Error
 	if err != nil {
-		return nil, translatePgError(err, "category")
+		return nil, translatePgError(err, m, m.ID)
 	}
 	return internal.CategoryPgToEntity(m), nil
 }
@@ -55,7 +55,7 @@ func (r *ProductPostgres) UpdateCategory(e *entities.Category) (*entities.Catego
 	m := internal.CategoryEntityToPg(e)
 	err := r.db.Save(m).Error
 	if err != nil {
-		return nil, translatePgError(err, "category")
+		return nil, translatePgError(err, m, e.ID.String())
 	}
 	return internal.CategoryPgToEntity(m), nil
 }
@@ -63,7 +63,7 @@ func (r *ProductPostgres) UpdateCategory(e *entities.Category) (*entities.Catego
 func (r *ProductPostgres) DeleteCategory(id entities.ID) error {
 	err := r.db.Delete(&internal.Category{}, "id = ?", id).Error
 	if err != nil {
-		return translatePgError(err, "category")
+		return translatePgError(err, &internal.Category{}, id.String())
 	}
 	return nil
 }

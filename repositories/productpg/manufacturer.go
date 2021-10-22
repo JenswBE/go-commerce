@@ -9,7 +9,7 @@ func (r *ProductPostgres) GetManufacturer(id entities.ID) (*entities.Manufacture
 	manufacturer := &internal.Manufacturer{}
 	err := r.db.Preload("Image").Take(manufacturer, "id = ?", id).Error
 	if err != nil {
-		return nil, translatePgError(err, "manufacturer")
+		return nil, translatePgError(err, manufacturer, id.String())
 	}
 	return internal.ManufacturerPgToEntity(manufacturer), nil
 }
@@ -18,7 +18,7 @@ func (r *ProductPostgres) ListManufacturers() ([]*entities.Manufacturer, error) 
 	manufacturers := []*internal.Manufacturer{}
 	err := r.db.Preload("Image").Find(&manufacturers).Error
 	if err != nil {
-		return nil, translatePgError(err, "manufacturer")
+		return nil, translatePgError(err, manufacturers, "")
 	}
 	return internal.ManufacturersListPgToEntity(manufacturers), nil
 }
@@ -27,7 +27,7 @@ func (r *ProductPostgres) CreateManufacturer(e *entities.Manufacturer) (*entitie
 	m := internal.ManufacturerEntityToPg(e)
 	err := r.db.Create(m).Error
 	if err != nil {
-		return nil, translatePgError(err, "manufacturer")
+		return nil, translatePgError(err, m, m.ID)
 	}
 	return internal.ManufacturerPgToEntity(m), nil
 }
@@ -36,7 +36,7 @@ func (r *ProductPostgres) UpdateManufacturer(e *entities.Manufacturer) (*entitie
 	m := internal.ManufacturerEntityToPg(e)
 	err := r.db.Save(m).Error
 	if err != nil {
-		return nil, translatePgError(err, "manufacturer")
+		return nil, translatePgError(err, m, m.ID)
 	}
 	return internal.ManufacturerPgToEntity(m), nil
 }
@@ -44,7 +44,7 @@ func (r *ProductPostgres) UpdateManufacturer(e *entities.Manufacturer) (*entitie
 func (r *ProductPostgres) DeleteManufacturer(id entities.ID) error {
 	err := r.db.Delete(&internal.Manufacturer{}, "id = ?", id).Error
 	if err != nil {
-		return translatePgError(err, "manufacturer")
+		return translatePgError(err, &internal.Manufacturer{}, id.String())
 	}
 	return nil
 }

@@ -1,8 +1,7 @@
 package product
 
 import (
-	"errors"
-
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/google/uuid"
@@ -174,7 +173,7 @@ func (s *Service) DeleteProductImage(productID, imageID entities.ID) error {
 		}
 	}
 	if image == nil {
-		return entities.NewError(404, errors.New("product has no image with this ID"))
+		return entities.NewError(404, openapi.ERRORCODE_UNKNOWN_IMAGE, imageID.String(), nil)
 	}
 
 	// Delete image

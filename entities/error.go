@@ -3,6 +3,8 @@ package entities
 import (
 	"errors"
 	"fmt"
+
+	"github.com/JenswBE/go-commerce/api/openapi"
 )
 
 // GoComError allows to bundle a status with the original error.
@@ -13,6 +15,12 @@ type GoComError struct {
 
 	// Original error
 	Err error
+
+	// Error code
+	Code string
+
+	// Optional - On which object to error occurred
+	Instance string
 }
 
 func (e *GoComError) Error() string {
@@ -20,10 +28,12 @@ func (e *GoComError) Error() string {
 }
 
 // NewError returns a new GoComError
-func NewError(status int, err error) error {
+func NewError(status int, code openapi.ErrorCode, instance string, err error) error {
 	return &GoComError{
-		Status: status,
-		Err:    err,
+		Status:   status,
+		Err:      err,
+		Code:     string(code),
+		Instance: instance,
 	}
 }
 
