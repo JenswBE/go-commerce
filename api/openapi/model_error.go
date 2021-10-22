@@ -16,6 +16,8 @@ import (
 
 // Error struct for Error
 type Error struct {
+	// HTTP status code
+	Status *int32 `json:"status,omitempty"`
 	Code ErrorCode `json:"code"`
 	// Human-readable description of the error
 	Message string `json:"message"`
@@ -40,6 +42,38 @@ func NewError(code ErrorCode, message string) *Error {
 func NewErrorWithDefaults() *Error {
 	this := Error{}
 	return &this
+}
+
+// GetStatus returns the Status field value if set, zero value otherwise.
+func (o *Error) GetStatus() int32 {
+	if o == nil || o.Status == nil {
+		var ret int32
+		return ret
+	}
+	return *o.Status
+}
+
+// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Error) GetStatusOk() (*int32, bool) {
+	if o == nil || o.Status == nil {
+		return nil, false
+	}
+	return o.Status, true
+}
+
+// HasStatus returns a boolean if a field has been set.
+func (o *Error) HasStatus() bool {
+	if o != nil && o.Status != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetStatus gets a reference to the given int32 and assigns it to the Status field.
+func (o *Error) SetStatus(v int32) {
+	o.Status = &v
 }
 
 // GetCode returns the Code field value
@@ -124,6 +158,9 @@ func (o *Error) SetInstance(v string) {
 
 func (o Error) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if o.Status != nil {
+		toSerialize["status"] = o.Status
+	}
 	if true {
 		toSerialize["code"] = o.Code
 	}

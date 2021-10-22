@@ -1,5 +1,5 @@
 Authentication:
-  IssuerURL: "http://localhost:9001/auth/realms/go-commerce"
+  IssuerURL: "http://127.0.0.1:9001/auth/realms/go-commerce" # See https://github.com/IBM/openapi-validator/issues/338
 Database:
   Host: localhost
   User: go_commerce

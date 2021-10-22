@@ -11,7 +11,7 @@ func (h *ProductHandler) listCategories(c *gin.Context) {
 	// Parse params
 	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -20,8 +20,7 @@ func (h *ProductHandler) listCategories(c *gin.Context) {
 
 	// Handle errors
 	if err != nil {
-		c.String(errToResponse(err))
-		return
+		c.JSON(errToResponse(err))
 	}
 
 	// Handle success
@@ -36,14 +35,14 @@ func (h *ProductHandler) getCategory(c *gin.Context) {
 	}
 	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
 	// Call service
 	category, err := h.service.GetCategory(id, imageConfigs)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -55,21 +54,21 @@ func (h *ProductHandler) createCategory(c *gin.Context) {
 	// Parse body
 	body := &openapi.Category{}
 	if err := c.BindJSON(body); err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
 	// Build entity
 	e, err := h.presenter.CategoryToEntity(uuid.Nil, *body)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
 	// Call service
 	category, err := h.service.CreateCategory(e)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -87,21 +86,21 @@ func (h *ProductHandler) updateCategory(c *gin.Context) {
 	// Parse body
 	body := &openapi.Category{}
 	if err := c.BindJSON(body); err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
 	// Build entity
 	e, err := h.presenter.CategoryToEntity(id, *body)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
 	// Call service
 	category, err := h.service.UpdateCategory(e)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -119,7 +118,7 @@ func (h *ProductHandler) deleteCategory(c *gin.Context) {
 	// Call service
 	err := h.service.DeleteCategory(id)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -135,18 +134,19 @@ func (h *ProductHandler) upsertCategoryImage(c *gin.Context) {
 	}
 	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
 	// Parse body
 	images, err := parseFilesFromMultipart(c.Request)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 	if len(images) != 1 {
-		c.String(400, "expects exactly 1 image in multipart form")
+		err := entities.NewError(400, openapi.ERRORCODE_SINGLE_IMAGE_IN_FORM, "", nil)
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -155,7 +155,7 @@ func (h *ProductHandler) upsertCategoryImage(c *gin.Context) {
 	for imageName, imageContent := range images {
 		category, err = h.service.UpsertCategoryImage(id, imageName, imageContent, imageConfigs)
 		if err != nil {
-			c.String(errToResponse(err))
+			c.JSON(errToResponse(err))
 			return
 		}
 	}
@@ -174,7 +174,7 @@ func (h *ProductHandler) deleteCategoryImage(c *gin.Context) {
 	// Call service
 	err := h.service.DeleteCategoryImage(categoryID)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 

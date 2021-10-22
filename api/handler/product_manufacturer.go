@@ -11,14 +11,14 @@ func (h *ProductHandler) listManufacturers(c *gin.Context) {
 	// Parse params
 	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
 	// Call service
 	result, err := h.service.ListManufacturers(imageConfigs)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -34,14 +34,14 @@ func (h *ProductHandler) getManufacturer(c *gin.Context) {
 	}
 	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
 	// Call service
 	manufacturer, err := h.service.GetManufacturer(id, imageConfigs)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -53,7 +53,7 @@ func (h *ProductHandler) createManufacturer(c *gin.Context) {
 	// Parse body
 	body := &openapi.Manufacturer{}
 	if err := c.BindJSON(body); err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -61,7 +61,7 @@ func (h *ProductHandler) createManufacturer(c *gin.Context) {
 	e := h.presenter.ManufacturerToEntity(uuid.Nil, *body)
 	manufacturer, err := h.service.CreateManufacturer(e)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -79,7 +79,7 @@ func (h *ProductHandler) updateManufacturer(c *gin.Context) {
 	// Parse body
 	body := &openapi.Manufacturer{}
 	if err := c.BindJSON(body); err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -87,7 +87,7 @@ func (h *ProductHandler) updateManufacturer(c *gin.Context) {
 	e := h.presenter.ManufacturerToEntity(id, *body)
 	manufacturer, err := h.service.UpdateManufacturer(e)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -105,7 +105,7 @@ func (h *ProductHandler) deleteManufacturer(c *gin.Context) {
 	// Call service
 	err := h.service.DeleteManufacturer(id)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -121,18 +121,19 @@ func (h *ProductHandler) upsertManufacturerImage(c *gin.Context) {
 	}
 	imageConfigs, err := parseImageConfigsParam(c)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 
 	// Parse body
 	images, err := parseFilesFromMultipart(c.Request)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 	if len(images) != 1 {
-		c.String(400, "expects exactly 1 image in multipart form")
+		err := entities.NewError(400, openapi.ERRORCODE_SINGLE_IMAGE_IN_FORM, "", nil)
+		c.JSON(errToResponse(err))
 		return
 	}
 
@@ -141,7 +142,7 @@ func (h *ProductHandler) upsertManufacturerImage(c *gin.Context) {
 	for imageName, imageContent := range images {
 		manufacturer, err = h.service.UpsertManufacturerImage(id, imageName, imageContent, imageConfigs)
 		if err != nil {
-			c.String(errToResponse(err))
+			c.JSON(errToResponse(err))
 			return
 		}
 	}
@@ -160,7 +161,7 @@ func (h *ProductHandler) deleteManufacturerImage(c *gin.Context) {
 	// Call service
 	err := h.service.DeleteManufacturerImage(manufacturerID)
 	if err != nil {
-		c.String(errToResponse(err))
+		c.JSON(errToResponse(err))
 		return
 	}
 

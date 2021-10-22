@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/gin-gonic/gin"
@@ -19,14 +20,15 @@ func parseIDParam(c *gin.Context, name string, p *presenter.Presenter) (uuid.UUI
 	// Parse param
 	pID, ok := c.Params.Get(name)
 	if !ok {
-		c.String(400, "Parameter "+name+" is mandatory")
+		err := entities.NewError(400, openapi.ERRORCODE_PARAMETER_MISSING, name, nil)
+		c.JSON(errToResponse(err))
 		return uuid.Nil, false
 	}
 
 	// Parse ID
 	id, err := p.ParseID(pID)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(errToResponse(err))
 		return uuid.Nil, false
 	}
 
@@ -37,9 +39,9 @@ func parseIDParam(c *gin.Context, name string, p *presenter.Presenter) (uuid.UUI
 // errToResponse checks if the provided error is a GoComError.
 // If yes, status and embedded error message are returned.
 // If no, status is 500 and provided error message are returned.
-func errToResponse(e error) (int, string) {
+func errToResponse(e error) (int, *entities.GoComError) {
 	if err, ok := e.(*entities.GoComError); ok {
-		return err.Status, err.Err.Error()
+		return err.Status, err
 	}
-	return 500, e.Error()
+	return 500, entities.NewError(500, openapi.ERRORCODE_UNKNOWN_ERROR, "", e).(*entities.GoComError)
 }

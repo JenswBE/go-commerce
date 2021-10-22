@@ -612,6 +612,10 @@ components:
         - code
         - message
       properties:
+        status:
+          description: HTTP status code
+          type: integer
+          example: 400
         code:
           $ref: "#/components/schemas/ErrorCode"
         message:
@@ -632,10 +636,12 @@ components:
         - INVALID_AUTH_TOKEN: Provided authentication token is invalid
         - INVALID_ID: Provided short ID or UUID is invalid
         - MISSING_ADMIN_ROLE: Required role "admin" is missing on provided authentication token
+        - PARAMETER_MISSING: A required URL parameter is missing
         - PRODUCT_CATEGORY_IDS_INVALID: Category ID's of product are invalid
         - PRODUCT_MANUFACTURER_ID_INVALID: Manufacturer ID of the product is invalid
         - PRODUCT_NAME_EMPTY: Product name is required and cannot be empty
         - PRODUCT_PRICE_NEGATIVE: Product price should be a positive integer
+        - SINGLE_IMAGE_IN_FORM: Exactly one image is expected in multipart form, but none or multiple are provided
         - UNKNOWN_CATEGORY: The category does not exist
         - UNKNOWN_ERROR: An unknown error occurred
         - UNKNOWN_IMAGE: The image does not exist
@@ -651,10 +657,12 @@ components:
         - INVALID_AUTH_TOKEN
         - INVALID_ID
         - MISSING_ADMIN_ROLE
+        - PARAMETER_MISSING
         - PRODUCT_CATEGORY_IDS_INVALID
         - PRODUCT_MANUFACTURER_ID_INVALID
         - PRODUCT_NAME_EMPTY
         - PRODUCT_PRICE_NEGATIVE
+        - SINGLE_IMAGE_IN_FORM
         - UNKNOWN_CATEGORY
         - UNKNOWN_ERROR
         - UNKNOWN_IMAGE
@@ -857,7 +865,7 @@ components:
   securitySchemes:
     localAuth:
       type: openIdConnect
-      openIdConnectUrl: http://localhost:9001/auth/realms/go-commerce/.well-known/openid-configuration
+      openIdConnectUrl: http://127.0.0.1:9001/auth/realms/go-commerce/.well-known/openid-configuration # See https://github.com/IBM/openapi-validator/issues/338
 
 security:
   - localAuth: []
