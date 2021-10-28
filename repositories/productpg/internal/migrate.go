@@ -9,10 +9,10 @@ import (
 
 func Migrate(db *gorm.DB) error {
 	m := gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
-		// create persons table
 		{
+			// Initial migration
 			ID: "202107302030",
-			Migrate: func(tx *gorm.DB) error {
+			Migrate: func(db *gorm.DB) error {
 				type Base struct {
 					ID        string `gorm:"type:uuid"`
 					CreatedAt time.Time
@@ -53,7 +53,7 @@ func Migrate(db *gorm.DB) error {
 					Extension string // File extension
 					Order     int
 				}
-				return tx.AutoMigrate(
+				return db.AutoMigrate(
 					&Category{},
 					&Manufacturer{},
 					&Product{},
@@ -61,8 +61,33 @@ func Migrate(db *gorm.DB) error {
 				)
 			},
 		},
+		{
+			// Setup correct FK constraints
+			ID: "202110281930",
+			Migrate: func(db *gorm.DB) error {
+				return runStatements(db, []string{
+					"ALTER TABLE products DROP CONSTRAINT IF EXISTS fk_products_manufacturer",
+					"ALTER TABLE products ADD CONSTRAINT fk_products_manufacturer FOREIGN KEY (manufacturer_id) REFERENCES manufacturers (id) ON UPDATE RESTRICT ON DELETE RESTRICT",
+					"ALTER TABLE product_categories DROP CONSTRAINT IF EXISTS fk_product_categories_product",
+					"ALTER TABLE product_categories ADD CONSTRAINT fk_product_categories_product FOREIGN KEY (product_id) REFERENCES products (id) ON UPDATE RESTRICT ON DELETE CASCADE",
+					"ALTER TABLE product_categories DROP CONSTRAINT IF EXISTS fk_product_categories_category",
+					"ALTER TABLE product_categories ADD CONSTRAINT fk_product_categories_category FOREIGN KEY (category_id) REFERENCES categories (id) ON UPDATE RESTRICT ON DELETE RESTRICT",
+				})
+			},
+		},
 	})
 
 	// Run migrations
 	return m.Migrate()
+}
+
+func runStatements(db *gorm.DB, statements []string) error {
+	return db.Transaction(func(tx *gorm.DB) error {
+		for _, statement := range statements {
+			if err := db.Exec(statement).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
