@@ -6,7 +6,7 @@ on:
       - "*"
 
 env:
-  GO_VERSION: '^1.16.6' # Also update Dockerfile when bumping
+  GO_VERSION: "^1.16.6" # Also update Dockerfile when bumping
   DOCKER_HUB_USER: jenswbebot
   DOCKER_HUB_REPO: jenswbe/go-commerce
 
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.4.0
 
       - name: Derive docker_tag
         id: vars

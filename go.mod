@@ -11,9 +11,9 @@ require (
 	github.com/google/go-cmp v0.5.6
 	github.com/google/uuid v1.3.0
 	github.com/jinzhu/copier v0.3.2
-	github.com/rs/zerolog v1.25.0
+	github.com/rs/zerolog v1.26.0
 	github.com/spf13/viper v1.9.0
 	github.com/stretchr/testify v1.7.0
-	gorm.io/driver/postgres v1.1.2
-	gorm.io/gorm v1.21.15
+	gorm.io/driver/postgres v1.2.2
+	gorm.io/gorm v1.22.3
 )
