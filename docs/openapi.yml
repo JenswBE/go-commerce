@@ -502,7 +502,7 @@ components:
           items:
             $ref: "#/components/schemas/Category"
 
-    Error:
+    GocomError:
       type: object
       required:
         - code
@@ -513,7 +513,7 @@ components:
           type: integer
           example: 400
         code:
-          $ref: "#/components/schemas/ErrorCode"
+          $ref: "#/components/schemas/GocomErrorCode"
         message:
           description: Human-readable description of the error
           type: string
@@ -523,7 +523,7 @@ components:
           type: string
           example: ""
 
-    ErrorCode:
+    GocomErrorCode:
       description: |
         - CATEGORY_NAME_EMPTY: Category name is required and cannot be empty
         - CATEGORY_ORDER_NEGATIVE: Category order should be a positive integer
@@ -756,7 +756,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: "#/components/schemas/GocomError"
 
   securitySchemes:
     localAuth:
