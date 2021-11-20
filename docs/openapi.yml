@@ -7,50 +7,18 @@ servers:
   - description: Local
     url: /api
 
+tags:
+  - name: categories
+  - name: manufacturers
+  - name: products
+
 paths:
-  /public/categories/:
+  /categories/:
     get:
-      operationId: public_list_categories
+      operationId: list_categories
       description: List categories
-      tags: ["Categories"]
+      tags: ["categories"]
       security: []
-      parameters:
-        - $ref: "#/components/parameters/queryImg"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CategoryList"
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /public/categories/{id}/:
-    parameters:
-      - $ref: "#/components/parameters/pathID"
-    get:
-      operationId: public_get_category
-      description: Get category details
-      tags: ["Categories"]
-      security: []
-      parameters:
-        - $ref: "#/components/parameters/queryImg"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Category"
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /admin/categories/:
-    get:
-      operationId: admin_list_categories
-      description: List categories
-      tags: ["Categories"]
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -63,9 +31,9 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     post:
-      operationId: admin_add_category
+      operationId: add_category
       description: Add category
-      tags: ["Categories"]
+      tags: ["categories"]
       requestBody:
         content:
           application/json:
@@ -82,13 +50,14 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
 
-  /admin/categories/{id}/:
+  /categories/{id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
     get:
-      operationId: admin_get_category
+      operationId: get_category
       description: Get category details
-      tags: ["Categories"]
+      tags: ["categories"]
+      security: []
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -101,9 +70,9 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     put:
-      operationId: admin_update_category
+      operationId: update_category
       description: Update category
-      tags: ["Categories"]
+      tags: ["categories"]
       requestBody:
         content:
           application/json:
@@ -120,22 +89,22 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     delete:
-      operationId: admin_delete_category
+      operationId: delete_category
       description: Delete category
-      tags: ["Categories"]
+      tags: ["categories"]
       responses:
         "204":
           description: No Content
         "default":
           $ref: "#/components/responses/Error"
 
-  /admin/categories/{id}/image/:
+  /categories/{id}/image/:
     parameters:
       - $ref: "#/components/parameters/pathID"
     put:
-      operationId: admin_upsert_category_image
+      operationId: upsert_category_image
       description: Upsert image
-      tags: ["Categories"]
+      tags: ["categories"]
       parameters:
         - $ref: "#/components/parameters/queryImg"
       requestBody:
@@ -158,58 +127,21 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     delete:
-      operationId: admin_delete_category_image
+      operationId: delete_category_image
       description: Delete image
-      tags: ["Categories"]
+      tags: ["categories"]
       responses:
         "204":
           description: No Content
         "default":
           $ref: "#/components/responses/Error"
 
-  /public/manufacturers/:
+  /manufacturers/:
     get:
-      operationId: public_list_manufacturers
+      operationId: list_manufacturers
       description: List manufacturers
-      tags: ["Manufacturers"]
+      tags: ["manufacturers"]
       security: []
-      parameters:
-        - $ref: "#/components/parameters/queryImg"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ManufacturerList"
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /public/manufacturers/{id}/:
-    parameters:
-      - $ref: "#/components/parameters/pathID"
-    get:
-      operationId: public_get_manufacturer
-      description: Get manufacturer details
-      tags: ["Manufacturers"]
-      security: []
-      parameters:
-        - $ref: "#/components/parameters/queryImg"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Manufacturer"
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /admin/manufacturers/:
-    get:
-      operationId: admin_list_manufacturers
-      description: List manufacturers
-      tags: ["Manufacturers"]
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -222,9 +154,9 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     post:
-      operationId: admin_add_manufacturer
+      operationId: add_manufacturer
       description: Add manufacturer
-      tags: ["Manufacturers"]
+      tags: ["manufacturers"]
       requestBody:
         content:
           application/json:
@@ -241,13 +173,14 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
 
-  /admin/manufacturers/{id}/:
+  /manufacturers/{id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
     get:
-      operationId: admin_get_manufacturer
+      operationId: get_manufacturer
       description: Get manufacturer details
-      tags: ["Manufacturers"]
+      tags: ["manufacturers"]
+      security: []
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -260,9 +193,9 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     put:
-      operationId: admin_update_manufacturer
+      operationId: update_manufacturer
       description: Update manufacturer
-      tags: ["Manufacturers"]
+      tags: ["manufacturers"]
       requestBody:
         content:
           application/json:
@@ -279,22 +212,22 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     delete:
-      operationId: admin_delete_manufacturer
+      operationId: delete_manufacturer
       description: Delete manufacturer
-      tags: ["Manufacturers"]
+      tags: ["manufacturers"]
       responses:
         "204":
           description: No Content
         "default":
           $ref: "#/components/responses/Error"
 
-  /admin/manufacturers/{id}/image/:
+  /manufacturers/{id}/image/:
     parameters:
       - $ref: "#/components/parameters/pathID"
     put:
-      operationId: admin_upsert_manufacturer_image
+      operationId: upsert_manufacturer_image
       description: Upsert image
-      tags: ["Manufacturers"]
+      tags: ["manufacturers"]
       parameters:
         - $ref: "#/components/parameters/queryImg"
       requestBody:
@@ -317,59 +250,21 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     delete:
-      operationId: admin_delete_manufacturer_image
+      operationId: delete_manufacturer_image
       description: Delete image
-      tags: ["Manufacturers"]
+      tags: ["manufacturers"]
       responses:
         "204":
           description: No Content
         "default":
           $ref: "#/components/responses/Error"
 
-  /public/products/:
+  /products/:
     get:
-      operationId: public_list_products
+      operationId: list_products
       description: List products
-      tags: ["Products"]
+      tags: ["products"]
       security: []
-      parameters:
-        - $ref: "#/components/parameters/queryImg"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProductList"
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /public/products/{id}/:
-    parameters:
-      - $ref: "#/components/parameters/pathID"
-    get:
-      operationId: public_get_product
-      description: Get product details
-      tags: ["Products"]
-      security: []
-      parameters:
-        - $ref: "#/components/parameters/queryImg"
-        - $ref: "#/components/parameters/resolve"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ResolvedProduct"
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /admin/products/:
-    get:
-      operationId: admin_list_products
-      description: List products
-      tags: ["Products"]
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -382,9 +277,9 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     post:
-      operationId: admin_add_product
+      operationId: add_product
       description: Add product
-      tags: ["Products"]
+      tags: ["products"]
       requestBody:
         content:
           application/json:
@@ -401,13 +296,14 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
 
-  /admin/products/{id}/:
+  /products/{id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
     get:
-      operationId: admin_get_product
+      operationId: get_product
       description: Get product details
-      tags: ["Products"]
+      tags: ["products"]
+      security: []
       parameters:
         - $ref: "#/components/parameters/queryImg"
         - $ref: "#/components/parameters/resolve"
@@ -421,9 +317,9 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     put:
-      operationId: admin_update_product
+      operationId: update_product
       description: Update product
-      tags: ["Products"]
+      tags: ["products"]
       requestBody:
         content:
           application/json:
@@ -440,23 +336,23 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     delete:
-      operationId: admin_delete_product
+      operationId: delete_product
       description: Delete product
-      tags: ["Products"]
+      tags: ["products"]
       responses:
         "204":
           description: No Content
         "default":
           $ref: "#/components/responses/Error"
 
-  /admin/products/{id}/images/:
+  /products/{id}/images/:
     parameters:
       - $ref: "#/components/parameters/pathID"
       - $ref: "#/components/parameters/queryImg"
     get:
-      operationId: admin_list_product_images
+      operationId: list_product_images
       description: Get product images
-      tags: ["Products"]
+      tags: ["products"]
       responses:
         "200":
           description: OK
@@ -467,9 +363,9 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     post:
-      operationId: admin_add_product_images
+      operationId: add_product_images
       description: Add product images
-      tags: ["Products"]
+      tags: ["products"]
       requestBody:
         content:
           multipart/form-data:
@@ -491,18 +387,18 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
 
-  /admin/products/{id}/images/{image_id}/:
+  /products/{id}/images/{image_id}/:
     parameters:
       - $ref: "#/components/parameters/pathID"
       - $ref: "#/components/parameters/pathImageID"
     put:
-      operationId: admin_update_product_image
+      operationId: update_product_image
       description: >-
         Update product image.
         In case the new order matches another image, the orders are swapped.
         Therefore, this call will return all impacted images (1 or 2).
         First the image on which the request was called and optionally second the swapped image.
-      tags: ["Products"]
+      tags: ["products"]
       requestBody:
         content:
           application/json:
@@ -519,9 +415,9 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
     delete:
-      operationId: admin_delete_product_image
+      operationId: delete_product_image
       description: Delete product image
-      tags: ["Products"]
+      tags: ["products"]
       responses:
         "204":
           description: No Content

@@ -42,8 +42,8 @@ If both are defined, the environment variables take precedence.
 ## Running locally
 
 ```bash
-./dc-up.sh
+docker compose up -d
 cd api
 go run .
-./dc-down.sh
+docker compose down
 ```

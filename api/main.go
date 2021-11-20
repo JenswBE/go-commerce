@@ -80,7 +80,7 @@ func main() {
 	productHandler := handler.NewProductHandler(presenter, productService)
 
 	// Public routes
-	public := router.Group("/public")
+	public := router.Group("/")
 	productHandler.RegisterReadRoutes(public)
 
 	// Admin routes
@@ -88,9 +88,8 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
 	}
-	admin := router.Group("/admin")
+	admin := router.Group("/")
 	admin.Use(authMW.EnforceRoles([]string{"admin"}))
-	productHandler.RegisterReadRoutes(admin)
 	productHandler.RegisterWriteRoutes(admin)
 
 	// Start Gin
