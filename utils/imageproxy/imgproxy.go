@@ -56,7 +56,8 @@ func NewImgProxyService(baseURL, keyHex, saltHex string, allowedConfigs []ImageC
 	return svc, nil
 }
 
-// GenerateURL generates a signed URL for imgproxy
+// GenerateURL generates a signed URL for imgproxy.
+// See https://docs.imgproxy.net/generating_the_url
 func (imgproxy *ImgProxy) GenerateURL(sourceURL string, config ImageConfig) (string, error) {
 	// Check if config is allowed
 	if len(imgproxy.allowedConfigs) > 0 && !imgproxy.allowedConfigs[config] {
@@ -71,7 +72,8 @@ func (imgproxy *ImgProxy) GenerateURL(sourceURL string, config ImageConfig) (str
 	// Build path
 	encodedURL := base64.RawURLEncoding.EncodeToString([]byte(sourceURL))
 	resizingType := strings.ToLower(string(config.ResizingType))
-	path := fmt.Sprintf("/%s/%d/%d/%s/%d/%s.%s", resizingType, config.Width, config.Height, gravity, enlarge, encodedURL, extension)
+	path := fmt.Sprintf("/rt:%s/w:%d/h:%d/g:%s/el:%d/%s.%s",
+		resizingType, config.Width, config.Height, gravity, enlarge, encodedURL, extension)
 
 	// Calculate signature
 	mac := hmac.New(sha256.New, imgproxy.key)
