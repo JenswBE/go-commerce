@@ -1,14 +1,15 @@
-package presenter
+package product
 
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
+	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 	"github.com/rs/zerolog/log"
 )
 
-func (p *Presenter) ProductFromEntity(e *entities.Product) openapi.Product {
+func ProductFromEntity(p *presenter.Presenter, e *entities.Product) openapi.Product {
 	// Set basic fields
 	output := openapi.NewProduct(e.Name, int64(e.Price))
 	output.SetId(p.EncodeID(e.ID))
@@ -18,7 +19,7 @@ func (p *Presenter) ProductFromEntity(e *entities.Product) openapi.Product {
 	output.SetDescriptionLong(e.DescriptionLong)
 	output.SetCategoryIds(p.EncodeIDList(e.CategoryIDs))
 	output.SetStockCount(int64(e.StockCount))
-	output.SetImageUrls(p.ImageURLsSliceFromEntity(e.Images))
+	output.SetImageUrls(ImageURLsSliceFromEntity(p, e.Images))
 
 	// Set status
 	status, err := openapi.NewProductStatusFromValue(e.Status.String())
@@ -36,21 +37,21 @@ func (p *Presenter) ProductFromEntity(e *entities.Product) openapi.Product {
 	return *output
 }
 
-func (p *Presenter) ProductSliceFromEntity(input []*entities.Product) []openapi.Product {
+func ProductSliceFromEntity(p *presenter.Presenter, input []*entities.Product) []openapi.Product {
 	output := make([]openapi.Product, 0, len(input))
 	for _, product := range input {
-		output = append(output, p.ProductFromEntity(product))
+		output = append(output, ProductFromEntity(p, product))
 	}
 	return output
 }
 
-func (p *Presenter) ProductListFromEntity(input []*entities.Product) openapi.ProductList {
-	return *openapi.NewProductList(p.ProductSliceFromEntity(input))
+func ProductListFromEntity(p *presenter.Presenter, input []*entities.Product) openapi.ProductList {
+	return *openapi.NewProductList(ProductSliceFromEntity(p, input))
 }
 
-func (p *Presenter) ResolvedProductFromEntity(e *entities.ResolvedProduct) (openapi.ResolvedProduct, error) {
+func ResolvedProductFromEntity(p *presenter.Presenter, e *entities.ResolvedProduct) (openapi.ResolvedProduct, error) {
 	// Convert to basic product
-	product := p.ProductFromEntity(&e.Product)
+	product := ProductFromEntity(p, &e.Product)
 	output := openapi.ResolvedProduct{}
 	err := copier.Copy(&output, &product)
 	if err != nil {
@@ -59,20 +60,20 @@ func (p *Presenter) ResolvedProductFromEntity(e *entities.ResolvedProduct) (open
 
 	// Set manufacturer
 	if e.Manufacturer != nil {
-		manufacturer := p.ManufacturerFromEntity(e.Manufacturer)
+		manufacturer := ManufacturerFromEntity(p, e.Manufacturer)
 		output.Manufacturer = &manufacturer
 	}
 
 	// Set categories
 	categories := make([]openapi.Category, 0, len(e.Categories))
 	for _, category := range e.Categories {
-		categories = append(categories, p.CategoryFromEntity(category))
+		categories = append(categories, CategoryFromEntity(p, category))
 	}
 	output.Categories = &categories
 	return output, nil
 }
 
-func (p *Presenter) ProductToEntity(id uuid.UUID, product openapi.Product) (*entities.Product, error) {
+func ProductToEntity(p *presenter.Presenter, id uuid.UUID, product openapi.Product) (*entities.Product, error) {
 	// Build entity
 	e := &entities.Product{
 		ID:               id,

@@ -14,7 +14,7 @@ func (r *ProductPostgres) GetImage(id entities.ID) (*entities.Image, error) {
 	if err != nil {
 		return nil, translatePgError(err, image, id.String())
 	}
-	return internal.ImagePgToEntity(image), nil
+	return image.ToEntity(), nil
 }
 
 func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOrder int) ([]*entities.Image, error) {
@@ -27,7 +27,7 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 
 	// Order is the same => Ignore update request
 	if image.Order == newOrder {
-		return []*entities.Image{internal.ImagePgToEntity(image)}, nil
+		return []*entities.Image{image.ToEntity()}, nil
 	}
 
 	// Fetch image with same new order (if any)
@@ -56,12 +56,12 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 	// Update successful
 	if imageSameOrder.ID == "" {
 		// No order swapped
-		return []*entities.Image{internal.ImagePgToEntity(image)}, nil
+		return []*entities.Image{image.ToEntity()}, nil
 	} else {
 		// Order swapped
 		images := []*entities.Image{
-			internal.ImagePgToEntity(image),
-			internal.ImagePgToEntity(imageSameOrder),
+			image.ToEntity(),
+			imageSameOrder.ToEntity(),
 		}
 		return images, nil
 	}

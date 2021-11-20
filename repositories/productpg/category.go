@@ -12,7 +12,7 @@ func (r *ProductPostgres) GetCategory(id entities.ID) (*entities.Category, error
 	if err != nil {
 		return nil, translatePgError(err, category, id.String())
 	}
-	return internal.CategoryPgToEntity(category), nil
+	return category.ToEntity(), nil
 }
 
 func (r *ProductPostgres) ListCategories() ([]*entities.Category, error) {
@@ -39,7 +39,7 @@ func (r *ProductPostgres) CreateCategory(e *entities.Category) (*entities.Catego
 	if err != nil {
 		return nil, translatePgError(err, m, m.ID)
 	}
-	return internal.CategoryPgToEntity(m), nil
+	return m.ToEntity(), nil
 }
 
 func (r *ProductPostgres) UpdateCategory(e *entities.Category) (*entities.Category, error) {
@@ -57,7 +57,7 @@ func (r *ProductPostgres) UpdateCategory(e *entities.Category) (*entities.Catego
 	if err != nil {
 		return nil, translatePgError(err, m, e.ID.String())
 	}
-	return internal.CategoryPgToEntity(m), nil
+	return m.ToEntity(), nil
 }
 
 func (r *ProductPostgres) DeleteCategory(id entities.ID) error {

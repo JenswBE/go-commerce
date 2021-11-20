@@ -1,4 +1,4 @@
-package handler
+package product
 
 import (
 	"errors"

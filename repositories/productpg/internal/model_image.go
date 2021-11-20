@@ -14,7 +14,7 @@ type Image struct {
 	Order     int
 }
 
-func ImagePgToEntity(image *Image) *entities.Image {
+func (image *Image) ToEntity() *entities.Image {
 	if image == nil {
 		return nil
 	}
@@ -31,7 +31,7 @@ func ImagesListPgToEntity(images []Image) []*entities.Image {
 	}
 	output := make([]*entities.Image, 0, len(images))
 	for _, image := range images {
-		output = append(output, ImagePgToEntity(&image))
+		output = append(output, image.ToEntity())
 	}
 	return output
 }

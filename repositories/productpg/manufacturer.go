@@ -11,7 +11,7 @@ func (r *ProductPostgres) GetManufacturer(id entities.ID) (*entities.Manufacture
 	if err != nil {
 		return nil, translatePgError(err, manufacturer, id.String())
 	}
-	return internal.ManufacturerPgToEntity(manufacturer), nil
+	return manufacturer.ToEntity(), nil
 }
 
 func (r *ProductPostgres) ListManufacturers() ([]*entities.Manufacturer, error) {
@@ -29,7 +29,7 @@ func (r *ProductPostgres) CreateManufacturer(e *entities.Manufacturer) (*entitie
 	if err != nil {
 		return nil, translatePgError(err, m, m.ID)
 	}
-	return internal.ManufacturerPgToEntity(m), nil
+	return m.ToEntity(), nil
 }
 
 func (r *ProductPostgres) UpdateManufacturer(e *entities.Manufacturer) (*entities.Manufacturer, error) {
@@ -38,7 +38,7 @@ func (r *ProductPostgres) UpdateManufacturer(e *entities.Manufacturer) (*entitie
 	if err != nil {
 		return nil, translatePgError(err, m, m.ID)
 	}
-	return internal.ManufacturerPgToEntity(m), nil
+	return m.ToEntity(), nil
 }
 
 func (r *ProductPostgres) DeleteManufacturer(id entities.ID) error {

@@ -9,6 +9,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var _ Usecase = &Service{}
+
 type Service struct {
 	db           DatabaseRepository
 	imageProxy   imageproxy.Service

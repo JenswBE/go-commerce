@@ -1,12 +1,13 @@
-package presenter
+package product
 
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
+	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/google/uuid"
 )
 
-func (p *Presenter) CategoryFromEntity(e *entities.Category) openapi.Category {
+func CategoryFromEntity(p *presenter.Presenter, e *entities.Category) openapi.Category {
 	// Set basic fields
 	c := openapi.NewCategory(e.Name, int64(e.Order))
 	c.SetId(p.EncodeID(e.ID))
@@ -25,19 +26,19 @@ func (p *Presenter) CategoryFromEntity(e *entities.Category) openapi.Category {
 	return *c
 }
 
-func (p *Presenter) CategorySliceFromEntity(input []*entities.Category) []openapi.Category {
+func CategorySliceFromEntity(p *presenter.Presenter, input []*entities.Category) []openapi.Category {
 	output := make([]openapi.Category, 0, len(input))
 	for _, category := range input {
-		output = append(output, p.CategoryFromEntity(category))
+		output = append(output, CategoryFromEntity(p, category))
 	}
 	return output
 }
 
-func (p *Presenter) CategoryListFromEntity(input []*entities.Category) openapi.CategoryList {
-	return *openapi.NewCategoryList(p.CategorySliceFromEntity(input))
+func CategoryListFromEntity(p *presenter.Presenter, input []*entities.Category) openapi.CategoryList {
+	return *openapi.NewCategoryList(CategorySliceFromEntity(p, input))
 }
 
-func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*entities.Category, error) {
+func CategoryToEntity(p *presenter.Presenter, id uuid.UUID, category openapi.Category) (*entities.Category, error) {
 	// Build entity
 	e := &entities.Category{
 		ID:          id,

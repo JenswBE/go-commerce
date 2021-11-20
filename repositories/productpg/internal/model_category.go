@@ -16,7 +16,7 @@ type Category struct {
 	Image       *Image `gorm:"polymorphic:Owner;"`
 }
 
-func CategoryPgToEntity(c *Category) *entities.Category {
+func (c *Category) ToEntity() *entities.Category {
 	cat := &entities.Category{
 		ID:          uuid.MustParse(c.ID),
 		Name:        c.Name,
@@ -24,7 +24,7 @@ func CategoryPgToEntity(c *Category) *entities.Category {
 		ParentID:    uuid.Nil,
 		Order:       c.Order,
 		ProductIDs:  nil,
-		Image:       ImagePgToEntity(c.Image),
+		Image:       c.Image.ToEntity(),
 	}
 	if c.ParentID != nil {
 		cat.ParentID = uuid.MustParse(*c.ParentID)
@@ -41,7 +41,7 @@ func CategoryPgToEntity(c *Category) *entities.Category {
 func CategoriesListPgToEntity(c []*Category) []*entities.Category {
 	output := make([]*entities.Category, 0, len(c))
 	for _, cat := range c {
-		output = append(output, CategoryPgToEntity(cat))
+		output = append(output, cat.ToEntity())
 	}
 	return output
 }

@@ -1,10 +1,11 @@
-package handler
+package product
 
 import (
 	"encoding/json"
 	"net/http"
 	"testing"
 
+	"github.com/JenswBE/go-commerce/api/handler"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/fixtures"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
@@ -16,15 +17,15 @@ import (
 
 func Test_listManufacturers_Success(t *testing.T) {
 	// Setup test
-	c, r := setupGinTest(t, "GET", "", nil, nil)
-	handler, usecaseMock := setupHandlerTest()
+	c, r := handler.SetupGinTest(t, "GET", "", nil, nil)
+	productHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("ListManufacturers", mock.Anything).Return(fixtures.ManufacturerSlice(), nil)
 
 	// Call handler
-	handler.listManufacturers(c)
+	productHandler.listManufacturers(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ManufacturerListOpenAPI(), r)
+	handler.RequireEqualJSON(t, fixtures.ManufacturerListOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
@@ -34,15 +35,15 @@ func Test_listManufacturers_Success(t *testing.T) {
 func Test_getManufacturer_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
-	c, r := setupGinTest(t, "GET", "", params, nil)
-	handler, usecaseMock := setupHandlerTest()
+	c, r := handler.SetupGinTest(t, "GET", "", params, nil)
+	productHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("GetManufacturer", mock.Anything, mock.Anything).Return(fixtures.Manufacturer(), nil)
 
 	// Call handler
-	handler.getManufacturer(c)
+	productHandler.getManufacturer(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ManufacturerOpenAPI(), r)
+	handler.RequireEqualJSON(t, fixtures.ManufacturerOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
@@ -53,15 +54,15 @@ func Test_createManufacturer_Success(t *testing.T) {
 	// Setup test
 	body, err := json.Marshal(fixtures.ManufacturerOpenAPI())
 	require.NoError(t, err)
-	c, r := setupGinTest(t, "POST", "", nil, body)
-	handler, usecaseMock := setupHandlerTest()
+	c, r := handler.SetupGinTest(t, "POST", "", nil, body)
+	productHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("CreateManufacturer", mock.Anything).Return(fixtures.Manufacturer(), nil)
 
 	// Call handler
-	handler.createManufacturer(c)
+	productHandler.createManufacturer(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ManufacturerOpenAPI(), r)
+	handler.RequireEqualJSON(t, fixtures.ManufacturerOpenAPI(), r)
 	require.Equal(t, http.StatusCreated, r.Code)
 
 	// Assert mock calls
@@ -79,15 +80,15 @@ func Test_updateManufacturer_Success(t *testing.T) {
 	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
 	body, err := json.Marshal(fixtures.ManufacturerOpenAPI())
 	require.NoError(t, err)
-	c, r := setupGinTest(t, "PUT", "", params, body)
-	handler, usecaseMock := setupHandlerTest()
+	c, r := handler.SetupGinTest(t, "PUT", "", params, body)
+	productHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("UpdateManufacturer", mock.Anything).Return(fixtures.Manufacturer(), nil)
 
 	// Call handler
-	handler.updateManufacturer(c)
+	productHandler.updateManufacturer(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ManufacturerOpenAPI(), r)
+	handler.RequireEqualJSON(t, fixtures.ManufacturerOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
@@ -102,12 +103,12 @@ func Test_updateManufacturer_Success(t *testing.T) {
 func Test_deleteManufacturer_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
-	c, r := setupGinTest(t, "DELETE", "", params, nil)
-	handler, usecaseMock := setupHandlerTest()
+	c, r := handler.SetupGinTest(t, "DELETE", "", params, nil)
+	productHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("DeleteManufacturer", mock.Anything).Return(nil)
 
 	// Call handler
-	handler.deleteManufacturer(c)
+	productHandler.deleteManufacturer(c)
 
 	// Assert result
 	require.Empty(t, r.Body.String())
@@ -121,16 +122,16 @@ func Test_upsertManufacturerImage_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
 	body, writer := fixtures.MultipartSingleFile()
-	c, r := setupGinTest(t, "PUT", "?"+fixtures.ImageConfigQuery, params, body.Bytes())
+	c, r := handler.SetupGinTest(t, "PUT", "?"+fixtures.ImageConfigQuery, params, body.Bytes())
 	c.Request.Header.Set("Content-Type", writer.FormDataContentType())
-	handler, usecaseMock := setupHandlerTest()
+	productHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("UpsertManufacturerImage", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(fixtures.Manufacturer(), nil)
 
 	// Call handler
-	handler.upsertManufacturerImage(c)
+	productHandler.upsertManufacturerImage(c)
 
 	// Assert result
-	requireEqualJSON(t, fixtures.ImageOpenAPI(), r)
+	handler.RequireEqualJSON(t, fixtures.ImageOpenAPI(), r)
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
@@ -140,12 +141,12 @@ func Test_upsertManufacturerImage_Success(t *testing.T) {
 func Test_deleteManufacturerImage_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.ManufacturerID}}
-	c, r := setupGinTest(t, "DELETE", "", params, nil)
-	handler, usecaseMock := setupHandlerTest()
+	c, r := handler.SetupGinTest(t, "DELETE", "", params, nil)
+	productHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("DeleteManufacturerImage", mock.Anything).Return(nil)
 
 	// Call handler
-	handler.deleteManufacturerImage(c)
+	productHandler.deleteManufacturerImage(c)
 
 	// Assert result
 	require.Empty(t, r.Body.String())

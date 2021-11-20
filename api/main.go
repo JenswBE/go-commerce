@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/JenswBE/go-commerce/api/handler"
+	productHandler "github.com/JenswBE/go-commerce/api/handler/product"
 	"github.com/JenswBE/go-commerce/api/middlewares"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/repositories/localstorage"
@@ -77,7 +77,7 @@ func main() {
 	router.StaticFile("/openapi.yml", "../docs/openapi.yml")
 
 	// Setup handlers
-	productHandler := handler.NewProductHandler(presenter, productService)
+	productHandler := productHandler.NewProductHandler(presenter, productService)
 
 	// Public routes
 	public := router.Group("/")
