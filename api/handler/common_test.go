@@ -45,7 +45,7 @@ func Test_parseIDParam_ParamNotProvided_Failure(t *testing.T) {
 	result, success := parseIDParam(c, "test_id", presenter)
 
 	// Assert results
-	require.Contains(t, w.Body.String(), openapi.ERRORCODE_PARAMETER_MISSING)
+	require.Contains(t, w.Body.String(), openapi.GOCOMERRORCODE_PARAMETER_MISSING)
 	require.Equal(t, 400, w.Code)
 	require.Equal(t, uuid.Nil, result)
 	require.False(t, success)

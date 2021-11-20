@@ -27,10 +27,10 @@ type Category struct {
 func (c *Category) Validate() error {
 	// Validate simple fields
 	if c.Name == "" {
-		return NewError(400, openapi.ERRORCODE_CATEGORY_NAME_EMPTY, c.ID.String(), nil)
+		return NewError(400, openapi.GOCOMERRORCODE_CATEGORY_NAME_EMPTY, c.ID.String(), nil)
 	}
 	if c.Order < 0 {
-		return NewError(400, openapi.ERRORCODE_CATEGORY_ORDER_NEGATIVE, c.ID.String(), nil)
+		return NewError(400, openapi.GOCOMERRORCODE_CATEGORY_ORDER_NEGATIVE, c.ID.String(), nil)
 	}
 
 	// Entity is valid

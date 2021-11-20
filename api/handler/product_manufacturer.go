@@ -132,7 +132,7 @@ func (h *ProductHandler) upsertManufacturerImage(c *gin.Context) {
 		return
 	}
 	if len(images) != 1 {
-		err := entities.NewError(400, openapi.ERRORCODE_SINGLE_IMAGE_IN_FORM, "", nil)
+		err := entities.NewError(400, openapi.GOCOMERRORCODE_SINGLE_IMAGE_IN_FORM, "", nil)
 		c.JSON(errToResponse(err))
 		return
 	}

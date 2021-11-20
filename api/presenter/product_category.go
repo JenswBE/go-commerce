@@ -52,7 +52,7 @@ func (p *Presenter) CategoryToEntity(id uuid.UUID, category openapi.Category) (*
 	if category.GetParentId() != "" {
 		pID, err := p.ParseID(category.GetParentId())
 		if err != nil {
-			return nil, entities.NewError(400, openapi.ERRORCODE_CATEGORY_PARENT_ID_INVALID, id.String(), err)
+			return nil, entities.NewError(400, openapi.GOCOMERRORCODE_CATEGORY_PARENT_ID_INVALID, id.String(), err)
 		}
 		e.ParentID = pID
 	}

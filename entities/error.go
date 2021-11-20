@@ -31,7 +31,7 @@ func (e *GoComError) Error() string {
 }
 
 // NewError returns a new GoComError
-func NewError(status int, code openapi.ErrorCode, instance string, err error) error {
+func NewError(status int, code openapi.GocomErrorCode, instance string, err error) error {
 	return &GoComError{
 		Status:   status,
 		Err:      err,
@@ -41,43 +41,43 @@ func NewError(status int, code openapi.ErrorCode, instance string, err error) er
 	}
 }
 
-func translateCodeToMessage(code openapi.ErrorCode) string {
+func translateCodeToMessage(code openapi.GocomErrorCode) string {
 	switch code {
-	case openapi.ERRORCODE_CATEGORY_NAME_EMPTY:
+	case openapi.GOCOMERRORCODE_CATEGORY_NAME_EMPTY:
 		return `Category name is required and cannot be empty`
-	case openapi.ERRORCODE_CATEGORY_ORDER_NEGATIVE:
+	case openapi.GOCOMERRORCODE_CATEGORY_ORDER_NEGATIVE:
 		return `Category order should be a positive integer`
-	case openapi.ERRORCODE_CATEGORY_PARENT_ID_INVALID:
+	case openapi.GOCOMERRORCODE_CATEGORY_PARENT_ID_INVALID:
 		return `Parent ID of the category is invalid`
-	case openapi.ERRORCODE_IMAGE_ORDER_NEGATIVE:
+	case openapi.GOCOMERRORCODE_IMAGE_ORDER_NEGATIVE:
 		return `Image order should be a positive integer`
-	case openapi.ERRORCODE_INVALID_AUTH_TOKEN:
+	case openapi.GOCOMERRORCODE_INVALID_AUTH_TOKEN:
 		return `Provided authentication token is invalid`
-	case openapi.ERRORCODE_INVALID_ID:
+	case openapi.GOCOMERRORCODE_INVALID_ID:
 		return `Provided short ID or UUID is invalid`
-	case openapi.ERRORCODE_MISSING_ADMIN_ROLE:
+	case openapi.GOCOMERRORCODE_MISSING_ADMIN_ROLE:
 		return `Required role "admin" is missing on provided authentication token`
-	case openapi.ERRORCODE_PARAMETER_MISSING:
+	case openapi.GOCOMERRORCODE_PARAMETER_MISSING:
 		return `A required URL parameter is missing`
-	case openapi.ERRORCODE_PRODUCT_CATEGORY_IDS_INVALID:
+	case openapi.GOCOMERRORCODE_PRODUCT_CATEGORY_IDS_INVALID:
 		return `Category ID's of product are invalid`
-	case openapi.ERRORCODE_PRODUCT_MANUFACTURER_ID_INVALID:
+	case openapi.GOCOMERRORCODE_PRODUCT_MANUFACTURER_ID_INVALID:
 		return `Manufacturer ID of the product is invalid`
-	case openapi.ERRORCODE_PRODUCT_NAME_EMPTY:
+	case openapi.GOCOMERRORCODE_PRODUCT_NAME_EMPTY:
 		return `Product name is required and cannot be empty`
-	case openapi.ERRORCODE_PRODUCT_PRICE_NEGATIVE:
+	case openapi.GOCOMERRORCODE_PRODUCT_PRICE_NEGATIVE:
 		return `Product price should be a positive integer`
-	case openapi.ERRORCODE_SINGLE_IMAGE_IN_FORM:
+	case openapi.GOCOMERRORCODE_SINGLE_IMAGE_IN_FORM:
 		return `Exactly one image is expected in multipart form, but none or multiple are provided`
-	case openapi.ERRORCODE_UNKNOWN_CATEGORY:
+	case openapi.GOCOMERRORCODE_UNKNOWN_CATEGORY:
 		return `The category does not exist`
-	case openapi.ERRORCODE_UNKNOWN_ERROR:
+	case openapi.GOCOMERRORCODE_UNKNOWN_ERROR:
 		return `An unknown error occurred`
-	case openapi.ERRORCODE_UNKNOWN_IMAGE:
+	case openapi.GOCOMERRORCODE_UNKNOWN_IMAGE:
 		return `The image does not exist`
-	case openapi.ERRORCODE_UNKNOWN_MANUFACTURER:
+	case openapi.GOCOMERRORCODE_UNKNOWN_MANUFACTURER:
 		return `The manufacturer does not exist`
-	case openapi.ERRORCODE_UNKNOWN_PRODUCT:
+	case openapi.GOCOMERRORCODE_UNKNOWN_PRODUCT:
 		return `The product does not exist`
 	}
 	return "" // Covered by exhaustive check

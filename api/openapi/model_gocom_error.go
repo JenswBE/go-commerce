@@ -14,38 +14,38 @@ import (
 	"encoding/json"
 )
 
-// Error struct for Error
-type Error struct {
+// GocomError struct for GocomError
+type GocomError struct {
 	// HTTP status code
 	Status *int32 `json:"status,omitempty"`
-	Code ErrorCode `json:"code"`
+	Code GocomErrorCode `json:"code"`
 	// Human-readable description of the error
 	Message string `json:"message"`
 	// Object to which this error is related
 	Instance *string `json:"instance,omitempty"`
 }
 
-// NewError instantiates a new Error object
+// NewGocomError instantiates a new GocomError object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewError(code ErrorCode, message string) *Error {
-	this := Error{}
+func NewGocomError(code GocomErrorCode, message string) *GocomError {
+	this := GocomError{}
 	this.Code = code
 	this.Message = message
 	return &this
 }
 
-// NewErrorWithDefaults instantiates a new Error object
+// NewGocomErrorWithDefaults instantiates a new GocomError object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewErrorWithDefaults() *Error {
-	this := Error{}
+func NewGocomErrorWithDefaults() *GocomError {
+	this := GocomError{}
 	return &this
 }
 
 // GetStatus returns the Status field value if set, zero value otherwise.
-func (o *Error) GetStatus() int32 {
+func (o *GocomError) GetStatus() int32 {
 	if o == nil || o.Status == nil {
 		var ret int32
 		return ret
@@ -55,7 +55,7 @@ func (o *Error) GetStatus() int32 {
 
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Error) GetStatusOk() (*int32, bool) {
+func (o *GocomError) GetStatusOk() (*int32, bool) {
 	if o == nil || o.Status == nil {
 		return nil, false
 	}
@@ -63,7 +63,7 @@ func (o *Error) GetStatusOk() (*int32, bool) {
 }
 
 // HasStatus returns a boolean if a field has been set.
-func (o *Error) HasStatus() bool {
+func (o *GocomError) HasStatus() bool {
 	if o != nil && o.Status != nil {
 		return true
 	}
@@ -72,14 +72,14 @@ func (o *Error) HasStatus() bool {
 }
 
 // SetStatus gets a reference to the given int32 and assigns it to the Status field.
-func (o *Error) SetStatus(v int32) {
+func (o *GocomError) SetStatus(v int32) {
 	o.Status = &v
 }
 
 // GetCode returns the Code field value
-func (o *Error) GetCode() ErrorCode {
+func (o *GocomError) GetCode() GocomErrorCode {
 	if o == nil {
-		var ret ErrorCode
+		var ret GocomErrorCode
 		return ret
 	}
 
@@ -88,7 +88,7 @@ func (o *Error) GetCode() ErrorCode {
 
 // GetCodeOk returns a tuple with the Code field value
 // and a boolean to check if the value has been set.
-func (o *Error) GetCodeOk() (*ErrorCode, bool) {
+func (o *GocomError) GetCodeOk() (*GocomErrorCode, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -96,12 +96,12 @@ func (o *Error) GetCodeOk() (*ErrorCode, bool) {
 }
 
 // SetCode sets field value
-func (o *Error) SetCode(v ErrorCode) {
+func (o *GocomError) SetCode(v GocomErrorCode) {
 	o.Code = v
 }
 
 // GetMessage returns the Message field value
-func (o *Error) GetMessage() string {
+func (o *GocomError) GetMessage() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -112,7 +112,7 @@ func (o *Error) GetMessage() string {
 
 // GetMessageOk returns a tuple with the Message field value
 // and a boolean to check if the value has been set.
-func (o *Error) GetMessageOk() (*string, bool) {
+func (o *GocomError) GetMessageOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -120,12 +120,12 @@ func (o *Error) GetMessageOk() (*string, bool) {
 }
 
 // SetMessage sets field value
-func (o *Error) SetMessage(v string) {
+func (o *GocomError) SetMessage(v string) {
 	o.Message = v
 }
 
 // GetInstance returns the Instance field value if set, zero value otherwise.
-func (o *Error) GetInstance() string {
+func (o *GocomError) GetInstance() string {
 	if o == nil || o.Instance == nil {
 		var ret string
 		return ret
@@ -135,7 +135,7 @@ func (o *Error) GetInstance() string {
 
 // GetInstanceOk returns a tuple with the Instance field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Error) GetInstanceOk() (*string, bool) {
+func (o *GocomError) GetInstanceOk() (*string, bool) {
 	if o == nil || o.Instance == nil {
 		return nil, false
 	}
@@ -143,7 +143,7 @@ func (o *Error) GetInstanceOk() (*string, bool) {
 }
 
 // HasInstance returns a boolean if a field has been set.
-func (o *Error) HasInstance() bool {
+func (o *GocomError) HasInstance() bool {
 	if o != nil && o.Instance != nil {
 		return true
 	}
@@ -152,11 +152,11 @@ func (o *Error) HasInstance() bool {
 }
 
 // SetInstance gets a reference to the given string and assigns it to the Instance field.
-func (o *Error) SetInstance(v string) {
+func (o *GocomError) SetInstance(v string) {
 	o.Instance = &v
 }
 
-func (o Error) MarshalJSON() ([]byte, error) {
+func (o GocomError) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Status != nil {
 		toSerialize["status"] = o.Status
@@ -173,38 +173,38 @@ func (o Error) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableError struct {
-	value *Error
+type NullableGocomError struct {
+	value *GocomError
 	isSet bool
 }
 
-func (v NullableError) Get() *Error {
+func (v NullableGocomError) Get() *GocomError {
 	return v.value
 }
 
-func (v *NullableError) Set(val *Error) {
+func (v *NullableGocomError) Set(val *GocomError) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableError) IsSet() bool {
+func (v NullableGocomError) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableError) Unset() {
+func (v *NullableGocomError) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableError(val *Error) *NullableError {
-	return &NullableError{value: val, isSet: true}
+func NewNullableGocomError(val *GocomError) *NullableGocomError {
+	return &NullableGocomError{value: val, isSet: true}
 }
 
-func (v NullableError) MarshalJSON() ([]byte, error) {
+func (v NullableGocomError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableError) UnmarshalJSON(src []byte) error {
+func (v *NullableGocomError) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

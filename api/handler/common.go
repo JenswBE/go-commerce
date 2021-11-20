@@ -23,7 +23,7 @@ func parseIDParam(c *gin.Context, name string, p *presenter.Presenter) (uuid.UUI
 	// Parse param
 	pID, ok := c.Params.Get(name)
 	if !ok {
-		err := entities.NewError(400, openapi.ERRORCODE_PARAMETER_MISSING, name, nil)
+		err := entities.NewError(400, openapi.GOCOMERRORCODE_PARAMETER_MISSING, name, nil)
 		c.JSON(errToResponse(err))
 		return uuid.Nil, false
 	}
@@ -47,5 +47,5 @@ func errToResponse(e error) (int, *entities.GoComError) {
 		return err.Status, err
 	}
 	log.Warn().Err(e).Stringer("error_type", reflect.TypeOf(e)).Msg("API received an non-GoComError error")
-	return 500, entities.NewError(500, openapi.ERRORCODE_UNKNOWN_ERROR, "", e).(*entities.GoComError)
+	return 500, entities.NewError(500, openapi.GOCOMERRORCODE_UNKNOWN_ERROR, "", e).(*entities.GoComError)
 }

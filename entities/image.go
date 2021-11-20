@@ -16,7 +16,7 @@ type Image struct {
 func (img *Image) Validate() error {
 	// Validate simple fields
 	if img.Order < 0 {
-		return NewError(400, openapi.ERRORCODE_IMAGE_ORDER_NEGATIVE, img.ID.String(), nil)
+		return NewError(400, openapi.GOCOMERRORCODE_IMAGE_ORDER_NEGATIVE, img.ID.String(), nil)
 	}
 
 	// Entity is valid

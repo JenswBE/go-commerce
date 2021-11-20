@@ -33,16 +33,16 @@ func translatePgError(err error, object interface{}, instance string) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		switch object.(type) {
 		case *internal.Category, []*internal.Category:
-			return entities.NewError(404, openapi.ERRORCODE_UNKNOWN_CATEGORY, instance, err)
+			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_CATEGORY, instance, err)
 		case *internal.Image, []*internal.Image:
-			return entities.NewError(404, openapi.ERRORCODE_UNKNOWN_IMAGE, instance, err)
+			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_IMAGE, instance, err)
 		case *internal.Manufacturer, []*internal.Manufacturer:
-			return entities.NewError(404, openapi.ERRORCODE_UNKNOWN_MANUFACTURER, instance, err)
+			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_MANUFACTURER, instance, err)
 		case *internal.Product, []*internal.Product:
-			return entities.NewError(404, openapi.ERRORCODE_UNKNOWN_PRODUCT, instance, err)
+			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_PRODUCT, instance, err)
 		default:
 			log.Warn().Err(err).Stringer("object", reflect.TypeOf(object)).Msg("Unknown object in translatePgError.ErrRecordNotFound")
-			return entities.NewError(404, openapi.ERRORCODE_UNKNOWN_ERROR, instance, err)
+			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_ERROR, instance, err)
 		}
 	}
 	return err

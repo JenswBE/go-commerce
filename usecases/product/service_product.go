@@ -173,7 +173,7 @@ func (s *Service) DeleteProductImage(productID, imageID entities.ID) error {
 		}
 	}
 	if image == nil {
-		return entities.NewError(404, openapi.ERRORCODE_UNKNOWN_IMAGE, imageID.String(), nil)
+		return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_IMAGE, imageID.String(), nil)
 	}
 
 	// Delete image

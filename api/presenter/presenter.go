@@ -23,7 +23,7 @@ func (p *Presenter) ParseID(id string) (uuid.UUID, error) {
 		pID, uuidErr = uuid.Parse(id)
 		if uuidErr != nil {
 			// UUID parsing failed => Return original error
-			return uuid.Nil, entities.NewError(400, openapi.ERRORCODE_INVALID_ID, id, err)
+			return uuid.Nil, entities.NewError(400, openapi.GOCOMERRORCODE_INVALID_ID, id, err)
 		}
 	}
 	return pID, nil
