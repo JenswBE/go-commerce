@@ -46,7 +46,7 @@ func Test_GenerateURL_Success(t *testing.T) {
 
 	// Assert results
 	require.NoError(t, err)
-	expected := "https://imageproxy.test/UTshYhaXeFJ518RnptmRB3KkBbuxxukwfPUXpnH2BBU/fill/300/400/sm/1/aHR0cDovL2V4YW1wbGUuY29tL2ltYWdlcy9jdXJpb3NpdHkuanBn.png"
+	expected := "https://imageproxy.test/1-RYa5BIJxpPtcOujl8ox9anvLIlyInE3usr0b_Glzc/rt:fill/w:300/h:400/g:sm/el:1/aHR0cDovL2V4YW1wbGUuY29tL2ltYWdlcy9jdXJpb3NpdHkuanBn.png"
 	require.Equal(t, expected, imgURL)
 }
 
