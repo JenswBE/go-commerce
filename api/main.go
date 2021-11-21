@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/JenswBE/go-commerce/api/config"
 	contentHandler "github.com/JenswBE/go-commerce/api/handler/content"
 	productHandler "github.com/JenswBE/go-commerce/api/handler/product"
 	"github.com/JenswBE/go-commerce/api/middlewares"
@@ -32,25 +33,25 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	// Parse config
-	config, err := parseConfig()
+	apiConfig, err := config.ParseConfig()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to parse config")
 	}
 
 	// Setup Debug logging if enabled
-	if config.Server.Debug {
+	if apiConfig.Server.Debug {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 		gin.SetMode(gin.DebugMode)
 		log.Debug().Msg("Debug logging enabled")
 	}
 
 	// DB
-	contentDSN := buildDSN(config.Database.Content, config.Database.Default)
+	contentDSN := config.BuildDSN(apiConfig.Database.Content, apiConfig.Database.Default)
 	contentDB, err := gorm.Open(postgres.Open(contentDSN), &gorm.Config{})
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to connect to content DB")
 	}
-	productDSN := buildDSN(config.Database.Product, config.Database.Default)
+	productDSN := config.BuildDSN(apiConfig.Database.Product, apiConfig.Database.Default)
 	productDB, err := gorm.Open(postgres.Open(productDSN), &gorm.Config{})
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to connect to product DB")
@@ -65,19 +66,22 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to migrate DB and create products repository")
 	}
-	imageStorage, err := getStorageRepo(config.Storage.Images)
+	imageStorage, err := getStorageRepo(apiConfig.Storage.Images)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create image storage repository")
 	}
-	allowedImageConfigs, err := parseAllowedImageConfigs(config.ImageProxy.AllowedConfigs)
+	allowedImageConfigs, err := config.ParseAllowedImageConfigs(apiConfig.ImageProxy.AllowedConfigs)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to parse allowed image configs")
 	}
-	imageProxyService, err := imageproxy.NewImgProxyService(config.ImageProxy.BaseURL, config.ImageProxy.Key, config.ImageProxy.Salt, allowedImageConfigs)
+	imageProxyService, err := imageproxy.NewImgProxyService(apiConfig.ImageProxy.BaseURL, apiConfig.ImageProxy.Key, apiConfig.ImageProxy.Salt, allowedImageConfigs)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create image proxy service")
 	}
-	contentService := content.NewService(contentDatabase)
+	contentService, err := content.NewService(contentDatabase, apiConfig.Content.ToEntity())
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to create content service")
+	}
 	productService := product.NewService(productDatabase, imageProxyService, imageStorage)
 	shortIDService := shortid.NewBase58Service()
 	presenter := presenter.New(shortIDService)
@@ -99,7 +103,7 @@ func main() {
 	productHandler.RegisterPublicRoutes(public)
 
 	// Admin routes
-	authMW, err := middlewares.NewOIDCMiddleware(config.Authentication.IssuerURL)
+	authMW, err := middlewares.NewOIDCMiddleware(apiConfig.Authentication.IssuerURL)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
 	}
@@ -109,18 +113,18 @@ func main() {
 	productHandler.RegisterAdminRoutes(admin)
 
 	// Start Gin
-	port := strconv.Itoa(config.Server.Port)
+	port := strconv.Itoa(apiConfig.Server.Port)
 	err = router.Run(":" + port)
 	if err != nil {
-		log.Fatal().Err(err).Int("port", config.Server.Port).Msg("Failed to start Gin server")
+		log.Fatal().Err(err).Int("port", apiConfig.Server.Port).Msg("Failed to start Gin server")
 	}
 }
 
-func getStorageRepo(config Storage) (product.StorageRepository, error) {
-	switch config.Type {
-	case StorageTypeFS:
-		return localstorage.NewLocalStorage(config.Path)
+func getStorageRepo(apiConfig config.Storage) (product.StorageRepository, error) {
+	switch apiConfig.Type {
+	case config.StorageTypeFS:
+		return localstorage.NewLocalStorage(apiConfig.Path)
 	default:
-		return nil, fmt.Errorf(`unknown storage type "%s"`, config.Type)
+		return nil, fmt.Errorf(`unknown storage type "%s"`, apiConfig.Type)
 	}
 }

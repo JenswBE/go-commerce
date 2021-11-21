@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"testing"
@@ -7,10 +7,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_parseAllowedImageConfigs_MultipleConfigs_Success(t *testing.T) {
+func Test_ParseAllowedImageConfigs_MultipleConfigs_Success(t *testing.T) {
 	// Call helper
 	input := "100:100:FIT,300:200:FIT,512:512:FILL"
-	result, err := parseAllowedImageConfigs(input)
+	result, err := ParseAllowedImageConfigs(input)
 
 	// Assert results
 	require.NoError(t, err)
@@ -34,9 +34,9 @@ func Test_parseAllowedImageConfigs_MultipleConfigs_Success(t *testing.T) {
 	require.Equal(t, expected, result)
 }
 
-func Test_parseAllowedImageConfigs_Wildcard_Success(t *testing.T) {
+func Test_ParseAllowedImageConfigs_Wildcard_Success(t *testing.T) {
 	// Call helper
-	result, err := parseAllowedImageConfigs("*")
+	result, err := ParseAllowedImageConfigs("*")
 
 	// Assert results
 	require.NoError(t, err)

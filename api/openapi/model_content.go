@@ -18,18 +18,18 @@ import (
 type Content struct {
 	Name string `json:"name"`
 	ContentType ContentType `json:"content_type"`
-	Content string `json:"content"`
+	Body string `json:"body"`
 }
 
 // NewContent instantiates a new Content object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewContent(name string, contentType ContentType, content string) *Content {
+func NewContent(name string, contentType ContentType, body string) *Content {
 	this := Content{}
 	this.Name = name
 	this.ContentType = contentType
-	this.Content = content
+	this.Body = body
 	return &this
 }
 
@@ -89,28 +89,28 @@ func (o *Content) SetContentType(v ContentType) {
 	o.ContentType = v
 }
 
-// GetContent returns the Content field value
-func (o *Content) GetContent() string {
+// GetBody returns the Body field value
+func (o *Content) GetBody() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Content
+	return o.Body
 }
 
-// GetContentOk returns a tuple with the Content field value
+// GetBodyOk returns a tuple with the Body field value
 // and a boolean to check if the value has been set.
-func (o *Content) GetContentOk() (*string, bool) {
+func (o *Content) GetBodyOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Content, true
+	return &o.Body, true
 }
 
-// SetContent sets field value
-func (o *Content) SetContent(v string) {
-	o.Content = v
+// SetBody sets field value
+func (o *Content) SetBody(v string) {
+	o.Body = v
 }
 
 func (o Content) MarshalJSON() ([]byte, error) {
@@ -122,7 +122,7 @@ func (o Content) MarshalJSON() ([]byte, error) {
 		toSerialize["content_type"] = o.ContentType
 	}
 	if true {
-		toSerialize["content"] = o.Content
+		toSerialize["body"] = o.Body
 	}
 	return json.Marshal(toSerialize)
 }

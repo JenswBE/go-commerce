@@ -8,7 +8,21 @@ import (
 type Content struct {
 	Name        string
 	ContentType ContentType
-	Content     string
+	Body        string
+}
+
+// Validate validates the content data
+func (c *Content) Validate() error {
+	// Validate simple fields
+	if c.Name == "" {
+		return NewError(400, openapi.GOCOMERRORCODE_CONTENT_NAME_EMPTY, c.Name, nil)
+	}
+	if !c.ContentType.IsValid() {
+		return NewError(400, openapi.GOCOMERRORCODE_CONTENT_TYPE_INVALID, c.Name, nil)
+	}
+
+	// Entity is valid
+	return nil
 }
 
 type ContentType string
@@ -34,18 +48,4 @@ func (contentType ContentType) IsValid() bool {
 		}
 	}
 	return false
-}
-
-// Validate validates the content data
-func (c *Content) Validate() error {
-	// Validate simple fields
-	if c.Name == "" {
-		return NewError(400, openapi.GOCOMERRORCODE_CONTENT_NAME_EMPTY, c.Name, nil)
-	}
-	if !c.ContentType.IsValid() {
-		return NewError(400, openapi.GOCOMERRORCODE_CONTENT_TYPE_INVALID, c.Name, nil)
-	}
-
-	// Entity is valid
-	return nil
 }

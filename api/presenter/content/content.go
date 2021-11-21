@@ -18,7 +18,7 @@ func ContentFromEntity(p *presenter.Presenter, input *entities.Content) openapi.
 	}
 
 	// Build OpenAPI model
-	return *openapi.NewContent(input.Name, *contentType, input.Content)
+	return *openapi.NewContent(input.Name, *contentType, input.Body)
 }
 
 func ContentSliceFromEntity(p *presenter.Presenter, input []*entities.Content) []openapi.Content {
@@ -38,6 +38,6 @@ func ContentToEntity(p *presenter.Presenter, content openapi.Content) *entities.
 	return &entities.Content{
 		Name:        content.Name,
 		ContentType: entities.ContentType(content.GetContentType()),
-		Content:     content.Content,
+		Body:        content.Body,
 	}
 }

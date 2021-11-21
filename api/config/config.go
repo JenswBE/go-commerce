@@ -1,13 +1,12 @@
-package main
+package config
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 
-	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/go-playground/validator/v10"
+	"github.com/mitchellh/mapstructure"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
@@ -16,6 +15,7 @@ type Config struct {
 	Authentication struct {
 		IssuerURL string `validate:"required"`
 	}
+	Content  ContentList
 	Database struct {
 		Default Database
 		Content Database
@@ -54,7 +54,7 @@ type Storage struct {
 
 const StorageTypeFS = "fs"
 
-func parseConfig() (*Config, error) {
+func ParseConfig() (*Config, error) {
 	// Set defaults
 	viper.SetDefault("Database.Default.Port", 5432)
 	viper.SetDefault("ImageProxy.BaseURL", "/images/")
@@ -77,6 +77,7 @@ func parseConfig() (*Config, error) {
 
 	// Bind ENV variables
 	viper.BindEnv("Authentication.IssuerURL", "AUTH_ISSUER_URL")
+	viper.BindEnv("Content", "CONTENT")
 	viper.BindEnv("Database.Default.Host", "DATABASE_DEFAULT_HOST")
 	viper.BindEnv("Database.Default.Port", "DATABASE_DEFAULT_PORT")
 	viper.BindEnv("Database.Default.User", "DATABASE_DEFAULT_USER")
@@ -103,7 +104,12 @@ func parseConfig() (*Config, error) {
 
 	// Unmarshal to Config struct
 	var config Config
-	err = viper.Unmarshal(&config)
+	decodeHooks := mapstructure.ComposeDecodeHookFunc(
+		contentListHook(),
+		mapstructure.StringToTimeDurationHookFunc(),
+		mapstructure.StringToSliceHookFunc(","),
+	)
+	err = viper.Unmarshal(&config, viper.DecodeHook(decodeHooks))
 	if err != nil {
 		return nil, fmt.Errorf("unable to decode config into struct: %w", err)
 	}
@@ -116,7 +122,7 @@ func parseConfig() (*Config, error) {
 	return &config, nil
 }
 
-func buildDSN(config Database, fallback Database) string {
+func BuildDSN(config Database, fallback Database) string {
 	options := make([]string, 0, 5)
 	host := stringFallback(config.Host, fallback.Host)
 	if host != "" {
@@ -153,41 +159,4 @@ func intFallback(value, fallback int) int {
 		return value
 	}
 	return fallback
-}
-
-func parseAllowedImageConfigs(configs string) ([]imageproxy.ImageConfig, error) {
-	// Configs cannot be empty, wildcard should be used in this case
-	if configs == "" {
-		return nil, errors.New(`allowed image configs cannot be empty, use wildcard * instead`)
-	}
-
-	// Return empty list on wildcard
-	if configs == "*" {
-		return []imageproxy.ImageConfig{}, nil
-	}
-
-	// Split config string in chunks
-	configChunks := strings.Split(configs, ",")
-
-	// Build image configs
-	imgConfigs := make([]imageproxy.ImageConfig, 0, len(configChunks))
-	for _, chunk := range configChunks {
-		// Split chunk in parts
-		parts := strings.Split(chunk, ":")
-
-		// Each chunk must consist of 3 parts (width:height:resizingType)
-		if len(parts) != 3 {
-			return nil, fmt.Errorf(`chunk should consist of 3 parts width:height:resizingType, received %s`, chunk)
-		}
-
-		// Parse config
-		config, err := imageproxy.ParseImageConfig(parts[0], parts[1], parts[2])
-		if err != nil {
-			return nil, err
-		}
-		imgConfigs = append(imgConfigs, config)
-	}
-
-	// Parse successful
-	return imgConfigs, nil
 }

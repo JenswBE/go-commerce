@@ -21,7 +21,7 @@ func Migrate(db *gorm.DB) error {
 				type Content struct {
 					Name        string `gorm:"primaryKey"`
 					ContentType string
-					Content     string
+					Body        string
 				}
 				type Event struct {
 					Base

@@ -13,7 +13,7 @@ func Content() *entities.Content {
 	return &entities.Content{
 		Name:        "test-name",
 		ContentType: entities.ContentTypeMarkdown,
-		Content:     "test-content",
+		Body:        "test-body",
 	}
 }
 
@@ -31,7 +31,7 @@ func ContentOpenAPI() *openapi.Content {
 	return &openapi.Content{
 		Name:        "test-name",
 		ContentType: openapi.CONTENTTYPE_MARKDOWN,
-		Content:     "test-content",
+		Body:        "test-body",
 	}
 }
 

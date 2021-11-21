@@ -647,7 +647,7 @@ components:
       required:
         - name
         - content_type
-        - content
+        - body
       properties:
         name:
           type: string
@@ -655,7 +655,7 @@ components:
           readOnly: true
         content_type:
           $ref: "#/components/schemas/ContentType"
-        content:
+        body:
           type: string
           example: This is something about me.
 

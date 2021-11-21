@@ -27,7 +27,10 @@ type GoComError struct {
 }
 
 func (e *GoComError) Error() string {
-	return fmt.Sprintf("%d - %s", e.Status, e.Err.Error())
+	if e.Err != nil {
+		return fmt.Sprintf("%d - %s - %s - %s", e.Status, e.Message, e.Instance, e.Err.Error())
+	}
+	return fmt.Sprintf("%d - %s - %s", e.Status, e.Message, e.Instance)
 }
 
 // NewError returns a new GoComError
@@ -49,6 +52,12 @@ func translateCodeToMessage(code openapi.GocomErrorCode) string {
 		return `Category order should be a positive integer`
 	case openapi.GOCOMERRORCODE_CATEGORY_PARENT_ID_INVALID:
 		return `Parent ID of the category is invalid`
+	case openapi.GOCOMERRORCODE_CONTENT_NAME_EMPTY:
+		return `Content name is required and cannot be empty`
+	case openapi.GOCOMERRORCODE_CONTENT_TYPE_INVALID:
+		return `Content type is empty or has an invalid value`
+	case openapi.GOCOMERRORCODE_EVENT_END_BEFORE_START:
+		return `The end date of the event should be equal to or after the start date`
 	case openapi.GOCOMERRORCODE_IMAGE_ORDER_NEGATIVE:
 		return `Image order should be a positive integer`
 	case openapi.GOCOMERRORCODE_INVALID_AUTH_TOKEN:
@@ -71,8 +80,12 @@ func translateCodeToMessage(code openapi.GocomErrorCode) string {
 		return `Exactly one image is expected in multipart form, but none or multiple are provided`
 	case openapi.GOCOMERRORCODE_UNKNOWN_CATEGORY:
 		return `The category does not exist`
+	case openapi.GOCOMERRORCODE_UNKNOWN_CONTENT:
+		return `The content does not exist`
 	case openapi.GOCOMERRORCODE_UNKNOWN_ERROR:
 		return `An unknown error occurred`
+	case openapi.GOCOMERRORCODE_UNKNOWN_EVENT:
+		return `The event does not exist`
 	case openapi.GOCOMERRORCODE_UNKNOWN_IMAGE:
 		return `The image does not exist`
 	case openapi.GOCOMERRORCODE_UNKNOWN_MANUFACTURER:
