@@ -28,7 +28,7 @@ func (c *Content) Validate() error {
 type ContentType string
 
 const ContentTypeSimple = "SIMPLE"
-const ContentTypeMarkdown = "MARKDOWN"
+const ContentTypeHTML = "HTML"
 
 func (contentType ContentType) String() string {
 	return string(contentType)
@@ -38,7 +38,7 @@ func (contentType ContentType) IsValid() bool {
 	// Valid types
 	validContentTypes := []ContentType{
 		ContentTypeSimple,
-		ContentTypeMarkdown,
+		ContentTypeHTML,
 	}
 
 	// Check provided type

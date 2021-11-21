@@ -12,7 +12,7 @@ import (
 func Content() *entities.Content {
 	return &entities.Content{
 		Name:        "test-name",
-		ContentType: entities.ContentTypeMarkdown,
+		ContentType: entities.ContentTypeHTML,
 		Body:        "test-body",
 	}
 }
@@ -30,7 +30,7 @@ func ContentSlice() []*entities.Content {
 func ContentOpenAPI() *openapi.Content {
 	return &openapi.Content{
 		Name:        "test-name",
-		ContentType: openapi.CONTENTTYPE_MARKDOWN,
+		ContentType: openapi.CONTENTTYPE_HTML,
 		Body:        "test-body",
 	}
 }

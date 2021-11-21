@@ -23,7 +23,7 @@ func NewContentHandler(p *presenter.Presenter, service content.Usecase) *Content
 
 func (h *ContentHandler) RegisterPublicRoutes(rg *gin.RouterGroup) {
 	groupContent := rg.Group(pathPrefixContent)
-	groupContent.GET("/:id/", h.getContent)
+	groupContent.GET("/:content_name/", h.getContent)
 
 	groupEvents := rg.Group(pathPrefixEvents)
 	groupEvents.GET("/", h.listEvents)
@@ -33,7 +33,7 @@ func (h *ContentHandler) RegisterPublicRoutes(rg *gin.RouterGroup) {
 func (h *ContentHandler) RegisterAdminRoutes(rg *gin.RouterGroup) {
 	groupContent := rg.Group(pathPrefixContent)
 	groupContent.GET("/", h.listContent)
-	groupContent.PUT("/:id/", h.updateContent)
+	groupContent.PUT("/:content_name/", h.updateContent)
 
 	groupEvents := rg.Group(pathPrefixEvents)
 	groupEvents.POST("/", h.createEvent)

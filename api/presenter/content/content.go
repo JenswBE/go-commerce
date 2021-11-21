@@ -7,7 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-const defaultContentType = openapi.CONTENTTYPE_MARKDOWN
+const defaultContentType = openapi.CONTENTTYPE_SIMPLE
 
 func ContentFromEntity(p *presenter.Presenter, input *entities.Content) openapi.Content {
 	// Convert ContentType

@@ -663,7 +663,7 @@ components:
       type: string
       enum:
         - SIMPLE
-        - MARKDOWN
+        - HTML
       readOnly: true
 
     ContentList:

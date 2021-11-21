@@ -21,13 +21,13 @@ type ContentType string
 // List of ContentType
 const (
 	CONTENTTYPE_SIMPLE ContentType = "SIMPLE"
-	CONTENTTYPE_MARKDOWN ContentType = "MARKDOWN"
+	CONTENTTYPE_HTML ContentType = "HTML"
 )
 
 // All allowed values of ContentType enum
 var AllowedContentTypeEnumValues = []ContentType{
 	"SIMPLE",
-	"MARKDOWN",
+	"HTML",
 }
 
 func (v *ContentType) UnmarshalJSON(src []byte) error {
