@@ -1,4 +1,4 @@
-package product
+package content
 
 import (
 	"github.com/JenswBE/go-commerce/entities"
@@ -12,7 +12,7 @@ type DatabaseRepository interface {
 	DeleteEvent(id entities.ID) error
 
 	GetContent(name string) (*entities.Content, error)
-	ListContents() ([]*entities.Content, error)
+	ListContent() ([]*entities.Content, error)
 	CreateContent(e *entities.Content) (*entities.Content, error)
 	UpdateContent(e *entities.Content) (*entities.Content, error)
 	DeleteContent(name string) error
@@ -26,7 +26,7 @@ type Usecase interface {
 	DeleteEvent(id entities.ID) error
 
 	GetContent(name string) (*entities.Content, error)
-	ListContents() ([]*entities.Content, error)
+	ListContent() ([]*entities.Content, error)
 	CreateContent(e *entities.Content) (*entities.Content, error)
 	UpdateContent(e *entities.Content) (*entities.Content, error)
 	DeleteContent(name string) error

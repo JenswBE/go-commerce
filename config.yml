@@ -1,10 +1,11 @@
 Authentication:
   IssuerURL: "http://127.0.0.1:9001/auth/realms/go-commerce" # See https://github.com/IBM/openapi-validator/issues/338
 Database:
-  Host: localhost
-  User: go_commerce
-  Password: go_commerce
-  Database: go_commerce
+  Default:
+    Host: localhost
+    User: go_commerce
+    Password: go_commerce
+    Database: go_commerce
 ImageProxy:
   BaseURL: "http://localhost:8090/images/"
   Key: 8f2fd7184ad28abe1b2cd3b6bb0f74dff4765659260f72eff6bea4b9c065bb7d64cbe75e4cd89ca98693f6c24fd670d50b1556b1b307700c7bd4a7dc9e66a72d

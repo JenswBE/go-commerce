@@ -7,17 +7,17 @@ import (
 	"github.com/google/uuid"
 )
 
-func ManufacturerFromEntity(p *presenter.Presenter, e *entities.Manufacturer) openapi.Manufacturer {
+func ManufacturerFromEntity(p *presenter.Presenter, input *entities.Manufacturer) openapi.Manufacturer {
 	// Set basic fields
-	m := openapi.NewManufacturer(e.Name)
-	m.SetId(p.EncodeID(e.ID))
-	m.SetWebsiteUrl(e.WebsiteURL)
+	output := openapi.NewManufacturer(input.Name)
+	output.SetId(p.EncodeID(input.ID))
+	output.SetWebsiteUrl(input.WebsiteURL)
 
 	// Set image URL
-	if e.Image != nil && len(e.Image.URLs) > 0 {
-		m.SetImageUrls(e.Image.URLs)
+	if input.Image != nil && len(input.Image.URLs) > 0 {
+		output.SetImageUrls(input.Image.URLs)
 	}
-	return *m
+	return *output
 }
 
 func ManufacturerSliceFromEntity(p *presenter.Presenter, input []*entities.Manufacturer) []openapi.Manufacturer {
@@ -32,11 +32,11 @@ func ManufacturerListFromEntity(p *presenter.Presenter, input []*entities.Manufa
 	return *openapi.NewManufacturerList(ManufacturerSliceFromEntity(p, input))
 }
 
-func ManufacturerToEntity(p *presenter.Presenter, id uuid.UUID, manufacturer openapi.Manufacturer) *entities.Manufacturer {
+func ManufacturerToEntity(p *presenter.Presenter, id uuid.UUID, input openapi.Manufacturer) *entities.Manufacturer {
 	// Build entity
 	return &entities.Manufacturer{
 		ID:         id,
-		Name:       manufacturer.GetName(),
-		WebsiteURL: manufacturer.GetWebsiteUrl(),
+		Name:       input.GetName(),
+		WebsiteURL: input.GetWebsiteUrl(),
 	}
 }

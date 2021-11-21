@@ -8,11 +8,19 @@ servers:
     url: /api
 
 tags:
+  # Products
   - name: categories
   - name: manufacturers
   - name: products
 
+  # Content
+  - name: content
+  - name: events
+
 paths:
+  # ============================
+  # =         PRODUCTS         =
+  # ============================
   /categories/:
     get:
       operationId: list_categories
@@ -111,11 +119,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
+              $ref: "#/components/schemas/FileBodySingle"
         required: true
       responses:
         "200":
@@ -234,11 +238,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
+              $ref: "#/components/schemas/FileBodySingle"
         required: true
       responses:
         "200":
@@ -370,12 +370,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              properties:
-                file:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
+              $ref: "#/components/schemas/FileBodyMultiple"
         required: true
       responses:
         "201":
@@ -424,8 +419,153 @@ paths:
         "default":
           $ref: "#/components/responses/Error"
 
+  # ============================
+  # =         CONTENT          =
+  # ============================
+  /content/:
+    get:
+      operationId: list_content
+      description: List content
+      tags: ["content"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentList"
+        "default":
+          $ref: "#/components/responses/Error"
+
+  /content/{content_name}/:
+    parameters:
+      - $ref: "#/components/parameters/pathContentName"
+    get:
+      operationId: get_content
+      description: Get content
+      tags: ["content"]
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Content"
+        "default":
+          $ref: "#/components/responses/Error"
+    put:
+      operationId: update_content
+      description: Update content
+      tags: ["content"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Content"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Content"
+        "default":
+          $ref: "#/components/responses/Error"
+
+  /events/:
+    get:
+      operationId: list_events
+      description: List events
+      tags: ["events"]
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventList"
+        "default":
+          $ref: "#/components/responses/Error"
+    post:
+      operationId: add_event
+      description: Add event
+      tags: ["events"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Event"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "default":
+          $ref: "#/components/responses/Error"
+
+  /events/{id}/:
+    parameters:
+      - $ref: "#/components/parameters/pathID"
+    get:
+      operationId: get_event
+      description: Get event details
+      tags: ["events"]
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "default":
+          $ref: "#/components/responses/Error"
+    put:
+      operationId: update_event
+      description: Update event
+      tags: ["events"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Event"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "default":
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: delete_event
+      description: Delete event
+      tags: ["events"]
+      responses:
+        "204":
+          description: No Content
+        "default":
+          $ref: "#/components/responses/Error"
+
 components:
   parameters:
+    pathContentName:
+      name: content_name
+      in: path
+      description: Content name
+      required: true
+      schema:
+        type: string
+        example: about
+
     pathID:
       name: id
       in: path
@@ -468,6 +608,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/Header"
         - type: object
+          required:
+            - name
+            - order
           properties:
             name:
               type: string
@@ -488,9 +631,6 @@ components:
               readOnly: True
             image_urls:
               $ref: "#/components/schemas/ImageUrlMap"
-          required:
-            - name
-            - order
 
     CategoryList:
       type: object
@@ -501,6 +641,102 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Category"
+
+    Content:
+      type: object
+      required:
+        - name
+        - content_type
+        - content
+      properties:
+        name:
+          type: string
+          example: about
+          readOnly: true
+        content_type:
+          $ref: "#/components/schemas/ContentType"
+        content:
+          type: string
+          example: This is something about me.
+
+    ContentType:
+      type: string
+      enum:
+        - SIMPLE
+        - MARKDOWN
+      readOnly: true
+
+    ContentList:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Content"
+
+    Event:
+      required:
+        - name
+        - event_type
+        - start
+      allOf:
+        - $ref: "#/components/schemas/Header"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: Winter sale
+            description:
+              type: string
+              example: Extended shopping during this winter day!
+            event_type:
+              type: string
+              description: Type of event. Types should be defined in GoCommerce config file.
+              example: sale
+            start:
+              type: string
+              format: date-time
+              description: Start of the event. In case "whole_day" is true, only the date part is considered.
+            end:
+              type: string
+              format: date-time
+              description: Optional end of the event. In case "whole_day" is true, only the date part is considered.
+            whole_day:
+              type: boolean
+
+    EventList:
+      type: object
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+
+    FileBodySingle:
+      type: object
+      required:
+        - file
+      properties:
+        file:
+          $ref: "#/components/schemas/File"
+
+    FileBodyMultiple:
+      type: object
+      required:
+        - file
+      properties:
+        file:
+          type: array
+          items:
+            $ref: "#/components/schemas/File"
+
+    File:
+      type: string
+      format: binary
 
     GocomError:
       type: object
@@ -529,6 +765,7 @@ components:
         - CATEGORY_ORDER_NEGATIVE: Category order should be a positive integer
         - CATEGORY_PARENT_ID_INVALID: Parent ID of the category is invalid
         - CONTENT_NAME_EMPTY: Content name is required and cannot be empty
+        - CONTENT_TYPE_INVALID: Content type is empty or has an invalid value
         - EVENT_END_BEFORE_START: The end date of the event should be equal to or after the start date
         - IMAGE_ORDER_NEGATIVE: Image order should be a positive integer
         - INVALID_AUTH_TOKEN: Provided authentication token is invalid
@@ -554,6 +791,7 @@ components:
         - CATEGORY_ORDER_NEGATIVE
         - CATEGORY_PARENT_ID_INVALID
         - CONTENT_NAME_EMPTY
+        - CONTENT_TYPE_INVALID
         - EVENT_END_BEFORE_START
         - IMAGE_ORDER_NEGATIVE
         - INVALID_AUTH_TOKEN

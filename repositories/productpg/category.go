@@ -1,9 +1,11 @@
 package productpg
 
 import (
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 	"github.com/google/uuid"
+	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetCategory(id entities.ID) (*entities.Category, error) {
@@ -61,9 +63,19 @@ func (r *ProductPostgres) UpdateCategory(e *entities.Category) (*entities.Catego
 }
 
 func (r *ProductPostgres) DeleteCategory(id entities.ID) error {
-	err := r.db.Delete(&internal.Category{}, "id = ?", id).Error
+	// Delete category
+	var categories []internal.Category
+	err := r.db.
+		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
+		Delete(&categories, "id = ?", id).
+		Error
 	if err != nil {
 		return translatePgError(err, &internal.Category{}, id.String())
+	}
+
+	// Return error if not found
+	if len(categories) == 0 {
+		return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_CATEGORY, id.String(), err)
 	}
 	return nil
 }

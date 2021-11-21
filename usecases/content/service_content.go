@@ -1,4 +1,4 @@
-package product
+package content
 
 import (
 	"github.com/JenswBE/go-commerce/entities"
@@ -17,9 +17,9 @@ func (s *Service) GetContent(name string) (*entities.Content, error) {
 }
 
 // ListContents fetches all contents
-func (s *Service) ListContents() ([]*entities.Content, error) {
+func (s *Service) ListContent() ([]*entities.Content, error) {
 	// Fetch contents
-	contents, err := s.db.ListContents()
+	contents, err := s.db.ListContent()
 	if err != nil {
 		return nil, err
 	}

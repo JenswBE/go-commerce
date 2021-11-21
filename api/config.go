@@ -17,11 +17,9 @@ type Config struct {
 		IssuerURL string `validate:"required"`
 	}
 	Database struct {
-		Host     string
-		Port     int
-		User     string
-		Password string
-		Database string
+		Default Database
+		Content Database
+		Product Database
 	}
 	ImageProxy struct {
 		BaseURL string
@@ -41,6 +39,14 @@ type Config struct {
 	}
 }
 
+type Database struct {
+	Host     string
+	Port     int
+	User     string
+	Password string
+	Database string
+}
+
 type Storage struct {
 	Type string
 	Path string
@@ -50,7 +56,7 @@ const StorageTypeFS = "fs"
 
 func parseConfig() (*Config, error) {
 	// Set defaults
-	viper.SetDefault("Database.Port", 5432)
+	viper.SetDefault("Database.Default.Port", 5432)
 	viper.SetDefault("ImageProxy.BaseURL", "/images/")
 	viper.SetDefault("Server.Port", 8080)
 	viper.SetDefault("Storage.Images.Type", StorageTypeFS)
@@ -71,11 +77,21 @@ func parseConfig() (*Config, error) {
 
 	// Bind ENV variables
 	viper.BindEnv("Authentication.IssuerURL", "AUTH_ISSUER_URL")
-	viper.BindEnv("Database.Host", "DATABASE_HOST")
-	viper.BindEnv("Database.Port", "DATABASE_PORT")
-	viper.BindEnv("Database.User", "DATABASE_USER")
-	viper.BindEnv("Database.Password", "DATABASE_PASSWORD")
-	viper.BindEnv("Database.Database", "DATABASE_DATABASE")
+	viper.BindEnv("Database.Default.Host", "DATABASE_DEFAULT_HOST")
+	viper.BindEnv("Database.Default.Port", "DATABASE_DEFAULT_PORT")
+	viper.BindEnv("Database.Default.User", "DATABASE_DEFAULT_USER")
+	viper.BindEnv("Database.Default.Password", "DATABASE_DEFAULT_PASSWORD")
+	viper.BindEnv("Database.Default.Database", "DATABASE_DEFAULT_DATABASE")
+	viper.BindEnv("Database.Content.Host", "DATABASE_CONTENT_HOST")
+	viper.BindEnv("Database.Content.Port", "DATABASE_CONTENT_PORT")
+	viper.BindEnv("Database.Content.User", "DATABASE_CONTENT_USER")
+	viper.BindEnv("Database.Content.Password", "DATABASE_CONTENT_PASSWORD")
+	viper.BindEnv("Database.Content.Database", "DATABASE_CONTENT_DATABASE")
+	viper.BindEnv("Database.Product.Host", "DATABASE_PRODUCT_HOST")
+	viper.BindEnv("Database.Product.Port", "DATABASE_PRODUCT_PORT")
+	viper.BindEnv("Database.Product.User", "DATABASE_PRODUCT_USER")
+	viper.BindEnv("Database.Product.Password", "DATABASE_PRODUCT_PASSWORD")
+	viper.BindEnv("Database.Product.Database", "DATABASE_PRODUCT_DATABASE")
 	viper.BindEnv("ImageProxy.BaseURL", "IMAGE_PROXY_BASE_URL")
 	viper.BindEnv("ImageProxy.Key", "IMAGE_PROXY_KEY")
 	viper.BindEnv("ImageProxy.Salt", "IMAGE_PROXY_SALT")
@@ -100,24 +116,43 @@ func parseConfig() (*Config, error) {
 	return &config, nil
 }
 
-func buildDSN(config *Config) string {
+func buildDSN(config Database, fallback Database) string {
 	options := make([]string, 0, 5)
-	if config.Database.Host != "" {
-		options = append(options, "host="+config.Database.Host)
+	host := stringFallback(config.Host, fallback.Host)
+	if host != "" {
+		options = append(options, "host="+host)
 	}
-	if config.Database.Port > 0 {
-		options = append(options, "port="+strconv.Itoa(config.Database.Port))
+	port := intFallback(config.Port, fallback.Port)
+	if port > 0 {
+		options = append(options, "port="+strconv.Itoa(port))
 	}
-	if config.Database.User != "" {
-		options = append(options, "user="+config.Database.User)
+	user := stringFallback(config.User, fallback.User)
+	if user != "" {
+		options = append(options, "user="+user)
 	}
-	if config.Database.Password != "" {
-		options = append(options, "password="+config.Database.Password)
+	password := stringFallback(config.Password, fallback.Password)
+	if password != "" {
+		options = append(options, "password="+password)
 	}
-	if config.Database.Database != "" {
-		options = append(options, "dbname="+config.Database.Database)
+	database := stringFallback(config.Database, fallback.Database)
+	if database != "" {
+		options = append(options, "dbname="+database)
 	}
 	return strings.Join(options, " ")
+}
+
+func stringFallback(value, fallback string) string {
+	if value != "" {
+		return value
+	}
+	return fallback
+}
+
+func intFallback(value, fallback int) int {
+	if value != 0 {
+		return value
+	}
+	return fallback
 }
 
 func parseAllowedImageConfigs(configs string) ([]imageproxy.ImageConfig, error) {

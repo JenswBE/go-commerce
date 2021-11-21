@@ -1,8 +1,10 @@
 package contentpg
 
 import (
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/contentpg/internal"
+	"gorm.io/gorm/clause"
 )
 
 func (r *ContentPostgres) GetEvent(id entities.ID) (*entities.Event, error) {
@@ -42,9 +44,19 @@ func (r *ContentPostgres) UpdateEvent(e *entities.Event) (*entities.Event, error
 }
 
 func (r *ContentPostgres) DeleteEvent(id entities.ID) error {
-	err := r.db.Delete(&internal.Event{}, "id = ?", id).Error
+	// Delete event
+	var events []internal.Event
+	err := r.db.
+		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
+		Delete(&events, "id = ?", id).
+		Error
 	if err != nil {
 		return translatePgError(err, &internal.Event{}, id.String())
+	}
+
+	// Return error if not found
+	if len(events) == 0 {
+		return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_EVENT, id.String(), err)
 	}
 	return nil
 }

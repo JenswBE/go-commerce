@@ -24,11 +24,21 @@ If both are defined, the environment variables take precedence.
 | Config key                | Env variable                | Description                                                                          | Default value  |
 | ------------------------- | --------------------------- | ------------------------------------------------------------------------------------ | -------------- |
 | Authentication.IssuerURL  | AUTH_ISSUER_URL             | URL to OpenID Configuration Issuer (without `.well-known/openid-configuration`)      |                |
-| Database.Host             | DATABASE_HOST               | Hostname of the Postgres datatabase                                                  |                |
-| Database.Port             | DATABASE_PORT               | Port of the Postgres datatabase                                                      | 5432           |
-| Database.User             | DATABASE_USER               | Username for the Postgres datatabase                                                 |                |
-| Database.Password         | DATABASE_PASSWORD           | Password for the Postgres datatabase                                                 |                |
-| Database.Database         | DATABASE_DATABASE           | Database name for the Postgres datatabase                                            |                |
+| Database.Default.Host     | DATABASE_DEFAULT_HOST       | Hostname of the default Postgres datatabase                                          |                |
+| Database.Default.Port     | DATABASE_DEFAULT_PORT       | Port of the default Postgres datatabase                                              | 5432           |
+| Database.Default.User     | DATABASE_DEFAULT_USER       | Username for the default Postgres datatabase                                         |                |
+| Database.Default.Password | DATABASE_DEFAULT_PASSWORD   | Password for the default Postgres datatabase                                         |                |
+| Database.Default.Database | DATABASE_DEFAULT_DATABASE   | Database name for default the Postgres datatabase                                    |                |
+| Database.Content.Host     | DATABASE_CONTENT_HOST       | Override the default hostname for the content Postgres datatabase                    |                |
+| Database.Content.Port     | DATABASE_CONTENT_PORT       | Override the default port for the content Postgres datatabase                        |                |
+| Database.Content.User     | DATABASE_CONTENT_USER       | Override the default user for the content Postgres datatabase                        |                |
+| Database.Content.Password | DATABASE_CONTENT_PASSWORD   | Override the default password for the content Postgres datatabase                    |                |
+| Database.Content.Database | DATABASE_CONTENT_DATABASE   | Override the default database for the content Postgres datatabase                    |                |
+| Database.Product.Host     | DATABASE_PRODUCT_HOST       | Override the default hostname for the product Postgres datatabase                    |                |
+| Database.Product.Port     | DATABASE_PRODUCT_PORT       | Override the default port for the product Postgres datatabase                        |                |
+| Database.Product.User     | DATABASE_PRODUCT_USER       | Override the default user for the product Postgres datatabase                        |                |
+| Database.Product.Password | DATABASE_PRODUCT_PASSWORD   | Override the default password for the product Postgres datatabase                    |                |
+| Database.Product.Database | DATABASE_PRODUCT_DATABASE   | Override the default database for the product Postgres datatabase                    |                |
 | ImageProxy.BaseURL        | IMAGE_PROXY_BASE_URL        | Base URL of your [Imgproxy instance](https://docs.imgproxy.net/)                     | /images/       |
 | ImageProxy.Key            | IMAGE_PROXY_KEY             | [Signing key for Imgproxy](https://docs.imgproxy.net/configuration?id=url-signature) |                |
 | ImageProxy.Salt           | IMAGE_PROXY_SALT            | [Salt for Imgproxy](https://docs.imgproxy.net/configuration?id=url-signature)        |                |

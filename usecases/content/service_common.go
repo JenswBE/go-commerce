@@ -1,4 +1,4 @@
-package product
+package content
 
 var _ Usecase = &Service{}
 

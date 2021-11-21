@@ -14,7 +14,7 @@ func (r *ContentPostgres) GetContent(name string) (*entities.Content, error) {
 	return content.ToEntity(), nil
 }
 
-func (r *ContentPostgres) ListContents() ([]*entities.Content, error) {
+func (r *ContentPostgres) ListContent() ([]*entities.Content, error) {
 	contents := []*internal.Content{}
 	err := r.db.Find(&contents).Error
 	if err != nil {

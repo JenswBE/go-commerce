@@ -1,4 +1,4 @@
-package product
+package content
 
 import (
 	"github.com/JenswBE/go-commerce/entities"

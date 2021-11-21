@@ -3,9 +3,11 @@ package productpg
 import (
 	"errors"
 
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetImage(id entities.ID) (*entities.Image, error) {
@@ -68,9 +70,19 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 }
 
 func (r *ProductPostgres) DeleteImage(id entities.ID) error {
-	err := r.db.Delete(&internal.Image{}, "id = ?", id).Error
+	// Delete image
+	var images []internal.Image
+	err := r.db.
+		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
+		Delete(&images, "id = ?", id).
+		Error
 	if err != nil {
 		return translatePgError(err, &internal.Image{}, id.String())
+	}
+
+	// Return error if not found
+	if len(images) == 0 {
+		return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_IMAGE, id.String(), err)
 	}
 	return nil
 }

@@ -7,23 +7,23 @@ import (
 	"github.com/google/uuid"
 )
 
-func CategoryFromEntity(p *presenter.Presenter, e *entities.Category) openapi.Category {
+func CategoryFromEntity(p *presenter.Presenter, input *entities.Category) openapi.Category {
 	// Set basic fields
-	c := openapi.NewCategory(e.Name, int64(e.Order))
-	c.SetId(p.EncodeID(e.ID))
-	c.SetDescription(e.Description)
-	c.SetProductIds(p.EncodeIDList(e.ProductIDs))
+	output := openapi.NewCategory(input.Name, int64(input.Order))
+	output.SetId(p.EncodeID(input.ID))
+	output.SetDescription(input.Description)
+	output.SetProductIds(p.EncodeIDList(input.ProductIDs))
 
 	// Set parent ID
-	if e.ParentID != uuid.Nil {
-		c.SetParentId(p.EncodeID(e.ParentID))
+	if input.ParentID != uuid.Nil {
+		output.SetParentId(p.EncodeID(input.ParentID))
 	}
 
 	// Set image URL
-	if e.Image != nil && len(e.Image.URLs) > 0 {
-		c.SetImageUrls(e.Image.URLs)
+	if input.Image != nil && len(input.Image.URLs) > 0 {
+		output.SetImageUrls(input.Image.URLs)
 	}
-	return *c
+	return *output
 }
 
 func CategorySliceFromEntity(p *presenter.Presenter, input []*entities.Category) []openapi.Category {
@@ -38,26 +38,26 @@ func CategoryListFromEntity(p *presenter.Presenter, input []*entities.Category) 
 	return *openapi.NewCategoryList(CategorySliceFromEntity(p, input))
 }
 
-func CategoryToEntity(p *presenter.Presenter, id uuid.UUID, category openapi.Category) (*entities.Category, error) {
+func CategoryToEntity(p *presenter.Presenter, id uuid.UUID, input openapi.Category) (*entities.Category, error) {
 	// Build entity
-	e := &entities.Category{
+	output := &entities.Category{
 		ID:          id,
-		Name:        category.GetName(),
-		Description: category.GetDescription(),
+		Name:        input.GetName(),
+		Description: input.GetDescription(),
 		ParentID:    uuid.Nil,
-		Order:       int(category.Order),
+		Order:       int(input.Order),
 		ProductIDs:  nil, // read-only
 	}
 
 	// Parse parent ID
-	if category.GetParentId() != "" {
-		pID, err := p.ParseID(category.GetParentId())
+	if input.GetParentId() != "" {
+		pID, err := p.ParseID(input.GetParentId())
 		if err != nil {
 			return nil, entities.NewError(400, openapi.GOCOMERRORCODE_CATEGORY_PARENT_ID_INVALID, id.String(), err)
 		}
-		e.ParentID = pID
+		output.ParentID = pID
 	}
 
 	// Successful
-	return e, nil
+	return output, nil
 }

@@ -1,9 +1,11 @@
 package productpg
 
 import (
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 	"github.com/google/uuid"
+	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) {
@@ -69,9 +71,20 @@ func (r *ProductPostgres) UpdateProduct(e *entities.Product) (*entities.Product,
 }
 
 func (r *ProductPostgres) DeleteProduct(id entities.ID) error {
-	err := r.db.Select("Images").Delete(&internal.Product{}, "id = ?", id).Error
+	// Delete product
+	var products []internal.Product
+	err := r.db.
+		Select("Images").
+		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
+		Delete(&products, "id = ?", id).
+		Error
 	if err != nil {
 		return translatePgError(err, &internal.Product{}, id.String())
+	}
+
+	// Return error if not found
+	if len(products) == 0 {
+		return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_PRODUCT, id.String(), err)
 	}
 	return nil
 }

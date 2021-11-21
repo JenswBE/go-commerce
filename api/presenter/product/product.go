@@ -9,30 +9,31 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func ProductFromEntity(p *presenter.Presenter, e *entities.Product) openapi.Product {
+const defaultStatus = openapi.PRODUCTSTATUS_ARCHIVED
+
+func ProductFromEntity(p *presenter.Presenter, input *entities.Product) openapi.Product {
 	// Set basic fields
-	output := openapi.NewProduct(e.Name, int64(e.Price))
-	output.SetId(p.EncodeID(e.ID))
-	output.SetCreatedAt(e.CreatedAt)
-	output.SetUpdatedAt(e.UpdatedAt)
-	output.SetDescriptionShort(e.DescriptionShort)
-	output.SetDescriptionLong(e.DescriptionLong)
-	output.SetCategoryIds(p.EncodeIDList(e.CategoryIDs))
-	output.SetStockCount(int64(e.StockCount))
-	output.SetImageUrls(ImageURLsSliceFromEntity(p, e.Images))
+	output := openapi.NewProduct(input.Name, int64(input.Price))
+	output.SetId(p.EncodeID(input.ID))
+	output.SetCreatedAt(input.CreatedAt)
+	output.SetUpdatedAt(input.UpdatedAt)
+	output.SetDescriptionShort(input.DescriptionShort)
+	output.SetDescriptionLong(input.DescriptionLong)
+	output.SetCategoryIds(p.EncodeIDList(input.CategoryIDs))
+	output.SetStockCount(int64(input.StockCount))
+	output.SetImageUrls(ImageURLsSliceFromEntity(p, input.Images))
 
 	// Set status
-	status, err := openapi.NewProductStatusFromValue(e.Status.String())
+	status, err := openapi.NewProductStatusFromValue(input.Status.String())
 	if err != nil {
-		defaultStatus := openapi.PRODUCTSTATUS_ARCHIVED
-		log.Warn().Err(err).Stringer("status", e.Status).Msgf("Unknown product status received from entity, defaulting to %s", defaultStatus)
+		log.Warn().Err(err).Stringer("status", input.Status).Msgf("Unknown product status received from entity, defaulting to %s", defaultStatus)
 		status = defaultStatus.Ptr()
 	}
 	output.SetStatus(*status)
 
 	// Set manufacturer ID
-	if e.ManufacturerID != uuid.Nil {
-		output.SetManufacturerId(p.EncodeID(e.ManufacturerID))
+	if input.ManufacturerID != uuid.Nil {
+		output.SetManufacturerId(p.EncodeID(input.ManufacturerID))
 	}
 	return *output
 }
@@ -49,62 +50,62 @@ func ProductListFromEntity(p *presenter.Presenter, input []*entities.Product) op
 	return *openapi.NewProductList(ProductSliceFromEntity(p, input))
 }
 
-func ResolvedProductFromEntity(p *presenter.Presenter, e *entities.ResolvedProduct) (openapi.ResolvedProduct, error) {
+func ResolvedProductFromEntity(p *presenter.Presenter, input *entities.ResolvedProduct) (openapi.ResolvedProduct, error) {
 	// Convert to basic product
-	product := ProductFromEntity(p, &e.Product)
+	product := ProductFromEntity(p, &input.Product)
 	output := openapi.ResolvedProduct{}
 	err := copier.Copy(&output, &product)
 	if err != nil {
-		return openapi.ResolvedProduct{}, entities.NewError(500, openapi.GOCOMERRORCODE_UNKNOWN_ERROR, e.ID.String(), err)
+		return openapi.ResolvedProduct{}, entities.NewError(500, openapi.GOCOMERRORCODE_UNKNOWN_ERROR, input.ID.String(), err)
 	}
 
 	// Set manufacturer
-	if e.Manufacturer != nil {
-		manufacturer := ManufacturerFromEntity(p, e.Manufacturer)
+	if input.Manufacturer != nil {
+		manufacturer := ManufacturerFromEntity(p, input.Manufacturer)
 		output.Manufacturer = &manufacturer
 	}
 
 	// Set categories
-	categories := make([]openapi.Category, 0, len(e.Categories))
-	for _, category := range e.Categories {
+	categories := make([]openapi.Category, 0, len(input.Categories))
+	for _, category := range input.Categories {
 		categories = append(categories, CategoryFromEntity(p, category))
 	}
 	output.Categories = &categories
 	return output, nil
 }
 
-func ProductToEntity(p *presenter.Presenter, id uuid.UUID, product openapi.Product) (*entities.Product, error) {
+func ProductToEntity(p *presenter.Presenter, id uuid.UUID, input openapi.Product) (*entities.Product, error) {
 	// Build entity
-	e := &entities.Product{
+	output := &entities.Product{
 		ID:               id,
-		Name:             product.GetName(),
-		DescriptionShort: product.GetDescriptionShort(),
-		DescriptionLong:  product.GetDescriptionLong(),
-		Price:            int(product.GetPrice()),
+		Name:             input.GetName(),
+		DescriptionShort: input.GetDescriptionShort(),
+		DescriptionLong:  input.GetDescriptionLong(),
+		Price:            int(input.GetPrice()),
 		CategoryIDs:      nil,
 		ManufacturerID:   uuid.Nil,
-		Status:           entities.ProductStatus(product.GetStatus()),
-		StockCount:       int(product.GetStockCount()),
+		Status:           entities.ProductStatus(input.GetStatus()),
+		StockCount:       int(input.GetStockCount()),
 	}
 
 	// Parse category ID's
-	if len(product.GetCategoryIds()) > 0 {
-		catIDs, err := p.ParseIDList(product.GetCategoryIds())
+	if len(input.GetCategoryIds()) > 0 {
+		catIDs, err := p.ParseIDList(input.GetCategoryIds())
 		if err != nil {
 			return nil, entities.NewError(400, openapi.GOCOMERRORCODE_PRODUCT_CATEGORY_IDS_INVALID, id.String(), err)
 		}
-		e.CategoryIDs = catIDs
+		output.CategoryIDs = catIDs
 	}
 
 	// Parse manufacturer ID
-	if product.GetManufacturerId() != "" {
-		manID, err := p.ParseID(product.GetManufacturerId())
+	if input.GetManufacturerId() != "" {
+		manID, err := p.ParseID(input.GetManufacturerId())
 		if err != nil {
 			return nil, entities.NewError(400, openapi.GOCOMERRORCODE_PRODUCT_MANUFACTURER_ID_INVALID, id.String(), err)
 		}
-		e.ManufacturerID = manID
+		output.ManufacturerID = manID
 	}
 
 	// Successful
-	return e, nil
+	return output, nil
 }

@@ -7,12 +7,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func ImageFromEntity(p *presenter.Presenter, e *entities.Image) openapi.Image {
+func ImageFromEntity(p *presenter.Presenter, input *entities.Image) openapi.Image {
 	return *openapi.NewImage(
-		p.EncodeID(e.ID),
-		e.Extension,
-		e.URLs,
-		int64(e.Order),
+		p.EncodeID(input.ID),
+		input.Extension,
+		input.URLs,
+		int64(input.Order),
 	)
 }
 
@@ -38,11 +38,11 @@ func ImageURLsSliceFromEntity(p *presenter.Presenter, input []*entities.Image) [
 
 func ImageToEntity(p *presenter.Presenter, id uuid.UUID, image openapi.Image) (*entities.Image, error) {
 	// Build entity
-	e := &entities.Image{
+	output := &entities.Image{
 		ID:    id,
 		Order: int(image.GetOrder()),
 	}
 
 	// Successful
-	return e, nil
+	return output, nil
 }

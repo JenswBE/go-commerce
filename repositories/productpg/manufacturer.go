@@ -1,8 +1,10 @@
 package productpg
 
 import (
+	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
+	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetManufacturer(id entities.ID) (*entities.Manufacturer, error) {
@@ -42,9 +44,19 @@ func (r *ProductPostgres) UpdateManufacturer(e *entities.Manufacturer) (*entitie
 }
 
 func (r *ProductPostgres) DeleteManufacturer(id entities.ID) error {
-	err := r.db.Delete(&internal.Manufacturer{}, "id = ?", id).Error
+	// Delete manufacturer
+	var manufacturers []internal.Manufacturer
+	err := r.db.
+		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
+		Delete(&manufacturers, "id = ?", id).
+		Error
 	if err != nil {
 		return translatePgError(err, &internal.Manufacturer{}, id.String())
+	}
+
+	// Return error if not found
+	if len(manufacturers) == 0 {
+		return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_MANUFACTURER, id.String(), err)
 	}
 	return nil
 }

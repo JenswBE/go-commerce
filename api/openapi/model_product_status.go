@@ -24,7 +24,8 @@ const (
 	PRODUCTSTATUS_ARCHIVED ProductStatus = "ARCHIVED"
 )
 
-var allowedProductStatusEnumValues = []ProductStatus{
+// All allowed values of ProductStatus enum
+var AllowedProductStatusEnumValues = []ProductStatus{
 	"AVAILABLE",
 	"ARCHIVED",
 }
@@ -36,7 +37,7 @@ func (v *ProductStatus) UnmarshalJSON(src []byte) error {
 		return err
 	}
 	enumTypeValue := ProductStatus(value)
-	for _, existing := range allowedProductStatusEnumValues {
+	for _, existing := range AllowedProductStatusEnumValues {
 		if existing == enumTypeValue {
 			*v = enumTypeValue
 			return nil
@@ -53,13 +54,13 @@ func NewProductStatusFromValue(v string) (*ProductStatus, error) {
 	if ev.IsValid() {
 		return &ev, nil
 	} else {
-		return nil, fmt.Errorf("invalid value '%v' for ProductStatus: valid values are %v", v, allowedProductStatusEnumValues)
+		return nil, fmt.Errorf("invalid value '%v' for ProductStatus: valid values are %v", v, AllowedProductStatusEnumValues)
 	}
 }
 
 // IsValid return true if the value is valid for the enum, false otherwise
 func (v ProductStatus) IsValid() bool {
-	for _, existing := range allowedProductStatusEnumValues {
+	for _, existing := range AllowedProductStatusEnumValues {
 		if existing == v {
 			return true
 		}

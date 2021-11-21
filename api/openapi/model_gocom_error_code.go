@@ -15,7 +15,7 @@ import (
 	"fmt"
 )
 
-// GocomErrorCode - CATEGORY_NAME_EMPTY: Category name is required and cannot be empty - CATEGORY_ORDER_NEGATIVE: Category order should be a positive integer - CATEGORY_PARENT_ID_INVALID: Parent ID of the category is invalid - CONTENT_NAME_EMPTY: Content name is required and cannot be empty - EVENT_END_BEFORE_START: The end date of the event should be equal to or after the start date - IMAGE_ORDER_NEGATIVE: Image order should be a positive integer - INVALID_AUTH_TOKEN: Provided authentication token is invalid - INVALID_ID: Provided short ID or UUID is invalid - MISSING_ADMIN_ROLE: Required role \"admin\" is missing on provided authentication token - PARAMETER_MISSING: A required URL parameter is missing - PRODUCT_CATEGORY_IDS_INVALID: Category ID's of product are invalid - PRODUCT_MANUFACTURER_ID_INVALID: Manufacturer ID of the product is invalid - PRODUCT_NAME_EMPTY: Product name is required and cannot be empty - PRODUCT_PRICE_NEGATIVE: Product price should be a positive integer - SINGLE_IMAGE_IN_FORM: Exactly one image is expected in multipart form, but none or multiple are provided - UNKNOWN_CATEGORY: The category does not exist - UNKNOWN_CONTENT: The content does not exist - UNKNOWN_ERROR: An unknown error occurred - UNKNOWN_EVENT: The event does not exist - UNKNOWN_IMAGE: The image does not exist - UNKNOWN_MANUFACTURER: The manufacturer does not exist - UNKNOWN_PRODUCT: The product does not exist 
+// GocomErrorCode - CATEGORY_NAME_EMPTY: Category name is required and cannot be empty - CATEGORY_ORDER_NEGATIVE: Category order should be a positive integer - CATEGORY_PARENT_ID_INVALID: Parent ID of the category is invalid - CONTENT_NAME_EMPTY: Content name is required and cannot be empty - CONTENT_TYPE_INVALID: Content type is empty or has an invalid value - EVENT_END_BEFORE_START: The end date of the event should be equal to or after the start date - IMAGE_ORDER_NEGATIVE: Image order should be a positive integer - INVALID_AUTH_TOKEN: Provided authentication token is invalid - INVALID_ID: Provided short ID or UUID is invalid - MISSING_ADMIN_ROLE: Required role \"admin\" is missing on provided authentication token - PARAMETER_MISSING: A required URL parameter is missing - PRODUCT_CATEGORY_IDS_INVALID: Category ID's of product are invalid - PRODUCT_MANUFACTURER_ID_INVALID: Manufacturer ID of the product is invalid - PRODUCT_NAME_EMPTY: Product name is required and cannot be empty - PRODUCT_PRICE_NEGATIVE: Product price should be a positive integer - SINGLE_IMAGE_IN_FORM: Exactly one image is expected in multipart form, but none or multiple are provided - UNKNOWN_CATEGORY: The category does not exist - UNKNOWN_CONTENT: The content does not exist - UNKNOWN_ERROR: An unknown error occurred - UNKNOWN_EVENT: The event does not exist - UNKNOWN_IMAGE: The image does not exist - UNKNOWN_MANUFACTURER: The manufacturer does not exist - UNKNOWN_PRODUCT: The product does not exist 
 type GocomErrorCode string
 
 // List of GocomErrorCode
@@ -24,6 +24,7 @@ const (
 	GOCOMERRORCODE_CATEGORY_ORDER_NEGATIVE GocomErrorCode = "CATEGORY_ORDER_NEGATIVE"
 	GOCOMERRORCODE_CATEGORY_PARENT_ID_INVALID GocomErrorCode = "CATEGORY_PARENT_ID_INVALID"
 	GOCOMERRORCODE_CONTENT_NAME_EMPTY GocomErrorCode = "CONTENT_NAME_EMPTY"
+	GOCOMERRORCODE_CONTENT_TYPE_INVALID GocomErrorCode = "CONTENT_TYPE_INVALID"
 	GOCOMERRORCODE_EVENT_END_BEFORE_START GocomErrorCode = "EVENT_END_BEFORE_START"
 	GOCOMERRORCODE_IMAGE_ORDER_NEGATIVE GocomErrorCode = "IMAGE_ORDER_NEGATIVE"
 	GOCOMERRORCODE_INVALID_AUTH_TOKEN GocomErrorCode = "INVALID_AUTH_TOKEN"
@@ -44,11 +45,13 @@ const (
 	GOCOMERRORCODE_UNKNOWN_PRODUCT GocomErrorCode = "UNKNOWN_PRODUCT"
 )
 
-var allowedGocomErrorCodeEnumValues = []GocomErrorCode{
+// All allowed values of GocomErrorCode enum
+var AllowedGocomErrorCodeEnumValues = []GocomErrorCode{
 	"CATEGORY_NAME_EMPTY",
 	"CATEGORY_ORDER_NEGATIVE",
 	"CATEGORY_PARENT_ID_INVALID",
 	"CONTENT_NAME_EMPTY",
+	"CONTENT_TYPE_INVALID",
 	"EVENT_END_BEFORE_START",
 	"IMAGE_ORDER_NEGATIVE",
 	"INVALID_AUTH_TOKEN",
@@ -76,7 +79,7 @@ func (v *GocomErrorCode) UnmarshalJSON(src []byte) error {
 		return err
 	}
 	enumTypeValue := GocomErrorCode(value)
-	for _, existing := range allowedGocomErrorCodeEnumValues {
+	for _, existing := range AllowedGocomErrorCodeEnumValues {
 		if existing == enumTypeValue {
 			*v = enumTypeValue
 			return nil
@@ -93,13 +96,13 @@ func NewGocomErrorCodeFromValue(v string) (*GocomErrorCode, error) {
 	if ev.IsValid() {
 		return &ev, nil
 	} else {
-		return nil, fmt.Errorf("invalid value '%v' for GocomErrorCode: valid values are %v", v, allowedGocomErrorCodeEnumValues)
+		return nil, fmt.Errorf("invalid value '%v' for GocomErrorCode: valid values are %v", v, AllowedGocomErrorCodeEnumValues)
 	}
 }
 
 // IsValid return true if the value is valid for the enum, false otherwise
 func (v GocomErrorCode) IsValid() bool {
-	for _, existing := range allowedGocomErrorCodeEnumValues {
+	for _, existing := range AllowedGocomErrorCodeEnumValues {
 		if existing == v {
 			return true
 		}

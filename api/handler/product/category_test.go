@@ -66,11 +66,11 @@ func Test_createCategory_Success(t *testing.T) {
 	require.Equal(t, http.StatusCreated, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "CreateCategory", mock.MatchedBy(func(cat *entities.Category) bool {
+	usecaseMock.AssertCalled(t, "CreateCategory", mock.MatchedBy(func(actual *entities.Category) bool {
 		expected := fixtures.Category()
 		expected.ID = uuid.Nil
 		expected.Image = nil
-		require.Equal(t, expected, cat)
+		require.Equal(t, expected, actual)
 		return true
 	}))
 }
@@ -92,10 +92,10 @@ func Test_updateCategory_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "UpdateCategory", mock.MatchedBy(func(cat *entities.Category) bool {
+	usecaseMock.AssertCalled(t, "UpdateCategory", mock.MatchedBy(func(actual *entities.Category) bool {
 		expected := fixtures.Category()
 		expected.Image = nil
-		require.Equal(t, expected, cat)
+		require.Equal(t, expected, actual)
 		return true
 	}))
 }

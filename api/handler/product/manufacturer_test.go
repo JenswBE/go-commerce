@@ -66,11 +66,11 @@ func Test_createManufacturer_Success(t *testing.T) {
 	require.Equal(t, http.StatusCreated, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "CreateManufacturer", mock.MatchedBy(func(cat *entities.Manufacturer) bool {
+	usecaseMock.AssertCalled(t, "CreateManufacturer", mock.MatchedBy(func(actual *entities.Manufacturer) bool {
 		expected := fixtures.Manufacturer()
 		expected.ID = uuid.Nil
 		expected.Image = nil
-		require.Equal(t, expected, cat)
+		require.Equal(t, expected, actual)
 		return true
 	}))
 }
@@ -92,10 +92,10 @@ func Test_updateManufacturer_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "UpdateManufacturer", mock.MatchedBy(func(cat *entities.Manufacturer) bool {
+	usecaseMock.AssertCalled(t, "UpdateManufacturer", mock.MatchedBy(func(actual *entities.Manufacturer) bool {
 		expected := fixtures.Manufacturer()
 		expected.Image = nil
-		require.Equal(t, expected, cat)
+		require.Equal(t, expected, actual)
 		return true
 	}))
 }

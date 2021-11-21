@@ -68,13 +68,13 @@ func Test_createProduct_Success(t *testing.T) {
 	require.Equal(t, http.StatusCreated, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "CreateProduct", mock.MatchedBy(func(product *entities.Product) bool {
+	usecaseMock.AssertCalled(t, "CreateProduct", mock.MatchedBy(func(actual *entities.Product) bool {
 		expected := fixtures.Product()
 		expected.ID = uuid.Nil
 		expected.CreatedAt = time.Time{}
 		expected.UpdatedAt = time.Time{}
 		expected.Images = nil
-		require.Equal(t, expected, product)
+		require.Equal(t, expected, actual)
 		return true
 	}))
 }
@@ -96,12 +96,12 @@ func Test_updateProduct_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "UpdateProduct", mock.MatchedBy(func(product *entities.Product) bool {
+	usecaseMock.AssertCalled(t, "UpdateProduct", mock.MatchedBy(func(actual *entities.Product) bool {
 		expected := fixtures.Product()
 		expected.CreatedAt = time.Time{}
 		expected.UpdatedAt = time.Time{}
 		expected.Images = nil
-		require.Equal(t, expected, product)
+		require.Equal(t, expected, actual)
 		return true
 	}))
 }

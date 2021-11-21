@@ -6,11 +6,14 @@ import (
 	"strconv"
 	"time"
 
+	contentHandler "github.com/JenswBE/go-commerce/api/handler/content"
 	productHandler "github.com/JenswBE/go-commerce/api/handler/product"
 	"github.com/JenswBE/go-commerce/api/middlewares"
 	"github.com/JenswBE/go-commerce/api/presenter"
+	"github.com/JenswBE/go-commerce/repositories/contentpg"
 	"github.com/JenswBE/go-commerce/repositories/localstorage"
 	"github.com/JenswBE/go-commerce/repositories/productpg"
+	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/JenswBE/go-commerce/utils/shortid"
@@ -42,13 +45,22 @@ func main() {
 	}
 
 	// DB
-	dsn := buildDSN(config)
-	productDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	contentDSN := buildDSN(config.Database.Content, config.Database.Default)
+	contentDB, err := gorm.Open(postgres.Open(contentDSN), &gorm.Config{})
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to connect to DB")
+		log.Fatal().Err(err).Msg("Failed to connect to content DB")
+	}
+	productDSN := buildDSN(config.Database.Product, config.Database.Default)
+	productDB, err := gorm.Open(postgres.Open(productDSN), &gorm.Config{})
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to connect to product DB")
 	}
 
 	// Services
+	contentDatabase, err := contentpg.NewContentPostgres(contentDB)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to migrate DB and create content repository")
+	}
 	productDatabase, err := productpg.NewProductPostgres(productDB)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to migrate DB and create products repository")
@@ -65,6 +77,7 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create image proxy service")
 	}
+	contentService := content.NewService(contentDatabase)
 	productService := product.NewService(productDatabase, imageProxyService, imageStorage)
 	shortIDService := shortid.NewBase58Service()
 	presenter := presenter.New(shortIDService)
@@ -77,11 +90,13 @@ func main() {
 	router.StaticFile("/openapi.yml", "../docs/openapi.yml")
 
 	// Setup handlers
+	contentHandler := contentHandler.NewContentHandler(presenter, contentService)
 	productHandler := productHandler.NewProductHandler(presenter, productService)
 
 	// Public routes
 	public := router.Group("/")
-	productHandler.RegisterReadRoutes(public)
+	contentHandler.RegisterPublicRoutes(public)
+	productHandler.RegisterPublicRoutes(public)
 
 	// Admin routes
 	authMW, err := middlewares.NewOIDCMiddleware(config.Authentication.IssuerURL)
@@ -90,7 +105,8 @@ func main() {
 	}
 	admin := router.Group("/")
 	admin.Use(authMW.EnforceRoles([]string{"admin"}))
-	productHandler.RegisterWriteRoutes(admin)
+	contentHandler.RegisterAdminRoutes(admin)
+	productHandler.RegisterAdminRoutes(admin)
 
 	// Start Gin
 	port := strconv.Itoa(config.Server.Port)
