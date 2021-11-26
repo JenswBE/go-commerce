@@ -25,8 +25,8 @@ type Event struct {
 	EventType string `json:"event_type"`
 	// Start of the event. In case \"whole_day\" is true, only the date part is considered.
 	Start time.Time `json:"start"`
-	// Optional end of the event. In case \"whole_day\" is true, only the date part is considered.
-	End *time.Time `json:"end,omitempty"`
+	// End of the event, could be same as start. In case \"whole_day\" is true, only the date part is considered.
+	End time.Time `json:"end"`
 	WholeDay *bool `json:"whole_day,omitempty"`
 }
 
@@ -34,11 +34,12 @@ type Event struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEvent(name string, eventType string, start time.Time) *Event {
+func NewEvent(name string, eventType string, start time.Time, end time.Time) *Event {
 	this := Event{}
 	this.Name = name
 	this.EventType = eventType
 	this.Start = start
+	this.End = end
 	return &this
 }
 
@@ -186,36 +187,28 @@ func (o *Event) SetStart(v time.Time) {
 	o.Start = v
 }
 
-// GetEnd returns the End field value if set, zero value otherwise.
+// GetEnd returns the End field value
 func (o *Event) GetEnd() time.Time {
-	if o == nil || o.End == nil {
+	if o == nil {
 		var ret time.Time
 		return ret
 	}
-	return *o.End
+
+	return o.End
 }
 
-// GetEndOk returns a tuple with the End field value if set, nil otherwise
+// GetEndOk returns a tuple with the End field value
 // and a boolean to check if the value has been set.
 func (o *Event) GetEndOk() (*time.Time, bool) {
-	if o == nil || o.End == nil {
+	if o == nil  {
 		return nil, false
 	}
-	return o.End, true
+	return &o.End, true
 }
 
-// HasEnd returns a boolean if a field has been set.
-func (o *Event) HasEnd() bool {
-	if o != nil && o.End != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetEnd gets a reference to the given time.Time and assigns it to the End field.
+// SetEnd sets field value
 func (o *Event) SetEnd(v time.Time) {
-	o.End = &v
+	o.End = v
 }
 
 // GetWholeDay returns the WholeDay field value if set, zero value otherwise.
@@ -267,7 +260,7 @@ func (o Event) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["start"] = o.Start
 	}
-	if o.End != nil {
+	if true {
 		toSerialize["end"] = o.End
 	}
 	if o.WholeDay != nil {

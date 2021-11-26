@@ -23,7 +23,7 @@ type EventAllOf struct {
 	EventType *string `json:"event_type,omitempty"`
 	// Start of the event. In case \"whole_day\" is true, only the date part is considered.
 	Start *time.Time `json:"start,omitempty"`
-	// Optional end of the event. In case \"whole_day\" is true, only the date part is considered.
+	// End of the event, could be same as start. In case \"whole_day\" is true, only the date part is considered.
 	End *time.Time `json:"end,omitempty"`
 	WholeDay *bool `json:"whole_day,omitempty"`
 }

@@ -20,7 +20,7 @@ type Event struct {
 // Validate validates the event data
 func (e *Event) Validate() error {
 	// Validate simple fields
-	if !e.End.IsZero() && e.End.Before(e.Start) {
+	if e.End.Before(e.Start) {
 		return NewError(400, openapi.GOCOMERRORCODE_EVENT_END_BEFORE_START, e.ID.String(), nil)
 	}
 

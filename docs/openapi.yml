@@ -681,6 +681,7 @@ components:
         - name
         - event_type
         - start
+        - end
       allOf:
         - $ref: "#/components/schemas/Header"
         - type: object
@@ -702,7 +703,7 @@ components:
             end:
               type: string
               format: date-time
-              description: Optional end of the event. In case "whole_day" is true, only the date part is considered.
+              description: End of the event, could be same as start. In case "whole_day" is true, only the date part is considered.
             whole_day:
               type: boolean
 

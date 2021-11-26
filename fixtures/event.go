@@ -41,7 +41,7 @@ func EventOpenAPI() *openapi.Event {
 		Description: openapi.PtrString("test-description"),
 		EventType:   "test-event-type",
 		Start:       time.Date(2021, 11, 21, 11, 25, 0, 0, time.UTC),
-		End:         openapi.PtrTime(time.Date(2021, 11, 22, 18, 45, 0, 0, time.UTC)),
+		End:         time.Date(2021, 11, 22, 18, 45, 0, 0, time.UTC),
 		WholeDay:    openapi.PtrBool(true),
 	}
 }
