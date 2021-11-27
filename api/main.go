@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/JenswBE/go-commerce/api/config"
+	configHandler "github.com/JenswBE/go-commerce/api/handler/config"
 	contentHandler "github.com/JenswBE/go-commerce/api/handler/content"
 	productHandler "github.com/JenswBE/go-commerce/api/handler/product"
 	"github.com/JenswBE/go-commerce/api/middlewares"
@@ -78,7 +79,7 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create image proxy service")
 	}
-	contentService, err := content.NewService(contentDatabase, apiConfig.Content.ToEntity())
+	contentService, err := content.NewService(contentDatabase, apiConfig.Features.Content.List.ToEntity())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create content service")
 	}
@@ -94,11 +95,13 @@ func main() {
 	router.StaticFile("/openapi.yml", "../docs/openapi.yml")
 
 	// Setup handlers
+	configHandler := configHandler.NewConfigHandler(presenter, *apiConfig)
 	contentHandler := contentHandler.NewContentHandler(presenter, contentService)
 	productHandler := productHandler.NewProductHandler(presenter, productService)
 
 	// Public routes
 	public := router.Group("/")
+	configHandler.RegisterPublicRoutes(public)
 	contentHandler.RegisterPublicRoutes(public)
 	productHandler.RegisterPublicRoutes(public)
 

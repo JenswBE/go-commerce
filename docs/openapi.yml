@@ -5,9 +5,12 @@ info:
 
 servers:
   - description: Local
-    url: /api
+    url: /
 
 tags:
+  # Config
+  - name: config
+
   # Products
   - name: categories
   - name: manufacturers
@@ -18,6 +21,23 @@ tags:
   - name: events
 
 paths:
+  # ============================
+  # =          CONFIG          =
+  # ============================
+  /config/:
+    get:
+      operationId: get_config
+      description: Get configuration
+      tags: ["config"]
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Config"
+
   # ============================
   # =         PRODUCTS         =
   # ============================
@@ -604,6 +624,78 @@ components:
         default: false
 
   schemas:
+    Config:
+      type: object
+      required:
+        - features
+      properties:
+        features:
+          $ref: "#/components/schemas/ConfigFeatures"
+
+    ConfigFeatures:
+      type: object
+      required:
+        - categories
+        - manufacturers
+        - products
+        - content
+        - events
+      properties:
+        categories:
+          $ref: "#/components/schemas/ConfigFeaturesCategories"
+        manufacturers:
+          $ref: "#/components/schemas/ConfigFeaturesManufacturers"
+        products:
+          $ref: "#/components/schemas/ConfigFeaturesProducts"
+        content:
+          $ref: "#/components/schemas/ConfigFeaturesContent"
+        events:
+          $ref: "#/components/schemas/ConfigFeaturesEvents"
+
+    ConfigFeaturesCategories:
+      type: object
+      required:
+        - enabled
+      properties:
+        enabled:
+          type: boolean
+
+    ConfigFeaturesManufacturers:
+      type: object
+      required:
+        - enabled
+      properties:
+        enabled:
+          type: boolean
+
+    ConfigFeaturesProducts:
+      type: object
+      required:
+        - enabled
+      properties:
+        enabled:
+          type: boolean
+
+    ConfigFeaturesContent:
+      type: object
+      required:
+        - enabled
+      properties:
+        enabled:
+          type: boolean
+        # content list should be fetched from `GET /content/` instead.
+
+    ConfigFeaturesEvents:
+      type: object
+      required:
+        - enabled
+        - whole_days_only
+      properties:
+        enabled:
+          type: boolean
+        whole_days_only:
+          type: boolean
+
     Category:
       allOf:
         - $ref: "#/components/schemas/Header"

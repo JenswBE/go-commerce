@@ -17,11 +17,11 @@ import (
 func Test_listEvents_Success(t *testing.T) {
 	// Setup test
 	c, r := handler.SetupGinTest(t, "GET", "", nil, nil)
-	productHandler, usecaseMock := setupHandlerTest()
+	contentHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("ListEvents", mock.Anything).Return(fixtures.EventSlice(), nil)
 
 	// Call handler
-	productHandler.listEvents(c)
+	contentHandler.listEvents(c)
 
 	// Assert result
 	handler.RequireEqualJSON(t, fixtures.EventListOpenAPI(), r)
@@ -35,11 +35,11 @@ func Test_getEvent_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.EventID}}
 	c, r := handler.SetupGinTest(t, "GET", "", params, nil)
-	productHandler, usecaseMock := setupHandlerTest()
+	contentHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("GetEvent", mock.Anything, mock.Anything).Return(fixtures.Event(), nil)
 
 	// Call handler
-	productHandler.getEvent(c)
+	contentHandler.getEvent(c)
 
 	// Assert result
 	handler.RequireEqualJSON(t, fixtures.EventOpenAPI(), r)
@@ -54,11 +54,11 @@ func Test_createEvent_Success(t *testing.T) {
 	body, err := json.Marshal(fixtures.EventOpenAPI())
 	require.NoError(t, err)
 	c, r := handler.SetupGinTest(t, "POST", "", nil, body)
-	productHandler, usecaseMock := setupHandlerTest()
+	contentHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("CreateEvent", mock.Anything).Return(fixtures.Event(), nil)
 
 	// Call handler
-	productHandler.createEvent(c)
+	contentHandler.createEvent(c)
 
 	// Assert result
 	handler.RequireEqualJSON(t, fixtures.EventOpenAPI(), r)
@@ -79,11 +79,11 @@ func Test_updateEvent_Success(t *testing.T) {
 	body, err := json.Marshal(fixtures.EventOpenAPI())
 	require.NoError(t, err)
 	c, r := handler.SetupGinTest(t, "PUT", "", params, body)
-	productHandler, usecaseMock := setupHandlerTest()
+	contentHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("UpdateEvent", mock.Anything).Return(fixtures.Event(), nil)
 
 	// Call handler
-	productHandler.updateEvent(c)
+	contentHandler.updateEvent(c)
 
 	// Assert result
 	handler.RequireEqualJSON(t, fixtures.EventOpenAPI(), r)
@@ -100,11 +100,11 @@ func Test_deleteEvent_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "id", Value: fixtures.EventID}}
 	c, r := handler.SetupGinTest(t, "DELETE", "", params, nil)
-	productHandler, usecaseMock := setupHandlerTest()
+	contentHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("DeleteEvent", mock.Anything).Return(nil)
 
 	// Call handler
-	productHandler.deleteEvent(c)
+	contentHandler.deleteEvent(c)
 
 	// Assert result
 	require.Empty(t, r.Body.String())

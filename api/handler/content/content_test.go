@@ -16,11 +16,11 @@ import (
 func Test_listContent_Success(t *testing.T) {
 	// Setup test
 	c, r := handler.SetupGinTest(t, "GET", "", nil, nil)
-	productHandler, usecaseMock := setupHandlerTest()
+	contentHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("ListContent", mock.Anything).Return(fixtures.ContentSlice(), nil)
 
 	// Call handler
-	productHandler.listContent(c)
+	contentHandler.listContent(c)
 
 	// Assert result
 	handler.RequireEqualJSON(t, fixtures.ContentListOpenAPI(), r)
@@ -34,11 +34,11 @@ func Test_getContent_Success(t *testing.T) {
 	// Setup test
 	params := gin.Params{{Key: "content_name", Value: fixtures.Content().Name}}
 	c, r := handler.SetupGinTest(t, "GET", "", params, nil)
-	productHandler, usecaseMock := setupHandlerTest()
+	contentHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("GetContent", mock.Anything, mock.Anything).Return(fixtures.Content(), nil)
 
 	// Call handler
-	productHandler.getContent(c)
+	contentHandler.getContent(c)
 
 	// Assert result
 	handler.RequireEqualJSON(t, fixtures.ContentOpenAPI(), r)
@@ -54,11 +54,11 @@ func Test_updateContent_Success(t *testing.T) {
 	body, err := json.Marshal(fixtures.ContentOpenAPI())
 	require.NoError(t, err)
 	c, r := handler.SetupGinTest(t, "PUT", "", params, body)
-	productHandler, usecaseMock := setupHandlerTest()
+	contentHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("UpdateContent", mock.Anything).Return(fixtures.Content(), nil)
 
 	// Call handler
-	productHandler.updateContent(c)
+	contentHandler.updateContent(c)
 
 	// Assert result
 	handler.RequireEqualJSON(t, fixtures.ContentOpenAPI(), r)

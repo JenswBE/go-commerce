@@ -15,11 +15,29 @@ type Config struct {
 	Authentication struct {
 		IssuerURL string `validate:"required"`
 	}
-	Content  ContentList
 	Database struct {
 		Default Database
 		Content Database
 		Product Database
+	}
+	Features struct {
+		Categories struct {
+			Enabled bool
+		}
+		Manufacturers struct {
+			Enabled bool
+		}
+		Products struct {
+			Enabled bool
+		}
+		Content struct {
+			Enabled bool
+			List    ContentList
+		}
+		Events struct {
+			Enabled       bool
+			WholeDaysOnly bool
+		}
 	}
 	ImageProxy struct {
 		BaseURL string
@@ -57,6 +75,11 @@ const StorageTypeFS = "fs"
 func ParseConfig() (*Config, error) {
 	// Set defaults
 	viper.SetDefault("Database.Default.Port", 5432)
+	viper.SetDefault("Features.Categories.Enabled", true)
+	viper.SetDefault("Features.Manufacturers.Enabled", true)
+	viper.SetDefault("Features.Products.Enabled", true)
+	viper.SetDefault("Features.Content.Enabled", true)
+	viper.SetDefault("Features.Events.Enabled", true)
 	viper.SetDefault("ImageProxy.BaseURL", "/images/")
 	viper.SetDefault("Server.Port", 8080)
 	viper.SetDefault("Storage.Images.Type", StorageTypeFS)
@@ -77,7 +100,6 @@ func ParseConfig() (*Config, error) {
 
 	// Bind ENV variables
 	viper.BindEnv("Authentication.IssuerURL", "AUTH_ISSUER_URL")
-	viper.BindEnv("Content", "CONTENT")
 	viper.BindEnv("Database.Default.Host", "DATABASE_DEFAULT_HOST")
 	viper.BindEnv("Database.Default.Port", "DATABASE_DEFAULT_PORT")
 	viper.BindEnv("Database.Default.User", "DATABASE_DEFAULT_USER")
@@ -93,6 +115,13 @@ func ParseConfig() (*Config, error) {
 	viper.BindEnv("Database.Product.User", "DATABASE_PRODUCT_USER")
 	viper.BindEnv("Database.Product.Password", "DATABASE_PRODUCT_PASSWORD")
 	viper.BindEnv("Database.Product.Database", "DATABASE_PRODUCT_DATABASE")
+	viper.BindEnv("Features.Categories.Enabled", "FEATURES_CATEGORIES_ENABLED")
+	viper.BindEnv("Features.Manufacturers.Enabled", "FEATURES_MANUFACTURERS_ENABLED")
+	viper.BindEnv("Features.Products.Enabled", "FEATURES_PRODUCTS_ENABLED")
+	viper.BindEnv("Features.Content.Enabled", "FEATURES_CONTENT_ENABLED")
+	viper.BindEnv("Features.Content.List", "FEATURES_CONTENT_LIST")
+	viper.BindEnv("Features.Events.Enabled", "FEATURES_EVENTS_ENABLED")
+	viper.BindEnv("Features.Content.Events.WholeDaysOnly", "FEATURES_EVENTS_WHOLE_DAYS_ONLY")
 	viper.BindEnv("ImageProxy.BaseURL", "IMAGE_PROXY_BASE_URL")
 	viper.BindEnv("ImageProxy.Key", "IMAGE_PROXY_KEY")
 	viper.BindEnv("ImageProxy.Salt", "IMAGE_PROXY_SALT")
