@@ -16,9 +16,13 @@ func (r *ContentPostgres) GetEvent(id entities.ID) (*entities.Event, error) {
 	return event.ToEntity(), nil
 }
 
-func (r *ContentPostgres) ListEvents() ([]*entities.Event, error) {
+func (r *ContentPostgres) ListEvents(includePastEvents bool) ([]*entities.Event, error) {
 	events := []*internal.Event{}
-	err := r.db.Find(&events).Error
+	query := r.db.Order(`"start", "end", "name"`)
+	if !includePastEvents {
+		query = query.Where(`"end" > now()`)
+	}
+	err := query.Find(&events).Error
 	if err != nil {
 		return nil, translatePgError(err, events, "")
 	}

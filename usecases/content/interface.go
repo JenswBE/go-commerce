@@ -6,7 +6,7 @@ import (
 
 type DatabaseRepository interface {
 	GetEvent(id entities.ID) (*entities.Event, error)
-	ListEvents() ([]*entities.Event, error)
+	ListEvents(includePastEvents bool) ([]*entities.Event, error)
 	CreateEvent(e *entities.Event) (*entities.Event, error)
 	UpdateEvent(e *entities.Event) (*entities.Event, error)
 	DeleteEvent(id entities.ID) error
@@ -20,7 +20,7 @@ type DatabaseRepository interface {
 
 type Usecase interface {
 	GetEvent(id entities.ID) (*entities.Event, error)
-	ListEvents() ([]*entities.Event, error)
+	ListEvents(includePastEvents bool) ([]*entities.Event, error)
 	CreateEvent(e *entities.Event) (*entities.Event, error)
 	UpdateEvent(e *entities.Event) (*entities.Event, error)
 	DeleteEvent(id entities.ID) error

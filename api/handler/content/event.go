@@ -1,6 +1,8 @@
 package content
 
 import (
+	"strings"
+
 	"github.com/JenswBE/go-commerce/api/handler"
 	"github.com/JenswBE/go-commerce/api/openapi"
 	presenter "github.com/JenswBE/go-commerce/api/presenter/content"
@@ -9,8 +11,11 @@ import (
 )
 
 func (h *ContentHandler) listEvents(c *gin.Context) {
+	// Parse params
+	includePastEvents := strings.ToLower(c.Query("include_past_events")) == "true"
+
 	// Call service
-	result, err := h.service.ListEvents()
+	result, err := h.service.ListEvents(includePastEvents)
 	if err != nil {
 		c.JSON(handler.ErrToResponse(err))
 		return

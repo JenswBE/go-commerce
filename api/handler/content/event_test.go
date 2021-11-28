@@ -16,7 +16,7 @@ import (
 
 func Test_listEvents_Success(t *testing.T) {
 	// Setup test
-	c, r := handler.SetupGinTest(t, "GET", "", nil, nil)
+	c, r := handler.SetupGinTest(t, "GET", "?include_past_events=True", nil, nil)
 	contentHandler, usecaseMock := setupHandlerTest()
 	usecaseMock.On("ListEvents", mock.Anything).Return(fixtures.EventSlice(), nil)
 
@@ -28,7 +28,7 @@ func Test_listEvents_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "ListEvents")
+	usecaseMock.AssertCalled(t, "ListEvents", true)
 }
 
 func Test_getEvent_Success(t *testing.T) {

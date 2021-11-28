@@ -157,13 +157,13 @@ func (_m *Usecase) ListContent() ([]*entities.Content, error) {
 	return r0, r1
 }
 
-// ListEvents provides a mock function with given fields:
-func (_m *Usecase) ListEvents() ([]*entities.Event, error) {
-	ret := _m.Called()
+// ListEvents provides a mock function with given fields: includePastEvents
+func (_m *Usecase) ListEvents(includePastEvents bool) ([]*entities.Event, error) {
+	ret := _m.Called(includePastEvents)
 
 	var r0 []*entities.Event
-	if rf, ok := ret.Get(0).(func() []*entities.Event); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(bool) []*entities.Event); ok {
+		r0 = rf(includePastEvents)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]*entities.Event)
@@ -171,8 +171,8 @@ func (_m *Usecase) ListEvents() ([]*entities.Event, error) {
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(bool) error); ok {
+		r1 = rf(includePastEvents)
 	} else {
 		r1 = ret.Error(1)
 	}

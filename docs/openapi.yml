@@ -500,6 +500,8 @@ paths:
       description: List events
       tags: ["events"]
       security: []
+      parameters:
+        - $ref: "#/components/parameters/queryIncludePastEvents"
       responses:
         "200":
           description: OK
@@ -608,12 +610,19 @@ components:
       description: >-
         Comma separated list of ImageConfig.
         Check ImageConfig for exact format.
-      required: false
       schema:
         type: array
         items:
           $ref: "#/components/schemas/ImageConfig"
       explode: false
+
+    queryIncludePastEvents:
+      name: include_past_events
+      in: query
+      description: Include events which are already done (end time in the past).
+      schema:
+        type: boolean
+        default: false
 
     resolve:
       name: resolve

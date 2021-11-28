@@ -17,9 +17,9 @@ func (s *Service) GetEvent(id entities.ID) (*entities.Event, error) {
 }
 
 // ListEvents fetches all events
-func (s *Service) ListEvents() ([]*entities.Event, error) {
+func (s *Service) ListEvents(includePastEvents bool) ([]*entities.Event, error) {
 	// Fetch events
-	events, err := s.db.ListEvents()
+	events, err := s.db.ListEvents(includePastEvents)
 	if err != nil {
 		return nil, err
 	}
