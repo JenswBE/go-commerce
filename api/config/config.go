@@ -49,8 +49,9 @@ type Config struct {
 		AllowedConfigs string
 	}
 	Server struct {
-		Debug bool
-		Port  int
+		Debug          bool
+		Port           int
+		TrustedProxies []string
 	}
 	Storage struct {
 		Images Storage
@@ -82,6 +83,7 @@ func ParseConfig() (*Config, error) {
 	viper.SetDefault("Features.Events.Enabled", true)
 	viper.SetDefault("ImageProxy.BaseURL", "/images/")
 	viper.SetDefault("Server.Port", 8080)
+	viper.SetDefault("Server.TrustedProxies", []string{"172.16.0.0/16"}) // Default Docker IP range
 	viper.SetDefault("Storage.Images.Type", StorageTypeFS)
 	viper.SetDefault("Storage.Images.Path", "./files/images")
 
@@ -128,6 +130,7 @@ func ParseConfig() (*Config, error) {
 	viper.BindEnv("ImageProxy.AllowedConfigs", "IMAGE_PROXY_ALLOWED_CONFIGS")
 	viper.BindEnv("Server.Debug", "GOCOM_DEBUG")
 	viper.BindEnv("Server.Port", "GOCOM_PORT")
+	viper.BindEnv("Server.TrustedProxies", "GOCOM_TRUSTED_PROXIES")
 	viper.BindEnv("Storage.Images.Type", "STORAGE_IMAGES_TYPE")
 	viper.BindEnv("Storage.Images.Path", "STORAGE_IMAGES_PATH")
 
