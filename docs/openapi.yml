@@ -5,7 +5,7 @@ info:
 
 servers:
   - description: Local
-    url: /
+    url: /api
 
 tags:
   # Config
