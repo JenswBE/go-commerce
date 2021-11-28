@@ -89,7 +89,10 @@ func main() {
 
 	// Setup Gin
 	router := gin.Default()
-	router.SetTrustedProxies(apiConfig.Server.TrustedProxies)
+	err = router.SetTrustedProxies(apiConfig.Server.TrustedProxies)
+	if err != nil {
+		log.Fatal().Err(err).Strs("trusted_proxies", apiConfig.Server.TrustedProxies).Msg("Failed to set trusted proxies")
+	}
 	router.StaticFile("/", "../docs/index.html")
 	router.StaticFile("/index.html", "../docs/index.html")
 	router.StaticFile("/oauth2-redirect.html", "../docs/oauth2-redirect.html")

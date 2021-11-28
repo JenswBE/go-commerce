@@ -101,38 +101,43 @@ func ParseConfig() (*Config, error) {
 	}
 
 	// Bind ENV variables
-	viper.BindEnv("Authentication.IssuerURL", "AUTH_ISSUER_URL")
-	viper.BindEnv("Database.Default.Host", "DATABASE_DEFAULT_HOST")
-	viper.BindEnv("Database.Default.Port", "DATABASE_DEFAULT_PORT")
-	viper.BindEnv("Database.Default.User", "DATABASE_DEFAULT_USER")
-	viper.BindEnv("Database.Default.Password", "DATABASE_DEFAULT_PASSWORD")
-	viper.BindEnv("Database.Default.Database", "DATABASE_DEFAULT_DATABASE")
-	viper.BindEnv("Database.Content.Host", "DATABASE_CONTENT_HOST")
-	viper.BindEnv("Database.Content.Port", "DATABASE_CONTENT_PORT")
-	viper.BindEnv("Database.Content.User", "DATABASE_CONTENT_USER")
-	viper.BindEnv("Database.Content.Password", "DATABASE_CONTENT_PASSWORD")
-	viper.BindEnv("Database.Content.Database", "DATABASE_CONTENT_DATABASE")
-	viper.BindEnv("Database.Product.Host", "DATABASE_PRODUCT_HOST")
-	viper.BindEnv("Database.Product.Port", "DATABASE_PRODUCT_PORT")
-	viper.BindEnv("Database.Product.User", "DATABASE_PRODUCT_USER")
-	viper.BindEnv("Database.Product.Password", "DATABASE_PRODUCT_PASSWORD")
-	viper.BindEnv("Database.Product.Database", "DATABASE_PRODUCT_DATABASE")
-	viper.BindEnv("Features.Categories.Enabled", "FEATURES_CATEGORIES_ENABLED")
-	viper.BindEnv("Features.Manufacturers.Enabled", "FEATURES_MANUFACTURERS_ENABLED")
-	viper.BindEnv("Features.Products.Enabled", "FEATURES_PRODUCTS_ENABLED")
-	viper.BindEnv("Features.Content.Enabled", "FEATURES_CONTENT_ENABLED")
-	viper.BindEnv("Features.Content.List", "FEATURES_CONTENT_LIST")
-	viper.BindEnv("Features.Events.Enabled", "FEATURES_EVENTS_ENABLED")
-	viper.BindEnv("Features.Content.Events.WholeDaysOnly", "FEATURES_EVENTS_WHOLE_DAYS_ONLY")
-	viper.BindEnv("ImageProxy.BaseURL", "IMAGE_PROXY_BASE_URL")
-	viper.BindEnv("ImageProxy.Key", "IMAGE_PROXY_KEY")
-	viper.BindEnv("ImageProxy.Salt", "IMAGE_PROXY_SALT")
-	viper.BindEnv("ImageProxy.AllowedConfigs", "IMAGE_PROXY_ALLOWED_CONFIGS")
-	viper.BindEnv("Server.Debug", "GOCOM_DEBUG")
-	viper.BindEnv("Server.Port", "GOCOM_PORT")
-	viper.BindEnv("Server.TrustedProxies", "GOCOM_TRUSTED_PROXIES")
-	viper.BindEnv("Storage.Images.Type", "STORAGE_IMAGES_TYPE")
-	viper.BindEnv("Storage.Images.Path", "STORAGE_IMAGES_PATH")
+	err = bindEnvs([]envBinding{
+		{"Authentication.IssuerURL", "AUTH_ISSUER_URL"},
+		{"Database.Default.Host", "DATABASE_DEFAULT_HOST"},
+		{"Database.Default.Port", "DATABASE_DEFAULT_PORT"},
+		{"Database.Default.User", "DATABASE_DEFAULT_USER"},
+		{"Database.Default.Password", "DATABASE_DEFAULT_PASSWORD"},
+		{"Database.Default.Database", "DATABASE_DEFAULT_DATABASE"},
+		{"Database.Content.Host", "DATABASE_CONTENT_HOST"},
+		{"Database.Content.Port", "DATABASE_CONTENT_PORT"},
+		{"Database.Content.User", "DATABASE_CONTENT_USER"},
+		{"Database.Content.Password", "DATABASE_CONTENT_PASSWORD"},
+		{"Database.Content.Database", "DATABASE_CONTENT_DATABASE"},
+		{"Database.Product.Host", "DATABASE_PRODUCT_HOST"},
+		{"Database.Product.Port", "DATABASE_PRODUCT_PORT"},
+		{"Database.Product.User", "DATABASE_PRODUCT_USER"},
+		{"Database.Product.Password", "DATABASE_PRODUCT_PASSWORD"},
+		{"Database.Product.Database", "DATABASE_PRODUCT_DATABASE"},
+		{"Features.Categories.Enabled", "FEATURES_CATEGORIES_ENABLED"},
+		{"Features.Manufacturers.Enabled", "FEATURES_MANUFACTURERS_ENABLED"},
+		{"Features.Products.Enabled", "FEATURES_PRODUCTS_ENABLED"},
+		{"Features.Content.Enabled", "FEATURES_CONTENT_ENABLED"},
+		{"Features.Content.List", "FEATURES_CONTENT_LIST"},
+		{"Features.Events.Enabled", "FEATURES_EVENTS_ENABLED"},
+		{"Features.Content.Events.WholeDaysOnly", "FEATURES_EVENTS_WHOLE_DAYS_ONLY"},
+		{"ImageProxy.BaseURL", "IMAGE_PROXY_BASE_URL"},
+		{"ImageProxy.Key", "IMAGE_PROXY_KEY"},
+		{"ImageProxy.Salt", "IMAGE_PROXY_SALT"},
+		{"ImageProxy.AllowedConfigs", "IMAGE_PROXY_ALLOWED_CONFIGS"},
+		{"Server.Debug", "GOCOM_DEBUG"},
+		{"Server.Port", "GOCOM_PORT"},
+		{"Server.TrustedProxies", "GOCOM_TRUSTED_PROXIES"},
+		{"Storage.Images.Type", "STORAGE_IMAGES_TYPE"},
+		{"Storage.Images.Path", "STORAGE_IMAGES_PATH"},
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	// Unmarshal to Config struct
 	var config Config
@@ -152,6 +157,21 @@ func ParseConfig() (*Config, error) {
 		return nil, fmt.Errorf("config validation failed: %w", err)
 	}
 	return &config, nil
+}
+
+type envBinding struct {
+	configPath string
+	envName    string
+}
+
+func bindEnvs(bindings []envBinding) error {
+	for _, binding := range bindings {
+		err := viper.BindEnv(binding.configPath, binding.envName)
+		if err != nil {
+			return fmt.Errorf("failed to bind env var %s to %s: %w", binding.envName, binding.configPath, err)
+		}
+	}
+	return nil
 }
 
 func BuildDSN(config Database, fallback Database) string {

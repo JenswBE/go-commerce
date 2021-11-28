@@ -2,6 +2,7 @@ package fixtures
 
 import (
 	"bytes"
+	"io"
 	"mime/multipart"
 )
 
@@ -9,7 +10,7 @@ func MultipartSingleFile() (*bytes.Buffer, *multipart.Writer) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	test, _ := writer.CreateFormFile("file", "test.jpg")
-	test.Write([]byte("test-jpg"))
+	_, _ = io.WriteString(test, "test-jpg") // We don't care for errors in fixtures
 	writer.Close()
 	return body, writer
 }
@@ -22,9 +23,9 @@ func MultipartMultipleFiles() (*bytes.Buffer, *multipart.Writer) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	test1, _ := writer.CreateFormFile("file", "test1.jpg")
-	test1.Write([]byte("test-1-jpg"))
+	_, _ = io.WriteString(test1, "test-1-jpg") // We don't care for errors in fixtures
 	test2, _ := writer.CreateFormFile("file", "test2.png")
-	test2.Write([]byte("test-2-png"))
+	_, _ = io.WriteString(test2, "test-2-png") // We don't care for errors in fixtures
 	writer.Close()
 	return body, writer
 }
