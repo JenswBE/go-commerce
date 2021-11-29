@@ -124,7 +124,7 @@ func ParseConfig() (*Config, error) {
 		{"Features.Content.Enabled", "FEATURES_CONTENT_ENABLED"},
 		{"Features.Content.List", "FEATURES_CONTENT_LIST"},
 		{"Features.Events.Enabled", "FEATURES_EVENTS_ENABLED"},
-		{"Features.Content.Events.WholeDaysOnly", "FEATURES_EVENTS_WHOLE_DAYS_ONLY"},
+		{"Features.Events.WholeDaysOnly", "FEATURES_EVENTS_WHOLE_DAYS_ONLY"},
 		{"ImageProxy.BaseURL", "IMAGE_PROXY_BASE_URL"},
 		{"ImageProxy.Key", "IMAGE_PROXY_KEY"},
 		{"ImageProxy.Salt", "IMAGE_PROXY_SALT"},
