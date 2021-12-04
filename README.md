@@ -1,5 +1,6 @@
 [![GitHub](https://img.shields.io/github/license/JenswBE/go-commerce)](https://github.com/JenswBE/go-commerce)
 [![Docker Pulls](https://img.shields.io/docker/pulls/jenswbe/go-commerce)](https://hub.docker.com/r/jenswbe/go-commerce)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=JenswBE_go-commerce&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=JenswBE_go-commerce)
 [![codecov](https://codecov.io/gh/JenswBE/go-commerce/branch/main/graph/badge.svg?token=S2oyV1sTWU)](https://codecov.io/gh/JenswBE/go-commerce)
 
 # GoCommerce
