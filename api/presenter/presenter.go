@@ -3,16 +3,21 @@ package presenter
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/google/uuid"
 )
 
 type Presenter struct {
-	shortIDService shortid.Service
+	shortIDService   shortid.Service
+	sanitizerService sanitizer.Service
 }
 
-func New(shortIDService shortid.Service) *Presenter {
-	return &Presenter{shortIDService}
+func New(shortIDService shortid.Service, sanitizerService sanitizer.Service) *Presenter {
+	return &Presenter{
+		shortIDService:   shortIDService,
+		sanitizerService: sanitizerService,
+	}
 }
 
 func (p *Presenter) ParseID(id string) (uuid.UUID, error) {
@@ -51,4 +56,16 @@ func (p *Presenter) EncodeIDList(ids []uuid.UUID) []string {
 		output = append(output, p.shortIDService.Encode(id))
 	}
 	return output
+}
+
+// Sanitizes input to a plain string.
+// Shortcut for p.sanitizerService.String()
+func (p *Presenter) String(input string) string {
+	return p.sanitizerService.String(input)
+}
+
+// Sanitizes input to a very restricted HTML subset for content of type HTML
+// Shortcut for p.sanitizerService.ContentHTML()
+func (p *Presenter) ContentHTML(input string) string {
+	return p.sanitizerService.ContentHTML(input)
 }

@@ -18,6 +18,7 @@ import (
 	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
+	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
@@ -85,7 +86,8 @@ func main() {
 	}
 	productService := product.NewService(productDatabase, imageProxyService, imageStorage)
 	shortIDService := shortid.NewBase58Service()
-	presenter := presenter.New(shortIDService)
+	sanitizerService := sanitizer.NewBluemondayService()
+	presenter := presenter.New(shortIDService, sanitizerService)
 
 	// Setup Gin
 	router := gin.Default()

@@ -13,12 +13,12 @@ const defaultStatus = openapi.PRODUCTSTATUS_ARCHIVED
 
 func ProductFromEntity(p *presenter.Presenter, input *entities.Product) openapi.Product {
 	// Set basic fields
-	output := openapi.NewProduct(input.Name, int64(input.Price))
+	output := openapi.NewProduct(p.String(input.Name), int64(input.Price))
 	output.SetId(p.EncodeID(input.ID))
 	output.SetCreatedAt(input.CreatedAt)
 	output.SetUpdatedAt(input.UpdatedAt)
-	output.SetDescriptionShort(input.DescriptionShort)
-	output.SetDescriptionLong(input.DescriptionLong)
+	output.SetDescriptionShort(p.String(input.DescriptionShort))
+	output.SetDescriptionLong(p.String(input.DescriptionLong))
 	output.SetCategoryIds(p.EncodeIDList(input.CategoryIDs))
 	output.SetStockCount(int64(input.StockCount))
 	output.SetImageUrls(ImageURLsSliceFromEntity(p, input.Images))

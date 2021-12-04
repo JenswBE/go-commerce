@@ -9,6 +9,7 @@ import (
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/fixtures"
 	mocks "github.com/JenswBE/go-commerce/mocks/usecases/product"
+	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/stretchr/testify/require"
 )
@@ -64,7 +65,7 @@ func Test_parseImageConfigsParam_NoParamsSet_Success(t *testing.T) {
 }
 
 func setupHandlerTest() (*ProductHandler, *mocks.Usecase) {
-	presenter := presenter.New(shortid.NewFakeService())
+	presenter := presenter.New(shortid.NewFakeService(), sanitizer.NewFakeService())
 	usecase := &mocks.Usecase{}
 	handler := NewProductHandler(presenter, usecase)
 	return handler, usecase

@@ -9,9 +9,9 @@ import (
 
 func CategoryFromEntity(p *presenter.Presenter, input *entities.Category) openapi.Category {
 	// Set basic fields
-	output := openapi.NewCategory(input.Name, int64(input.Order))
+	output := openapi.NewCategory(p.String(input.Name), int64(input.Order))
 	output.SetId(p.EncodeID(input.ID))
-	output.SetDescription(input.Description)
+	output.SetDescription(p.String(input.Description))
 	output.SetProductIds(p.EncodeIDList(input.ProductIDs))
 
 	// Set parent ID

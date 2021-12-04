@@ -5,6 +5,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
+	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -17,7 +18,7 @@ import (
 
 func Test_parseIDParam_Success(t *testing.T) {
 	// Setup test
-	presenter := presenter.New(shortid.NewFakeService())
+	presenter := presenter.New(shortid.NewFakeService(), sanitizer.NewFakeService())
 	value := uuid.New()
 	c, _ := SetupGinTest(t, "", "", gin.Params{{Key: "test_id", Value: value.String()}}, nil)
 
@@ -31,7 +32,7 @@ func Test_parseIDParam_Success(t *testing.T) {
 
 func Test_parseIDParam_ParamNotProvided_Failure(t *testing.T) {
 	// Setup test
-	presenter := presenter.New(shortid.NewFakeService())
+	presenter := presenter.New(shortid.NewFakeService(), sanitizer.NewFakeService())
 	c, w := SetupGinTest(t, "", "", nil, nil)
 
 	// Call function

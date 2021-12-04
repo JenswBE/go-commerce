@@ -10,11 +10,13 @@ require (
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/google/go-cmp v0.5.6
 	github.com/google/uuid v1.3.0
-	github.com/jinzhu/copier v0.3.2
-	github.com/mitchellh/mapstructure v1.4.2
+	github.com/jinzhu/copier v0.3.4
+	github.com/microcosm-cc/bluemonday v1.0.16
+	github.com/mitchellh/mapstructure v1.4.3
 	github.com/rs/zerolog v1.26.0
 	github.com/spf13/viper v1.9.0
 	github.com/stretchr/testify v1.7.0
-	gorm.io/driver/postgres v1.2.2
-	gorm.io/gorm v1.22.3
+	golang.org/x/net v0.0.0-20211203184738-4852103109b8 // indirect
+	gorm.io/driver/postgres v1.2.3
+	gorm.io/gorm v1.22.4
 )

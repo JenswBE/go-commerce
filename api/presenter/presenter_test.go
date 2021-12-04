@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/JenswBE/go-commerce/api/presenter"
+	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
@@ -11,7 +12,7 @@ import (
 
 func Test_ParseID_ShortID_Success(t *testing.T) {
 	// Get presenter
-	p := presenter.New(shortid.NewBase58Service())
+	p := presenter.New(shortid.NewBase58Service(), sanitizer.NewBluemondayService())
 
 	// Call function
 	id, err := p.ParseID("KCrsG1RUKHLuc5hS2GZvJa")
@@ -23,7 +24,7 @@ func Test_ParseID_ShortID_Success(t *testing.T) {
 
 func Test_ParseID_UUID_Success(t *testing.T) {
 	// Get presenter
-	p := presenter.New(shortid.NewBase58Service())
+	p := presenter.New(shortid.NewBase58Service(), sanitizer.NewBluemondayService())
 
 	// Call function
 	id, err := p.ParseID("619add22-faf2-4d54-a662-8a0206b967c4")
@@ -35,7 +36,7 @@ func Test_ParseID_UUID_Success(t *testing.T) {
 
 func Test_ParseID_InvalidID_Failure(t *testing.T) {
 	// Get presenter
-	p := presenter.New(shortid.NewBase58Service())
+	p := presenter.New(shortid.NewBase58Service(), sanitizer.NewBluemondayService())
 
 	// Call function
 	id, err := p.ParseID("invalid")

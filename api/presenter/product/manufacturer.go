@@ -9,9 +9,9 @@ import (
 
 func ManufacturerFromEntity(p *presenter.Presenter, input *entities.Manufacturer) openapi.Manufacturer {
 	// Set basic fields
-	output := openapi.NewManufacturer(input.Name)
+	output := openapi.NewManufacturer(p.String(input.Name))
 	output.SetId(p.EncodeID(input.ID))
-	output.SetWebsiteUrl(input.WebsiteURL)
+	output.SetWebsiteUrl(p.String(input.WebsiteURL))
 
 	// Set image URL
 	if input.Image != nil && len(input.Image.URLs) > 0 {

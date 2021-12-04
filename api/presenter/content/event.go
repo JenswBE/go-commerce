@@ -9,9 +9,9 @@ import (
 
 func EventFromEntity(p *presenter.Presenter, input *entities.Event) openapi.Event {
 	// Set basic fields
-	output := openapi.NewEvent(input.Name, input.EventType, input.Start, input.End)
+	output := openapi.NewEvent(p.String(input.Name), input.EventType, input.Start, input.End)
 	output.SetId(p.EncodeID(input.ID))
-	output.SetDescription(input.Description)
+	output.SetDescription(p.String(input.Description))
 	output.SetWholeDay(input.WholeDay)
 	return *output
 }
