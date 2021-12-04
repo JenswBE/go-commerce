@@ -20,10 +20,10 @@ func ContentFromEntity(p *presenter.Presenter, input *entities.Content) openapi.
 	// Build OpenAPI model
 	var body string
 	switch *contentType {
+	case openapi.CONTENTTYPE_SIMPLE:
+		body = p.String(input.Body)
 	case openapi.CONTENTTYPE_HTML:
 		body = p.ContentHTML(input.Body)
-	default:
-		body = p.String(input.Body)
 	}
 	return *openapi.NewContent(p.String(input.Name), *contentType, body)
 }
