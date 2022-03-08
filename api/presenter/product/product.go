@@ -70,7 +70,7 @@ func ResolvedProductFromEntity(p *presenter.Presenter, input *entities.ResolvedP
 	for _, category := range input.Categories {
 		categories = append(categories, CategoryFromEntity(p, category))
 	}
-	output.Categories = &categories
+	output.Categories = categories
 	return output, nil
 }
 

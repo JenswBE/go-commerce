@@ -57,10 +57,10 @@ func ProductOpenAPI() *openapi.Product {
 		DescriptionLong:  openapi.PtrString("test-description-long"),
 		Price:            2050,
 		ManufacturerId:   openapi.PtrString(ManufacturerID),
-		CategoryIds:      &[]string{CategoryID},
+		CategoryIds:      []string{CategoryID},
 		Status:           openapi.PRODUCTSTATUS_AVAILABLE.Ptr(),
 		StockCount:       openapi.PtrInt64(5),
-		ImageUrls:        &[]map[string]string{Image().URLs},
+		ImageUrls:        []map[string]string{Image().URLs},
 	}
 }
 
@@ -84,11 +84,11 @@ func ResolvedProductOpenAPI() *openapi.ResolvedProduct {
 		DescriptionLong:  openapi.PtrString("test-description-long"),
 		Price:            2050,
 		ManufacturerId:   openapi.PtrString(ManufacturerID),
-		CategoryIds:      &[]string{CategoryID},
+		CategoryIds:      []string{CategoryID},
 		Status:           openapi.PRODUCTSTATUS_AVAILABLE.Ptr(),
 		StockCount:       openapi.PtrInt64(5),
-		ImageUrls:        &[]map[string]string{Image().URLs},
+		ImageUrls:        []map[string]string{Image().URLs},
 		Manufacturer:     ManufacturerOpenAPI(),
-		Categories:       &[]openapi.Category{*CategoryOpenAPI()},
+		Categories:       []openapi.Category{*CategoryOpenAPI()},
 	}
 }
