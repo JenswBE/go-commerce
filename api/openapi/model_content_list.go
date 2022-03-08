@@ -49,11 +49,11 @@ func (o *ContentList) GetContent() []Content {
 
 // GetContentOk returns a tuple with the Content field value
 // and a boolean to check if the value has been set.
-func (o *ContentList) GetContentOk() (*[]Content, bool) {
-	if o == nil  {
+func (o *ContentList) GetContentOk() ([]Content, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return &o.Content, true
+	return o.Content, true
 }
 
 // SetContent sets field value

@@ -96,7 +96,7 @@ func (o *Event) GetName() string {
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *Event) GetNameOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Name, true
@@ -152,7 +152,7 @@ func (o *Event) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value
 // and a boolean to check if the value has been set.
 func (o *Event) GetEventTypeOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.EventType, true
@@ -176,7 +176,7 @@ func (o *Event) GetStart() time.Time {
 // GetStartOk returns a tuple with the Start field value
 // and a boolean to check if the value has been set.
 func (o *Event) GetStartOk() (*time.Time, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Start, true
@@ -200,7 +200,7 @@ func (o *Event) GetEnd() time.Time {
 // GetEndOk returns a tuple with the End field value
 // and a boolean to check if the value has been set.
 func (o *Event) GetEndOk() (*time.Time, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.End, true

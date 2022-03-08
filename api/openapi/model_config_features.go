@@ -58,7 +58,7 @@ func (o *ConfigFeatures) GetCategories() ConfigFeaturesCategories {
 // GetCategoriesOk returns a tuple with the Categories field value
 // and a boolean to check if the value has been set.
 func (o *ConfigFeatures) GetCategoriesOk() (*ConfigFeaturesCategories, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Categories, true
@@ -82,7 +82,7 @@ func (o *ConfigFeatures) GetManufacturers() ConfigFeaturesManufacturers {
 // GetManufacturersOk returns a tuple with the Manufacturers field value
 // and a boolean to check if the value has been set.
 func (o *ConfigFeatures) GetManufacturersOk() (*ConfigFeaturesManufacturers, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Manufacturers, true
@@ -106,7 +106,7 @@ func (o *ConfigFeatures) GetProducts() ConfigFeaturesProducts {
 // GetProductsOk returns a tuple with the Products field value
 // and a boolean to check if the value has been set.
 func (o *ConfigFeatures) GetProductsOk() (*ConfigFeaturesProducts, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Products, true
@@ -130,7 +130,7 @@ func (o *ConfigFeatures) GetContent() ConfigFeaturesContent {
 // GetContentOk returns a tuple with the Content field value
 // and a boolean to check if the value has been set.
 func (o *ConfigFeatures) GetContentOk() (*ConfigFeaturesContent, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Content, true
@@ -154,7 +154,7 @@ func (o *ConfigFeatures) GetEvents() ConfigFeaturesEvents {
 // GetEventsOk returns a tuple with the Events field value
 // and a boolean to check if the value has been set.
 func (o *ConfigFeatures) GetEventsOk() (*ConfigFeaturesEvents, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Events, true

@@ -89,7 +89,7 @@ func (o *GocomError) GetCode() GocomErrorCode {
 // GetCodeOk returns a tuple with the Code field value
 // and a boolean to check if the value has been set.
 func (o *GocomError) GetCodeOk() (*GocomErrorCode, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Code, true
@@ -113,7 +113,7 @@ func (o *GocomError) GetMessage() string {
 // GetMessageOk returns a tuple with the Message field value
 // and a boolean to check if the value has been set.
 func (o *GocomError) GetMessageOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Message, true

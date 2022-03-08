@@ -50,7 +50,7 @@ func (o *ConfigFeaturesCategories) GetEnabled() bool {
 // GetEnabledOk returns a tuple with the Enabled field value
 // and a boolean to check if the value has been set.
 func (o *ConfigFeaturesCategories) GetEnabledOk() (*bool, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Enabled, true

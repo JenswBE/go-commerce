@@ -58,7 +58,7 @@ func (o *Image) GetId() string {
 // GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *Image) GetIdOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Id, true
@@ -82,7 +82,7 @@ func (o *Image) GetExt() string {
 // GetExtOk returns a tuple with the Ext field value
 // and a boolean to check if the value has been set.
 func (o *Image) GetExtOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Ext, true
@@ -106,7 +106,7 @@ func (o *Image) GetUrls() map[string]string {
 // GetUrlsOk returns a tuple with the Urls field value
 // and a boolean to check if the value has been set.
 func (o *Image) GetUrlsOk() (*map[string]string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Urls, true
@@ -130,7 +130,7 @@ func (o *Image) GetOrder() int64 {
 // GetOrderOk returns a tuple with the Order field value
 // and a boolean to check if the value has been set.
 func (o *Image) GetOrderOk() (*int64, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Order, true

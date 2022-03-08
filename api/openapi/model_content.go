@@ -54,7 +54,7 @@ func (o *Content) GetName() string {
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *Content) GetNameOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Name, true
@@ -78,7 +78,7 @@ func (o *Content) GetContentType() ContentType {
 // GetContentTypeOk returns a tuple with the ContentType field value
 // and a boolean to check if the value has been set.
 func (o *Content) GetContentTypeOk() (*ContentType, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.ContentType, true
@@ -102,7 +102,7 @@ func (o *Content) GetBody() string {
 // GetBodyOk returns a tuple with the Body field value
 // and a boolean to check if the value has been set.
 func (o *Content) GetBodyOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Body, true

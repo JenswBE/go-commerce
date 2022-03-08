@@ -50,7 +50,7 @@ func (o *Config) GetFeatures() ConfigFeatures {
 // GetFeaturesOk returns a tuple with the Features field value
 // and a boolean to check if the value has been set.
 func (o *Config) GetFeaturesOk() (*ConfigFeatures, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Features, true

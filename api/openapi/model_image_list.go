@@ -49,11 +49,11 @@ func (o *ImageList) GetImages() []Image {
 
 // GetImagesOk returns a tuple with the Images field value
 // and a boolean to check if the value has been set.
-func (o *ImageList) GetImagesOk() (*[]Image, bool) {
-	if o == nil  {
+func (o *ImageList) GetImagesOk() ([]Image, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return &o.Images, true
+	return o.Images, true
 }
 
 // SetImages sets field value

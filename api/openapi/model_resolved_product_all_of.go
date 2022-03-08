@@ -17,7 +17,7 @@ import (
 // ResolvedProductAllOf struct for ResolvedProductAllOf
 type ResolvedProductAllOf struct {
 	Manufacturer *Manufacturer `json:"manufacturer,omitempty"`
-	Categories *[]Category `json:"categories,omitempty"`
+	Categories []Category `json:"categories,omitempty"`
 }
 
 // NewResolvedProductAllOf instantiates a new ResolvedProductAllOf object
@@ -75,12 +75,12 @@ func (o *ResolvedProductAllOf) GetCategories() []Category {
 		var ret []Category
 		return ret
 	}
-	return *o.Categories
+	return o.Categories
 }
 
 // GetCategoriesOk returns a tuple with the Categories field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ResolvedProductAllOf) GetCategoriesOk() (*[]Category, bool) {
+func (o *ResolvedProductAllOf) GetCategoriesOk() ([]Category, bool) {
 	if o == nil || o.Categories == nil {
 		return nil, false
 	}
@@ -98,7 +98,7 @@ func (o *ResolvedProductAllOf) HasCategories() bool {
 
 // SetCategories gets a reference to the given []Category and assigns it to the Categories field.
 func (o *ResolvedProductAllOf) SetCategories(v []Category) {
-	o.Categories = &v
+	o.Categories = v
 }
 
 func (o ResolvedProductAllOf) MarshalJSON() ([]byte, error) {

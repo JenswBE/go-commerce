@@ -26,13 +26,13 @@ type ResolvedProduct struct {
 	DescriptionLong *string `json:"description_long,omitempty"`
 	// Price in cents
 	Price int64 `json:"price"`
-	CategoryIds *[]string `json:"category_ids,omitempty"`
+	CategoryIds []string `json:"category_ids,omitempty"`
 	ManufacturerId *string `json:"manufacturer_id,omitempty"`
 	Status *ProductStatus `json:"status,omitempty"`
 	StockCount *int64 `json:"stock_count,omitempty"`
-	ImageUrls *[]map[string]string `json:"image_urls,omitempty"`
+	ImageUrls []map[string]string `json:"image_urls,omitempty"`
 	Manufacturer *Manufacturer `json:"manufacturer,omitempty"`
-	Categories *[]Category `json:"categories,omitempty"`
+	Categories []Category `json:"categories,omitempty"`
 }
 
 // NewResolvedProduct instantiates a new ResolvedProduct object
@@ -163,7 +163,7 @@ func (o *ResolvedProduct) GetName() string {
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *ResolvedProduct) GetNameOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Name, true
@@ -251,7 +251,7 @@ func (o *ResolvedProduct) GetPrice() int64 {
 // GetPriceOk returns a tuple with the Price field value
 // and a boolean to check if the value has been set.
 func (o *ResolvedProduct) GetPriceOk() (*int64, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Price, true
@@ -268,12 +268,12 @@ func (o *ResolvedProduct) GetCategoryIds() []string {
 		var ret []string
 		return ret
 	}
-	return *o.CategoryIds
+	return o.CategoryIds
 }
 
 // GetCategoryIdsOk returns a tuple with the CategoryIds field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ResolvedProduct) GetCategoryIdsOk() (*[]string, bool) {
+func (o *ResolvedProduct) GetCategoryIdsOk() ([]string, bool) {
 	if o == nil || o.CategoryIds == nil {
 		return nil, false
 	}
@@ -291,7 +291,7 @@ func (o *ResolvedProduct) HasCategoryIds() bool {
 
 // SetCategoryIds gets a reference to the given []string and assigns it to the CategoryIds field.
 func (o *ResolvedProduct) SetCategoryIds(v []string) {
-	o.CategoryIds = &v
+	o.CategoryIds = v
 }
 
 // GetManufacturerId returns the ManufacturerId field value if set, zero value otherwise.
@@ -396,12 +396,12 @@ func (o *ResolvedProduct) GetImageUrls() []map[string]string {
 		var ret []map[string]string
 		return ret
 	}
-	return *o.ImageUrls
+	return o.ImageUrls
 }
 
 // GetImageUrlsOk returns a tuple with the ImageUrls field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ResolvedProduct) GetImageUrlsOk() (*[]map[string]string, bool) {
+func (o *ResolvedProduct) GetImageUrlsOk() ([]map[string]string, bool) {
 	if o == nil || o.ImageUrls == nil {
 		return nil, false
 	}
@@ -419,7 +419,7 @@ func (o *ResolvedProduct) HasImageUrls() bool {
 
 // SetImageUrls gets a reference to the given []map[string]string and assigns it to the ImageUrls field.
 func (o *ResolvedProduct) SetImageUrls(v []map[string]string) {
-	o.ImageUrls = &v
+	o.ImageUrls = v
 }
 
 // GetManufacturer returns the Manufacturer field value if set, zero value otherwise.
@@ -460,12 +460,12 @@ func (o *ResolvedProduct) GetCategories() []Category {
 		var ret []Category
 		return ret
 	}
-	return *o.Categories
+	return o.Categories
 }
 
 // GetCategoriesOk returns a tuple with the Categories field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ResolvedProduct) GetCategoriesOk() (*[]Category, bool) {
+func (o *ResolvedProduct) GetCategoriesOk() ([]Category, bool) {
 	if o == nil || o.Categories == nil {
 		return nil, false
 	}
@@ -483,7 +483,7 @@ func (o *ResolvedProduct) HasCategories() bool {
 
 // SetCategories gets a reference to the given []Category and assigns it to the Categories field.
 func (o *ResolvedProduct) SetCategories(v []Category) {
-	o.Categories = &v
+	o.Categories = v
 }
 
 func (o ResolvedProduct) MarshalJSON() ([]byte, error) {

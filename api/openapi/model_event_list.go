@@ -49,11 +49,11 @@ func (o *EventList) GetEvents() []Event {
 
 // GetEventsOk returns a tuple with the Events field value
 // and a boolean to check if the value has been set.
-func (o *EventList) GetEventsOk() (*[]Event, bool) {
-	if o == nil  {
+func (o *EventList) GetEventsOk() ([]Event, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return &o.Events, true
+	return o.Events, true
 }
 
 // SetEvents sets field value

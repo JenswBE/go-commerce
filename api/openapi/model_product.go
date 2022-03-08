@@ -26,11 +26,11 @@ type Product struct {
 	DescriptionLong *string `json:"description_long,omitempty"`
 	// Price in cents
 	Price int64 `json:"price"`
-	CategoryIds *[]string `json:"category_ids,omitempty"`
+	CategoryIds []string `json:"category_ids,omitempty"`
 	ManufacturerId *string `json:"manufacturer_id,omitempty"`
 	Status *ProductStatus `json:"status,omitempty"`
 	StockCount *int64 `json:"stock_count,omitempty"`
-	ImageUrls *[]map[string]string `json:"image_urls,omitempty"`
+	ImageUrls []map[string]string `json:"image_urls,omitempty"`
 }
 
 // NewProduct instantiates a new Product object
@@ -161,7 +161,7 @@ func (o *Product) GetName() string {
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *Product) GetNameOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Name, true
@@ -249,7 +249,7 @@ func (o *Product) GetPrice() int64 {
 // GetPriceOk returns a tuple with the Price field value
 // and a boolean to check if the value has been set.
 func (o *Product) GetPriceOk() (*int64, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Price, true
@@ -266,12 +266,12 @@ func (o *Product) GetCategoryIds() []string {
 		var ret []string
 		return ret
 	}
-	return *o.CategoryIds
+	return o.CategoryIds
 }
 
 // GetCategoryIdsOk returns a tuple with the CategoryIds field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Product) GetCategoryIdsOk() (*[]string, bool) {
+func (o *Product) GetCategoryIdsOk() ([]string, bool) {
 	if o == nil || o.CategoryIds == nil {
 		return nil, false
 	}
@@ -289,7 +289,7 @@ func (o *Product) HasCategoryIds() bool {
 
 // SetCategoryIds gets a reference to the given []string and assigns it to the CategoryIds field.
 func (o *Product) SetCategoryIds(v []string) {
-	o.CategoryIds = &v
+	o.CategoryIds = v
 }
 
 // GetManufacturerId returns the ManufacturerId field value if set, zero value otherwise.
@@ -394,12 +394,12 @@ func (o *Product) GetImageUrls() []map[string]string {
 		var ret []map[string]string
 		return ret
 	}
-	return *o.ImageUrls
+	return o.ImageUrls
 }
 
 // GetImageUrlsOk returns a tuple with the ImageUrls field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Product) GetImageUrlsOk() (*[]map[string]string, bool) {
+func (o *Product) GetImageUrlsOk() ([]map[string]string, bool) {
 	if o == nil || o.ImageUrls == nil {
 		return nil, false
 	}
@@ -417,7 +417,7 @@ func (o *Product) HasImageUrls() bool {
 
 // SetImageUrls gets a reference to the given []map[string]string and assigns it to the ImageUrls field.
 func (o *Product) SetImageUrls(v []map[string]string) {
-	o.ImageUrls = &v
+	o.ImageUrls = v
 }
 
 func (o Product) MarshalJSON() ([]byte, error) {

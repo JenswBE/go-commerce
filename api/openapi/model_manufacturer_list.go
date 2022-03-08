@@ -49,11 +49,11 @@ func (o *ManufacturerList) GetManufacturers() []Manufacturer {
 
 // GetManufacturersOk returns a tuple with the Manufacturers field value
 // and a boolean to check if the value has been set.
-func (o *ManufacturerList) GetManufacturersOk() (*[]Manufacturer, bool) {
-	if o == nil  {
+func (o *ManufacturerList) GetManufacturersOk() ([]Manufacturer, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return &o.Manufacturers, true
+	return o.Manufacturers, true
 }
 
 // SetManufacturers sets field value

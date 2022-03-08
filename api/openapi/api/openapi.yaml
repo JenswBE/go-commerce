@@ -1,0 +1,1626 @@
+openapi: 3.0.2
+info:
+  title: GoCommerce
+  version: "1.0"
+servers:
+- description: Local
+  url: /api
+security:
+- localAuth: []
+tags:
+- name: config
+- name: categories
+- name: manufacturers
+- name: products
+- name: content
+- name: events
+paths:
+  /config/:
+    get:
+      description: Get configuration
+      operationId: get_config
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+          description: OK
+      security: []
+      tags:
+      - config
+  /categories/:
+    get:
+      description: List categories
+      operationId: list_categories
+      parameters:
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryList'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      security: []
+      tags:
+      - categories
+    post:
+      description: Add category
+      operationId: add_category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: Created
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - categories
+  /categories/{id}/:
+    delete:
+      description: Delete category
+      operationId: delete_category
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - categories
+    get:
+      description: Get category details
+      operationId: get_category
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      security: []
+      tags:
+      - categories
+    put:
+      description: Update category
+      operationId: update_category
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - categories
+  /categories/{id}/image/:
+    delete:
+      description: Delete image
+      operationId: delete_category_image
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - categories
+    put:
+      description: Upsert image
+      operationId: upsert_category_image
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileBodySingle'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - categories
+  /manufacturers/:
+    get:
+      description: List manufacturers
+      operationId: list_manufacturers
+      parameters:
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManufacturerList'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      security: []
+      tags:
+      - manufacturers
+    post:
+      description: Add manufacturer
+      operationId: add_manufacturer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Manufacturer'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manufacturer'
+          description: Created
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - manufacturers
+  /manufacturers/{id}/:
+    delete:
+      description: Delete manufacturer
+      operationId: delete_manufacturer
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - manufacturers
+    get:
+      description: Get manufacturer details
+      operationId: get_manufacturer
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manufacturer'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      security: []
+      tags:
+      - manufacturers
+    put:
+      description: Update manufacturer
+      operationId: update_manufacturer
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Manufacturer'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manufacturer'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - manufacturers
+  /manufacturers/{id}/image/:
+    delete:
+      description: Delete image
+      operationId: delete_manufacturer_image
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - manufacturers
+    put:
+      description: Upsert image
+      operationId: upsert_manufacturer_image
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileBodySingle'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - manufacturers
+  /products/:
+    get:
+      description: List products
+      operationId: list_products
+      parameters:
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      security: []
+      tags:
+      - products
+    post:
+      description: Add product
+      operationId: add_product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: Created
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - products
+  /products/{id}/:
+    delete:
+      description: Delete product
+      operationId: delete_product
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - products
+    get:
+      description: Get product details
+      operationId: get_product
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      - description: The returned object should include related objects.
+        explode: true
+        in: query
+        name: resolve
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResolvedProduct'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      security: []
+      tags:
+      - products
+    put:
+      description: Update product
+      operationId: update_product
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - products
+  /products/{id}/images/:
+    get:
+      description: Get product images
+      operationId: list_product_images
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageList'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - products
+    post:
+      description: Add product images
+      operationId: add_product_images
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      - description: Comma separated list of ImageConfig. Check ImageConfig for exact
+          format.
+        explode: false
+        in: query
+        name: img
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ImageConfig'
+          type: array
+        style: form
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileBodyMultiple'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageList'
+          description: Created
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - products
+  /products/{id}/images/{image_id}/:
+    delete:
+      description: Delete product image
+      operationId: delete_product_image
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      - description: Image ID
+        explode: false
+        in: path
+        name: image_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - products
+    put:
+      description: "Update product image. In case the new order matches another image,\
+        \ the orders are swapped. Therefore, this call will return all impacted images\
+        \ (1 or 2). First the image on which the request was called and optionally\
+        \ second the swapped image."
+      operationId: update_product_image
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      - description: Image ID
+        explode: false
+        in: path
+        name: image_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Image'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageList'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - products
+  /content/:
+    get:
+      description: List content
+      operationId: list_content
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentList'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - content
+  /content/{content_name}/:
+    get:
+      description: Get content
+      operationId: get_content
+      parameters:
+      - description: Content name
+        explode: false
+        in: path
+        name: content_name
+        required: true
+        schema:
+          example: about
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Content'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      security: []
+      tags:
+      - content
+    put:
+      description: Update content
+      operationId: update_content
+      parameters:
+      - description: Content name
+        explode: false
+        in: path
+        name: content_name
+        required: true
+        schema:
+          example: about
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Content'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Content'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - content
+  /events/:
+    get:
+      description: List events
+      operationId: list_events
+      parameters:
+      - description: Include events which are already done (end time in the past).
+        explode: true
+        in: query
+        name: include_past_events
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventList'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      security: []
+      tags:
+      - events
+    post:
+      description: Add event
+      operationId: add_event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: Created
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - events
+  /events/{id}/:
+    delete:
+      description: Delete event
+      operationId: delete_event
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - events
+    get:
+      description: Get event details
+      operationId: get_event
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      security: []
+      tags:
+      - events
+    put:
+      description: Update event
+      operationId: update_event
+      parameters:
+      - description: ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ShortID'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GocomError'
+          description: Default error response
+      tags:
+      - events
+components:
+  parameters:
+    pathContentName:
+      description: Content name
+      explode: false
+      in: path
+      name: content_name
+      required: true
+      schema:
+        example: about
+        type: string
+      style: simple
+    pathID:
+      description: ID
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/ShortID'
+      style: simple
+    pathImageID:
+      description: Image ID
+      explode: false
+      in: path
+      name: image_id
+      required: true
+      schema:
+        $ref: '#/components/schemas/ShortID'
+      style: simple
+    queryImg:
+      description: Comma separated list of ImageConfig. Check ImageConfig for exact
+        format.
+      explode: false
+      in: query
+      name: img
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ImageConfig'
+        type: array
+      style: form
+    queryIncludePastEvents:
+      description: Include events which are already done (end time in the past).
+      explode: true
+      in: query
+      name: include_past_events
+      required: false
+      schema:
+        default: false
+        type: boolean
+      style: form
+    resolve:
+      description: The returned object should include related objects.
+      explode: true
+      in: query
+      name: resolve
+      required: false
+      schema:
+        default: false
+        type: boolean
+      style: form
+  responses:
+    Error:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GocomError'
+      description: Default error response
+  schemas:
+    Config:
+      example:
+        features:
+          manufacturers:
+            enabled: true
+          categories:
+            enabled: true
+          content:
+            enabled: true
+          events:
+            whole_days_only: true
+            enabled: true
+          products:
+            enabled: true
+      properties:
+        features:
+          $ref: '#/components/schemas/ConfigFeatures'
+      required:
+      - features
+      type: object
+    ConfigFeatures:
+      example:
+        manufacturers:
+          enabled: true
+        categories:
+          enabled: true
+        content:
+          enabled: true
+        events:
+          whole_days_only: true
+          enabled: true
+        products:
+          enabled: true
+      properties:
+        categories:
+          $ref: '#/components/schemas/ConfigFeaturesCategories'
+        manufacturers:
+          $ref: '#/components/schemas/ConfigFeaturesManufacturers'
+        products:
+          $ref: '#/components/schemas/ConfigFeaturesProducts'
+        content:
+          $ref: '#/components/schemas/ConfigFeaturesContent'
+        events:
+          $ref: '#/components/schemas/ConfigFeaturesEvents'
+      required:
+      - categories
+      - content
+      - events
+      - manufacturers
+      - products
+      type: object
+    ConfigFeaturesCategories:
+      example:
+        enabled: true
+      properties:
+        enabled:
+          type: boolean
+      required:
+      - enabled
+      type: object
+    ConfigFeaturesManufacturers:
+      example:
+        enabled: true
+      properties:
+        enabled:
+          type: boolean
+      required:
+      - enabled
+      type: object
+    ConfigFeaturesProducts:
+      example:
+        enabled: true
+      properties:
+        enabled:
+          type: boolean
+      required:
+      - enabled
+      type: object
+    ConfigFeaturesContent:
+      example:
+        enabled: true
+      properties:
+        enabled:
+          type: boolean
+      required:
+      - enabled
+      type: object
+    ConfigFeaturesEvents:
+      example:
+        whole_days_only: true
+        enabled: true
+      properties:
+        enabled:
+          type: boolean
+        whole_days_only:
+          type: boolean
+      required:
+      - enabled
+      - whole_days_only
+      type: object
+    Category:
+      allOf:
+      - $ref: '#/components/schemas/Header'
+      - $ref: '#/components/schemas/Category_allOf'
+    CategoryList:
+      example:
+        categories:
+        - null
+        - null
+      properties:
+        categories:
+          items:
+            $ref: '#/components/schemas/Category'
+          type: array
+      required:
+      - categories
+      type: object
+    Content:
+      example:
+        content_type: null
+        name: about
+        body: This is something about me.
+      properties:
+        name:
+          example: about
+          readOnly: true
+          type: string
+        content_type:
+          $ref: '#/components/schemas/ContentType'
+        body:
+          example: This is something about me.
+          type: string
+      required:
+      - body
+      - content_type
+      - name
+      type: object
+    ContentType:
+      enum:
+      - SIMPLE
+      - HTML
+      readOnly: true
+      type: string
+    ContentList:
+      example:
+        content:
+        - content_type: null
+          name: about
+          body: This is something about me.
+        - content_type: null
+          name: about
+          body: This is something about me.
+      properties:
+        content:
+          items:
+            $ref: '#/components/schemas/Content'
+          type: array
+      required:
+      - content
+      type: object
+    Event:
+      allOf:
+      - $ref: '#/components/schemas/Header'
+      - $ref: '#/components/schemas/Event_allOf'
+      required:
+      - end
+      - event_type
+      - name
+      - start
+    EventList:
+      example:
+        events:
+        - null
+        - null
+      properties:
+        events:
+          items:
+            $ref: '#/components/schemas/Event'
+          type: array
+      required:
+      - events
+      type: object
+    FileBodySingle:
+      properties:
+        file:
+          $ref: '#/components/schemas/File'
+      required:
+      - file
+      type: object
+    FileBodyMultiple:
+      properties:
+        file:
+          items:
+            $ref: '#/components/schemas/File'
+          type: array
+      required:
+      - file
+      type: object
+    File:
+      format: binary
+      type: string
+    GocomError:
+      properties:
+        status:
+          description: HTTP status code
+          example: 400
+          type: integer
+        code:
+          $ref: '#/components/schemas/GocomErrorCode'
+        message:
+          description: Human-readable description of the error
+          example: Provided authentication token is invalid
+          type: string
+        instance:
+          description: Object to which this error is related
+          example: ""
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    GocomErrorCode:
+      description: "- CATEGORY_NAME_EMPTY: Category name is required and cannot be\
+        \ empty\n- CATEGORY_ORDER_NEGATIVE: Category order should be a positive integer\n\
+        - CATEGORY_PARENT_ID_INVALID: Parent ID of the category is invalid\n- CONTENT_NAME_EMPTY:\
+        \ Content name is required and cannot be empty\n- CONTENT_TYPE_INVALID: Content\
+        \ type is empty or has an invalid value\n- EVENT_END_BEFORE_START: The end\
+        \ date of the event should be equal to or after the start date\n- IMAGE_ORDER_NEGATIVE:\
+        \ Image order should be a positive integer\n- INVALID_AUTH_TOKEN: Provided\
+        \ authentication token is invalid\n- INVALID_ID: Provided short ID or UUID\
+        \ is invalid\n- MISSING_ADMIN_ROLE: Required role \"admin\" is missing on\
+        \ provided authentication token\n- PARAMETER_MISSING: A required URL parameter\
+        \ is missing\n- PRODUCT_CATEGORY_IDS_INVALID: Category ID's of product are\
+        \ invalid\n- PRODUCT_MANUFACTURER_ID_INVALID: Manufacturer ID of the product\
+        \ is invalid\n- PRODUCT_NAME_EMPTY: Product name is required and cannot be\
+        \ empty\n- PRODUCT_PRICE_NEGATIVE: Product price should be a positive integer\n\
+        - SINGLE_IMAGE_IN_FORM: Exactly one image is expected in multipart form, but\
+        \ none or multiple are provided\n- UNKNOWN_CATEGORY: The category does not\
+        \ exist\n- UNKNOWN_CONTENT: The content does not exist\n- UNKNOWN_ERROR: An\
+        \ unknown error occurred\n- UNKNOWN_EVENT: The event does not exist\n- UNKNOWN_IMAGE:\
+        \ The image does not exist\n- UNKNOWN_MANUFACTURER: The manufacturer does\
+        \ not exist\n- UNKNOWN_PRODUCT: The product does not exist\n"
+      enum:
+      - CATEGORY_NAME_EMPTY
+      - CATEGORY_ORDER_NEGATIVE
+      - CATEGORY_PARENT_ID_INVALID
+      - CONTENT_NAME_EMPTY
+      - CONTENT_TYPE_INVALID
+      - EVENT_END_BEFORE_START
+      - IMAGE_ORDER_NEGATIVE
+      - INVALID_AUTH_TOKEN
+      - INVALID_ID
+      - MISSING_ADMIN_ROLE
+      - PARAMETER_MISSING
+      - PRODUCT_CATEGORY_IDS_INVALID
+      - PRODUCT_MANUFACTURER_ID_INVALID
+      - PRODUCT_NAME_EMPTY
+      - PRODUCT_PRICE_NEGATIVE
+      - SINGLE_IMAGE_IN_FORM
+      - UNKNOWN_CATEGORY
+      - UNKNOWN_CONTENT
+      - UNKNOWN_ERROR
+      - UNKNOWN_EVENT
+      - UNKNOWN_IMAGE
+      - UNKNOWN_MANUFACTURER
+      - UNKNOWN_PRODUCT
+      example: INVALID_AUTH_TOKEN
+      type: string
+    Header:
+      properties:
+        id:
+          description: Compressed representation of ID
+          example: AneTxNh7GB5uD2HoXvwF2E
+          readOnly: true
+          type: string
+      type: object
+    HeaderTimestamped:
+      allOf:
+      - $ref: '#/components/schemas/Header'
+      - $ref: '#/components/schemas/HeaderTimestamped_allOf'
+    Image:
+      example:
+        ext: png
+        urls:
+          "300_200_FIT": https://images.jensw.be/.../fill/300/200/.../anBn.png
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        order: 0
+      properties:
+        id:
+          format: uuid
+          readOnly: true
+          type: string
+        ext:
+          description: Extension of the image
+          example: png
+          readOnly: true
+          type: string
+        urls:
+          additionalProperties:
+            $ref: '#/components/schemas/ImageUrl'
+          example:
+            "300_200_FIT": https://images.jensw.be/.../fill/300/200/.../anBn.png
+          readOnly: true
+          type: object
+        order:
+          description: Should be sorted ascending by this column
+          format: int64
+          type: integer
+      required:
+      - ext
+      - id
+      - order
+      - urls
+      type: object
+    ImageConfig:
+      description: "Comma separated list of image configs in format width_height_resizeMode.\n\
+        - Width: Width of the image\n- Height: Height of the image (optional, default\
+        \ = Width)\n- Resize mode (optional, default = FIT):\n  - FIT:  Fits the image\
+        \ within the dimensions. Resulting image\n          might be smaller than\
+        \ dimensions.\n  - FILL: Fill the dimensions with the image. Image might be\
+        \ cropped."
+      example: 300_200_FIT
+      type: string
+    ImageUrl:
+      description: Signed URL pointing to the image
+      example: https://images.jensw.be/.../fill/300/200/.../anBn.png
+      readOnly: true
+      type: string
+    ImageUrlMap:
+      additionalProperties:
+        $ref: '#/components/schemas/ImageUrl'
+      example:
+        "300_200_FIT": https://images.jensw.be/.../fill/300/200/.../anBn.png
+      readOnly: true
+      type: object
+    ImageList:
+      example:
+        images:
+        - ext: png
+          urls:
+            "300_200_FIT": https://images.jensw.be/.../fill/300/200/.../anBn.png
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          order: 0
+        - ext: png
+          urls:
+            "300_200_FIT": https://images.jensw.be/.../fill/300/200/.../anBn.png
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          order: 0
+      properties:
+        images:
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+      readOnly: true
+      required:
+      - images
+      type: object
+    Manufacturer:
+      allOf:
+      - $ref: '#/components/schemas/Header'
+      - $ref: '#/components/schemas/Manufacturer_allOf'
+      required:
+      - name
+    ManufacturerList:
+      example:
+        manufacturers:
+        - null
+        - null
+      properties:
+        manufacturers:
+          items:
+            $ref: '#/components/schemas/Manufacturer'
+          type: array
+      required:
+      - manufacturers
+      type: object
+    Product:
+      allOf:
+      - $ref: '#/components/schemas/HeaderTimestamped'
+      - $ref: '#/components/schemas/Product_allOf'
+    ProductStatus:
+      enum:
+      - AVAILABLE
+      - ARCHIVED
+      type: string
+    ResolvedProduct:
+      allOf:
+      - $ref: '#/components/schemas/Product'
+      - $ref: '#/components/schemas/ResolvedProduct_allOf'
+    ProductList:
+      example:
+        products:
+        - null
+        - null
+      properties:
+        products:
+          items:
+            $ref: '#/components/schemas/Product'
+          type: array
+      required:
+      - products
+      type: object
+    ShortID:
+      description: Compressed representation of ID
+      example: AneTxNh7GB5uD2HoXvwF2E
+      type: string
+    Category_allOf:
+      properties:
+        name:
+          example: Makeup & Cosmetica
+          type: string
+        description:
+          type: string
+        parent_id:
+          description: Compressed representation of ID
+          example: AneTxNh7GB5uD2HoXvwF2E
+          type: string
+        order:
+          description: Should be sorted ascending by this column
+          format: int64
+          type: integer
+        product_ids:
+          items:
+            format: uuid
+            type: string
+          readOnly: true
+          type: array
+        image_urls:
+          additionalProperties:
+            $ref: '#/components/schemas/ImageUrl'
+          example:
+            "300_200_FIT": https://images.jensw.be/.../fill/300/200/.../anBn.png
+          readOnly: true
+          type: object
+      required:
+      - name
+      - order
+      type: object
+    Event_allOf:
+      properties:
+        name:
+          example: Winter sale
+          type: string
+        description:
+          example: Extended shopping during this winter day!
+          type: string
+        event_type:
+          description: Type of event. Types should be defined in GoCommerce config
+            file.
+          example: sale
+          type: string
+        start:
+          description: "Start of the event. In case \"whole_day\" is true, only the\
+            \ date part is considered."
+          format: date-time
+          type: string
+        end:
+          description: "End of the event, could be same as start. In case \"whole_day\"\
+            \ is true, only the date part is considered."
+          format: date-time
+          type: string
+        whole_day:
+          type: boolean
+      type: object
+    HeaderTimestamped_allOf:
+      properties:
+        created_at:
+          example: 2020-12-23T10:00:00Z
+          format: date-time
+          readOnly: true
+          type: string
+        updated_at:
+          example: 2020-12-24T11:30:00Z
+          format: date-time
+          readOnly: true
+          type: string
+      type: object
+    Manufacturer_allOf:
+      properties:
+        name:
+          example: Bjoetiek Y
+          type: string
+        website_url:
+          example: https://bjoetiek-y.be
+          format: url
+          type: string
+        image_urls:
+          additionalProperties:
+            $ref: '#/components/schemas/ImageUrl'
+          example:
+            "300_200_FIT": https://images.jensw.be/.../fill/300/200/.../anBn.png
+          readOnly: true
+          type: object
+      type: object
+    Product_allOf:
+      properties:
+        name:
+          example: Gezichtsmasker
+          type: string
+        description_short:
+          type: string
+        description_long:
+          type: string
+        price:
+          description: Price in cents
+          example: 1500
+          format: int64
+          type: integer
+        category_ids:
+          items:
+            format: uuid
+            type: string
+          type: array
+        manufacturer_id:
+          format: uuid
+          type: string
+        status:
+          $ref: '#/components/schemas/ProductStatus'
+        stock_count:
+          format: int64
+          type: integer
+        image_urls:
+          items:
+            $ref: '#/components/schemas/ImageUrlMap'
+          readOnly: true
+          type: array
+      required:
+      - name
+      - price
+      type: object
+    ResolvedProduct_allOf:
+      properties:
+        manufacturer:
+          $ref: '#/components/schemas/Manufacturer'
+        categories:
+          items:
+            $ref: '#/components/schemas/Category'
+          type: array
+      type: object
+  securitySchemes:
+    localAuth:
+      openIdConnectUrl: http://127.0.0.1:9001/auth/realms/go-commerce/.well-known/openid-configuration
+      type: openIdConnect

@@ -49,11 +49,11 @@ func (o *CategoryList) GetCategories() []Category {
 
 // GetCategoriesOk returns a tuple with the Categories field value
 // and a boolean to check if the value has been set.
-func (o *CategoryList) GetCategoriesOk() (*[]Category, bool) {
-	if o == nil  {
+func (o *CategoryList) GetCategoriesOk() ([]Category, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return &o.Categories, true
+	return o.Categories, true
 }
 
 // SetCategories sets field value

@@ -25,4 +25,5 @@ openapitools/openapi-generator-cli generate \
 --additional-properties enumClassPrefix=true
 
 # Remove unused files
-find api/openapi -mindepth 1 -not -iname "model_*.go" -not -name utils.go -delete
+rm api/openapi/go.mod api/openapi/go.sum 
+go mod tidy

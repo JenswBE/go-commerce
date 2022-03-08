@@ -52,7 +52,7 @@ func (o *ConfigFeaturesEvents) GetEnabled() bool {
 // GetEnabledOk returns a tuple with the Enabled field value
 // and a boolean to check if the value has been set.
 func (o *ConfigFeaturesEvents) GetEnabledOk() (*bool, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Enabled, true
@@ -76,7 +76,7 @@ func (o *ConfigFeaturesEvents) GetWholeDaysOnly() bool {
 // GetWholeDaysOnlyOk returns a tuple with the WholeDaysOnly field value
 // and a boolean to check if the value has been set.
 func (o *ConfigFeaturesEvents) GetWholeDaysOnlyOk() (*bool, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.WholeDaysOnly, true

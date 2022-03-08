@@ -24,7 +24,7 @@ type Category struct {
 	ParentId *string `json:"parent_id,omitempty"`
 	// Should be sorted ascending by this column
 	Order int64 `json:"order"`
-	ProductIds *[]string `json:"product_ids,omitempty"`
+	ProductIds []string `json:"product_ids,omitempty"`
 	ImageUrls *map[string]string `json:"image_urls,omitempty"`
 }
 
@@ -92,7 +92,7 @@ func (o *Category) GetName() string {
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *Category) GetNameOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Name, true
@@ -180,7 +180,7 @@ func (o *Category) GetOrder() int64 {
 // GetOrderOk returns a tuple with the Order field value
 // and a boolean to check if the value has been set.
 func (o *Category) GetOrderOk() (*int64, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Order, true
@@ -197,12 +197,12 @@ func (o *Category) GetProductIds() []string {
 		var ret []string
 		return ret
 	}
-	return *o.ProductIds
+	return o.ProductIds
 }
 
 // GetProductIdsOk returns a tuple with the ProductIds field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Category) GetProductIdsOk() (*[]string, bool) {
+func (o *Category) GetProductIdsOk() ([]string, bool) {
 	if o == nil || o.ProductIds == nil {
 		return nil, false
 	}
@@ -220,7 +220,7 @@ func (o *Category) HasProductIds() bool {
 
 // SetProductIds gets a reference to the given []string and assigns it to the ProductIds field.
 func (o *Category) SetProductIds(v []string) {
-	o.ProductIds = &v
+	o.ProductIds = v
 }
 
 // GetImageUrls returns the ImageUrls field value if set, zero value otherwise.
