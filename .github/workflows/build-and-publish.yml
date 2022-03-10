@@ -58,6 +58,7 @@ jobs:
           export AUTH_TYPE=BASIC_AUTH
           export DATABASE_DEFAULT_USER=e2e
           export DATABASE_DEFAULT_PASSWORD=e2e
+          export DATABASE_DEFAULT_DATABASE=e2e
 
           # Run API
           cd api
