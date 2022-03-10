@@ -25,6 +25,8 @@ func (s *E2ETestSuite) TestProductCRUD() {
 
 	// Add a new product
 	product := fixtures.ProductOpenAPI()
+	product.CategoryIds = nil
+	product.ManufacturerId = nil
 	rspProduct, rspRaw, err := s.authClient.ProductsApi.AddProduct(ctx).Product(*product).Execute()
 	require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	require.NotNil(s.T(), rspProduct)
