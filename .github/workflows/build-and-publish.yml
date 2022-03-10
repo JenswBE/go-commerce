@@ -63,8 +63,10 @@ jobs:
           # Run API
           cd api
           go run ./... &
+          sleep 5s
 
           # Run unit tests
+          cd ..
           go test -tags e2e -coverprofile=coverage.out -covermode=atomic ./...
 
       - name: Upload coverage to Codecov
