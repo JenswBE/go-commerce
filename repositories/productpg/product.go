@@ -63,11 +63,17 @@ func (r *ProductPostgres) UpdateProduct(e *entities.Product) (*entities.Product,
 	if err != nil {
 		return nil, translatePgError(err, m, m.ID)
 	}
-	err = r.db.Model(m).Association("Images").Replace(m.Images)
+	return internal.ProductPgToEntity(m), nil
+}
+
+func (r *ProductPostgres) UpdateProductImages(id entities.ID, images []*entities.Image) ([]*entities.Image, error) {
+	m := &internal.Product{Base: internal.Base{ID: id.String()}}
+	mImages := internal.ImagesListEntityToPg(images)
+	err := r.db.Model(m).Association("Images").Replace(mImages)
 	if err != nil {
 		return nil, translatePgError(err, m, m.ID)
 	}
-	return internal.ProductPgToEntity(m), nil
+	return internal.ImagesListPgToEntity(mImages), nil
 }
 
 func (r *ProductPostgres) DeleteProduct(id entities.ID) error {

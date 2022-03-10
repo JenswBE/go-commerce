@@ -39,7 +39,7 @@ services:
 
   db:
     <<: *defaults
-    image: postgres:13-alpine
+    image: postgres:13-alpine # Keep in sync with GitHub Actions ("services" section)
     environment:
       - "POSTGRES_USER=go_commerce"
       - "POSTGRES_PASSWORD=go_commerce"

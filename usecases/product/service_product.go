@@ -134,10 +134,11 @@ func (s *Service) AddProductImages(productID entities.ID, images map[string][]by
 	}
 
 	// Save product
-	product, err = s.db.UpdateProduct(product)
+	imageEntities, err := s.db.UpdateProductImages(product.ID, product.Images)
 	if err != nil {
 		return nil, err
 	}
+	product.Images = imageEntities
 
 	// Generate URL's
 	if len(imageConfigs) > 0 {

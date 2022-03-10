@@ -22,6 +22,7 @@ type DatabaseRepository interface {
 	ListProducts() ([]*entities.Product, error)
 	CreateProduct(e *entities.Product) (*entities.Product, error)
 	UpdateProduct(e *entities.Product) (*entities.Product, error)
+	UpdateProductImages(id entities.ID, images []*entities.Image) ([]*entities.Image, error)
 	DeleteProduct(id entities.ID) error
 
 	GetImage(id entities.ID) (*entities.Image, error)

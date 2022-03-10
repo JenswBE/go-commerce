@@ -112,12 +112,19 @@ func main() {
 	productHandler.RegisterPublicRoutes(public)
 
 	// Admin routes
-	authMW, err := middlewares.NewOIDCMiddleware(apiConfig.Authentication.IssuerURL)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
-	}
 	admin := router.Group("/")
-	admin.Use(authMW.EnforceRoles([]string{"admin"}))
+	switch apiConfig.Authentication.Type {
+	case config.AuthTypeBasicAuth:
+		log.Warn().Msg("Using authentication type BASIC_AUTH. This should only be used for E2E testing!")
+		authMW := gin.BasicAuth(gin.Accounts{apiConfig.Authentication.BasicAuth.Username: apiConfig.Authentication.BasicAuth.Password})
+		admin.Use(authMW)
+	case config.AuthTypeOIDC:
+		authMW, err := middlewares.NewOIDCMiddleware(apiConfig.Authentication.OIDC.IssuerURL)
+		if err != nil {
+			log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
+		}
+		admin.Use(authMW.EnforceRoles([]string{"admin"}))
+	}
 	contentHandler.RegisterAdminRoutes(admin)
 	productHandler.RegisterAdminRoutes(admin)
 

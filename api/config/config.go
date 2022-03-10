@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -13,7 +14,14 @@ import (
 
 type Config struct {
 	Authentication struct {
-		IssuerURL string `validate:"required"`
+		Type      AuthType
+		BasicAuth struct {
+			Username string
+			Password string
+		}
+		OIDC struct {
+			IssuerURL string
+		}
 	}
 	Database struct {
 		Default Database
@@ -58,6 +66,18 @@ type Config struct {
 	}
 }
 
+type AuthType string
+
+const (
+	AuthTypeBasicAuth AuthType = "BASIC_AUTH"
+	AuthTypeOIDC      AuthType = "OIDC"
+)
+
+type AuthBasicAuthConfig struct {
+	Username string
+	Password string
+}
+
 type Database struct {
 	Host     string
 	Port     int
@@ -75,6 +95,7 @@ const StorageTypeFS = "fs"
 
 func ParseConfig() (*Config, error) {
 	// Set defaults
+	viper.SetDefault("Authentication.Type", AuthTypeOIDC)
 	viper.SetDefault("Database.Default.Port", 5432)
 	viper.SetDefault("Features.Categories.Enabled", true)
 	viper.SetDefault("Features.Manufacturers.Enabled", true)
@@ -102,7 +123,10 @@ func ParseConfig() (*Config, error) {
 
 	// Bind ENV variables
 	err = bindEnvs([]envBinding{
-		{"Authentication.IssuerURL", "AUTH_ISSUER_URL"},
+		{"Authentication.Type", "AUTH_TYPE"},
+		{"Authentication.BasicAuth.Username", "AUTH_BASIC_USERNAME"},
+		{"Authentication.BasicAuth.Password", "AUTH_BASIC_PASSWORD"},
+		{"Authentication.OIDC.IssuerURL", "AUTH_OIDC_ISSUER_URL"},
 		{"Database.Default.Host", "DATABASE_DEFAULT_HOST"},
 		{"Database.Default.Port", "DATABASE_DEFAULT_PORT"},
 		{"Database.Default.User", "DATABASE_DEFAULT_USER"},
@@ -156,6 +180,24 @@ func ParseConfig() (*Config, error) {
 	if err := validate.Struct(&config); err != nil {
 		return nil, fmt.Errorf("config validation failed: %w", err)
 	}
+
+	// Additional validation
+	switch config.Authentication.Type {
+	case AuthTypeBasicAuth:
+		if config.Authentication.BasicAuth.Username == "" {
+			return nil, errors.New("username is required for authentication type BASIC_AUTH")
+		}
+		if config.Authentication.BasicAuth.Password == "" {
+			return nil, errors.New("password is required for authentication type BASIC_AUTH")
+		}
+	case AuthTypeOIDC:
+		if config.Authentication.OIDC.IssuerURL == "" {
+			return nil, errors.New("issuer URL is required for authentication type OIDC")
+		}
+	default:
+		return nil, fmt.Errorf("unknown authentication type %s", config.Authentication.Type)
+	}
+
 	return &config, nil
 }
 
