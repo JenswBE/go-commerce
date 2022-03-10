@@ -62,7 +62,7 @@ jobs:
 
           # Run API
           cd api
-          go run ./...
+          go run ./... &
 
           # Run unit tests
           go test -tags e2e -coverprofile=coverage.out -covermode=atomic ./...
