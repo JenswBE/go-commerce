@@ -51,7 +51,7 @@ func (s *E2ETestSuite) SetupSuite() {
 		formData.Add("client_id", "go-commerce-admin")
 		formData.Add("username", "e2e")
 		formData.Add("password", "e2e")
-		res, err := http.PostForm("http://127.0.0.1:9001/auth/realms/go-commerce/protocol/openid-connect/token", formData)
+		res, err := http.PostForm("http://127.0.0.1:9001/realms/go-commerce/protocol/openid-connect/token", formData)
 		require.NoError(s.T(), err)
 
 		// Parse token
@@ -61,7 +61,7 @@ func (s *E2ETestSuite) SetupSuite() {
 		var tokenData tokenResponse
 		err = json.NewDecoder(res.Body).Decode(&tokenData)
 		require.NoError(s.T(), err)
-		require.NotEmpty(s.T(), tokenData.AccessToken)
+		require.NotEmpty(s.T(), tokenData.AccessToken, "A valid access token should have been returned")
 		authConfig.AddDefaultHeader("Authorization", "Bearer "+tokenData.AccessToken)
 	}
 	s.authClient = openapi.NewAPIClient(authConfig)
