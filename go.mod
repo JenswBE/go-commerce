@@ -13,7 +13,7 @@ require (
 	github.com/jinzhu/copier v0.3.5
 	github.com/microcosm-cc/bluemonday v1.0.18
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/rs/zerolog v1.26.1
+	github.com/rs/zerolog v1.27.0
 	github.com/spf13/viper v1.12.0
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/oauth2 v0.0.0-20220524215830-622c5d57e401
