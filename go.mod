@@ -11,7 +11,7 @@ require (
 	github.com/google/go-cmp v0.5.8
 	github.com/google/uuid v1.3.0
 	github.com/jinzhu/copier v0.3.5
-	github.com/microcosm-cc/bluemonday v1.0.18
+	github.com/microcosm-cc/bluemonday v1.0.19
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/rs/zerolog v1.26.1
 	github.com/spf13/viper v1.12.0
