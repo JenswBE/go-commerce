@@ -18,5 +18,5 @@ require (
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/oauth2 v0.0.0-20220524215830-622c5d57e401
 	gorm.io/driver/postgres v1.3.7
-	gorm.io/gorm v1.23.5
+	gorm.io/gorm v1.23.8
 )
