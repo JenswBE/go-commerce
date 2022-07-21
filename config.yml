@@ -28,6 +28,7 @@ ImageProxy:
 Server:
   Debug: true
   Port: 8091
+  SessionAuthKey: "CCB6/3qUWsWqj7o4gmssFxV/tg3MJ9Z0d7QW4ASCoNP3jrh7XiPGjJFxAfSd1atpWv0iOJ4/pB/f6Hcj5AJizQ=="
 Storage:
   Images:
     Path: ../files/images

@@ -7,12 +7,12 @@ import (
 	"time"
 
 	"github.com/JenswBE/go-commerce/admin"
-	"github.com/JenswBE/go-commerce/api/config"
 	configHandler "github.com/JenswBE/go-commerce/api/handler/config"
 	contentHandler "github.com/JenswBE/go-commerce/api/handler/content"
 	productHandler "github.com/JenswBE/go-commerce/api/handler/product"
 	"github.com/JenswBE/go-commerce/api/middlewares"
 	"github.com/JenswBE/go-commerce/api/presenter"
+	"github.com/JenswBE/go-commerce/config"
 	"github.com/JenswBE/go-commerce/repositories/contentpg"
 	"github.com/JenswBE/go-commerce/repositories/localstorage"
 	"github.com/JenswBE/go-commerce/repositories/productpg"
@@ -38,25 +38,25 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	// Parse config
-	apiConfig, err := config.ParseConfig()
+	svcConfig, err := config.ParseConfig()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to parse config")
 	}
 
 	// Setup Debug logging if enabled
-	if apiConfig.Server.Debug {
+	if svcConfig.Server.Debug {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 		gin.SetMode(gin.DebugMode)
 		log.Debug().Msg("Debug logging enabled")
 	}
 
 	// DB
-	contentDSN := config.BuildDSN(apiConfig.Database.Content, apiConfig.Database.Default)
+	contentDSN := config.BuildDSN(svcConfig.Database.Content, svcConfig.Database.Default)
 	contentDB, err := gorm.Open(postgres.Open(contentDSN), &gorm.Config{})
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to connect to content DB")
 	}
-	productDSN := config.BuildDSN(apiConfig.Database.Product, apiConfig.Database.Default)
+	productDSN := config.BuildDSN(svcConfig.Database.Product, svcConfig.Database.Default)
 	productDB, err := gorm.Open(postgres.Open(productDSN), &gorm.Config{})
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to connect to product DB")
@@ -71,19 +71,19 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to migrate DB and create products repository")
 	}
-	imageStorage, err := getStorageRepo(apiConfig.Storage.Images)
+	imageStorage, err := getStorageRepo(svcConfig.Storage.Images)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create image storage repository")
 	}
-	allowedImageConfigs, err := config.ParseAllowedImageConfigs(apiConfig.ImageProxy.AllowedConfigs)
+	allowedImageConfigs, err := config.ParseAllowedImageConfigs(svcConfig.ImageProxy.AllowedConfigs)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to parse allowed image configs")
 	}
-	imageProxyService, err := imageproxy.NewImgProxyService(apiConfig.ImageProxy.BaseURL, apiConfig.ImageProxy.Key, apiConfig.ImageProxy.Salt, allowedImageConfigs)
+	imageProxyService, err := imageproxy.NewImgProxyService(svcConfig.ImageProxy.BaseURL, svcConfig.ImageProxy.Key, svcConfig.ImageProxy.Salt, allowedImageConfigs)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create image proxy service")
 	}
-	contentService, err := content.NewService(contentDatabase, apiConfig.Features.Content.List.ToEntity())
+	contentService, err := content.NewService(contentDatabase, svcConfig.Features.Content.List.ToEntity())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create content service")
 	}
@@ -95,16 +95,15 @@ func main() {
 	// Setup Gin
 	router := gin.Default()
 	router.RedirectTrailingSlash = true
-	err = router.SetTrustedProxies(apiConfig.Server.TrustedProxies)
+	err = router.SetTrustedProxies(svcConfig.Server.TrustedProxies)
 	if err != nil {
-		log.Fatal().Err(err).Strs("trusted_proxies", apiConfig.Server.TrustedProxies).Msg("Failed to set trusted proxies")
+		log.Fatal().Err(err).Strs("trusted_proxies", svcConfig.Server.TrustedProxies).Msg("Failed to set trusted proxies")
 	}
 
 	// Setup admin pages
 	router.HTMLRender = createAdminRenderer()
-	adminGroup := router.Group("/admin")
-	adminHandler := admin.NewAdminHandler()
-	adminHandler.RegisterRoutes(adminGroup)
+	adminHandler := admin.NewAdminHandler(productService, svcConfig.Server.SessionAuthKey)
+	adminHandler.RegisterRoutes(router)
 
 	// Setup API routes
 	apiGroup := router.Group("/api")
@@ -115,7 +114,7 @@ func main() {
 	apiGroup.StaticFile("/openapi.yml", "docs/openapi.yml")
 
 	// Setup handlers
-	configHandler := configHandler.NewConfigHandler(presenter, *apiConfig)
+	configHandler := configHandler.NewConfigHandler(presenter, *svcConfig)
 	contentHandler := contentHandler.NewContentHandler(presenter, contentService)
 	productHandler := productHandler.NewProductHandler(presenter, productService)
 
@@ -127,13 +126,13 @@ func main() {
 
 	// API admin routes
 	apiAdmin := apiGroup.Group("/")
-	switch apiConfig.Authentication.Type {
+	switch svcConfig.Authentication.Type {
 	case config.AuthTypeBasicAuth:
 		log.Warn().Msg("Using authentication type BASIC_AUTH. This should only be used for E2E testing!")
-		authMW := gin.BasicAuth(gin.Accounts{apiConfig.Authentication.BasicAuth.Username: apiConfig.Authentication.BasicAuth.Password})
+		authMW := gin.BasicAuth(gin.Accounts{svcConfig.Authentication.BasicAuth.Username: svcConfig.Authentication.BasicAuth.Password})
 		apiAdmin.Use(authMW)
 	case config.AuthTypeOIDC:
-		authMW, err := middlewares.NewOIDCMiddleware(apiConfig.Authentication.OIDC.IssuerURL)
+		authMW, err := middlewares.NewOIDCMiddleware(svcConfig.Authentication.OIDC.IssuerURL)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
 		}
@@ -143,32 +142,33 @@ func main() {
 	productHandler.RegisterAdminRoutes(apiAdmin)
 
 	// Start Gin
-	port := strconv.Itoa(apiConfig.Server.Port)
+	port := strconv.Itoa(svcConfig.Server.Port)
 	err = router.Run(":" + port)
 	if err != nil {
-		log.Fatal().Err(err).Int("port", apiConfig.Server.Port).Msg("Failed to start Gin server")
+		log.Fatal().Err(err).Int("port", svcConfig.Server.Port).Msg("Failed to start Gin server")
 	}
 }
 
-func getStorageRepo(apiConfig config.Storage) (product.StorageRepository, error) {
-	switch apiConfig.Type {
+func getStorageRepo(svcConfig config.Storage) (product.StorageRepository, error) {
+	switch svcConfig.Type {
 	case config.StorageTypeFS:
-		return localstorage.NewLocalStorage(apiConfig.Path)
+		return localstorage.NewLocalStorage(svcConfig.Path)
 	default:
-		return nil, fmt.Errorf(`unknown storage type "%s"`, apiConfig.Type)
+		return nil, fmt.Errorf(`unknown storage type "%s"`, svcConfig.Type)
 	}
 }
 
 func createAdminRenderer() multitemplate.Renderer {
 	pages := map[string][]string{
-		"categoriesList": {"pages/categories_list"},
-		"login":          {"pages/login"},
-		"productsList":   {"pages/products_list"},
+		"categoriesList":    {"pages/categories_list"},
+		"login":             {"pages/login"},
+		"manufacturersList": {"pages/manufacturers_list"},
+		"productsList":      {"pages/products_list"},
 	}
 
 	r := multitemplate.NewRenderer()
 	for pageName, templates := range pages {
-		templates = append(templates, "layouts/empty", "layouts/base")
+		templates = append([]string{"layouts/empty", "layouts/base"}, templates...)
 		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("admin/html/%s.html.go.tmpl", i) })
 		r.AddFromFiles(pageName, templatePaths...)
 	}

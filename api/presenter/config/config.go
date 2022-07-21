@@ -1,9 +1,9 @@
 package content
 
 import (
-	"github.com/JenswBE/go-commerce/api/config"
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
+	"github.com/JenswBE/go-commerce/config"
 )
 
 func ConfigFromEntity(p *presenter.Presenter, input config.Config) openapi.Config {

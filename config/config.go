@@ -60,6 +60,7 @@ type Config struct {
 		Debug          bool
 		Port           int
 		TrustedProxies []string
+		SessionAuthKey [64]byte
 	}
 	Storage struct {
 		Images Storage
@@ -155,6 +156,7 @@ func ParseConfig() (*Config, error) {
 		{"ImageProxy.AllowedConfigs", "IMAGE_PROXY_ALLOWED_CONFIGS"},
 		{"Server.Debug", "GOCOM_DEBUG"},
 		{"Server.Port", "GOCOM_PORT"},
+		{"Server.SessionAuthKey", "GOCOM_SESSION_AUTH_KEY"},
 		{"Server.TrustedProxies", "GOCOM_TRUSTED_PROXIES"},
 		{"Storage.Images.Type", "STORAGE_IMAGES_TYPE"},
 		{"Storage.Images.Path", "STORAGE_IMAGES_PATH"},
@@ -166,6 +168,7 @@ func ParseConfig() (*Config, error) {
 	// Unmarshal to Config struct
 	var config Config
 	decodeHooks := mapstructure.ComposeDecodeHookFunc(
+		byteArrayFromBase64StringHook(),
 		contentListHook(),
 		mapstructure.StringToTimeDurationHookFunc(),
 		mapstructure.StringToSliceHookFunc(","),
@@ -182,6 +185,9 @@ func ParseConfig() (*Config, error) {
 	}
 
 	// Additional validation
+	if config.Server.SessionAuthKey == [64]byte{} {
+		return nil, errors.New("session auth key is required. Please set in config or using env var GOCOM_SESSION_AUTH_KEY")
+	}
 	switch config.Authentication.Type {
 	case AuthTypeBasicAuth:
 		if config.Authentication.BasicAuth.Username == "" {

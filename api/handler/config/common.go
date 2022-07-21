@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/JenswBE/go-commerce/api/config"
 	"github.com/JenswBE/go-commerce/api/presenter"
+	"github.com/JenswBE/go-commerce/config"
 	"github.com/gin-gonic/gin"
 )
 

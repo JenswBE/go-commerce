@@ -22,6 +22,12 @@
     {{ block "empty_head" . }}{{ end }}
   </head>
   <body>
+    {{ range .Messages }}
+      <div class="alert alert-{{ .Type }}" role="alert">
+        {{ .Content }}
+      </div>
+    {{ end }}
+
     {{ block "empty_content" . }}{{ end }}
 
 

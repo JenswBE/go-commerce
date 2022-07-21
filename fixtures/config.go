@@ -1,8 +1,8 @@
 package fixtures
 
 import (
-	"github.com/JenswBE/go-commerce/api/config"
 	"github.com/JenswBE/go-commerce/api/openapi"
+	"github.com/JenswBE/go-commerce/config"
 )
 
 // #############################

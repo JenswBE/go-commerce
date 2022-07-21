@@ -60,6 +60,8 @@ If both are defined, the environment variables take precedence.
 | Server.Debug                          | GOCOM_DEBUG                     | Set to true to enable debug logging and put API framework in debug mode.                                   | false          |
 | Server.Port                           | GOCOM_PORT                      | HTTP port on which the GoCommerce API listens                                                              | 8080           |
 | Server.TrustedProxies                 | GOCOM_TRUSTED_PROXIES           | IP's of proxies trusted by GoCommerce. Header `X-Forwarded-For` is only considered for these hosts.        | 172.16.0.0/16  |
+| Server.SessionAuthKey                 | GOCOM_SESSION_AUTH_KEY          | Authentication key for session tokens. Mandatory and must be a base64 encoded string of 64 bytes.          |                |
+|                                       |                                 | Can be generated using `openssl rand -base64 64 \| paste --delimiters '' --serial`                         |                |
 | Storage.Images.Type                   | STORAGE_IMAGES_TYPE             | Type of storage used for storing images. Currently only `fs` is supported.                                 | fs             |
 | Storage.Images.Path                   | STORAGE_IMAGES_PATH             | Path for storing images                                                                                    | ./files/images |
 
