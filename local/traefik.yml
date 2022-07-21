@@ -8,9 +8,8 @@ http:
   routers:
     api:
       entrypoints: ["web"]
-      rule: "PathPrefix(`/api`)"
+      rule: "!PathPrefix(`/images`)"
       service: api
-      middlewares: ["strip-api-prefix"]
 
   middlewares:
     cors:
@@ -20,7 +19,3 @@ http:
         accessControlAllowMethods: "*"
         accessControlAllowOriginListRegex: '^https?://(localhost|127.0.0.1|192\.168\.\d+\.\d+)(:\d+)$'
         addVaryHeader: true
-
-    strip-api-prefix:
-      stripPrefix:
-        prefixes: ["/api"]

@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/JenswBE/go-commerce/admin"
 	"github.com/JenswBE/go-commerce/api/config"
 	configHandler "github.com/JenswBE/go-commerce/api/handler/config"
 	contentHandler "github.com/JenswBE/go-commerce/api/handler/content"
@@ -17,9 +18,11 @@ import (
 	"github.com/JenswBE/go-commerce/repositories/productpg"
 	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
+	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
+	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -91,42 +94,53 @@ func main() {
 
 	// Setup Gin
 	router := gin.Default()
+	router.RedirectTrailingSlash = true
 	err = router.SetTrustedProxies(apiConfig.Server.TrustedProxies)
 	if err != nil {
 		log.Fatal().Err(err).Strs("trusted_proxies", apiConfig.Server.TrustedProxies).Msg("Failed to set trusted proxies")
 	}
-	router.StaticFile("/", "../docs/index.html")
-	router.StaticFile("/index.html", "../docs/index.html")
-	router.StaticFile("/oauth2-redirect.html", "../docs/oauth2-redirect.html")
-	router.StaticFile("/openapi.yml", "../docs/openapi.yml")
+
+	// Setup admin pages
+	router.HTMLRender = createAdminRenderer()
+	adminGroup := router.Group("/admin")
+	adminHandler := admin.NewAdminHandler()
+	adminHandler.RegisterRoutes(adminGroup)
+
+	// Setup API routes
+	apiGroup := router.Group("/api")
+	apiGroup.StaticFile("", "docs/index.html")
+	apiGroup.StaticFile("/", "docs/index.html")
+	apiGroup.StaticFile("/index.html", "docs/index.html")
+	apiGroup.StaticFile("/oauth2-redirect.html", "docs/oauth2-redirect.html")
+	apiGroup.StaticFile("/openapi.yml", "docs/openapi.yml")
 
 	// Setup handlers
 	configHandler := configHandler.NewConfigHandler(presenter, *apiConfig)
 	contentHandler := contentHandler.NewContentHandler(presenter, contentService)
 	productHandler := productHandler.NewProductHandler(presenter, productService)
 
-	// Public routes
-	public := router.Group("/")
-	configHandler.RegisterPublicRoutes(public)
-	contentHandler.RegisterPublicRoutes(public)
-	productHandler.RegisterPublicRoutes(public)
+	// API public routes
+	apiPublic := apiGroup.Group("/")
+	configHandler.RegisterPublicRoutes(apiPublic)
+	contentHandler.RegisterPublicRoutes(apiPublic)
+	productHandler.RegisterPublicRoutes(apiPublic)
 
-	// Admin routes
-	admin := router.Group("/")
+	// API admin routes
+	apiAdmin := apiGroup.Group("/")
 	switch apiConfig.Authentication.Type {
 	case config.AuthTypeBasicAuth:
 		log.Warn().Msg("Using authentication type BASIC_AUTH. This should only be used for E2E testing!")
 		authMW := gin.BasicAuth(gin.Accounts{apiConfig.Authentication.BasicAuth.Username: apiConfig.Authentication.BasicAuth.Password})
-		admin.Use(authMW)
+		apiAdmin.Use(authMW)
 	case config.AuthTypeOIDC:
 		authMW, err := middlewares.NewOIDCMiddleware(apiConfig.Authentication.OIDC.IssuerURL)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
 		}
-		admin.Use(authMW.EnforceRoles([]string{"admin"}))
+		apiAdmin.Use(authMW.EnforceRoles([]string{"admin"}))
 	}
-	contentHandler.RegisterAdminRoutes(admin)
-	productHandler.RegisterAdminRoutes(admin)
+	contentHandler.RegisterAdminRoutes(apiAdmin)
+	productHandler.RegisterAdminRoutes(apiAdmin)
 
 	// Start Gin
 	port := strconv.Itoa(apiConfig.Server.Port)
@@ -143,4 +157,20 @@ func getStorageRepo(apiConfig config.Storage) (product.StorageRepository, error)
 	default:
 		return nil, fmt.Errorf(`unknown storage type "%s"`, apiConfig.Type)
 	}
+}
+
+func createAdminRenderer() multitemplate.Renderer {
+	pages := map[string][]string{
+		"categoriesList": {"pages/categories_list"},
+		"login":          {"pages/login"},
+		"productsList":   {"pages/products_list"},
+	}
+
+	r := multitemplate.NewRenderer()
+	for pageName, templates := range pages {
+		templates = append(templates, "layouts/empty", "layouts/base")
+		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("admin/html/%s.html.go.tmpl", i) })
+		r.AddFromFiles(pageName, templatePaths...)
+	}
+	return r
 }
