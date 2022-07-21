@@ -1,3 +1,4 @@
+//go:build e2e
 // +build e2e
 
 package e2e
@@ -17,7 +18,7 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-const BaseURL = "http://localhost:8090/api/"
+const BaseURL = "http://127.0.0.1:8090/api/"
 
 type E2ETestSuite struct {
 	suite.Suite
