@@ -39,6 +39,7 @@ func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	rg.GET("/", func(c *gin.Context) { c.Redirect(http.StatusTemporaryRedirect, "products/") })
 	// rg.GET("categories/", handleCategoriesList)
 	rg.GET("login/", handleLogin)
+	rg.GET("logout/", handleLogout)
 	rg.GET("manufacturers/", h.handleManufacturersList)
 	rg.GET("manufacturers/:manufacturer_id/", h.handleManufacturersEdit)
 	rg.Any("manufacturers/:manufacturer_id/delete/", h.handleManufacturersDelete)
@@ -79,25 +80,7 @@ func htmlWithFlashes(c *gin.Context, code int, name string, obj entities.WithBas
 	c.HTML(code, name, obj)
 }
 
-func messagesFromFlashes(c *gin.Context) (messages []entities.Message, success bool) {
-	// Get and convert flashes
-	session := sessions.Default(c)
-	flashes := session.Flashes()
-	messages = make([]entities.Message, 0, len(flashes))
-	for _, flash := range flashes {
-		messages = append(messages, entities.ParseMessage(flash.(string)))
-	}
-
-	// Save and return flashes
-	err := session.Save()
-	if err != nil {
-		c.String(http.StatusInternalServerError, "Failed to save session after retrieving flashes: %v. Flashes: %v", err, flashes)
-		return nil, false
-	}
-	return messages, true
-}
-
-func redirectWithFlash(c *gin.Context, session sessions.Session, messageType entities.MessageType, message, adminRedirectLocation string) {
+func redirectWithMessage(c *gin.Context, session sessions.Session, messageType entities.MessageType, message, adminRedirectLocation string) {
 	session.AddFlash(entities.Message{
 		Type:    messageType,
 		Content: message,

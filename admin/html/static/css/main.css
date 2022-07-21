@@ -83,3 +83,12 @@ body {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
+
+.alert-fixed {
+  position: fixed;
+  top: 10px;
+  left: 10vw;
+  width: 80vw;
+  z-index: 9999;
+  border-radius: 0px;
+}

@@ -23,8 +23,17 @@
   </head>
   <body>
     {{ range .Messages }}
-      <div class="alert alert-{{ .Type }}" role="alert">
+      <div
+        class="alert alert-{{ .Type }} alert-fixed alert-dismissible"
+        role="alert"
+      >
         {{ .Content }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
       </div>
     {{ end }}
 

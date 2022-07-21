@@ -11,12 +11,16 @@ func InvalidUUID(objectType ObjectType, value string) string {
 	return fmt.Sprintf(`Ongeldige ID "%s" voor %s`, value, objectType)
 }
 
-func FailedToDelete(objectType ObjectType, objectID uuid.UUID, err error) string {
+func DeleteFailed(objectType ObjectType, objectID uuid.UUID, err error) string {
 	return fmt.Sprintf(`Verwijderen van %s "%s" mislukt: %v`, objectType, objectID, err)
 }
 
 func DeleteSuccessful(objectType ObjectType) string {
 	return fmt.Sprintf(`%s succesvol verwijderd`, capitalFirst(string(objectType)))
+}
+
+func LogoutSuccessful() string {
+	return `Succesvol uitgelogd`
 }
 
 func capitalFirst(input string) string {

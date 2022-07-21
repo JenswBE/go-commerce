@@ -36,19 +36,19 @@ func (h *AdminHandler) handleManufacturersDelete(c *gin.Context) {
 	// Parse parameters
 	manID, err := parseUUID(c.Param(paramManufacturerID), objectTypeManufacturer)
 	if err != nil {
-		redirectWithFlash(c, session, entities.MessageTypeError, err.Error(), "manufacturers/")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "manufacturers/")
 		return
 	}
 
 	// Call service
 	err = h.productService.DeleteManufacturer(manID)
 	if err != nil {
-		msg := i18n.FailedToDelete(i18n.ObjectTypeManufacturer, manID, err)
-		redirectWithFlash(c, session, entities.MessageTypeError, msg, "manufacturers/")
+		msg := i18n.DeleteFailed(i18n.ObjectTypeManufacturer, manID, err)
+		redirectWithMessage(c, session, entities.MessageTypeError, msg, "manufacturers/")
 		return
 	}
 
 	// Call successful
 	msg := i18n.DeleteSuccessful(i18n.ObjectTypeManufacturer)
-	redirectWithFlash(c, session, entities.MessageTypeSuccess, msg, "manufacturers/")
+	redirectWithMessage(c, session, entities.MessageTypeSuccess, msg, "manufacturers/")
 }
