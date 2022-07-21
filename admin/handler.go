@@ -7,6 +7,7 @@ import (
 	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
 	"github.com/JenswBE/go-commerce/usecases/product"
+	"github.com/JenswBE/go-commerce/utils/auth"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -17,20 +18,23 @@ const PrefixAdmin = "/admin/"
 
 type AdminHandler struct {
 	productService product.Usecase
-	sessionStore   sessions.Store
+	middlewares    gin.HandlersChain
 }
 
-func NewAdminHandler(productService product.Usecase, sessionAuthKey [64]byte) *AdminHandler {
+func NewAdminGUIHandler(productService product.Usecase, sessionAuthKey [64]byte, authVerifier auth.Verifier) (*AdminHandler, error) {
 	return &AdminHandler{
 		productService: productService,
-		sessionStore:   cookie.NewStore(sessionAuthKey[:]),
-	}
+		middlewares: gin.HandlersChain{
+			sessions.Sessions("gocom", cookie.NewStore(sessionAuthKey[:])),
+			auth.NewAuthMiddleware(authVerifier).EnforceRoles([]string{auth.RoleAdmin}),
+		},
+	}, nil
 }
 
 func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	// Register middlewares
 	rg := r.Group(PrefixAdmin)
-	rg.Use(sessions.Sessions("gocom", h.sessionStore))
+	rg.Use(h.middlewares...)
 
 	// Register static routes
 	rg.Static("static", "admin/html/static")
@@ -38,7 +42,7 @@ func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	// Register dynamic routes
 	rg.GET("/", func(c *gin.Context) { c.Redirect(http.StatusTemporaryRedirect, "products/") })
 	// rg.GET("categories/", handleCategoriesList)
-	rg.GET("login/", handleLogin)
+	rg.Any("login/", handleLogin)
 	rg.GET("logout/", handleLogout)
 	rg.GET("manufacturers/", h.handleManufacturersList)
 	rg.GET("manufacturers/:manufacturer_id/", h.handleManufacturersEdit)

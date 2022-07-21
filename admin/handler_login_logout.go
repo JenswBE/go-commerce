@@ -10,9 +10,14 @@ import (
 )
 
 func handleLogin(c *gin.Context) {
-	c.HTML(200, "login", gin.H{
-		"title": "Inloggen",
-	})
+	// Default action (non-POST) is to show the template
+	if c.Request.Method != http.MethodPost {
+		c.HTML(200, "login", entities.BaseData{Title: "Inloggen"})
+		return
+	}
+
+	// Handle login on POST
+
 }
 
 func handleLogout(c *gin.Context) {

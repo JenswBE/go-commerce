@@ -10,7 +10,6 @@ import (
 	configHandler "github.com/JenswBE/go-commerce/api/handler/config"
 	contentHandler "github.com/JenswBE/go-commerce/api/handler/content"
 	productHandler "github.com/JenswBE/go-commerce/api/handler/product"
-	"github.com/JenswBE/go-commerce/api/middlewares"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/config"
 	"github.com/JenswBE/go-commerce/repositories/contentpg"
@@ -18,6 +17,7 @@ import (
 	"github.com/JenswBE/go-commerce/repositories/productpg"
 	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
+	"github.com/JenswBE/go-commerce/utils/auth"
 	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/JenswBE/go-commerce/utils/sanitizer"
@@ -100,11 +100,6 @@ func main() {
 		log.Fatal().Err(err).Strs("trusted_proxies", svcConfig.Server.TrustedProxies).Msg("Failed to set trusted proxies")
 	}
 
-	// Setup admin pages
-	router.HTMLRender = createAdminRenderer()
-	adminHandler := admin.NewAdminHandler(productService, svcConfig.Server.SessionAuthKey)
-	adminHandler.RegisterRoutes(router)
-
 	// Setup API routes
 	apiGroup := router.Group("/api")
 	apiGroup.StaticFile("", "docs/index.html")
@@ -124,22 +119,34 @@ func main() {
 	contentHandler.RegisterPublicRoutes(apiPublic)
 	productHandler.RegisterPublicRoutes(apiPublic)
 
-	// API admin routes
-	apiAdmin := apiGroup.Group("/")
+	// Setup admin authentication
+	var authVerifier auth.Verifier
 	switch svcConfig.Authentication.Type {
 	case config.AuthTypeBasicAuth:
 		log.Warn().Msg("Using authentication type BASIC_AUTH. This should only be used for E2E testing!")
-		authMW := gin.BasicAuth(gin.Accounts{svcConfig.Authentication.BasicAuth.Username: svcConfig.Authentication.BasicAuth.Password})
-		apiAdmin.Use(authMW)
+		authVerifier = auth.NewBasicVerifier(svcConfig.Authentication.BasicAuth.Username, svcConfig.Authentication.BasicAuth.Password)
 	case config.AuthTypeOIDC:
-		authMW, err := middlewares.NewOIDCMiddleware(svcConfig.Authentication.OIDC.IssuerURL)
+		authVerifier, err = auth.NewOIDCVerifier(svcConfig.Authentication.OIDC.IssuerURL)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
 		}
-		apiAdmin.Use(authMW.EnforceRoles([]string{"admin"}))
+	default:
+		log.Fatal().Msg("Invalid authentication type specified") // Should be captured by exhaustive, but too important to not shield.
 	}
+
+	// API admin routes
+	apiAdmin := apiGroup.Group("/")
+	apiAdmin.Use(auth.NewAuthMiddleware(authVerifier).EnforceRoles([]string{auth.RoleAdmin}))
 	contentHandler.RegisterAdminRoutes(apiAdmin)
 	productHandler.RegisterAdminRoutes(apiAdmin)
+
+	// Setup admin GUI
+	router.HTMLRender = createAdminGUIRenderer()
+	adminHandler, err := admin.NewAdminGUIHandler(productService, svcConfig.Server.SessionAuthKey, authVerifier)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to register admin handler")
+	}
+	adminHandler.RegisterRoutes(router)
 
 	// Start Gin
 	port := strconv.Itoa(svcConfig.Server.Port)
@@ -158,7 +165,7 @@ func getStorageRepo(svcConfig config.Storage) (product.StorageRepository, error)
 	}
 }
 
-func createAdminRenderer() multitemplate.Renderer {
+func createAdminGUIRenderer() multitemplate.Renderer {
 	pages := map[string][]string{
 		"categoriesList":    {"pages/categories_list"},
 		"login":             {"pages/login"},
