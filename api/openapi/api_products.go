@@ -13,12 +13,12 @@ package openapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strings"
 	"os"
+	"strings"
 )
 
 
