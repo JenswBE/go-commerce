@@ -58,9 +58,10 @@ type Config struct {
 	}
 	Server struct {
 		Debug          bool
+		JWTSigningKey  [64]byte
 		Port           int
-		TrustedProxies []string
 		SessionAuthKey [64]byte
+		TrustedProxies []string
 	}
 	Storage struct {
 		Images Storage
@@ -155,6 +156,7 @@ func ParseConfig() (*Config, error) {
 		{"ImageProxy.Salt", "IMAGE_PROXY_SALT"},
 		{"ImageProxy.AllowedConfigs", "IMAGE_PROXY_ALLOWED_CONFIGS"},
 		{"Server.Debug", "GOCOM_DEBUG"},
+		{"Server.JWTSigningKey", "GOCOM_JWT_SIGNING_KEY"},
 		{"Server.Port", "GOCOM_PORT"},
 		{"Server.SessionAuthKey", "GOCOM_SESSION_AUTH_KEY"},
 		{"Server.TrustedProxies", "GOCOM_TRUSTED_PROXIES"},
@@ -185,6 +187,9 @@ func ParseConfig() (*Config, error) {
 	}
 
 	// Additional validation
+	if config.Server.JWTSigningKey == [64]byte{} {
+		return nil, errors.New("jwt signing key is required. Please set in config or using env var GOCOM_JWT_SIGNING_KEY")
+	}
 	if config.Server.SessionAuthKey == [64]byte{} {
 		return nil, errors.New("session auth key is required. Please set in config or using env var GOCOM_SESSION_AUTH_KEY")
 	}

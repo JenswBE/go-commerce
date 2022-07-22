@@ -27,6 +27,7 @@ ImageProxy:
   AllowedConfigs: "100:100:FIT,150:150:FIT,400:400:FIT,550:550:FIT"
 Server:
   Debug: true
+  JWTSigningKey: "AaDsDFT7CXHMo7l+8OQFu+NqGxXaNEHNx+pghk1igTvhTg1URvT/SxqhKqCksx2AvkK3PE+lb3eDxiQc/NVbFg=="
   Port: 8091
   SessionAuthKey: "CCB6/3qUWsWqj7o4gmssFxV/tg3MJ9Z0d7QW4ASCoNP3jrh7XiPGjJFxAfSd1atpWv0iOJ4/pB/f6Hcj5AJizQ=="
 Storage:

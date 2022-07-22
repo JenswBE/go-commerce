@@ -42,8 +42,8 @@ func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	// Register dynamic routes
 	rg.GET("/", func(c *gin.Context) { c.Redirect(http.StatusTemporaryRedirect, "products/") })
 	// rg.GET("categories/", handleCategoriesList)
-	rg.Any("login/", handleLogin)
-	rg.GET("logout/", handleLogout)
+	rg.Any("login/", h.handleLogin)
+	rg.GET("logout/", h.handleLogout)
 	rg.GET("manufacturers/", h.handleManufacturersList)
 	rg.GET("manufacturers/:manufacturer_id/", h.handleManufacturersEdit)
 	rg.Any("manufacturers/:manufacturer_id/delete/", h.handleManufacturersDelete)

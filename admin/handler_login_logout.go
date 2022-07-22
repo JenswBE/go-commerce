@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func handleLogin(c *gin.Context) {
+func (h *AdminHandler) handleLogin(c *gin.Context) {
 	// Default action (non-POST) is to show the template
 	if c.Request.Method != http.MethodPost {
 		c.HTML(200, "login", entities.BaseData{Title: "Inloggen"})
@@ -17,10 +17,12 @@ func handleLogin(c *gin.Context) {
 	}
 
 	// Handle login on POST
+	username := c.PostForm("username")
+	password := c.PostForm("password")
 
 }
 
-func handleLogout(c *gin.Context) {
+func (h *AdminHandler) handleLogout(c *gin.Context) {
 	s := sessions.Default(c)
 	s.Clear()
 	if err := s.Save(); err != nil {
@@ -30,4 +32,8 @@ func handleLogout(c *gin.Context) {
 		}
 	}
 	redirectWithMessage(c, s, entities.MessageTypeSuccess, i18n.LogoutSuccessful(), "")
+}
+
+func verifyCredentials(username, password string) bool {
+	return false
 }
