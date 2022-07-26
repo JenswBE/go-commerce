@@ -34,18 +34,6 @@ func (p *Presenter) ParseID(id string) (uuid.UUID, error) {
 	return pID, nil
 }
 
-func (p *Presenter) ParseIDList(ids []string) ([]uuid.UUID, error) {
-	output := make([]uuid.UUID, 0, len(ids))
-	for _, id := range ids {
-		pID, err := p.ParseID(id)
-		if err != nil {
-			return nil, err
-		}
-		output = append(output, pID)
-	}
-	return output, nil
-}
-
 func (p *Presenter) EncodeID(id uuid.UUID) string {
 	return p.shortIDService.Encode(id)
 }

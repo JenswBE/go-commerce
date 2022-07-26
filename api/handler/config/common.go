@@ -20,7 +20,7 @@ func NewConfigHandler(p *presenter.Presenter, config config.Config) *ConfigHandl
 	}
 }
 
-func (h *ConfigHandler) RegisterPublicRoutes(rg *gin.RouterGroup) {
+func (h *ConfigHandler) RegisterRoutes(rg *gin.RouterGroup) {
 	groupConfig := rg.Group(pathPrefixConfig)
 	groupConfig.GET("/", h.getConfig)
 }

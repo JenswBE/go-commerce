@@ -29,7 +29,6 @@ paths:
       operationId: get_config
       description: Get configuration
       tags: ["config"]
-      security: []
       responses:
         "200":
           description: OK
@@ -46,7 +45,6 @@ paths:
       operationId: list_categories
       description: List categories
       tags: ["categories"]
-      security: []
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -58,25 +56,6 @@ paths:
                 $ref: "#/components/schemas/CategoryList"
         "default":
           $ref: "#/components/responses/Error"
-    post:
-      operationId: add_category
-      description: Add category
-      tags: ["categories"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Category"
-        required: true
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Category"
-        "default":
-          $ref: "#/components/responses/Error"
 
   /categories/{id}/:
     parameters:
@@ -85,7 +64,6 @@ paths:
       operationId: get_category
       description: Get category details
       tags: ["categories"]
-      security: []
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -95,68 +73,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Category"
-        "default":
-          $ref: "#/components/responses/Error"
-    put:
-      operationId: update_category
-      description: Update category
-      tags: ["categories"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Category"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Category"
-        "default":
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: delete_category
-      description: Delete category
-      tags: ["categories"]
-      responses:
-        "204":
-          description: No Content
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /categories/{id}/image/:
-    parameters:
-      - $ref: "#/components/parameters/pathID"
-    put:
-      operationId: upsert_category_image
-      description: Upsert image
-      tags: ["categories"]
-      parameters:
-        - $ref: "#/components/parameters/queryImg"
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/FileBodySingle"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Image"
-        "default":
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: delete_category_image
-      description: Delete image
-      tags: ["categories"]
-      responses:
-        "204":
-          description: No Content
         "default":
           $ref: "#/components/responses/Error"
 
@@ -165,7 +81,6 @@ paths:
       operationId: list_manufacturers
       description: List manufacturers
       tags: ["manufacturers"]
-      security: []
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -177,25 +92,6 @@ paths:
                 $ref: "#/components/schemas/ManufacturerList"
         "default":
           $ref: "#/components/responses/Error"
-    post:
-      operationId: add_manufacturer
-      description: Add manufacturer
-      tags: ["manufacturers"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Manufacturer"
-        required: true
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Manufacturer"
-        "default":
-          $ref: "#/components/responses/Error"
 
   /manufacturers/{id}/:
     parameters:
@@ -204,7 +100,6 @@ paths:
       operationId: get_manufacturer
       description: Get manufacturer details
       tags: ["manufacturers"]
-      security: []
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -214,68 +109,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Manufacturer"
-        "default":
-          $ref: "#/components/responses/Error"
-    put:
-      operationId: update_manufacturer
-      description: Update manufacturer
-      tags: ["manufacturers"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Manufacturer"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Manufacturer"
-        "default":
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: delete_manufacturer
-      description: Delete manufacturer
-      tags: ["manufacturers"]
-      responses:
-        "204":
-          description: No Content
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /manufacturers/{id}/image/:
-    parameters:
-      - $ref: "#/components/parameters/pathID"
-    put:
-      operationId: upsert_manufacturer_image
-      description: Upsert image
-      tags: ["manufacturers"]
-      parameters:
-        - $ref: "#/components/parameters/queryImg"
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/FileBodySingle"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Image"
-        "default":
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: delete_manufacturer_image
-      description: Delete image
-      tags: ["manufacturers"]
-      responses:
-        "204":
-          description: No Content
         "default":
           $ref: "#/components/responses/Error"
 
@@ -284,7 +117,6 @@ paths:
       operationId: list_products
       description: List products
       tags: ["products"]
-      security: []
       parameters:
         - $ref: "#/components/parameters/queryImg"
       responses:
@@ -296,25 +128,6 @@ paths:
                 $ref: "#/components/schemas/ProductList"
         "default":
           $ref: "#/components/responses/Error"
-    post:
-      operationId: add_product
-      description: Add product
-      tags: ["products"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Product"
-        required: true
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Product"
-        "default":
-          $ref: "#/components/responses/Error"
 
   /products/{id}/:
     parameters:
@@ -323,7 +136,6 @@ paths:
       operationId: get_product
       description: Get product details
       tags: ["products"]
-      security: []
       parameters:
         - $ref: "#/components/parameters/queryImg"
         - $ref: "#/components/parameters/resolve"
@@ -336,127 +148,10 @@ paths:
                 $ref: "#/components/schemas/ResolvedProduct"
         "default":
           $ref: "#/components/responses/Error"
-    put:
-      operationId: update_product
-      description: Update product
-      tags: ["products"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Product"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Product"
-        "default":
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: delete_product
-      description: Delete product
-      tags: ["products"]
-      responses:
-        "204":
-          description: No Content
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /products/{id}/images/:
-    parameters:
-      - $ref: "#/components/parameters/pathID"
-      - $ref: "#/components/parameters/queryImg"
-    get:
-      operationId: list_product_images
-      description: Get product images
-      tags: ["products"]
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ImageList"
-        "default":
-          $ref: "#/components/responses/Error"
-    post:
-      operationId: add_product_images
-      description: Add product images
-      tags: ["products"]
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/FileBodyMultiple"
-        required: true
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ImageList"
-        "default":
-          $ref: "#/components/responses/Error"
-
-  /products/{id}/images/{image_id}/:
-    parameters:
-      - $ref: "#/components/parameters/pathID"
-      - $ref: "#/components/parameters/pathImageID"
-    put:
-      operationId: update_product_image
-      description: >-
-        Update product image.
-        In case the new order matches another image, the orders are swapped.
-        Therefore, this call will return all impacted images (1 or 2).
-        First the image on which the request was called and optionally second the swapped image.
-      tags: ["products"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Image"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ImageList"
-        "default":
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: delete_product_image
-      description: Delete product image
-      tags: ["products"]
-      responses:
-        "204":
-          description: No Content
-        "default":
-          $ref: "#/components/responses/Error"
 
   # ============================
   # =         CONTENT          =
   # ============================
-  /content/:
-    get:
-      operationId: list_content
-      description: List content
-      tags: ["content"]
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ContentList"
-        "default":
-          $ref: "#/components/responses/Error"
-
   /content/{content_name}/:
     parameters:
       - $ref: "#/components/parameters/pathContentName"
@@ -464,26 +159,6 @@ paths:
       operationId: get_content
       description: Get content
       tags: ["content"]
-      security: []
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Content"
-        "default":
-          $ref: "#/components/responses/Error"
-    put:
-      operationId: update_content
-      description: Update content
-      tags: ["content"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Content"
-        required: true
       responses:
         "200":
           description: OK
@@ -499,7 +174,6 @@ paths:
       operationId: list_events
       description: List events
       tags: ["events"]
-      security: []
       parameters:
         - $ref: "#/components/parameters/queryIncludePastEvents"
       responses:
@@ -511,25 +185,6 @@ paths:
                 $ref: "#/components/schemas/EventList"
         "default":
           $ref: "#/components/responses/Error"
-    post:
-      operationId: add_event
-      description: Add event
-      tags: ["events"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Event"
-        required: true
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Event"
-        "default":
-          $ref: "#/components/responses/Error"
 
   /events/{id}/:
     parameters:
@@ -538,7 +193,6 @@ paths:
       operationId: get_event
       description: Get event details
       tags: ["events"]
-      security: []
       responses:
         "200":
           description: OK
@@ -546,34 +200,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Event"
-        "default":
-          $ref: "#/components/responses/Error"
-    put:
-      operationId: update_event
-      description: Update event
-      tags: ["events"]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Event"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Event"
-        "default":
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: delete_event
-      description: Delete event
-      tags: ["events"]
-      responses:
-        "204":
-          description: No Content
         "default":
           $ref: "#/components/responses/Error"
 
@@ -592,14 +218,6 @@ components:
       name: id
       in: path
       description: ID
-      required: true
-      schema:
-        $ref: "#/components/schemas/ShortID"
-
-    pathImageID:
-      name: image_id
-      in: path
-      description: Image ID
       required: true
       schema:
         $ref: "#/components/schemas/ShortID"
@@ -692,7 +310,6 @@ components:
       properties:
         enabled:
           type: boolean
-        # content list should be fetched from `GET /content/` instead.
 
     ConfigFeaturesEvents:
       type: object
@@ -818,28 +435,6 @@ components:
           items:
             $ref: "#/components/schemas/Event"
 
-    FileBodySingle:
-      type: object
-      required:
-        - file
-      properties:
-        file:
-          $ref: "#/components/schemas/File"
-
-    FileBodyMultiple:
-      type: object
-      required:
-        - file
-      properties:
-        file:
-          type: array
-          items:
-            $ref: "#/components/schemas/File"
-
-    File:
-      type: string
-      format: binary
-
     GocomError:
       type: object
       required:
@@ -865,20 +460,14 @@ components:
       description: |
         - CATEGORY_NAME_EMPTY: Category name is required and cannot be empty
         - CATEGORY_ORDER_NEGATIVE: Category order should be a positive integer
-        - CATEGORY_PARENT_ID_INVALID: Parent ID of the category is invalid
         - CONTENT_NAME_EMPTY: Content name is required and cannot be empty
         - CONTENT_TYPE_INVALID: Content type is empty or has an invalid value
         - EVENT_END_BEFORE_START: The end date of the event should be equal to or after the start date
         - IMAGE_ORDER_NEGATIVE: Image order should be a positive integer
-        - INVALID_AUTH_TOKEN: Provided authentication token is invalid
         - INVALID_ID: Provided short ID or UUID is invalid
-        - MISSING_ADMIN_ROLE: Required role "admin" is missing on provided authentication token
         - PARAMETER_MISSING: A required URL parameter is missing
-        - PRODUCT_CATEGORY_IDS_INVALID: Category ID's of product are invalid
-        - PRODUCT_MANUFACTURER_ID_INVALID: Manufacturer ID of the product is invalid
         - PRODUCT_NAME_EMPTY: Product name is required and cannot be empty
         - PRODUCT_PRICE_NEGATIVE: Product price should be a positive integer
-        - SINGLE_IMAGE_IN_FORM: Exactly one image is expected in multipart form, but none or multiple are provided
         - UNKNOWN_CATEGORY: The category does not exist
         - UNKNOWN_CONTENT: The content does not exist
         - UNKNOWN_ERROR: An unknown error occurred
@@ -887,24 +476,18 @@ components:
         - UNKNOWN_MANUFACTURER: The manufacturer does not exist
         - UNKNOWN_PRODUCT: The product does not exist
       type: string
-      example: INVALID_AUTH_TOKEN
+      example: INVALID_ID
       enum:
         - CATEGORY_NAME_EMPTY
         - CATEGORY_ORDER_NEGATIVE
-        - CATEGORY_PARENT_ID_INVALID
         - CONTENT_NAME_EMPTY
         - CONTENT_TYPE_INVALID
         - EVENT_END_BEFORE_START
         - IMAGE_ORDER_NEGATIVE
-        - INVALID_AUTH_TOKEN
         - INVALID_ID
-        - MISSING_ADMIN_ROLE
         - PARAMETER_MISSING
-        - PRODUCT_CATEGORY_IDS_INVALID
-        - PRODUCT_MANUFACTURER_ID_INVALID
         - PRODUCT_NAME_EMPTY
         - PRODUCT_PRICE_NEGATIVE
-        - SINGLE_IMAGE_IN_FORM
         - UNKNOWN_CATEGORY
         - UNKNOWN_CONTENT
         - UNKNOWN_ERROR
@@ -986,17 +569,6 @@ components:
         $ref: "#/components/schemas/ImageUrl"
       example:
         300_200_FIT: "https://images.jensw.be/.../fill/300/200/.../anBn.png"
-      readOnly: true
-
-    ImageList:
-      type: object
-      required:
-        - images
-      properties:
-        images:
-          type: array
-          items:
-            $ref: "#/components/schemas/Image"
       readOnly: true
 
     Manufacturer:
@@ -1105,11 +677,3 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/GocomError"
-
-  securitySchemes:
-    localAuth:
-      type: openIdConnect
-      openIdConnectUrl: http://127.0.0.1:9001/auth/realms/go-commerce/.well-known/openid-configuration # See https://github.com/IBM/openapi-validator/issues/338
-
-security:
-  - localAuth: []

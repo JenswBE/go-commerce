@@ -28,7 +28,7 @@ func NewProductHandler(p *presenter.Presenter, service product.Usecase) *Product
 	}
 }
 
-func (h *ProductHandler) RegisterPublicRoutes(rg *gin.RouterGroup) {
+func (h *ProductHandler) RegisterRoutes(rg *gin.RouterGroup) {
 	groupCategories := rg.Group(pathPrefixCategories)
 	groupCategories.GET("/", h.listCategories)
 	groupCategories.GET("/:id/", h.getCategory)
@@ -40,31 +40,6 @@ func (h *ProductHandler) RegisterPublicRoutes(rg *gin.RouterGroup) {
 	groupProducts := rg.Group(pathPrefixProducts)
 	groupProducts.GET("/", h.listProducts)
 	groupProducts.GET("/:id/", h.getProduct)
-	groupProducts.GET("/:id/images/", h.listProductImages)
-}
-
-func (h *ProductHandler) RegisterAdminRoutes(rg *gin.RouterGroup) {
-	groupCategories := rg.Group(pathPrefixCategories)
-	groupCategories.POST("/", h.createCategory)
-	groupCategories.PUT("/:id/", h.updateCategory)
-	groupCategories.DELETE("/:id/", h.deleteCategory)
-	groupCategories.PUT("/:id/image/", h.upsertCategoryImage)
-	groupCategories.DELETE("/:id/image/", h.deleteCategoryImage)
-
-	groupManufacturers := rg.Group(pathPrefixManufacturers)
-	groupManufacturers.POST("/", h.createManufacturer)
-	groupManufacturers.PUT("/:id/", h.updateManufacturer)
-	groupManufacturers.DELETE("/:id/", h.deleteManufacturer)
-	groupManufacturers.PUT("/:id/image/", h.upsertManufacturerImage)
-	groupManufacturers.DELETE("/:id/image/", h.deleteManufacturerImage)
-
-	groupProducts := rg.Group(pathPrefixProducts)
-	groupProducts.POST("/", h.createProduct)
-	groupProducts.PUT("/:id/", h.updateProduct)
-	groupProducts.DELETE("/:id/", h.deleteProduct)
-	groupProducts.POST("/:id/images/", h.addProductImages)
-	groupProducts.PUT("/:id/images/:image_id/", h.updateProductImage)
-	groupProducts.DELETE("/:id/images/:image_id/", h.deleteProductImage)
 }
 
 func parseFilesFromMultipart(req *http.Request) (map[string][]byte, error) {

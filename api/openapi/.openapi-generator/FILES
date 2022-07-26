@@ -36,7 +36,6 @@ docs/Header.md
 docs/HeaderTimestamped.md
 docs/HeaderTimestampedAllOf.md
 docs/Image.md
-docs/ImageList.md
 docs/Manufacturer.md
 docs/ManufacturerAllOf.md
 docs/ManufacturerList.md
@@ -73,7 +72,6 @@ model_header.go
 model_header_timestamped.go
 model_header_timestamped_all_of.go
 model_image.go
-model_image_list.go
 model_manufacturer.go
 model_manufacturer_all_of.go
 model_manufacturer_list.go

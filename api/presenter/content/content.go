@@ -35,16 +35,3 @@ func ContentSliceFromEntity(p *presenter.Presenter, input []*entities.Content) [
 	}
 	return output
 }
-
-func ContentListFromEntity(p *presenter.Presenter, input []*entities.Content) openapi.ContentList {
-	return *openapi.NewContentList(ContentSliceFromEntity(p, input))
-}
-
-func ContentToEntity(p *presenter.Presenter, content openapi.Content) *entities.Content {
-	// Build entity
-	return &entities.Content{
-		Name:        content.Name,
-		ContentType: entities.ContentType(content.GetContentType()),
-		Body:        content.Body,
-	}
-}

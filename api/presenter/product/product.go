@@ -73,39 +73,3 @@ func ResolvedProductFromEntity(p *presenter.Presenter, input *entities.ResolvedP
 	output.Categories = categories
 	return output, nil
 }
-
-func ProductToEntity(p *presenter.Presenter, id uuid.UUID, input openapi.Product) (*entities.Product, error) {
-	// Build entity
-	output := &entities.Product{
-		ID:               id,
-		Name:             input.GetName(),
-		DescriptionShort: input.GetDescriptionShort(),
-		DescriptionLong:  input.GetDescriptionLong(),
-		Price:            int(input.GetPrice()),
-		CategoryIDs:      nil,
-		ManufacturerID:   uuid.Nil,
-		Status:           entities.ProductStatus(input.GetStatus()),
-		StockCount:       int(input.GetStockCount()),
-	}
-
-	// Parse category ID's
-	if len(input.GetCategoryIds()) > 0 {
-		catIDs, err := p.ParseIDList(input.GetCategoryIds())
-		if err != nil {
-			return nil, entities.NewError(400, openapi.GOCOMERRORCODE_PRODUCT_CATEGORY_IDS_INVALID, id.String(), err)
-		}
-		output.CategoryIDs = catIDs
-	}
-
-	// Parse manufacturer ID
-	if input.GetManufacturerId() != "" {
-		manID, err := p.ParseID(input.GetManufacturerId())
-		if err != nil {
-			return nil, entities.NewError(400, openapi.GOCOMERRORCODE_PRODUCT_MANUFACTURER_ID_INVALID, id.String(), err)
-		}
-		output.ManufacturerID = manID
-	}
-
-	// Successful
-	return output, nil
-}

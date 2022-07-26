@@ -4,7 +4,6 @@ import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
 )
 
 func ManufacturerFromEntity(p *presenter.Presenter, input *entities.Manufacturer) openapi.Manufacturer {
@@ -30,13 +29,4 @@ func ManufacturerSliceFromEntity(p *presenter.Presenter, input []*entities.Manuf
 
 func ManufacturerListFromEntity(p *presenter.Presenter, input []*entities.Manufacturer) openapi.ManufacturerList {
 	return *openapi.NewManufacturerList(ManufacturerSliceFromEntity(p, input))
-}
-
-func ManufacturerToEntity(p *presenter.Presenter, id uuid.UUID, input openapi.Manufacturer) *entities.Manufacturer {
-	// Build entity
-	return &entities.Manufacturer{
-		ID:         id,
-		Name:       input.GetName(),
-		WebsiteURL: input.GetWebsiteUrl(),
-	}
 }

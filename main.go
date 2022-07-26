@@ -105,7 +105,6 @@ func main() {
 	apiGroup.StaticFile("", "docs/index.html")
 	apiGroup.StaticFile("/", "docs/index.html")
 	apiGroup.StaticFile("/index.html", "docs/index.html")
-	apiGroup.StaticFile("/oauth2-redirect.html", "docs/oauth2-redirect.html")
 	apiGroup.StaticFile("/openapi.yml", "docs/openapi.yml")
 
 	// Setup handlers
@@ -115,9 +114,9 @@ func main() {
 
 	// API public routes
 	apiPublic := apiGroup.Group("/")
-	configHandler.RegisterPublicRoutes(apiPublic)
-	contentHandler.RegisterPublicRoutes(apiPublic)
-	productHandler.RegisterPublicRoutes(apiPublic)
+	configHandler.RegisterRoutes(apiPublic)
+	contentHandler.RegisterRoutes(apiPublic)
+	productHandler.RegisterRoutes(apiPublic)
 
 	// Setup admin authentication
 	var authVerifier auth.Verifier
@@ -133,12 +132,6 @@ func main() {
 	default:
 		log.Fatal().Msg("Invalid authentication type specified") // Should be captured by exhaustive, but too important to not shield.
 	}
-
-	// API admin routes
-	apiAdmin := apiGroup.Group("/")
-	apiAdmin.Use(auth.NewAuthMiddleware(authVerifier).EnforceRoles([]string{auth.RoleAdmin}))
-	contentHandler.RegisterAdminRoutes(apiAdmin)
-	productHandler.RegisterAdminRoutes(apiAdmin)
 
 	// Setup admin GUI
 	router.HTMLRender = createAdminGUIRenderer()

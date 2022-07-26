@@ -78,38 +78,16 @@ All URIs are relative to */api*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*CategoriesApi* | [**AddCategory**](docs/CategoriesApi.md#addcategory) | **Post** /categories/ | 
-*CategoriesApi* | [**DeleteCategory**](docs/CategoriesApi.md#deletecategory) | **Delete** /categories/{id}/ | 
-*CategoriesApi* | [**DeleteCategoryImage**](docs/CategoriesApi.md#deletecategoryimage) | **Delete** /categories/{id}/image/ | 
 *CategoriesApi* | [**GetCategory**](docs/CategoriesApi.md#getcategory) | **Get** /categories/{id}/ | 
 *CategoriesApi* | [**ListCategories**](docs/CategoriesApi.md#listcategories) | **Get** /categories/ | 
-*CategoriesApi* | [**UpdateCategory**](docs/CategoriesApi.md#updatecategory) | **Put** /categories/{id}/ | 
-*CategoriesApi* | [**UpsertCategoryImage**](docs/CategoriesApi.md#upsertcategoryimage) | **Put** /categories/{id}/image/ | 
 *ConfigApi* | [**GetConfig**](docs/ConfigApi.md#getconfig) | **Get** /config/ | 
 *ContentApi* | [**GetContent**](docs/ContentApi.md#getcontent) | **Get** /content/{content_name}/ | 
-*ContentApi* | [**ListContent**](docs/ContentApi.md#listcontent) | **Get** /content/ | 
-*ContentApi* | [**UpdateContent**](docs/ContentApi.md#updatecontent) | **Put** /content/{content_name}/ | 
-*EventsApi* | [**AddEvent**](docs/EventsApi.md#addevent) | **Post** /events/ | 
-*EventsApi* | [**DeleteEvent**](docs/EventsApi.md#deleteevent) | **Delete** /events/{id}/ | 
 *EventsApi* | [**GetEvent**](docs/EventsApi.md#getevent) | **Get** /events/{id}/ | 
 *EventsApi* | [**ListEvents**](docs/EventsApi.md#listevents) | **Get** /events/ | 
-*EventsApi* | [**UpdateEvent**](docs/EventsApi.md#updateevent) | **Put** /events/{id}/ | 
-*ManufacturersApi* | [**AddManufacturer**](docs/ManufacturersApi.md#addmanufacturer) | **Post** /manufacturers/ | 
-*ManufacturersApi* | [**DeleteManufacturer**](docs/ManufacturersApi.md#deletemanufacturer) | **Delete** /manufacturers/{id}/ | 
-*ManufacturersApi* | [**DeleteManufacturerImage**](docs/ManufacturersApi.md#deletemanufacturerimage) | **Delete** /manufacturers/{id}/image/ | 
 *ManufacturersApi* | [**GetManufacturer**](docs/ManufacturersApi.md#getmanufacturer) | **Get** /manufacturers/{id}/ | 
 *ManufacturersApi* | [**ListManufacturers**](docs/ManufacturersApi.md#listmanufacturers) | **Get** /manufacturers/ | 
-*ManufacturersApi* | [**UpdateManufacturer**](docs/ManufacturersApi.md#updatemanufacturer) | **Put** /manufacturers/{id}/ | 
-*ManufacturersApi* | [**UpsertManufacturerImage**](docs/ManufacturersApi.md#upsertmanufacturerimage) | **Put** /manufacturers/{id}/image/ | 
-*ProductsApi* | [**AddProduct**](docs/ProductsApi.md#addproduct) | **Post** /products/ | 
-*ProductsApi* | [**AddProductImages**](docs/ProductsApi.md#addproductimages) | **Post** /products/{id}/images/ | 
-*ProductsApi* | [**DeleteProduct**](docs/ProductsApi.md#deleteproduct) | **Delete** /products/{id}/ | 
-*ProductsApi* | [**DeleteProductImage**](docs/ProductsApi.md#deleteproductimage) | **Delete** /products/{id}/images/{image_id}/ | 
 *ProductsApi* | [**GetProduct**](docs/ProductsApi.md#getproduct) | **Get** /products/{id}/ | 
-*ProductsApi* | [**ListProductImages**](docs/ProductsApi.md#listproductimages) | **Get** /products/{id}/images/ | 
 *ProductsApi* | [**ListProducts**](docs/ProductsApi.md#listproducts) | **Get** /products/ | 
-*ProductsApi* | [**UpdateProduct**](docs/ProductsApi.md#updateproduct) | **Put** /products/{id}/ | 
-*ProductsApi* | [**UpdateProductImage**](docs/ProductsApi.md#updateproductimage) | **Put** /products/{id}/images/{image_id}/ | 
 
 
 ## Documentation For Models
@@ -136,7 +114,6 @@ Class | Method | HTTP request | Description
  - [HeaderTimestamped](docs/HeaderTimestamped.md)
  - [HeaderTimestampedAllOf](docs/HeaderTimestampedAllOf.md)
  - [Image](docs/Image.md)
- - [ImageList](docs/ImageList.md)
  - [Manufacturer](docs/Manufacturer.md)
  - [ManufacturerAllOf](docs/ManufacturerAllOf.md)
  - [ManufacturerList](docs/ManufacturerList.md)

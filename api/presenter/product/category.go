@@ -37,27 +37,3 @@ func CategorySliceFromEntity(p *presenter.Presenter, input []*entities.Category)
 func CategoryListFromEntity(p *presenter.Presenter, input []*entities.Category) openapi.CategoryList {
 	return *openapi.NewCategoryList(CategorySliceFromEntity(p, input))
 }
-
-func CategoryToEntity(p *presenter.Presenter, id uuid.UUID, input openapi.Category) (*entities.Category, error) {
-	// Build entity
-	output := &entities.Category{
-		ID:          id,
-		Name:        input.GetName(),
-		Description: input.GetDescription(),
-		ParentID:    uuid.Nil,
-		Order:       int(input.Order),
-		ProductIDs:  nil, // read-only
-	}
-
-	// Parse parent ID
-	if input.GetParentId() != "" {
-		pID, err := p.ParseID(input.GetParentId())
-		if err != nil {
-			return nil, entities.NewError(400, openapi.GOCOMERRORCODE_CATEGORY_PARENT_ID_INVALID, id.String(), err)
-		}
-		output.ParentID = pID
-	}
-
-	// Successful
-	return output, nil
-}
