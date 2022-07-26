@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/JenswBE/go-commerce/admin/auth"
 	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
 	"github.com/JenswBE/go-commerce/usecases/product"
-	"github.com/JenswBE/go-commerce/utils/auth"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"

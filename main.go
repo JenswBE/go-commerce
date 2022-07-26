@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/JenswBE/go-commerce/admin"
+	"github.com/JenswBE/go-commerce/admin/auth"
 	configHandler "github.com/JenswBE/go-commerce/api/handler/config"
 	contentHandler "github.com/JenswBE/go-commerce/api/handler/content"
 	productHandler "github.com/JenswBE/go-commerce/api/handler/product"
@@ -17,7 +18,6 @@ import (
 	"github.com/JenswBE/go-commerce/repositories/productpg"
 	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
-	"github.com/JenswBE/go-commerce/utils/auth"
 	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/JenswBE/go-commerce/utils/sanitizer"
@@ -106,17 +106,9 @@ func main() {
 	apiGroup.StaticFile("/", "docs/index.html")
 	apiGroup.StaticFile("/index.html", "docs/index.html")
 	apiGroup.StaticFile("/openapi.yml", "docs/openapi.yml")
-
-	// Setup handlers
-	configHandler := configHandler.NewConfigHandler(presenter, *svcConfig)
-	contentHandler := contentHandler.NewContentHandler(presenter, contentService)
-	productHandler := productHandler.NewProductHandler(presenter, productService)
-
-	// API public routes
-	apiPublic := apiGroup.Group("/")
-	configHandler.RegisterRoutes(apiPublic)
-	contentHandler.RegisterRoutes(apiPublic)
-	productHandler.RegisterRoutes(apiPublic)
+	configHandler.NewConfigHandler(presenter, *svcConfig).RegisterRoutes(apiGroup)
+	contentHandler.NewContentHandler(presenter, contentService).RegisterRoutes(apiGroup)
+	productHandler.NewProductHandler(presenter, productService).RegisterRoutes(apiGroup)
 
 	// Setup admin authentication
 	var authVerifier auth.Verifier

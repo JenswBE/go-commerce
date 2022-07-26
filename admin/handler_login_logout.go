@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/JenswBE/go-commerce/admin/auth"
 	"github.com/JenswBE/go-commerce/admin/entities"
-	"github.com/JenswBE/go-commerce/utils/auth"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
