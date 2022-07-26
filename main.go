@@ -126,7 +126,7 @@ func main() {
 		log.Warn().Msg("Using authentication type BASIC_AUTH. This should only be used for E2E testing!")
 		authVerifier = auth.NewBasicVerifier(svcConfig.Authentication.BasicAuth.Username, svcConfig.Authentication.BasicAuth.Password)
 	case config.AuthTypeOIDC:
-		authVerifier, err = auth.NewOIDCVerifier(svcConfig.Authentication.OIDC.IssuerURL)
+		authVerifier, err = auth.NewOIDCVerifier(svcConfig.Authentication.OIDC.IssuerURL, svcConfig.Authentication.OIDC.ClientID)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
 		}
@@ -142,7 +142,7 @@ func main() {
 
 	// Setup admin GUI
 	router.HTMLRender = createAdminGUIRenderer()
-	adminHandler, err := admin.NewAdminGUIHandler(productService, svcConfig.Server.SessionAuthKey, authVerifier)
+	adminHandler, err := admin.NewAdminGUIHandler(productService, svcConfig.Server.SessionAuthKey, authVerifier, svcConfig.Server.JWTSigningKey)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to register admin handler")
 	}

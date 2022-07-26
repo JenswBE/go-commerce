@@ -3,6 +3,7 @@ package admin
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
@@ -12,29 +13,38 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
 )
 
 const PrefixAdmin = "/admin/"
 
+const (
+	objectTypeManufacturer = "merk"
+	pathLogin              = "login/"
+)
+
 type AdminHandler struct {
 	productService product.Usecase
-	middlewares    gin.HandlersChain
+	authVerifier   auth.Verifier
+	jwtSigningKey  [64]byte
+	sessionAuthKey [64]byte
 }
 
-func NewAdminGUIHandler(productService product.Usecase, sessionAuthKey [64]byte, authVerifier auth.Verifier) (*AdminHandler, error) {
+func NewAdminGUIHandler(productService product.Usecase, sessionAuthKey [64]byte, authVerifier auth.Verifier, jwtSigningKey [64]byte) (*AdminHandler, error) {
 	return &AdminHandler{
 		productService: productService,
-		middlewares: gin.HandlersChain{
-			sessions.Sessions("gocom", cookie.NewStore(sessionAuthKey[:])),
-			auth.NewAuthMiddleware(authVerifier).EnforceRoles([]string{auth.RoleAdmin}),
-		},
+		authVerifier:   authVerifier,
+		jwtSigningKey:  jwtSigningKey,
+		sessionAuthKey: sessionAuthKey,
 	}, nil
 }
 
 func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	// Register middlewares
-	rg := r.Group(PrefixAdmin)
-	rg.Use(h.middlewares...)
+	notAuthenticatedGroup := r.Group(PrefixAdmin)
+	notAuthenticatedGroup.Use(sessions.Sessions("gocom", cookie.NewStore(h.sessionAuthKey[:])))
+	rg := notAuthenticatedGroup.Group("")
+	rg.Use(validateAndRefreshToken(h.jwtSigningKey))
 
 	// Register static routes
 	rg.Static("static", "admin/html/static")
@@ -42,18 +52,15 @@ func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	// Register dynamic routes
 	rg.GET("/", func(c *gin.Context) { c.Redirect(http.StatusTemporaryRedirect, "products/") })
 	// rg.GET("categories/", handleCategoriesList)
-	rg.Any("login/", h.handleLogin)
+	notAuthenticatedGroup.GET(pathLogin, h.handleLogin)
+	notAuthenticatedGroup.POST(pathLogin, h.handleLogin)
 	rg.GET("logout/", h.handleLogout)
 	rg.GET("manufacturers/", h.handleManufacturersList)
 	rg.GET("manufacturers/:manufacturer_id/", h.handleManufacturersEdit)
-	rg.Any("manufacturers/:manufacturer_id/delete/", h.handleManufacturersDelete)
+	rg.GET("manufacturers/:manufacturer_id/delete/", h.handleManufacturersDelete)
 	// rg.GET("products/", handleProductsList)
 	// rg.GET("products/:product_id/", handleProductsEdit)
 }
-
-const (
-	objectTypeManufacturer = "merk"
-)
 
 func parseUUID(input string, objectType i18n.ObjectType) (uuid.UUID, error) {
 	output, err := uuid.Parse(input)
@@ -94,5 +101,51 @@ func redirectWithMessage(c *gin.Context, session sessions.Session, messageType e
 		c.String(http.StatusInternalServerError, "Failed to save flash in session: %v", err)
 		return
 	}
-	c.Redirect(http.StatusTemporaryRedirect, PrefixAdmin+adminRedirectLocation)
+	c.Redirect(http.StatusSeeOther, PrefixAdmin+adminRedirectLocation)
+}
+
+func validateAndRefreshToken(jwtSigningKey [64]byte) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Extract token from session
+		session := sessions.Default(c)
+		rawToken := session.Get("token")
+		if rawToken == nil {
+			c.Redirect(http.StatusSeeOther, PrefixAdmin+pathLogin)
+			c.Abort()
+			return
+		}
+
+		// Validate type of token
+		tokenString, ok := rawToken.(string)
+		if !ok {
+			session.Clear()
+			if err := session.Save(); err != nil {
+				log.Warn().Err(err).Interface("token", rawToken).Msg("Failed to clear session")
+				redirectWithMessage(c, session, entities.MessageTypeError, "Opkuisen van sessie mislukt. Probeer opnieuw in te loggen.", pathLogin)
+			} else {
+				redirectWithMessage(c, session, entities.MessageTypeError, "Ongeldig type token in sessie. Probeer opnieuw in te loggen.", pathLogin)
+			}
+			c.Abort()
+			return
+		}
+
+		// Validate token
+		tokenClaims, err := auth.ValidateJWT(tokenString, jwtSigningKey)
+		if err != nil {
+			c.Redirect(http.StatusSeeOther, PrefixAdmin+pathLogin)
+			c.Abort()
+			return
+		}
+
+		// Refresh token if older than 1 day
+		if tokenClaims.IssuedAt != nil && tokenClaims.IssuedAt.Time.Before(time.Now().AddDate(0, 0, 1)) {
+			err = setNewTokenInSession(c, jwtSigningKey)
+			if err != nil {
+				log.Warn().Err(err).Msg("Failed to refresh token in session")
+				redirectWithMessage(c, session, entities.MessageTypeError, "Verversen van token mislukt. Probeer opnieuw in te loggen.", pathLogin)
+				c.Abort()
+				return
+			}
+		}
+	}
 }

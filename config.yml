@@ -5,6 +5,7 @@ Authentication:
     Password: test
   OIDC:
     IssuerURL: "http://127.0.0.1:9001/realms/go-commerce" # See https://github.com/IBM/openapi-validator/issues/338
+    ClientID: go-commerce-admin
 Features:
   Content:
     List:

@@ -19,8 +19,17 @@ type BasicVerifier struct {
 func NewBasicVerifier(username, password string) *BasicVerifier {
 	return &BasicVerifier{
 		username:       username,
-		expectedSecret: base64.StdEncoding.EncodeToString([]byte(username + ":" + password)),
+		expectedSecret: encodeBasicLogin(username, password),
 	}
+}
+
+func (v *BasicVerifier) ValidateCredentialsWithRoles(ctx context.Context, username, password string, roles []string) error {
+	if v.expectedSecret != encodeBasicLogin(username, password) {
+		return errors.New("invalid credentials")
+	}
+	// Basic auth doesn't support roles and is always considered and admin.
+	// Should only be used for testing!
+	return nil
 }
 
 func (v *BasicVerifier) EnforceRoles(ctx context.Context, roles []string, basicSecret string) (string, error) {
@@ -30,4 +39,8 @@ func (v *BasicVerifier) EnforceRoles(ctx context.Context, roles []string, basicS
 		return "", errors.New("provided basic secret invalid")
 	}
 	return v.username, nil
+}
+
+func encodeBasicLogin(username, password string) string {
+	return base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
 }

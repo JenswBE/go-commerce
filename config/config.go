@@ -21,6 +21,7 @@ type Config struct {
 		}
 		OIDC struct {
 			IssuerURL string
+			ClientID  string
 		}
 	}
 	Database struct {
@@ -129,6 +130,7 @@ func ParseConfig() (*Config, error) {
 		{"Authentication.BasicAuth.Username", "AUTH_BASIC_USERNAME"},
 		{"Authentication.BasicAuth.Password", "AUTH_BASIC_PASSWORD"},
 		{"Authentication.OIDC.IssuerURL", "AUTH_OIDC_ISSUER_URL"},
+		{"Authentication.OIDC.ClientID", "AUTH_OIDC_CLIENT_ID"},
 		{"Database.Default.Host", "DATABASE_DEFAULT_HOST"},
 		{"Database.Default.Port", "DATABASE_DEFAULT_PORT"},
 		{"Database.Default.User", "DATABASE_DEFAULT_USER"},
@@ -204,6 +206,9 @@ func ParseConfig() (*Config, error) {
 	case AuthTypeOIDC:
 		if config.Authentication.OIDC.IssuerURL == "" {
 			return nil, errors.New("issuer URL is required for authentication type OIDC")
+		}
+		if config.Authentication.OIDC.ClientID == "" {
+			return nil, errors.New("client ID is required for authentication type OIDC")
 		}
 	default:
 		return nil, fmt.Errorf("unknown authentication type %s", config.Authentication.Type)

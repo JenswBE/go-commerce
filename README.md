@@ -28,6 +28,7 @@ If both are defined, the environment variables take precedence.
 | Authentication.BasicAuth.Username     | AUTH_BASIC_USERNAME             | Username for Basic Auth                                                                                    |                |
 | Authentication.BasicAuth.Password     | AUTH_BASIC_PASSWORD             | Password for Basic Auth                                                                                    |                |
 | Authentication.OIDC.IssuerURL         | AUTH_OIDC_ISSUER_URL            | URL to OpenID Configuration Issuer (without `.well-known/openid-configuration`)                            |                |
+| Authentication.OIDC.ClientID          | AUTH_OIDC_CLIENT_ID             | Client ID for OIDC                                                                                         |                |
 | Database.Default.Host                 | DATABASE_DEFAULT_HOST           | Hostname of the default Postgres datatabase                                                                |                |
 | Database.Default.Port                 | DATABASE_DEFAULT_PORT           | Port of the default Postgres datatabase                                                                    | 5432           |
 | Database.Default.User                 | DATABASE_DEFAULT_USER           | Username for the default Postgres datatabase                                                               |                |
