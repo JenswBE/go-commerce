@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/JenswBE/go-commerce/admin/entities"
-	"github.com/JenswBE/go-commerce/admin/i18n"
 	"github.com/JenswBE/go-commerce/utils/auth"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -70,5 +69,5 @@ func (h *AdminHandler) handleLogout(c *gin.Context) {
 			return
 		}
 	}
-	redirectWithMessage(c, s, entities.MessageTypeSuccess, i18n.LogoutSuccessful(), "")
+	c.Redirect(http.StatusSeeOther, PrefixAdmin)
 }

@@ -19,10 +19,6 @@ func DeleteSuccessful(objectType ObjectType) string {
 	return fmt.Sprintf(`%s succesvol verwijderd`, capitalFirst(string(objectType)))
 }
 
-func LogoutSuccessful() string {
-	return `Succesvol uitgelogd`
-}
-
 func capitalFirst(input string) string {
 	// Based on https://stackoverflow.com/a/70259366
 	r := []rune(input)

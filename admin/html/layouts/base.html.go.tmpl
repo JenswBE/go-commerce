@@ -1,8 +1,6 @@
 {{ template "empty.html.go.tmpl" . }}
 
 {{ define "empty_head" }}
-  <link href="/admin/static/css/main.css" rel="stylesheet" />
-
   {{ block "base_head" . }}{{ end }}
 {{ end }}
 
@@ -32,7 +30,7 @@
     />
     <div class="navbar-nav">
       <div class="nav-item text-nowrap">
-        <a class="nav-link px-3" href="#">Sign out</a>
+        <a class="nav-link px-3" href="/admin/logout">Uitloggen</a>
       </div>
     </div>
   </header>
