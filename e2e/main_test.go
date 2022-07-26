@@ -72,7 +72,6 @@ func newE2EConfig(apiConfig config.Config) *openapi.Configuration {
 	config := openapi.NewConfiguration()
 	config.Scheme = "http"
 	config.Host = fmt.Sprintf("127.0.0.1:%d", apiConfig.Server.Port)
-	config.Servers[0].URL = ""
 	return config
 }
 
