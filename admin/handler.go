@@ -13,7 +13,6 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
 )
 
 const PrefixAdmin = "/admin/"
@@ -24,27 +23,34 @@ const (
 )
 
 type AdminHandler struct {
-	productService product.Usecase
-	authVerifier   auth.Verifier
-	jwtSigningKey  [64]byte
-	sessionAuthKey [64]byte
+	productService       product.Usecase
+	authVerifier         auth.Verifier
+	sessionAuthenticator *auth.SessionAuthenticator
+	sessionAuthKey       [64]byte
+	sessionEncKey        [32]byte
 }
 
-func NewAdminGUIHandler(productService product.Usecase, sessionAuthKey [64]byte, authVerifier auth.Verifier, jwtSigningKey [64]byte) (*AdminHandler, error) {
-	return &AdminHandler{
+func NewAdminGUIHandler(productService product.Usecase, authVerifier auth.Verifier, sessionAuthKey [64]byte, sessionEncKey [32]byte) *AdminHandler {
+	handler := &AdminHandler{
 		productService: productService,
 		authVerifier:   authVerifier,
-		jwtSigningKey:  jwtSigningKey,
 		sessionAuthKey: sessionAuthKey,
-	}, nil
+		sessionEncKey:  sessionEncKey,
+	}
+	if authVerifier != nil {
+		handler.sessionAuthenticator = auth.NewSessionAuthenticator(time.Hour * 24 * 7)
+	}
+	return handler
 }
 
 func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	// Register middlewares
 	notAuthenticatedGroup := r.Group(PrefixAdmin)
-	notAuthenticatedGroup.Use(sessions.Sessions("gocom", cookie.NewStore(h.sessionAuthKey[:])))
+	notAuthenticatedGroup.Use(sessions.Sessions("gocom", cookie.NewStore(h.sessionAuthKey[:], h.sessionEncKey[:])))
 	rg := notAuthenticatedGroup.Group("")
-	rg.Use(validateAndRefreshToken(h.jwtSigningKey))
+	if h.sessionAuthenticator != nil {
+		rg.Use(h.sessionAuthenticator.MW(PrefixAdmin + pathLogin))
+	}
 
 	// Register static routes
 	rg.Static("static", "admin/html/static")
@@ -102,50 +108,4 @@ func redirectWithMessage(c *gin.Context, session sessions.Session, messageType e
 		return
 	}
 	c.Redirect(http.StatusSeeOther, PrefixAdmin+adminRedirectLocation)
-}
-
-func validateAndRefreshToken(jwtSigningKey [64]byte) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Extract token from session
-		session := sessions.Default(c)
-		rawToken := session.Get("token")
-		if rawToken == nil {
-			c.Redirect(http.StatusSeeOther, PrefixAdmin+pathLogin)
-			c.Abort()
-			return
-		}
-
-		// Validate type of token
-		tokenString, ok := rawToken.(string)
-		if !ok {
-			session.Clear()
-			if err := session.Save(); err != nil {
-				log.Warn().Err(err).Interface("token", rawToken).Msg("Failed to clear session")
-				redirectWithMessage(c, session, entities.MessageTypeError, "Opkuisen van sessie mislukt. Probeer opnieuw in te loggen.", pathLogin)
-			} else {
-				redirectWithMessage(c, session, entities.MessageTypeError, "Ongeldig type token in sessie. Probeer opnieuw in te loggen.", pathLogin)
-			}
-			c.Abort()
-			return
-		}
-
-		// Validate token
-		tokenClaims, err := auth.ValidateJWT(tokenString, jwtSigningKey)
-		if err != nil {
-			c.Redirect(http.StatusSeeOther, PrefixAdmin+pathLogin)
-			c.Abort()
-			return
-		}
-
-		// Refresh token if older than 1 day
-		if tokenClaims.IssuedAt != nil && tokenClaims.IssuedAt.Time.Before(time.Now().AddDate(0, 0, 1)) {
-			err = setNewTokenInSession(c, jwtSigningKey)
-			if err != nil {
-				log.Warn().Err(err).Msg("Failed to refresh token in session")
-				redirectWithMessage(c, session, entities.MessageTypeError, "Verversen van token mislukt. Probeer opnieuw in te loggen.", pathLogin)
-				c.Abort()
-				return
-			}
-		}
-	}
 }

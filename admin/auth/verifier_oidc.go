@@ -4,20 +4,19 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 )
 
-var _ Verifier = &OIDCVerifier{}
-
 type OIDCVerifier struct {
 	clientID string
-	provider *oidc.Provider
+	endpoint oauth2.Endpoint
 	verifier *oidc.IDTokenVerifier
 }
+
+var _ Verifier = &OIDCVerifier{} // Enforce interface
 
 func NewOIDCVerifier(issuerURL, clientID string) (*OIDCVerifier, error) {
 	// Get provider
@@ -29,48 +28,38 @@ func NewOIDCVerifier(issuerURL, clientID string) (*OIDCVerifier, error) {
 	// Build middleware
 	return &OIDCVerifier{
 		clientID: clientID,
-		provider: provider,
+		endpoint: provider.Endpoint(),
 		verifier: provider.Verifier(&oidc.Config{SkipClientIDCheck: true}),
 	}, nil
 }
 
-func (v *OIDCVerifier) ValidateCredentialsWithRoles(ctx context.Context, username, password string, roles []string) error {
+func (v *OIDCVerifier) ValidateCredentialsWithRoles(ctx context.Context, username, password string, roles []string) (subject string, err error) {
 	// To keep things simple, we will just use the Direct/Password Grant flow.
 	// We might improve later by using e.g. a Token Grant flow.
 	oauth2Config := oauth2.Config{
 		ClientID: v.clientID,
-		Endpoint: v.provider.Endpoint(),
+		Endpoint: v.endpoint,
 		Scopes:   []string{oidc.ScopeOpenID},
 	}
-	token, err := oauth2Config.PasswordCredentialsToken(ctx, username, password)
+	oauth2Token, err := oauth2Config.PasswordCredentialsToken(ctx, username, password)
 	if err != nil {
-		return fmt.Errorf("failed to validate credentials: %w", err)
+		return "", fmt.Errorf("failed to validate credentials using password grant: %w", err)
 	}
 
-	// Validate roles
-	_, err = v.EnforceRoles(ctx, roles, token.AccessToken)
+	// Parse token
+	oidcToken, err := v.verifier.Verify(ctx, oauth2Token.AccessToken)
 	if err != nil {
-		return fmt.Errorf("failed to enforce roles %v: %w", roles, err)
-	}
-	return nil
-}
-
-func (v *OIDCVerifier) EnforceRoles(ctx context.Context, roles []string, rawToken string) (string, error) {
-	// Validate token
-	rawToken = strings.TrimPrefix(rawToken, "Bearer ")
-	token, err := v.verifier.Verify(ctx, rawToken)
-	if err != nil {
-		log.Debug().Err(err).Msg("VerifyToken: Token is invalid")
-		return "", err
+		log.Debug().Err(err).Str("token", oauth2Token.AccessToken).Msg("VerifyToken: Token is invalid")
+		return "", fmt.Errorf("failed to verify OIDC token: %w", err)
 	}
 
 	// Extract claims
 	var claims struct {
 		Roles []string `json:"roles"`
 	}
-	if err := token.Claims(&claims); err != nil {
+	if err := oidcToken.Claims(&claims); err != nil {
 		log.Debug().Err(err).Msg("VerifyToken: Failed to extract custom claims")
-		return "", err
+		return "", fmt.Errorf("failed to extract custom claims from OIDC token: %w", err)
 	}
 
 	// Verify roles
@@ -78,19 +67,5 @@ func (v *OIDCVerifier) EnforceRoles(ctx context.Context, roles []string, rawToke
 		log.Debug().Strs("expected", roles).Strs("actual", claims.Roles).Msg("VerifyToken: Expected role missing")
 		return "", errors.New("expected roles missing")
 	}
-	return token.Subject, nil
-}
-
-func verifyRoles(actualRoles, expectedRoles []string) bool {
-outer:
-	for _, expected := range expectedRoles {
-		for _, actual := range actualRoles {
-			if actual == expected {
-				continue outer
-			}
-		}
-		// Current expected not found in actual roles
-		return false
-	}
-	return true
+	return oidcToken.Subject, nil
 }

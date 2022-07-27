@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -99,6 +100,7 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Strs("trusted_proxies", svcConfig.Server.TrustedProxies).Msg("Failed to set trusted proxies")
 	}
+	router.GET("/", func(c *gin.Context) { c.Redirect(http.StatusTemporaryRedirect, admin.PrefixAdmin) })
 
 	// Setup API routes
 	apiGroup := router.Group("/api")
@@ -113,13 +115,12 @@ func main() {
 	// Setup admin authentication
 	var authVerifier auth.Verifier
 	switch svcConfig.Authentication.Type {
-	case config.AuthTypeBasicAuth:
-		log.Warn().Msg("Using authentication type BASIC_AUTH. This should only be used for E2E testing!")
-		authVerifier = auth.NewBasicVerifier(svcConfig.Authentication.BasicAuth.Username, svcConfig.Authentication.BasicAuth.Password)
+	case config.AuthTypeNone:
+		log.Warn().Msg("Authentication disabled because of Authentication type NONE. This should only be used for testing or with an external service to enforce authentication!")
 	case config.AuthTypeOIDC:
 		authVerifier, err = auth.NewOIDCVerifier(svcConfig.Authentication.OIDC.IssuerURL, svcConfig.Authentication.OIDC.ClientID)
 		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to create OIDC middleware")
+			log.Fatal().Err(err).Msg("Failed to create OIDC verifier")
 		}
 	default:
 		log.Fatal().Msg("Invalid authentication type specified") // Should be captured by exhaustive, but too important to not shield.
@@ -127,10 +128,7 @@ func main() {
 
 	// Setup admin GUI
 	router.HTMLRender = createAdminGUIRenderer()
-	adminHandler, err := admin.NewAdminGUIHandler(productService, svcConfig.Server.SessionAuthKey, authVerifier, svcConfig.Server.JWTSigningKey)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to register admin handler")
-	}
+	adminHandler := admin.NewAdminGUIHandler(productService, authVerifier, svcConfig.Authentication.SessionAuthKey, svcConfig.Authentication.SessionEncKey)
 	adminHandler.RegisterRoutes(router)
 
 	// Start Gin

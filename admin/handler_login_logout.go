@@ -3,7 +3,6 @@ package admin
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/JenswBE/go-commerce/admin/auth"
 	"github.com/JenswBE/go-commerce/admin/entities"
@@ -12,6 +11,21 @@ import (
 )
 
 func (h *AdminHandler) handleLogin(c *gin.Context) {
+	// Check if authentication is enabled
+	if h.authVerifier == nil {
+		// Authentication disabled => Redirect to home
+		c.Redirect(http.StatusSeeOther, PrefixAdmin)
+	}
+
+	// Check if already logged in
+	if h.sessionAuthenticator != nil {
+		_, err := h.sessionAuthenticator.MustHaveSessionLogin(c)
+		if err != nil {
+			// Already logged in => Redirect to home
+			c.Redirect(http.StatusSeeOther, PrefixAdmin)
+		}
+	}
+
 	// Default action (non-POST) is to show the template
 	if c.Request.Method != http.MethodPost {
 		c.HTML(200, "login", entities.BaseData{Title: "Inloggen"})
@@ -19,13 +33,13 @@ func (h *AdminHandler) handleLogin(c *gin.Context) {
 	}
 
 	// Handle login on POST
-	err := h.authVerifier.ValidateCredentialsWithRoles(c.Request.Context(), c.PostForm("username"), c.PostForm("password"), []string{auth.RoleAdmin})
+	_, err := h.authVerifier.ValidateCredentialsWithRoles(c.Request.Context(), c.PostForm("username"), c.PostForm("password"), []string{auth.RoleAdmin})
 	if err != nil {
 		handleLoginFailed(c, http.StatusUnauthorized, "Inloggen mislukt", err)
 		return
 	}
 
-	// Login successful => Set token in session
+	// Login successful => Start session
 	err = setNewTokenInSession(c, h.jwtSigningKey)
 	if err != nil {
 		handleLoginFailed(c, http.StatusInternalServerError, "Token toevoegen aan sessie mislukt", err)
@@ -34,23 +48,6 @@ func (h *AdminHandler) handleLogin(c *gin.Context) {
 
 	// Redirect to home
 	c.Redirect(http.StatusSeeOther, PrefixAdmin)
-}
-
-func setNewTokenInSession(c *gin.Context, jwtSigningKey [64]byte) error {
-	// Login successful => Set token in session
-	token, err := auth.GenerateJWT(jwtSigningKey, time.Hour*24*7)
-	if err != nil {
-		return fmt.Errorf("aanmaken van token mislukt: %w", err)
-	}
-
-	// Set token in session
-	session := sessions.Default(c)
-	session.Set("token", token)
-	err = session.Save()
-	if err != nil {
-		return fmt.Errorf("opslaan van token in sessie mislukt: %w", err)
-	}
-	return nil
 }
 
 func handleLoginFailed(c *gin.Context, status int, message string, err error) {

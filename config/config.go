@@ -14,15 +14,13 @@ import (
 
 type Config struct {
 	Authentication struct {
-		Type      AuthType
-		BasicAuth struct {
-			Username string
-			Password string
-		}
+		Type AuthType
 		OIDC struct {
 			IssuerURL string
 			ClientID  string
 		}
+		SessionAuthKey [64]byte
+		SessionEncKey  [32]byte
 	}
 	Database struct {
 		Default Database
@@ -59,9 +57,7 @@ type Config struct {
 	}
 	Server struct {
 		Debug          bool
-		JWTSigningKey  [64]byte
 		Port           int
-		SessionAuthKey [64]byte
 		TrustedProxies []string
 	}
 	Storage struct {
@@ -72,14 +68,9 @@ type Config struct {
 type AuthType string
 
 const (
-	AuthTypeBasicAuth AuthType = "BASIC_AUTH"
-	AuthTypeOIDC      AuthType = "OIDC"
+	AuthTypeNone AuthType = "NONE"
+	AuthTypeOIDC AuthType = "OIDC"
 )
-
-type AuthBasicAuthConfig struct {
-	Username string
-	Password string
-}
 
 type Database struct {
 	Host     string
@@ -127,10 +118,10 @@ func ParseConfig() (*Config, error) {
 	// Bind ENV variables
 	err = bindEnvs([]envBinding{
 		{"Authentication.Type", "AUTH_TYPE"},
-		{"Authentication.BasicAuth.Username", "AUTH_BASIC_USERNAME"},
-		{"Authentication.BasicAuth.Password", "AUTH_BASIC_PASSWORD"},
 		{"Authentication.OIDC.IssuerURL", "AUTH_OIDC_ISSUER_URL"},
 		{"Authentication.OIDC.ClientID", "AUTH_OIDC_CLIENT_ID"},
+		{"Authentication.SessionAuthKey", "AUTH_SESSION_AUTH_KEY"},
+		{"Authentication.SessionEncKey", "AUTH_SESSION_ENC_KEY"},
 		{"Database.Default.Host", "DATABASE_DEFAULT_HOST"},
 		{"Database.Default.Port", "DATABASE_DEFAULT_PORT"},
 		{"Database.Default.User", "DATABASE_DEFAULT_USER"},
@@ -158,9 +149,7 @@ func ParseConfig() (*Config, error) {
 		{"ImageProxy.Salt", "IMAGE_PROXY_SALT"},
 		{"ImageProxy.AllowedConfigs", "IMAGE_PROXY_ALLOWED_CONFIGS"},
 		{"Server.Debug", "GOCOM_DEBUG"},
-		{"Server.JWTSigningKey", "GOCOM_JWT_SIGNING_KEY"},
 		{"Server.Port", "GOCOM_PORT"},
-		{"Server.SessionAuthKey", "GOCOM_SESSION_AUTH_KEY"},
 		{"Server.TrustedProxies", "GOCOM_TRUSTED_PROXIES"},
 		{"Storage.Images.Type", "STORAGE_IMAGES_TYPE"},
 		{"Storage.Images.Path", "STORAGE_IMAGES_PATH"},
@@ -189,20 +178,13 @@ func ParseConfig() (*Config, error) {
 	}
 
 	// Additional validation
-	if config.Server.JWTSigningKey == [64]byte{} {
-		return nil, errors.New("jwt signing key is required. Please set in config or using env var GOCOM_JWT_SIGNING_KEY")
+	if config.Authentication.SessionAuthKey == [64]byte{} {
+		return nil, errors.New("session auth key is required. Please set in config or using env var AUTH_SESSION_AUTH_KEY")
 	}
-	if config.Server.SessionAuthKey == [64]byte{} {
-		return nil, errors.New("session auth key is required. Please set in config or using env var GOCOM_SESSION_AUTH_KEY")
+	if config.Authentication.SessionEncKey == [32]byte{} {
+		return nil, errors.New("session encryption key is required. Please set in config or using env var AUTH_SESSION_ENC_KEY")
 	}
 	switch config.Authentication.Type {
-	case AuthTypeBasicAuth:
-		if config.Authentication.BasicAuth.Username == "" {
-			return nil, errors.New("username is required for authentication type BASIC_AUTH")
-		}
-		if config.Authentication.BasicAuth.Password == "" {
-			return nil, errors.New("password is required for authentication type BASIC_AUTH")
-		}
 	case AuthTypeOIDC:
 		if config.Authentication.OIDC.IssuerURL == "" {
 			return nil, errors.New("issuer URL is required for authentication type OIDC")

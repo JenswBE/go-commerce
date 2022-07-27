@@ -1,10 +1,22 @@
 package auth
 
-import "context"
+import (
+	"context"
+
+	"golang.org/x/exp/slices"
+)
 
 const RoleAdmin = "admin"
 
 type Verifier interface {
-	ValidateCredentialsWithRoles(ctx context.Context, username, password string, roles []string) error
-	EnforceRoles(ctx context.Context, roles []string, secret string) (string, error)
+	ValidateCredentialsWithRoles(ctx context.Context, username, password string, roles []string) (string, error)
+}
+
+func verifyRoles(actualRoles, expectedRoles []string) bool {
+	for _, expected := range expectedRoles {
+		if !slices.Contains(actualRoles, expected) {
+			return false
+		}
+	}
+	return true
 }
