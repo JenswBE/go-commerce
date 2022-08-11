@@ -25,16 +25,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          {{ range .Events }}
+        {{ range .Events }}
+          <tr>
             <td>{{ .Start }}</td>
             <td>{{ .End }}</td>
             <td>{{ .Name }}</td>
             <td>placeholder</td>
-          {{ else }}
+          </tr>
+        {{ else }}
+          <tr>
             <td colspan="4" class="text-center">Geen evenementen gevonden</td>
-          {{ end }}
-        </tr>
+          </tr>
+        {{ end }}
       </tbody>
     </table>
   </div>

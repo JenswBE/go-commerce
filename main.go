@@ -128,7 +128,7 @@ func main() {
 
 	// Setup admin GUI
 	router.HTMLRender = admin.GetRenderer()
-	adminHandler := admin.NewAdminGUIHandler(productService, authVerifier, svcConfig.Authentication.SessionAuthKey, svcConfig.Authentication.SessionEncKey)
+	adminHandler := admin.NewAdminGUIHandler(productService, contentService, authVerifier, svcConfig.Authentication.SessionAuthKey, svcConfig.Authentication.SessionEncKey)
 	adminHandler.RegisterRoutes(router)
 
 	// Start Gin

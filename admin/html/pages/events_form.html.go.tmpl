@@ -9,18 +9,36 @@
     </h1>
   </div>
 
-  <form>
+  <form method="post">
+    <div class="mb-3">
+      <label for="inputName" class="form-label">Naam</label>
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        id="inputName"
+        value="{{ .Event.Name }}"
+      />
+    </div>
     <div class="mb-3">
       <label for="inputStart" class="form-label">Start datum</label>
-      <input type="date" class="form-control" id="inputStart" />
+      <input
+        type="date"
+        name="start"
+        class="form-control"
+        id="inputStart"
+        value="{{ .Event.Start }}"
+      />
     </div>
     <div class="mb-3">
       <label for="inputEnd" class="form-label">Eind datum</label>
-      <input type="date" class="form-control" id="inputEnd" />
-    </div>
-    <div class="mb-3">
-      <label for="inputName" class="form-label">Naam</label>
-      <input type="text" class="form-control" id="inputName" />
+      <input
+        type="date"
+        name="end"
+        class="form-control"
+        id="inputEnd"
+        value="{{ .Event.End }}"
+      />
     </div>
 
     <a href="{{ getURL "events" }}" class="btn btn-danger">Annuleren</a>

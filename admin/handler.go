@@ -25,7 +25,7 @@ const (
 )
 
 type AdminHandler struct {
-	contentService       content.Service
+	contentService       content.Usecase
 	productService       product.Usecase
 	authVerifier         auth.Verifier
 	sessionAuthenticator *auth.SessionAuthenticator
@@ -33,9 +33,10 @@ type AdminHandler struct {
 	sessionEncKey        [32]byte
 }
 
-func NewAdminGUIHandler(productService product.Usecase, authVerifier auth.Verifier, sessionAuthKey [64]byte, sessionEncKey [32]byte) *AdminHandler {
+func NewAdminGUIHandler(productService product.Usecase, contentService content.Usecase, authVerifier auth.Verifier, sessionAuthKey [64]byte, sessionEncKey [32]byte) *AdminHandler {
 	handler := &AdminHandler{
 		productService: productService,
+		contentService: contentService,
 		authVerifier:   authVerifier,
 		sessionAuthKey: sessionAuthKey,
 		sessionEncKey:  sessionEncKey,
@@ -70,8 +71,8 @@ func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	notAuthenticatedGroup.POST(pathLogin, h.handleLogin)
 	rg.GET("logout/", h.handleLogout)
 	rg.GET("events/", h.handleEventsList)
-	rg.GET("events/:event_id/", h.handleEventsForm)
-	rg.POST("events/:event_id/", h.handleEventsForm)
+	rg.GET("events/:event_id/", h.handleEventsFormGET)
+	rg.POST("events/:event_id/", h.handleEventsFormPOST)
 	rg.POST("events/:event_id/delete/", h.handleEventsDelete)
 	rg.GET("manufacturers/", h.handleManufacturersList)
 	rg.GET("manufacturers/:manufacturer_id/", h.handleManufacturersEdit)
