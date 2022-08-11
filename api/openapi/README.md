@@ -80,7 +80,6 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *CategoriesApi* | [**GetCategory**](docs/CategoriesApi.md#getcategory) | **Get** /categories/{id}/ | 
 *CategoriesApi* | [**ListCategories**](docs/CategoriesApi.md#listcategories) | **Get** /categories/ | 
-*ConfigApi* | [**GetConfig**](docs/ConfigApi.md#getconfig) | **Get** /config/ | 
 *ContentApi* | [**GetContent**](docs/ContentApi.md#getcontent) | **Get** /content/{content_name}/ | 
 *EventsApi* | [**GetEvent**](docs/EventsApi.md#getevent) | **Get** /events/{id}/ | 
 *EventsApi* | [**ListEvents**](docs/EventsApi.md#listevents) | **Get** /events/ | 

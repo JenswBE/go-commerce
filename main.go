@@ -9,7 +9,6 @@ import (
 
 	"github.com/JenswBE/go-commerce/admin"
 	"github.com/JenswBE/go-commerce/admin/auth"
-	configHandler "github.com/JenswBE/go-commerce/api/handler/config"
 	contentHandler "github.com/JenswBE/go-commerce/api/handler/content"
 	productHandler "github.com/JenswBE/go-commerce/api/handler/product"
 	"github.com/JenswBE/go-commerce/api/presenter"
@@ -108,7 +107,6 @@ func main() {
 	apiGroup.StaticFile("/", "docs/index.html")
 	apiGroup.StaticFile("/index.html", "docs/index.html")
 	apiGroup.StaticFile("/openapi.yml", "docs/openapi.yml")
-	configHandler.NewConfigHandler(presenter, *svcConfig).RegisterRoutes(apiGroup)
 	contentHandler.NewContentHandler(presenter, contentService).RegisterRoutes(apiGroup)
 	productHandler.NewProductHandler(presenter, productService).RegisterRoutes(apiGroup)
 

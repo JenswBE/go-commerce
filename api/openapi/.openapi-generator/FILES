@@ -3,7 +3,6 @@
 README.md
 api/openapi.yaml
 api_categories.go
-api_config.go
 api_content.go
 api_events.go
 api_manufacturers.go
@@ -15,7 +14,6 @@ docs/Category.md
 docs/CategoryAllOf.md
 docs/CategoryList.md
 docs/Config.md
-docs/ConfigApi.md
 docs/ConfigFeatures.md
 docs/ConfigFeaturesCategories.md
 docs/ConfigFeaturesContent.md

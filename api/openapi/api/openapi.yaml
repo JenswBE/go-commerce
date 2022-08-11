@@ -6,26 +6,12 @@ servers:
 - description: Local
   url: /api
 tags:
-- name: config
 - name: categories
 - name: manufacturers
 - name: products
 - name: content
 - name: events
 paths:
-  /config/:
-    get:
-      description: Get configuration
-      operationId: get_config
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Config'
-          description: OK
-      tags:
-      - config
   /categories/:
     get:
       description: List categories
@@ -393,19 +379,6 @@ components:
       description: Default error response
   schemas:
     Config:
-      example:
-        features:
-          manufacturers:
-            enabled: true
-          categories:
-            enabled: true
-          content:
-            enabled: true
-          events:
-            whole_days_only: true
-            enabled: true
-          products:
-            enabled: true
       properties:
         features:
           $ref: '#/components/schemas/ConfigFeatures'
@@ -413,18 +386,6 @@ components:
       - features
       type: object
     ConfigFeatures:
-      example:
-        manufacturers:
-          enabled: true
-        categories:
-          enabled: true
-        content:
-          enabled: true
-        events:
-          whole_days_only: true
-          enabled: true
-        products:
-          enabled: true
       properties:
         categories:
           $ref: '#/components/schemas/ConfigFeaturesCategories'
@@ -444,8 +405,6 @@ components:
       - products
       type: object
     ConfigFeaturesCategories:
-      example:
-        enabled: true
       properties:
         enabled:
           type: boolean
@@ -453,8 +412,6 @@ components:
       - enabled
       type: object
     ConfigFeaturesManufacturers:
-      example:
-        enabled: true
       properties:
         enabled:
           type: boolean
@@ -462,8 +419,6 @@ components:
       - enabled
       type: object
     ConfigFeaturesProducts:
-      example:
-        enabled: true
       properties:
         enabled:
           type: boolean
@@ -471,8 +426,6 @@ components:
       - enabled
       type: object
     ConfigFeaturesContent:
-      example:
-        enabled: true
       properties:
         enabled:
           type: boolean
@@ -480,9 +433,6 @@ components:
       - enabled
       type: object
     ConfigFeaturesEvents:
-      example:
-        whole_days_only: true
-        enabled: true
       properties:
         enabled:
           type: boolean
