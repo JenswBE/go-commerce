@@ -39,7 +39,7 @@ func (h *Handler) handleEventsList(c *gin.Context) {
 }
 
 func (h *Handler) handleEventsFormGET(c *gin.Context) {
-	// Check if new object
+	// Check if new event
 	paramID := c.Param(paramEventID)
 	if paramID == "new" {
 		c.HTML(http.StatusOK, "eventsForm", entities.EventsFormData{
@@ -56,14 +56,14 @@ func (h *Handler) handleEventsFormGET(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse ID parameter
-	id, err := parseUUID(paramID, objectTypeManufacturer)
+	id, err := parseUUID(paramID, objectTypeEvent)
 	if err != nil {
 		log.Debug().Err(err).Str("event_id", paramID).Msg("Invalid event ID provided")
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "events/")
 		return
 	}
 
-	// Fetch object
+	// Fetch event
 	event, err := h.contentService.GetEvent(id)
 	if err != nil {
 		log.Debug().Err(err).Str("event_id", paramID).Msg("Failed to fetch event")
@@ -83,7 +83,7 @@ func (h *Handler) handleEventsFormGET(c *gin.Context) {
 }
 
 func (h *Handler) handleEventsFormPOST(c *gin.Context) {
-	// Check if new object
+	// Check if new event
 	paramID := c.Param(paramEventID)
 	isNew := paramID == "new"
 
@@ -111,7 +111,7 @@ func (h *Handler) handleEventsFormPOST(c *gin.Context) {
 		}
 	} else {
 		// Parse ID parameter
-		eventEntity.ID, err = parseUUID(paramID, objectTypeManufacturer)
+		eventEntity.ID, err = parseUUID(paramID, objectTypeEvent)
 		if err != nil {
 			renderEventsFormWithError(c, isNew, event, fmt.Sprintf("Ongeldige evenement ID %s: %v", paramID, err))
 			return

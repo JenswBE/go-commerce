@@ -73,6 +73,11 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	notAuthenticatedGroup.GET(pathLogin, h.handleLogin)
 	notAuthenticatedGroup.POST(pathLogin, h.handleLogin)
 	rg.GET("logout/", h.handleLogout)
+	if h.features.Content.Enabled {
+		rg.GET("content/", h.handleContentList)
+		rg.GET("content/:content_name/", h.handleContentFormGET)
+		rg.POST("content/:content_name/", h.handleContentFormPOST)
+	}
 	if h.features.Events.Enabled {
 		rg.GET("events/", h.handleEventsList)
 		rg.GET("events/:event_id/", h.handleEventsFormGET)

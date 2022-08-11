@@ -17,6 +17,10 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 	if h.features.Categories.Enabled {
 		pages["categoriesList"] = []string{"pages/categories_list"}
 	}
+	if h.features.Content.Enabled {
+		pages["contentForm"] = []string{"pages/content_form"}
+		pages["contentList"] = []string{"pages/content_list"}
+	}
 	if h.features.Events.Enabled {
 		pages["eventsForm"] = []string{"pages/events_form"}
 		pages["eventsList"] = []string{"pages/events_list"}

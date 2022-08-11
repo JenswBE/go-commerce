@@ -1,0 +1,69 @@
+{{ template "base.html.go.tmpl" . }}
+
+{{ define "base_head" }}
+  {{ if .IsHTMLContent }}
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+  {{ end }}
+{{ end }}
+
+{{ define "base_content" }}
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="h2">
+      Inhoud aanpassen:
+      {{ .ContentName }}
+    </h1>
+  </div>
+
+  <div id="editor">{{ .Content.BodyHTML }}</div>
+
+  <form method="post">
+    {{ if .IsHTMLContent }}
+      <textarea id="inputBody" name="body" class="d-none">
+      {{- .Content.BodyHTML -}}
+      </textarea
+      >
+    {{ else }}
+      <textarea name="body" class="form-control">
+        {{- .Content.BodySimple -}}
+      </textarea
+      >
+    {{ end }}
+
+
+    <div class="mt-2">
+      <a href="{{ getURL "content" }}" class="btn btn-danger">Annuleren</a>
+      <button type="submit" class="btn btn-success">Opslaan</button>
+    </div>
+  </form>
+{{ end }}
+
+{{ define "base_body_end" }}
+  {{ if .IsHTMLContent }}
+    <!-- Include the Quill library -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- Initialize Quill editor -->
+    <script>
+      var bodyInput = document.getElementById("inputBody");
+      var quill = new Quill("#editor", {
+        theme: "snow",
+        modules: {
+          toolbar: [
+            ["bold", "italic", "underline"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["clean"],
+          ],
+        },
+      });
+
+      quill.on("text-change", function (delta, oldDelta, source) {
+        bodyInput.innerHTML = quill.root.innerHTML;
+      });
+    </script>
+  {{ end }}
+{{ end }}

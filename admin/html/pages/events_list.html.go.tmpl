@@ -42,8 +42,8 @@
       <tbody>
         {{ range .Events }}
           <tr>
-            <td>{{ .Start.Format "02/01/2006" }}</td>
-            <td>{{ .End.Format "02/01/2006" }}</td>
+            <td>{{ .Start.Format "Mon 02/01/2006" }}</td>
+            <td>{{ .End.Format "Mon 02/01/2006" }}</td>
             <td>{{ .Name }}</td>
             <td>
               <a
