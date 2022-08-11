@@ -59,13 +59,11 @@ jobs:
           export DATABASE_DEFAULT_PASSWORD=e2e
           export DATABASE_DEFAULT_DATABASE=e2e
 
-          # Run API
-          cd api
+          # Run service
           go run ./... &
           sleep 5s
 
           # Run unit tests
-          cd ..
           go test -tags e2e -coverprofile=coverage.out -covermode=atomic ./...
 
       - name: Upload coverage to Codecov
