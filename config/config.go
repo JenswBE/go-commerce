@@ -185,6 +185,8 @@ func ParseConfig() (*Config, error) {
 		return nil, errors.New("session encryption key is required. Please set in config or using env var AUTH_SESSION_ENC_KEY")
 	}
 	switch config.Authentication.Type {
+	case AuthTypeNone:
+		// No action required
 	case AuthTypeOIDC:
 		if config.Authentication.OIDC.IssuerURL == "" {
 			return nil, errors.New("issuer URL is required for authentication type OIDC")
