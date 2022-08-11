@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	adminEntities "github.com/JenswBE/go-commerce/admin/entities"
+	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -18,7 +18,7 @@ func (h *AdminHandler) handleEventsList(c *gin.Context) {
 	// Get ShowPastEvents state
 	showPastEvents, err := handleStatefulBoolFlag(c, "show_past_events")
 	if err != nil {
-		redirectWithMessage(c, sessions.Default(c), adminEntities.MessageTypeError, err.Error(), "events/")
+		redirectWithMessage(c, sessions.Default(c), entities.MessageTypeError, err.Error(), "events/")
 		return
 	}
 
@@ -28,8 +28,8 @@ func (h *AdminHandler) handleEventsList(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Ophalen van evenementen mislukt: %v", err)
 	}
 
-	htmlWithFlashes(c, http.StatusOK, "eventsList", &adminEntities.EventsListData{
-		BaseData: adminEntities.BaseData{
+	htmlWithFlashes(c, http.StatusOK, "eventsList", &entities.EventsListData{
+		BaseData: entities.BaseData{
 			Title:      "Evenementen",
 			ParentPath: "events",
 		},
@@ -42,8 +42,8 @@ func (h *AdminHandler) handleEventsFormGET(c *gin.Context) {
 	// Check if new object
 	paramID := c.Param(paramEventID)
 	if paramID == "new" {
-		c.HTML(http.StatusOK, "eventsForm", adminEntities.EventsFormData{
-			BaseData: adminEntities.BaseData{
+		c.HTML(http.StatusOK, "eventsForm", entities.EventsFormData{
+			BaseData: entities.BaseData{
 				Title:      eventsFormTitle(true),
 				ParentPath: "events",
 			},
@@ -59,27 +59,26 @@ func (h *AdminHandler) handleEventsFormGET(c *gin.Context) {
 	id, err := parseUUID(paramID, objectTypeManufacturer)
 	if err != nil {
 		log.Debug().Err(err).Str("event_id", paramID).Msg("Invalid event ID provided")
-		redirectWithMessage(c, session, adminEntities.MessageTypeError, err.Error(), "events/")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "events/")
 		return
 	}
 
 	// Fetch object
 	event, err := h.contentService.GetEvent(id)
-	_ = event // FIXME
 	if err != nil {
 		log.Debug().Err(err).Str("event_id", paramID).Msg("Failed to fetch event")
-		redirectWithMessage(c, session, adminEntities.MessageTypeError, err.Error(), "events/")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "events/")
 		return
 	}
 
 	// Render page
-	c.HTML(http.StatusOK, "eventsForm", adminEntities.EventsFormData{
-		BaseData: adminEntities.BaseData{
+	c.HTML(http.StatusOK, "eventsForm", entities.EventsFormData{
+		BaseData: entities.BaseData{
 			Title:      eventsFormTitle(false),
 			ParentPath: "events",
 		},
 		IsNew: false,
-		// Event: *event, // FIXME
+		Event: entities.EventFromEntity(event),
 	})
 }
 
@@ -89,7 +88,7 @@ func (h *AdminHandler) handleEventsFormPOST(c *gin.Context) {
 	isNew := paramID == "new"
 
 	// Parse body
-	event := adminEntities.Event{}
+	event := entities.Event{}
 	err := c.MustBindWith(&event, binding.FormPost)
 	if err != nil {
 		renderEventsFormWithError(c, isNew, event, fmt.Sprintf("Ongeldige data ontvangen: %v", err))
@@ -127,7 +126,7 @@ func (h *AdminHandler) handleEventsFormPOST(c *gin.Context) {
 	}
 
 	// Upsert successful
-	redirectWithMessage(c, sessions.Default(c), adminEntities.MessageTypeSuccess, "Evenement successvol toegevoegd/aangepast.", "events/")
+	redirectWithMessage(c, sessions.Default(c), entities.MessageTypeSuccess, "Evenement successvol toegevoegd/aangepast.", "events/")
 }
 
 func eventsFormTitle(isNew bool) string {
@@ -137,13 +136,13 @@ func eventsFormTitle(isNew bool) string {
 	return "Eventement aanpassen"
 }
 
-func renderEventsFormWithError(c *gin.Context, isNew bool, event adminEntities.Event, message string) {
-	c.HTML(http.StatusOK, "eventsForm", &adminEntities.EventsFormData{
-		BaseData: adminEntities.BaseData{
+func renderEventsFormWithError(c *gin.Context, isNew bool, event entities.Event, message string) {
+	c.HTML(http.StatusOK, "eventsForm", &entities.EventsFormData{
+		BaseData: entities.BaseData{
 			Title:      eventsFormTitle(isNew),
 			ParentPath: "events",
-			Messages: []adminEntities.Message{{
-				Type:    adminEntities.MessageTypeError,
+			Messages: []entities.Message{{
+				Type:    entities.MessageTypeError,
 				Content: message,
 			}},
 		},
@@ -159,7 +158,7 @@ func (h *AdminHandler) handleEventsDelete(c *gin.Context) {
 	// Parse parameters
 	id, err := parseUUID(c.Param(paramEventID), objectTypeEvent)
 	if err != nil {
-		redirectWithMessage(c, session, adminEntities.MessageTypeError, err.Error(), "events/")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "events/")
 		return
 	}
 
@@ -167,11 +166,11 @@ func (h *AdminHandler) handleEventsDelete(c *gin.Context) {
 	err = h.contentService.DeleteEvent(id)
 	if err != nil {
 		msg := i18n.DeleteFailed(i18n.ObjectTypeEvent, id, err)
-		redirectWithMessage(c, session, adminEntities.MessageTypeError, msg, "events/")
+		redirectWithMessage(c, session, entities.MessageTypeError, msg, "events/")
 		return
 	}
 
 	// Call successful
 	msg := i18n.DeleteSuccessful(i18n.ObjectTypeEvent)
-	redirectWithMessage(c, session, adminEntities.MessageTypeSuccess, msg, "events/")
+	redirectWithMessage(c, session, entities.MessageTypeSuccess, msg, "events/")
 }

@@ -22,6 +22,14 @@ type Event struct {
 	End   string `form:"end"`
 }
 
+func EventFromEntity(e *entities.Event) Event {
+	return Event{
+		Name:  e.Name,
+		Start: e.Start.Format(TimeFormatDate),
+		End:   e.End.Format(TimeFormatDate),
+	}
+}
+
 func (e Event) ToEntity() (entities.Event, error) {
 	start, err := parseDateString(e.Start)
 	if err != nil {
