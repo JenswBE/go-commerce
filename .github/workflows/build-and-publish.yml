@@ -54,7 +54,7 @@ jobs:
       - name: Run coverage
         run: |
           # Settings
-          export AUTH_TYPE=BASIC_AUTH
+          export AUTH_TYPE=NONE
           export DATABASE_DEFAULT_USER=e2e
           export DATABASE_DEFAULT_PASSWORD=e2e
           export DATABASE_DEFAULT_DATABASE=e2e
