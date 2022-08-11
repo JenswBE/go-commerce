@@ -19,7 +19,7 @@ require (
 	github.com/spf13/viper v1.12.0
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
-	golang.org/x/oauth2 v0.0.0-20220718184931-c8730f7fcb92
+	golang.org/x/oauth2 v0.0.0-20220808172628-8227340efae7
 	gorm.io/driver/postgres v1.3.8
 	gorm.io/gorm v1.23.8
 )
