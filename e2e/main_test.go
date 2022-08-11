@@ -3,7 +3,6 @@
 package e2e
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -40,10 +39,6 @@ func (s *E2ETestSuite) SetupSuite() {
 	// Setup authenticated client
 	authConfig := newE2EConfig(*apiConfig)
 	switch apiConfig.Authentication.Type {
-	case config.AuthTypeBasicAuth:
-		creds := fmt.Sprintf("%s:%s", apiConfig.Authentication.BasicAuth.Username, apiConfig.Authentication.BasicAuth.Password)
-		fmt.Println(creds)
-		authConfig.AddDefaultHeader("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(creds)))
 	case config.AuthTypeOIDC:
 		// Get token
 		formData := url.Values{}
