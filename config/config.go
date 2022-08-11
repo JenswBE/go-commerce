@@ -27,25 +27,7 @@ type Config struct {
 		Content Database
 		Product Database
 	}
-	Features struct {
-		Categories struct {
-			Enabled bool
-		}
-		Manufacturers struct {
-			Enabled bool
-		}
-		Products struct {
-			Enabled bool
-		}
-		Content struct {
-			Enabled bool
-			List    ContentList
-		}
-		Events struct {
-			Enabled       bool
-			WholeDaysOnly bool
-		}
-	}
+	Features   Features
 	ImageProxy struct {
 		BaseURL string
 		Key     string
@@ -78,6 +60,26 @@ type Database struct {
 	User     string
 	Password string
 	Database string
+}
+
+type Features struct {
+	Categories struct {
+		Enabled bool
+	}
+	Manufacturers struct {
+		Enabled bool
+	}
+	Products struct {
+		Enabled bool
+	}
+	Content struct {
+		Enabled bool
+		List    ContentList
+	}
+	Events struct {
+		Enabled       bool
+		WholeDaysOnly bool
+	}
 }
 
 type Storage struct {

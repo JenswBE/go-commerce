@@ -11,7 +11,7 @@ import (
 
 const paramManufacturerID = "manufacturer_id"
 
-func (h *AdminHandler) handleManufacturersList(c *gin.Context) {
+func (h *Handler) handleManufacturersList(c *gin.Context) {
 	htmlWithFlashes(c, http.StatusOK, "manufacturersList", &entities.ProductsListData{
 		BaseData: entities.BaseData{
 			Title:      "Merken",
@@ -20,7 +20,7 @@ func (h *AdminHandler) handleManufacturersList(c *gin.Context) {
 	})
 }
 
-func (h *AdminHandler) handleManufacturersEdit(c *gin.Context) {
+func (h *Handler) handleManufacturersEdit(c *gin.Context) {
 	c.HTML(http.StatusOK, "manufacturersList", entities.ProductsListData{
 		BaseData: entities.BaseData{
 			Title:      "Merken",
@@ -29,7 +29,7 @@ func (h *AdminHandler) handleManufacturersEdit(c *gin.Context) {
 	})
 }
 
-func (h *AdminHandler) handleManufacturersDelete(c *gin.Context) {
+func (h *Handler) handleManufacturersDelete(c *gin.Context) {
 	// Get session
 	session := sessions.Default(c)
 

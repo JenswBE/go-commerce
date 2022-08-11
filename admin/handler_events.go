@@ -14,7 +14,7 @@ import (
 
 const paramEventID = "event_id"
 
-func (h *AdminHandler) handleEventsList(c *gin.Context) {
+func (h *Handler) handleEventsList(c *gin.Context) {
 	// Get ShowPastEvents state
 	showPastEvents, err := handleStatefulBoolFlag(c, "show_past_events")
 	if err != nil {
@@ -38,7 +38,7 @@ func (h *AdminHandler) handleEventsList(c *gin.Context) {
 	})
 }
 
-func (h *AdminHandler) handleEventsFormGET(c *gin.Context) {
+func (h *Handler) handleEventsFormGET(c *gin.Context) {
 	// Check if new object
 	paramID := c.Param(paramEventID)
 	if paramID == "new" {
@@ -82,7 +82,7 @@ func (h *AdminHandler) handleEventsFormGET(c *gin.Context) {
 	})
 }
 
-func (h *AdminHandler) handleEventsFormPOST(c *gin.Context) {
+func (h *Handler) handleEventsFormPOST(c *gin.Context) {
 	// Check if new object
 	paramID := c.Param(paramEventID)
 	isNew := paramID == "new"
@@ -151,7 +151,7 @@ func renderEventsFormWithError(c *gin.Context, isNew bool, event entities.Event,
 	})
 }
 
-func (h *AdminHandler) handleEventsDelete(c *gin.Context) {
+func (h *Handler) handleEventsDelete(c *gin.Context) {
 	// Get session
 	session := sessions.Default(c)
 

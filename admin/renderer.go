@@ -12,14 +12,20 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func GetRenderer() multitemplate.Renderer {
-	pages := map[string][]string{
-		"categoriesList":    {"pages/categories_list"},
-		"eventsForm":        {"pages/events_form"},
-		"eventsList":        {"pages/events_list"},
-		"login":             {"pages/login"},
-		"manufacturersList": {"pages/manufacturers_list"},
-		"productsList":      {"pages/products_list"},
+func (h *Handler) NewRenderer() multitemplate.Renderer {
+	pages := map[string][]string{"login": {"pages/login"}}
+	if h.features.Categories.Enabled {
+		pages["categoriesList"] = []string{"pages/categories_list"}
+	}
+	if h.features.Events.Enabled {
+		pages["eventsForm"] = []string{"pages/events_form"}
+		pages["eventsList"] = []string{"pages/events_list"}
+	}
+	if h.features.Manufacturers.Enabled {
+		pages["manufacturersList"] = []string{"pages/manufacturers_list"}
+	}
+	if h.features.Products.Enabled {
+		pages["productsList"] = []string{"pages/products_list"}
 	}
 
 	r := multitemplate.NewRenderer()

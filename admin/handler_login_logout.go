@@ -11,7 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (h *AdminHandler) handleLogin(c *gin.Context) {
+func (h *Handler) handleLogin(c *gin.Context) {
 	// Check if authentication is enabled
 	if h.authVerifier == nil {
 		// Authentication disabled => Redirect to home
@@ -62,7 +62,7 @@ func handleLoginFailed(c *gin.Context, status int, message string, err error) {
 	}}})
 }
 
-func (h *AdminHandler) handleLogout(c *gin.Context) {
+func (h *Handler) handleLogout(c *gin.Context) {
 	s := sessions.Default(c)
 	s.Clear()
 	if err := s.Save(); err != nil {
