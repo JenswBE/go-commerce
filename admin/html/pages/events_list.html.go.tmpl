@@ -6,7 +6,22 @@
   >
     <h1 class="h2">Evenementen</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group me-2">
+      <div class="me-2">
+        <a
+          href="?show_past_events={{ if .ShowPastEvents -}}
+            false
+          {{- else -}}
+            true
+          {{- end }}"
+          class="btn btn-sm btn-primary"
+        >
+          {{ if .ShowPastEvents }}
+            Verberg
+          {{ else }}
+            Toon
+          {{ end }}
+          voorbije evenementen
+        </a>
         <a href="{{ getURL "events/new" }}" class="btn btn-sm btn-success">
           Toevoegen
         </a>

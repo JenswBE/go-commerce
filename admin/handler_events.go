@@ -15,7 +15,15 @@ import (
 const paramEventID = "event_id"
 
 func (h *AdminHandler) handleEventsList(c *gin.Context) {
-	events, err := h.contentService.ListEvents(false)
+	// Get ShowPastEvents state
+	showPastEvents, err := handleStatefulBoolFlag(c, "show_past_events")
+	if err != nil {
+		redirectWithMessage(c, sessions.Default(c), adminEntities.MessageTypeError, err.Error(), "events/")
+		return
+	}
+
+	// Fetch events
+	events, err := h.contentService.ListEvents(showPastEvents)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Ophalen van evenementen mislukt: %v", err)
 	}
@@ -25,7 +33,8 @@ func (h *AdminHandler) handleEventsList(c *gin.Context) {
 			Title:      "Evenementen",
 			ParentPath: "events",
 		},
-		Events: events,
+		Events:         events,
+		ShowPastEvents: showPastEvents,
 	})
 }
 

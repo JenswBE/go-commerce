@@ -6,7 +6,8 @@ import (
 
 type EventsListData struct {
 	BaseData
-	Events []*entities.Event
+	Events         []*entities.Event
+	ShowPastEvents bool
 }
 
 type EventsFormData struct {
