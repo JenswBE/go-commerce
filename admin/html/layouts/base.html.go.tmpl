@@ -8,7 +8,10 @@
   <header
     class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow"
   >
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="/admin">
+    <a
+      class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6"
+      href="{{ getURL "" }}"
+    >
       GoCommerce
     </a>
     <button
@@ -22,17 +25,6 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <input
-      class="form-control form-control-dark w-100 rounded-0 border-0"
-      type="text"
-      placeholder="Search"
-      aria-label="Search"
-    />
-    <div class="navbar-nav">
-      <div class="nav-item text-nowrap">
-        <a class="nav-link px-3" href="/admin/logout">Uitloggen</a>
-      </div>
-    </div>
   </header>
 
   <div class="container-fluid">
@@ -48,7 +40,7 @@
                 class="nav-link {{ if eq .ParentPath "products" }}
                   active
                 {{ end }}"
-                href="/admin/products/"
+                href="{{ getURL "products" }}"
               >
                 <i class="bi bi-box-seam"></i>
                 Producten
@@ -59,7 +51,7 @@
                 class="nav-link {{ if eq .ParentPath "categories" }}
                   active
                 {{ end }}"
-                href="/admin/categories/"
+                href="{{ getURL "categories" }}"
               >
                 <i class="bi bi-tag"></i>
                 Categorieën
@@ -70,7 +62,7 @@
                 class="nav-link {{ if eq .ParentPath "manufacturers" }}
                   active
                 {{ end }}"
-                href="/admin/manufacturers/"
+                href="{{ getURL "manufacturers" }}"
               >
                 <i class="bi bi-building"></i>
                 Merken
@@ -81,7 +73,7 @@
                 class="nav-link {{ if eq .ParentPath "events" }}
                   active
                 {{ end }}"
-                href="/admin/events/"
+                href="{{ getURL "events" }}"
               >
                 <i class="bi bi-calendar-event"></i>
                 Evenementen
@@ -92,14 +84,14 @@
                 class="nav-link {{ if eq .ParentPath "content" }}
                   active
                 {{ end }}"
-                href="/admin/content/"
+                href="{{ getURL "content" }}"
               >
                 <i class="bi bi-blockquote-left"></i>
                 Inhoud
               </a>
             </li>
             <li class="nav-item mt-3">
-              <a class="nav-link" href="/admin/logout/">
+              <a class="nav-link" href="{{ getURL "logout" }}">
                 <i class="bi bi-door-open"></i>
                 Uitloggen
               </a>

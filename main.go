@@ -19,20 +19,20 @@ import (
 	"github.com/JenswBE/go-commerce/repositories/productpg"
 	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
-	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
-	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog/pkgerrors"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func main() {
 	// Setup logging
+	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}
 	log.Logger = log.Output(output)
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
@@ -127,7 +127,7 @@ func main() {
 	}
 
 	// Setup admin GUI
-	router.HTMLRender = createAdminGUIRenderer()
+	router.HTMLRender = admin.GetRenderer()
 	adminHandler := admin.NewAdminGUIHandler(productService, authVerifier, svcConfig.Authentication.SessionAuthKey, svcConfig.Authentication.SessionEncKey)
 	adminHandler.RegisterRoutes(router)
 
@@ -146,21 +146,4 @@ func getStorageRepo(svcConfig config.Storage) (product.StorageRepository, error)
 	default:
 		return nil, fmt.Errorf(`unknown storage type "%s"`, svcConfig.Type)
 	}
-}
-
-func createAdminGUIRenderer() multitemplate.Renderer {
-	pages := map[string][]string{
-		"categoriesList":    {"pages/categories_list"},
-		"login":             {"pages/login"},
-		"manufacturersList": {"pages/manufacturers_list"},
-		"productsList":      {"pages/products_list"},
-	}
-
-	r := multitemplate.NewRenderer()
-	for pageName, templates := range pages {
-		templates = append([]string{"layouts/empty", "layouts/base"}, templates...)
-		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("admin/html/%s.html.go.tmpl", i) })
-		r.AddFromFiles(pageName, templatePaths...)
-	}
-	return r
 }

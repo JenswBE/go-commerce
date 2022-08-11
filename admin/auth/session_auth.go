@@ -30,11 +30,22 @@ func (s *SessionAuthenticator) MustHaveSessionLogin(c *gin.Context) (username st
 	}
 
 	// Validate type of expiration
-	validUntil, ok := validUntilRaw.(time.Time)
+	validUntilString, ok := validUntilRaw.(string)
 	if !ok {
 		session.Clear()
 		if err := session.Save(); err != nil {
 			log.Warn().Err(err).Interface("valid_until", validUntilRaw).Msg("Failed to clear invalid session")
+			return "", fmt.Errorf("session invalid, but failed to clear session: %w", err)
+		}
+		return "", errors.New("session invalid and therefore cleared")
+	}
+
+	// Parse expiration
+	validUntil, timeErr := time.Parse(time.RFC3339, validUntilString)
+	if timeErr != nil {
+		session.Clear()
+		if err := session.Save(); err != nil {
+			log.Warn().Err(err).AnErr("time_parse_error", timeErr).Interface("valid_until", validUntilRaw).Msg("Failed to clear invalid session")
 			return "", fmt.Errorf("session invalid, but failed to clear session: %w", err)
 		}
 		return "", errors.New("session invalid and therefore cleared")
@@ -76,6 +87,16 @@ func (s *SessionAuthenticator) MustHaveSessionLogin(c *gin.Context) (username st
 		return "", errors.New("username in session has unexpected type and therefore session is cleared")
 	}
 	return username, nil
+}
+
+func (s *SessionAuthenticator) StartSession(session sessions.Session, username string) error {
+	session.Set("username", username)
+	session.Set("valid_until", time.Now().Add(s.sessionValidity).Format(time.RFC3339))
+	if err := session.Save(); err != nil {
+		log.Warn().Err(err).Str("username", username).Msg("Failed to start session")
+		return fmt.Errorf("failed to start session: %w", err)
+	}
+	return nil
 }
 
 func (s *SessionAuthenticator) MW(redirectPathNotLoggedIn string) gin.HandlerFunc {

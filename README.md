@@ -23,11 +23,13 @@ If both are defined, the environment variables take precedence.
 
 | Config key                            | Env variable                    | Description                                                                                                | Default value  |
 | ------------------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
-| Authentication.Type                   | AUTH_TYPE                       | Switch between OIDC and Basic Auth (latter should only be used for testing)                                |                |
-| Authentication.BasicAuth.Username     | AUTH_BASIC_USERNAME             | Username for Basic Auth                                                                                    |                |
-| Authentication.BasicAuth.Password     | AUTH_BASIC_PASSWORD             | Password for Basic Auth                                                                                    |                |
+| Authentication.Type                   | AUTH_TYPE                       | Switch between OIDC and NONE (latter should only be used for testing)                                      |                |
 | Authentication.OIDC.IssuerURL         | AUTH_OIDC_ISSUER_URL            | URL to OpenID Configuration Issuer (without `.well-known/openid-configuration`)                            |                |
 | Authentication.OIDC.ClientID          | AUTH_OIDC_CLIENT_ID             | Client ID for OIDC                                                                                         |                |
+| Authentication.SessionAuthKey         | AUTH_SESSION_AUTH_KEY           | Authentication key for session tokens. Mandatory and must be a base64 encoded string of 64 bytes.          |                |
+|                                       |                                 | Can be generated using `openssl rand -base64 64 \| paste --delimiters '' --serial`                         |                |
+| Authentication.SessionEncKey          | AUTH_SESSION_ENC_KEY            | Encryption key for session tokens. Mandatory and must be a base64 encoded string of 32 bytes.              |                |
+|                                       |                                 | Can be generated using `openssl rand -base64 32 \| paste --delimiters '' --serial`                         |                |
 | Database.Default.Host                 | DATABASE_DEFAULT_HOST           | Hostname of the default Postgres datatabase                                                                |                |
 | Database.Default.Port                 | DATABASE_DEFAULT_PORT           | Port of the default Postgres datatabase                                                                    | 5432           |
 | Database.Default.User                 | DATABASE_DEFAULT_USER           | Username for the default Postgres datatabase                                                               |                |
@@ -58,11 +60,7 @@ If both are defined, the environment variables take precedence.
 | ImageProxy.AllowedConfigs             | IMAGE_PROXY_ALLOWED_CONFIGS     | Comma-separated list of allowed image configs in format width:height:resizingType.                         |                |
 |                                       |                                 | Example `100:100:FILL,300:200:FIT`. Use `*` if not limiting the configs.                                   |                |
 | Server.Debug                          | GOCOM_DEBUG                     | Set to true to enable debug logging and put API framework in debug mode.                                   | false          |
-| Server.JWTSigningKey                  | GOCOM_JWT_SIGNING_KEY           | Signing key for JWT keys. Mandatory and must be a base64 encoded string of 64 bytes.                       |                |
-|                                       |                                 | Can be generated using `openssl rand -base64 64 \| paste --delimiters '' --serial`                         |                |
 | Server.Port                           | GOCOM_PORT                      | HTTP port on which the GoCommerce API listens                                                              | 8080           |
-| Server.SessionAuthKey                 | GOCOM_SESSION_AUTH_KEY          | Authentication key for session tokens. Mandatory and must be a base64 encoded string of 64 bytes.          |                |
-|                                       |                                 | Can be generated using `openssl rand -base64 64 \| paste --delimiters '' --serial`                         |                |
 | Server.TrustedProxies                 | GOCOM_TRUSTED_PROXIES           | IP's of proxies trusted by GoCommerce. Header `X-Forwarded-For` is only considered for these hosts.        | 172.16.0.0/16  |
 | Storage.Images.Type                   | STORAGE_IMAGES_TYPE             | Type of storage used for storing images. Currently only `fs` is supported.                                 | fs             |
 | Storage.Images.Path                   | STORAGE_IMAGES_PATH             | Path for storing images                                                                                    | ./files/images |

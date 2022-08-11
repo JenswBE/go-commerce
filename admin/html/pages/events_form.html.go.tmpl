@@ -1,0 +1,29 @@
+{{ template "base.html.go.tmpl" . }}
+
+{{ define "base_content" }}
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="h2">
+      Evenement {{ if .IsNew }}toevoegen{{ else }}aanpassen{{ end }}
+    </h1>
+  </div>
+
+  <form>
+    <div class="mb-3">
+      <label for="inputStart" class="form-label">Start datum</label>
+      <input type="date" class="form-control" id="inputStart" />
+    </div>
+    <div class="mb-3">
+      <label for="inputEnd" class="form-label">Eind datum</label>
+      <input type="date" class="form-control" id="inputEnd" />
+    </div>
+    <div class="mb-3">
+      <label for="inputName" class="form-label">Naam</label>
+      <input type="text" class="form-control" id="inputName" />
+    </div>
+
+    <a href="{{ getURL "events" }}" class="btn btn-danger">Annuleren</a>
+    <button type="submit" class="btn btn-success">Opslaan</button>
+  </form>
+{{ end }}

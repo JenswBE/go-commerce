@@ -4,4 +4,5 @@ type ObjectType string
 
 const (
 	ObjectTypeManufacturer ObjectType = "merk"
+	ObjectTypeEvent        ObjectType = "evenement"
 )

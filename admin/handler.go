@@ -8,6 +8,7 @@ import (
 	"github.com/JenswBE/go-commerce/admin/auth"
 	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
+	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -18,11 +19,13 @@ import (
 const PrefixAdmin = "/admin/"
 
 const (
+	objectTypeEvent        = "evenement"
 	objectTypeManufacturer = "merk"
 	pathLogin              = "login/"
 )
 
 type AdminHandler struct {
+	contentService       content.Service
 	productService       product.Usecase
 	authVerifier         auth.Verifier
 	sessionAuthenticator *auth.SessionAuthenticator
@@ -46,7 +49,12 @@ func NewAdminGUIHandler(productService product.Usecase, authVerifier auth.Verifi
 func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	// Register middlewares
 	notAuthenticatedGroup := r.Group(PrefixAdmin)
-	notAuthenticatedGroup.Use(sessions.Sessions("gocom", cookie.NewStore(h.sessionAuthKey[:], h.sessionEncKey[:])))
+	cookieStore := cookie.NewStore(h.sessionAuthKey[:], h.sessionEncKey[:])
+	cookieStore.Options(sessions.Options{
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	})
+	notAuthenticatedGroup.Use(sessions.Sessions("gocom", cookieStore))
 	rg := notAuthenticatedGroup.Group("")
 	if h.sessionAuthenticator != nil {
 		rg.Use(h.sessionAuthenticator.MW(PrefixAdmin + pathLogin))
@@ -61,9 +69,13 @@ func (h *AdminHandler) RegisterRoutes(r *gin.Engine) {
 	notAuthenticatedGroup.GET(pathLogin, h.handleLogin)
 	notAuthenticatedGroup.POST(pathLogin, h.handleLogin)
 	rg.GET("logout/", h.handleLogout)
+	rg.GET("events/", h.handleEventsList)
+	rg.GET("events/:event_id/", h.handleEventsForm)
+	rg.POST("events/:event_id/", h.handleEventsForm)
+	rg.POST("events/:event_id/delete/", h.handleEventsDelete)
 	rg.GET("manufacturers/", h.handleManufacturersList)
 	rg.GET("manufacturers/:manufacturer_id/", h.handleManufacturersEdit)
-	rg.GET("manufacturers/:manufacturer_id/delete/", h.handleManufacturersDelete)
+	rg.POST("manufacturers/:manufacturer_id/delete/", h.handleManufacturersDelete)
 	// rg.GET("products/", handleProductsList)
 	// rg.GET("products/:product_id/", handleProductsEdit)
 }
