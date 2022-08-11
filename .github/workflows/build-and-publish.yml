@@ -6,7 +6,7 @@ on:
       - "*"
 
 env:
-  GO_VERSION: "^1.16.6" # Also update Dockerfile when bumping
+  GO_VERSION: "^1.18.4" # Also update Dockerfile when bumping
   DOCKER_HUB_USER: jenswbebot
   DOCKER_HUB_REPO: jenswbe/go-commerce
 

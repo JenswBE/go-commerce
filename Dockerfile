@@ -1,8 +1,7 @@
-FROM golang:1.16 AS builder
+FROM golang:1.18 AS builder
 
 WORKDIR /src/
 COPY . .
-WORKDIR /src/api
 RUN go install github.com/nishanths/exhaustive/...@latest
 RUN exhaustive ./...
 RUN CGO_ENABLED=0 go build -ldflags='-extldflags=-static' -o /bin/go-commerce-api
