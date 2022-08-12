@@ -45,6 +45,7 @@ If both are defined, the environment variables take precedence.
 | Database.Product.User                 | DATABASE_PRODUCT_USER           | Override the default user for the product Postgres datatabase                                              |                |
 | Database.Product.Password             | DATABASE_PRODUCT_PASSWORD       | Override the default password for the product Postgres datatabase                                          |                |
 | Database.Product.Database             | DATABASE_PRODUCT_DATABASE       | Override the default database for the product Postgres datatabase                                          |                |
+| Features.StartpageFeature             | FEATURES_STARTPAGE_FEATURE      | Feature which should be shown as startpage. See below config keys for supported features.                  | Products       |
 | Features.Categories.Enabled           | FEATURES_CATEGORIES_ENABLED     | Support for categories is enabled                                                                          | true           |
 | Features.Manufacturers.Enabled        | FEATURES_MANUFACTURERS_ENABLED  | Support for manufacturers is enabled                                                                       | true           |
 | Features.Products.Enabled             | FEATURES_PRODUCTS_ENABLED       | Support for products is enabled                                                                            | true           |
@@ -69,7 +70,6 @@ If both are defined, the environment variables take precedence.
 
 ```bash
 docker compose up -d
-cd api
 go run .
 docker compose down
 ```

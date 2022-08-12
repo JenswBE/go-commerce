@@ -12,13 +12,10 @@
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
   >
-    <h1 class="h2">Categorieën</h1>
+    <h1 class="h2">Categorie&euml;n</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="me-2">
-        <a
-          href="{{ getURL "categories/new" }}"
-          class="btn btn-sm btn-success"
-        >
+        <a href="{{ getURL "categories/new" }}" class="btn btn-sm btn-success">
           Toevoegen
         </a>
       </div>
@@ -59,7 +56,9 @@
           </tr>
         {{ else }}
           <tr>
-            <td colspan="4" class="text-center">Geen categorieën gevonden</td>
+            <td colspan="4" class="text-center">
+              Geen categorie&euml;n gevonden
+            </td>
           </tr>
         {{ end }}
       </tbody>

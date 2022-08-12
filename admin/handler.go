@@ -3,6 +3,7 @@ package admin
 import (
 	"errors"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/JenswBE/go-commerce/admin/auth"
@@ -66,8 +67,9 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	rg.Static("static", "admin/html/static")
 
 	// Register dynamic routes
-	rg.GET("/", func(c *gin.Context) { c.Redirect(http.StatusTemporaryRedirect, "products/") })
-	// rg.GET("categories/", handleCategoriesList)
+	rg.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusTemporaryRedirect, strings.ToLower(string(h.features.StartpageFeature))+"/")
+	})
 	notAuthenticatedGroup.GET(pathLogin, h.handleLogin)
 	notAuthenticatedGroup.POST(pathLogin, h.handleLogin)
 	rg.GET("logout/", h.handleLogout)
@@ -94,10 +96,12 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 		rg.POST("manufacturers/:manufacturer_id/", h.handleManufacturersFormPOST)
 		rg.POST("manufacturers/:manufacturer_id/delete/", h.handleManufacturersDelete)
 	}
-	// if h.features.Products.Enabled {
-	// 	rg.GET("products/", handleProductsList)
-	// 	rg.GET("products/:product_id/", handleProductsEdit)
-	// }
+	if h.features.Products.Enabled {
+		rg.GET("products/", h.handleProductsList)
+		rg.GET("products/:product_id/", h.handleProductsFormGET)
+		rg.POST("products/:product_id/", h.handleProductsFormPOST)
+		rg.POST("products/:product_id/delete/", h.handleProductsDelete)
+	}
 }
 
 func parseUUID(input string, objectType i18n.ObjectType) (uuid.UUID, error) {

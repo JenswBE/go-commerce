@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
 
@@ -62,8 +63,19 @@ type Database struct {
 	Database string
 }
 
+type Feature string
+
+const (
+	FeatureCategories    Feature = "Categories"
+	FeatureManufacturers Feature = "Manufacturers"
+	FeatureProducts      Feature = "Products"
+	FeatureContent       Feature = "Content"
+	FeatureEvents        Feature = "Events"
+)
+
 type Features struct {
-	Categories struct {
+	StartpageFeature Feature
+	Categories       struct {
 		Enabled bool
 	}
 	Manufacturers struct {
@@ -93,6 +105,7 @@ func ParseConfig() (*Config, error) {
 	// Set defaults
 	viper.SetDefault("Authentication.Type", AuthTypeOIDC)
 	viper.SetDefault("Database.Default.Port", 5432)
+	viper.SetDefault("Features.StartpageFeature", FeatureProducts)
 	viper.SetDefault("Features.Categories.Enabled", true)
 	viper.SetDefault("Features.Manufacturers.Enabled", true)
 	viper.SetDefault("Features.Products.Enabled", true)
@@ -139,6 +152,7 @@ func ParseConfig() (*Config, error) {
 		{"Database.Product.User", "DATABASE_PRODUCT_USER"},
 		{"Database.Product.Password", "DATABASE_PRODUCT_PASSWORD"},
 		{"Database.Product.Database", "DATABASE_PRODUCT_DATABASE"},
+		{"Features.StartpageFeature", "FEATURES_STARTPAGE_FEATURE"},
 		{"Features.Categories.Enabled", "FEATURES_CATEGORIES_ENABLED"},
 		{"Features.Manufacturers.Enabled", "FEATURES_MANUFACTURERS_ENABLED"},
 		{"Features.Products.Enabled", "FEATURES_PRODUCTS_ENABLED"},
@@ -198,6 +212,16 @@ func ParseConfig() (*Config, error) {
 		}
 	default:
 		return nil, fmt.Errorf("unknown authentication type %s", config.Authentication.Type)
+	}
+	switch config.Features.StartpageFeature {
+	case FeatureCategories, FeatureContent, FeatureEvents, FeatureManufacturers, FeatureProducts:
+		// No action required
+	default:
+		return nil, fmt.Errorf("unknown startpage feature %s", config.Features.StartpageFeature)
+	}
+	isStartpageFeatureEnabled := reflect.ValueOf(config.Features).FieldByName(string(config.Features.StartpageFeature)).FieldByName("Enabled").Bool()
+	if !isStartpageFeatureEnabled {
+		return nil, fmt.Errorf("provided startpage feature %s is a disabled feature. Please enable or change to another startpage feature", config.Features.StartpageFeature)
 	}
 
 	return &config, nil

@@ -19,7 +19,7 @@ func (r *ProductPostgres) GetCategory(id entities.ID) (*entities.Category, error
 
 func (r *ProductPostgres) ListCategories() ([]*entities.Category, error) {
 	categories := []*internal.Category{}
-	err := r.db.Preload("Products").Preload("Image").Order("name").Find(&categories).Error
+	err := r.db.Preload("Products").Preload("Image").Order(`"order"`).Find(&categories).Error
 	if err != nil {
 		return nil, translatePgError(err, categories, "")
 	}

@@ -1,0 +1,29 @@
+{{ template "base.html.go.tmpl" . }}
+
+{{ define "base_content" }}
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="h2">
+      Product {{ if .IsNew }}toevoegen{{ else }}aanpassen{{ end }}
+    </h1>
+  </div>
+
+  <form method="post">
+    <div class="mb-3">
+      <label for="inputName" class="form-label">Naam *</label>
+      <input
+        required
+        type="text"
+        name="name"
+        class="form-control"
+        id="inputName"
+        value="{{ .Product.Name }}"
+        placeholder="Bv. JenswBE"
+      />
+    </div>
+
+    <a href="{{ getURL "products" }}" class="btn btn-danger">Annuleren</a>
+    <button type="submit" class="btn btn-success">Opslaan</button>
+  </form>
+{{ end }}
