@@ -9,6 +9,7 @@ type ProductsListTemplate struct {
 	BaseData
 	Products         []*entities.Product
 	ManufacturersMap map[uuid.UUID]entities.Manufacturer
+	PublicURLMap     map[uuid.UUID]string
 }
 
 func (t ProductsListTemplate) GetTemplateName() string {

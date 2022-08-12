@@ -3,6 +3,7 @@ package admin
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
@@ -43,11 +44,27 @@ func (h *Handler) handleProductsList(c *gin.Context) {
 		manufacturersMap[manufacturer.ID] = *manufacturer
 	}
 
+	// Generate public URL's
+	publicURLMap := make(map[uuid.UUID]string, len(products))
+	if h.features.Products.PublicURLTemplate != "" {
+		for _, product := range products {
+			urlBuilder := strings.Builder{}
+			err = h.features.Products.PublicURLTemplateParsed.Execute(&urlBuilder, product)
+			if err != nil {
+				baseData.AddMessage(entities.MessageTypeError, "Opbouwen van publieke link mislukt voor product %s: %v", product.Name, err)
+				html(c, http.StatusInternalServerError, &entities.ProductsListTemplate{BaseData: baseData})
+				return
+			}
+			publicURLMap[product.ID] = urlBuilder.String()
+		}
+	}
+
 	// Render page
 	htmlWithFlashes(c, http.StatusOK, &entities.ProductsListTemplate{
 		BaseData:         baseData,
 		Products:         products,
 		ManufacturersMap: manufacturersMap,
+		PublicURLMap:     publicURLMap,
 	})
 }
 

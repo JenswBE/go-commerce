@@ -54,14 +54,16 @@
             <td>{{ .StockCount }}</td>
             <td>{{ .Status }}</td>
             <td>
-              <a
-                target="_blank"
-                href="{{ getURL "products" .ID.String }}"
-                title="Toon product op website"
-                class="btn btn-success me-2"
-              >
-                <i class="bi bi-link-45deg"></i>
-              </a>
+              {{ if ne (index $.PublicURLMap .ID) "" }}
+                <a
+                  target="_blank"
+                  href="{{ index $.PublicURLMap .ID }}"
+                  title="Toon product op website"
+                  class="btn btn-success me-2"
+                >
+                  <i class="bi bi-link-45deg"></i>
+                </a>
+              {{ end }}
               <a
                 href="{{ getURL "products" .ID.String }}"
                 title="Aanpassen"

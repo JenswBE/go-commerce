@@ -3,10 +3,13 @@ package config
 import (
 	"errors"
 	"fmt"
+	"html/template"
+	"io"
 	"reflect"
 	"strconv"
 	"strings"
 
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
 	"github.com/rs/zerolog/log"
@@ -82,7 +85,9 @@ type Features struct {
 		Enabled bool
 	}
 	Products struct {
-		Enabled bool
+		Enabled                 bool
+		PublicURLTemplate       string
+		PublicURLTemplateParsed *template.Template
 	}
 	Content struct {
 		Enabled bool
@@ -109,6 +114,7 @@ func ParseConfig() (*Config, error) {
 	viper.SetDefault("Features.Categories.Enabled", true)
 	viper.SetDefault("Features.Manufacturers.Enabled", true)
 	viper.SetDefault("Features.Products.Enabled", true)
+	viper.SetDefault("Features.Products.PublicURLTemplate", "")
 	viper.SetDefault("Features.Content.Enabled", true)
 	viper.SetDefault("Features.Events.Enabled", true)
 	viper.SetDefault("ImageProxy.BaseURL", "/images/")
@@ -156,6 +162,7 @@ func ParseConfig() (*Config, error) {
 		{"Features.Categories.Enabled", "FEATURES_CATEGORIES_ENABLED"},
 		{"Features.Manufacturers.Enabled", "FEATURES_MANUFACTURERS_ENABLED"},
 		{"Features.Products.Enabled", "FEATURES_PRODUCTS_ENABLED"},
+		{"Features.Products.PublicURLTemplate", "FEATURES_PRODUCTS_PUBLIC_URL_TEMPLATE"},
 		{"Features.Content.Enabled", "FEATURES_CONTENT_ENABLED"},
 		{"Features.Content.List", "FEATURES_CONTENT_LIST"},
 		{"Features.Events.Enabled", "FEATURES_EVENTS_ENABLED"},
@@ -222,6 +229,17 @@ func ParseConfig() (*Config, error) {
 	isStartpageFeatureEnabled := reflect.ValueOf(config.Features).FieldByName(string(config.Features.StartpageFeature)).FieldByName("Enabled").Bool()
 	if !isStartpageFeatureEnabled {
 		return nil, fmt.Errorf("provided startpage feature %s is a disabled feature. Please enable or change to another startpage feature", config.Features.StartpageFeature)
+	}
+	if config.Features.Products.Enabled && config.Features.Products.PublicURLTemplate != "" {
+		templateString := config.Features.Products.PublicURLTemplate
+		config.Features.Products.PublicURLTemplateParsed, err = template.New("product_public_url_template").Parse(templateString)
+		if err != nil {
+			return nil, fmt.Errorf("provided product public URL template '%s' is not parsable into Golang template: %w", templateString, err)
+		}
+		err = config.Features.Products.PublicURLTemplateParsed.Execute(io.Discard, entities.Product{})
+		if err != nil {
+			return nil, fmt.Errorf("provided product public URL template '%s' is not executable: %w", templateString, err)
+		}
 	}
 
 	return &config, nil
