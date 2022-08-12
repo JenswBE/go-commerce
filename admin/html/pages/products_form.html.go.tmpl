@@ -85,6 +85,31 @@
         placeholder="15"
       />
     </div>
+    <div class="mb-3">
+      <label for="inputDescriptionShort" class="form-label">
+        Korte beschrijving
+      </label>
+      <textarea
+        name="description_short"
+        class="form-control"
+        id="inputDescriptionShort"
+      >
+{{- .Product.DescriptionShort -}}</textarea
+      >
+    </div>
+    <div class="mb-3">
+      <label for="inputDescriptionLong" class="form-label">
+        Lange beschrijving
+      </label>
+      <textarea
+        name="description_long"
+        class="form-control"
+        id="inputDescriptionLong"
+        rows="5"
+      >
+{{- .Product.DescriptionLong -}}</textarea
+      >
+    </div>
 
     <a href="{{ getURL "products" }}" class="btn btn-danger">Annuleren</a>
     <button type="submit" class="btn btn-success">Opslaan</button>

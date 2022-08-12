@@ -30,11 +30,13 @@ func (t ProductsFormTemplate) GetTemplateName() string {
 }
 
 type Product struct {
-	Name           string   `form:"name"`
-	Price          string   `form:"price"`
-	ManufacturerID string   `form:"manufacturer_id"`
-	CategoryIDs    []string `form:"category_ids"`
-	StockCount     int      `form:"stock_count"`
+	Name             string   `form:"name"`
+	Price            string   `form:"price"`
+	ManufacturerID   string   `form:"manufacturer_id"`
+	CategoryIDs      []string `form:"category_ids"`
+	StockCount       int      `form:"stock_count"`
+	DescriptionShort string   `form:"description_short"`
+	DescriptionLong  string   `form:"description_long"`
 }
 
 func ProductFromEntity(e *entities.ResolvedProduct) Product {
@@ -44,11 +46,13 @@ func ProductFromEntity(e *entities.ResolvedProduct) Product {
 	}
 
 	return Product{
-		Name:           e.Name,
-		Price:          e.Price.String(),
-		ManufacturerID: e.ManufacturerID.String(),
-		CategoryIDs:    categoryIDs,
-		StockCount:     e.StockCount,
+		Name:             e.Name,
+		Price:            e.Price.String(),
+		ManufacturerID:   e.ManufacturerID.String(),
+		CategoryIDs:      categoryIDs,
+		StockCount:       e.StockCount,
+		DescriptionShort: e.DescriptionShort,
+		DescriptionLong:  e.DescriptionLong,
 	}
 }
 
@@ -79,11 +83,13 @@ func (e Product) ToEntity() (entities.Product, error) {
 	}
 
 	return entities.Product{
-		Name:           e.Name,
-		Price:          price,
-		ManufacturerID: manufacturerID,
-		CategoryIDs:    categoryIDs,
-		StockCount:     e.StockCount,
+		Name:             e.Name,
+		Price:            price,
+		ManufacturerID:   manufacturerID,
+		CategoryIDs:      categoryIDs,
+		StockCount:       e.StockCount,
+		DescriptionShort: e.DescriptionShort,
+		DescriptionLong:  e.DescriptionLong,
 	}, nil
 }
 
