@@ -15,6 +15,7 @@ import (
 func (h *Handler) NewRenderer() multitemplate.Renderer {
 	pages := map[string][]string{"login": {"pages/login"}}
 	if h.features.Categories.Enabled {
+		pages["categoriesForm"] = []string{"pages/categories_form"}
 		pages["categoriesList"] = []string{"pages/categories_list"}
 	}
 	if h.features.Content.Enabled {

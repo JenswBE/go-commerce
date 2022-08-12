@@ -19,7 +19,7 @@ func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) 
 
 func (r *ProductPostgres) ListProducts() ([]*entities.Product, error) {
 	products := []*internal.Product{}
-	err := r.db.Preload("Categories").Preload("Images").Find(&products).Error
+	err := r.db.Preload("Categories").Preload("Images").Order("name").Find(&products).Error
 	if err != nil {
 		return nil, translatePgError(err, products, "")
 	}

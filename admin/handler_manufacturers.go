@@ -54,7 +54,7 @@ func (h *Handler) handleManufacturersFormGET(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse ID parameter
-	id, err := parseUUID(paramID, objectTypeManufacturer)
+	id, err := parseUUID(paramID, i18n.ObjectTypeManufacturer)
 	if err != nil {
 		log.Debug().Err(err).Str("manufacturer_id", paramID).Msg("Invalid manufacturer ID provided")
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "manufacturers/")
@@ -103,7 +103,7 @@ func (h *Handler) handleManufacturersFormPOST(c *gin.Context) {
 		}
 	} else {
 		// Parse ID parameter
-		manufacturerEntity.ID, err = parseUUID(paramID, objectTypeManufacturer)
+		manufacturerEntity.ID, err = parseUUID(paramID, i18n.ObjectTypeManufacturer)
 		if err != nil {
 			renderManufacturersFormWithError(c, isNew, manufacturer, fmt.Sprintf("Ongeldige merk ID %s: %v", paramID, err))
 			return
@@ -125,7 +125,7 @@ func manufacturersFormTitle(isNew bool) string {
 	if isNew {
 		return "Merk toevoegen"
 	}
-	return "Manufacturerement aanpassen"
+	return "Merk aanpassen"
 }
 
 func renderManufacturersFormWithError(c *gin.Context, isNew bool, manufacturer entities.Manufacturer, message string) {
@@ -148,7 +148,7 @@ func (h *Handler) handleManufacturersDelete(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse parameters
-	id, err := parseUUID(c.Param(paramManufacturerID), objectTypeManufacturer)
+	id, err := parseUUID(c.Param(paramManufacturerID), i18n.ObjectTypeManufacturer)
 	if err != nil {
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "manufacturers/")
 		return

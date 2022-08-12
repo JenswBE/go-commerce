@@ -18,7 +18,7 @@ func (r *ProductPostgres) GetManufacturer(id entities.ID) (*entities.Manufacture
 
 func (r *ProductPostgres) ListManufacturers() ([]*entities.Manufacturer, error) {
 	manufacturers := []*internal.Manufacturer{}
-	err := r.db.Preload("Image").Find(&manufacturers).Error
+	err := r.db.Preload("Image").Order("name").Find(&manufacturers).Error
 	if err != nil {
 		return nil, translatePgError(err, manufacturers, "")
 	}

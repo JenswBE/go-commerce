@@ -5,7 +5,7 @@
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
   >
     <h1 class="h2">
-      Merk {{ if .IsNew }}toevoegen{{ else }}aanpassen{{ end }}
+      Categorie {{ if .IsNew }}toevoegen{{ else }}aanpassen{{ end }}
     </h1>
   </div>
 
@@ -18,23 +18,19 @@
         name="name"
         class="form-control"
         id="inputName"
-        value="{{ .Manufacturer.Name }}"
-        placeholder="Bv. JenswBE"
+        value="{{ .Category.Name }}"
       />
     </div>
     <div class="mb-3">
-      <label for="inputWebsite" class="form-label">Website</label>
-      <input
-        type="url"
-        name="website_url"
+      <label for="inputDescription" class="form-label">Beschrijving</label>
+      <textarea
+        name="description"
         class="form-control"
-        id="inputWebsite"
-        value="{{ .Manufacturer.WebsiteURL }}"
-        placeholder="Bv. https://jensw.be"
-      />
+        id="inputDescription"
+      >{{- .Category.Description -}}</textarea>
     </div>
 
-    <a href="{{ getURL "manufacturers" }}" class="btn btn-danger">Annuleren</a>
+    <a href="{{ getURL "categories" }}" class="btn btn-danger">Annuleren</a>
     <button type="submit" class="btn btn-success">Opslaan</button>
   </form>
 {{ end }}

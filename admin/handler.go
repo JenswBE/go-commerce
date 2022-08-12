@@ -20,9 +20,7 @@ import (
 const PrefixAdmin = "/admin/"
 
 const (
-	objectTypeEvent        = "evenement"
-	objectTypeManufacturer = "merk"
-	pathLogin              = "login/"
+	pathLogin = "login/"
 )
 
 type Handler struct {
@@ -73,6 +71,12 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	notAuthenticatedGroup.GET(pathLogin, h.handleLogin)
 	notAuthenticatedGroup.POST(pathLogin, h.handleLogin)
 	rg.GET("logout/", h.handleLogout)
+	if h.features.Categories.Enabled {
+		rg.GET("categories/", h.handleCategoriesList)
+		rg.GET("categories/:category_id/", h.handleCategoriesFormGET)
+		rg.POST("categories/:category_id/", h.handleCategoriesFormPOST)
+		rg.POST("categories/:category_id/delete/", h.handleCategoriesDelete)
+	}
 	if h.features.Content.Enabled {
 		rg.GET("content/", h.handleContentList)
 		rg.GET("content/:content_name/", h.handleContentFormGET)

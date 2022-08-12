@@ -1,5 +1,68 @@
 {{ template "base.html.go.tmpl" . }}
 
+{{ define "base_head" }}
+  <style>
+    td {
+      vertical-align: middle;
+    }
+  </style>
+{{ end }}
+
 {{ define "base_content" }}
-  <h1>Categories</h1>
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="h2">Categorieën</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="me-2">
+        <a
+          href="{{ getURL "categories/new" }}"
+          class="btn btn-sm btn-success"
+        >
+          Toevoegen
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Naam</th>
+          <th scope="col">Acties</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range .Categories }}
+          <tr>
+            <td>{{ .Name }}</td>
+            <td>
+              <a
+                href="{{ getURL "categories" .ID.String }}"
+                title="Aanpassen"
+                class="btn btn-primary me-2"
+              >
+                <i class="bi bi-pencil-square"></i>
+              </a>
+              <form
+                method="post"
+                action="{{ getURL "categories" .ID.String "delete" }}"
+                onsubmit="return confirm('Ben je zeker dat je deze categorie wilt verwijderen?');"
+                class="d-inline-block"
+              >
+                <button type="submit" class="btn btn-danger">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        {{ else }}
+          <tr>
+            <td colspan="4" class="text-center">Geen categorieën gevonden</td>
+          </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
 {{ end }}
