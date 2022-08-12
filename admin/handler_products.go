@@ -11,7 +11,6 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 )
 
@@ -39,13 +38,13 @@ func (h *Handler) handleProductsList(c *gin.Context) {
 		html(c, http.StatusInternalServerError, &entities.ProductsListTemplate{BaseData: baseData})
 		return
 	}
-	manufacturersMap := make(map[uuid.UUID]baseEntities.Manufacturer, len(manufacturers))
+	manufacturersMap := make(map[baseEntities.ID]baseEntities.Manufacturer, len(manufacturers))
 	for _, manufacturer := range manufacturers {
 		manufacturersMap[manufacturer.ID] = *manufacturer
 	}
 
 	// Generate public URL's
-	publicURLMap := make(map[uuid.UUID]string, len(products))
+	publicURLMap := make(map[baseEntities.ID]string, len(products))
 	if h.features.Products.PublicURLTemplate != "" {
 		for _, product := range products {
 			urlBuilder := strings.Builder{}
@@ -86,7 +85,7 @@ func (h *Handler) handleProductsFormGET(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse ID parameter
-	id, err := parseUUID(paramID, i18n.ObjectTypeProduct)
+	id, err := parseID(paramID, i18n.ObjectTypeProduct)
 	if err != nil {
 		log.Debug().Err(err).Str("product_id", paramID).Msg("Invalid product ID provided")
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
@@ -101,14 +100,32 @@ func (h *Handler) handleProductsFormGET(c *gin.Context) {
 		return
 	}
 
+	// Fetch manufacturers
+	manufacturers, err := h.productService.ListManufacturers(nil)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch manufacturers for product form")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
+		return
+	}
+
+	// Fetch categories
+	categories, err := h.productService.ListCategories(nil)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch categories for product form")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
+		return
+	}
+
 	// Render page
 	html(c, http.StatusOK, &entities.ProductsFormTemplate{
 		BaseData: entities.BaseData{
 			Title:      productsFormTitle(false),
 			ParentPath: "products",
 		},
-		IsNew:   false,
-		Product: entities.ProductFromEntity(product),
+		IsNew:         false,
+		Product:       entities.ProductFromEntity(product),
+		Categories:    categories,
+		Manufacturers: manufacturers,
 	})
 }
 
@@ -125,8 +142,14 @@ func (h *Handler) handleProductsFormPOST(c *gin.Context) {
 		return
 	}
 
-	// Create new entity
-	productEntity := product.ToEntity()
+	// Convert to entity
+	productEntity, err := product.ToEntity()
+	if err != nil {
+		renderProductsFormWithError(c, isNew, product, fmt.Sprintf("Ongeldige data ontvangen: %v", err))
+		return
+	}
+
+	// Process upsert
 	if isNew {
 		_, err := h.productService.CreateProduct(&productEntity)
 		if err != nil {
@@ -135,7 +158,7 @@ func (h *Handler) handleProductsFormPOST(c *gin.Context) {
 		}
 	} else {
 		// Parse ID parameter
-		productEntity.ID, err = parseUUID(paramID, i18n.ObjectTypeProduct)
+		productEntity.ID, err = parseID(paramID, i18n.ObjectTypeProduct)
 		if err != nil {
 			renderProductsFormWithError(c, isNew, product, fmt.Sprintf("Ongeldige product ID %s: %v", paramID, err))
 			return
@@ -180,7 +203,7 @@ func (h *Handler) handleProductsDelete(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse parameters
-	id, err := parseUUID(c.Param(paramProductID), i18n.ObjectTypeProduct)
+	id, err := parseID(c.Param(paramProductID), i18n.ObjectTypeProduct)
 	if err != nil {
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
 		return

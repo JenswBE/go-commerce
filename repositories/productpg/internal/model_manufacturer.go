@@ -2,7 +2,7 @@ package internal
 
 import (
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 type Manufacturer struct {
@@ -14,7 +14,7 @@ type Manufacturer struct {
 
 func (m *Manufacturer) ToEntity() *entities.Manufacturer {
 	return &entities.Manufacturer{
-		ID:         uuid.MustParse(m.ID),
+		ID:         generics.Must(entities.NewIDFromString(m.ID)),
 		Name:       m.Name,
 		WebsiteURL: m.WebsiteURL,
 		Image:      m.Image.ToEntity(),

@@ -1,8 +1,8 @@
 package shortid
 
 import (
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/btcsuite/btcutil/base58"
-	"github.com/google/uuid"
 )
 
 // Base58 shortens ID using a Flickr base58 encoding
@@ -14,13 +14,13 @@ func NewBase58Service() *Base58 {
 }
 
 // Encode converts an UUID to a short ID
-func (b *Base58) Encode(input uuid.UUID) string {
-	encoded := base58.Encode(input[:])
+func (b *Base58) Encode(input entities.ID) string {
+	encoded := base58.Encode(input.Bytes())
 	return string(encoded)
 }
 
 // Decode converts a short ID to an UUID
-func (b *Base58) Decode(input string) (uuid.UUID, error) {
+func (b *Base58) Decode(input string) (entities.ID, error) {
 	decoded := base58.Decode(input)
-	return uuid.FromBytes(decoded)
+	return entities.NewIDFromBytes(decoded)
 }

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 type Event struct {
@@ -19,7 +19,7 @@ type Event struct {
 
 func (e *Event) ToEntity() *entities.Event {
 	return &entities.Event{
-		ID:          uuid.MustParse(e.ID),
+		ID:          generics.Must(entities.NewIDFromString(e.ID)),
 		Name:        e.Name,
 		Description: e.Description,
 		EventType:   e.EventType,

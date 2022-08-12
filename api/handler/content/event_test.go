@@ -5,9 +5,10 @@ import (
 	"testing"
 
 	"github.com/JenswBE/go-commerce/api/handler"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/fixtures"
+	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )
@@ -44,5 +45,5 @@ func Test_getEvent_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "GetEvent", uuid.MustParse(fixtures.EventID))
+	usecaseMock.AssertCalled(t, "GetEvent", generics.Must(entities.NewIDFromString(fixtures.EventID)))
 }

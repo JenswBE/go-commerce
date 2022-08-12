@@ -4,7 +4,6 @@ import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
 )
 
 func CategoryFromEntity(p *presenter.Presenter, input *entities.Category) openapi.Category {
@@ -15,7 +14,7 @@ func CategoryFromEntity(p *presenter.Presenter, input *entities.Category) openap
 	output.SetProductIds(p.EncodeIDList(input.ProductIDs))
 
 	// Set parent ID
-	if input.ParentID != uuid.Nil {
+	if !input.ParentID.IsNil() {
 		output.SetParentId(p.EncodeID(input.ParentID))
 	}
 

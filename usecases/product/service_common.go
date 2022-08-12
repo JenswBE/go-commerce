@@ -6,7 +6,6 @@ import (
 
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
-	"github.com/google/uuid"
 )
 
 var _ Usecase = &Service{}
@@ -44,7 +43,7 @@ func (s *Service) saveImage(filename string, content []byte) (*entities.Image, e
 	}
 
 	// Save images as files
-	imageID := uuid.New()
+	imageID := entities.NewID()
 	err := s.imageStorage.SaveFile(imageID.String()+imageExt, content)
 	if err != nil {
 		return nil, err

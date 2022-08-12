@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"unicode"
 
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/entities"
 )
 
 func InvalidUUID(objectType ObjectType, value string) string {
 	return fmt.Sprintf(`Ongeldige ID "%s" voor %s`, value, objectType)
 }
 
-func DeleteFailed(objectType ObjectType, objectID uuid.UUID, err error) string {
+func DeleteFailed(objectType ObjectType, objectID entities.ID, err error) string {
 	return fmt.Sprintf(`Verwijderen van %s "%s" mislukt: %v`, objectType, objectID, err)
 }
 

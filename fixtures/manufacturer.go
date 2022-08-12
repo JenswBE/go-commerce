@@ -3,7 +3,7 @@ package fixtures
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 // #############################
@@ -12,7 +12,7 @@ import (
 
 func Manufacturer() *entities.Manufacturer {
 	return &entities.Manufacturer{
-		ID:         uuid.MustParse(ManufacturerID),
+		ID:         generics.Must(entities.NewIDFromString(ManufacturerID)),
 		Name:       "test-name",
 		WebsiteURL: "https://manufacturer.test",
 		Image:      Image(),

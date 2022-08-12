@@ -5,7 +5,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 // #############################
@@ -14,15 +14,15 @@ import (
 
 func Product() *entities.Product {
 	return &entities.Product{
-		ID:               uuid.MustParse(ProductID),
+		ID:               generics.Must(entities.NewIDFromString(ProductID)),
 		CreatedAt:        time.Date(2021, 8, 6, 10, 0, 0, 0, time.UTC),
 		UpdatedAt:        time.Date(2021, 8, 7, 14, 0, 0, 0, time.UTC),
 		Name:             "test-name",
 		DescriptionShort: "test-description-short",
 		DescriptionLong:  "test-description-long",
-		Price:            2050,
+		Price:            entities.NewAmountInCents(2050),
 		ManufacturerID:   Manufacturer().ID,
-		CategoryIDs:      []uuid.UUID{Category().ID},
+		CategoryIDs:      []entities.ID{Category().ID},
 		Status:           entities.ProductStatusAvailable,
 		StockCount:       5,
 		Images:           []*entities.Image{Image()},

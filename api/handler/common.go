@@ -13,7 +13,6 @@ import (
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/gin-gonic/gin"
 	"github.com/google/go-cmp/cmp"
-	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 )
@@ -26,20 +25,20 @@ import (
 //   if !ok {
 // 	   return // Response already set on Gin context
 //   }
-func ParseIDParam(c *gin.Context, name string, p *presenter.Presenter) (uuid.UUID, bool) {
+func ParseIDParam(c *gin.Context, name string, p *presenter.Presenter) (entities.ID, bool) {
 	// Parse param
 	pID, ok := c.Params.Get(name)
 	if !ok {
 		err := entities.NewError(400, openapi.GOCOMERRORCODE_PARAMETER_MISSING, name, nil)
 		c.JSON(ErrToResponse(err))
-		return uuid.Nil, false
+		return entities.NewNilID(), false
 	}
 
 	// Parse ID
 	id, err := p.ParseID(pID)
 	if err != nil {
 		c.JSON(ErrToResponse(err))
-		return uuid.Nil, false
+		return entities.NewNilID(), false
 	}
 
 	// Parse successful

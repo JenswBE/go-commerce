@@ -2,7 +2,7 @@ package internal
 
 import (
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 type Image struct {
@@ -19,7 +19,7 @@ func (image *Image) ToEntity() *entities.Image {
 		return nil
 	}
 	return &entities.Image{
-		ID:        uuid.MustParse(image.ID),
+		ID:        generics.Must(entities.NewIDFromString(image.ID)),
 		Extension: image.Extension,
 		Order:     image.Order,
 	}

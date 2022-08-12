@@ -2,7 +2,7 @@ package internal
 
 import (
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 type Product struct {
@@ -20,32 +20,32 @@ type Product struct {
 
 func ProductPgToEntity(c *Product) *entities.Product {
 	product := &entities.Product{
-		ID:               uuid.MustParse(c.ID),
+		ID:               generics.Must(entities.NewIDFromString(c.ID)),
 		CreatedAt:        c.CreatedAt,
 		UpdatedAt:        c.UpdatedAt,
 		Name:             c.Name,
 		DescriptionShort: c.DescriptionShort,
 		DescriptionLong:  c.DescriptionLong,
-		Price:            c.Price,
+		Price:            entities.NewAmountInCents(c.Price),
 		CategoryIDs:      nil,
-		ManufacturerID:   uuid.Nil,
+		ManufacturerID:   entities.NewNilID(),
 		Status:           entities.ProductStatus(c.Status),
 		StockCount:       c.StockCount,
 		Images:           ImagesListPgToEntity(c.Images),
 	}
 	if c.ManufacturerID != nil {
-		product.ManufacturerID = uuid.MustParse(*c.ManufacturerID)
+		product.ManufacturerID = generics.Must(entities.NewIDFromString(*c.ManufacturerID))
 	}
 	if len(c.Categories) > 0 {
-		product.CategoryIDs = make([]uuid.UUID, len(c.Categories))
+		product.CategoryIDs = make([]entities.ID, len(c.Categories))
 		for i, cat := range c.Categories {
-			product.CategoryIDs[i] = uuid.MustParse(cat.ID)
+			product.CategoryIDs[i] = generics.Must(entities.NewIDFromString(cat.ID))
 		}
 	}
 	if len(c.Categories) > 0 {
-		product.CategoryIDs = make([]uuid.UUID, len(c.Categories))
+		product.CategoryIDs = make([]entities.ID, len(c.Categories))
 		for i, cat := range c.Categories {
-			product.CategoryIDs[i] = uuid.MustParse(cat.ID)
+			product.CategoryIDs[i] = generics.Must(entities.NewIDFromString(cat.ID))
 		}
 	}
 	return product
@@ -65,12 +65,13 @@ func ProductEntityToPg(e *entities.Product) *Product {
 		Name:             e.Name,
 		DescriptionShort: e.DescriptionShort,
 		DescriptionLong:  e.DescriptionLong,
-		Price:            e.Price,
+		Price:            e.Price.Int(),
 		Categories:       nil,
 		ManufacturerID:   nil,
 		Images:           ImagesListEntityToPg(e.Images),
+		StockCount:       e.StockCount,
 	}
-	if e.ManufacturerID != uuid.Nil {
+	if !e.ManufacturerID.IsNil() {
 		id := e.ManufacturerID.String()
 		product.ManufacturerID = &id
 	}

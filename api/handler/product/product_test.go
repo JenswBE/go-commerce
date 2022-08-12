@@ -5,10 +5,11 @@ import (
 	"testing"
 
 	"github.com/JenswBE/go-commerce/api/handler"
+	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/fixtures"
+	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )
@@ -45,5 +46,5 @@ func Test_getProduct_Success(t *testing.T) {
 	require.Equal(t, http.StatusOK, r.Code)
 
 	// Assert mock calls
-	usecaseMock.AssertCalled(t, "GetProduct", uuid.MustParse(fixtures.ProductID), true, map[string]imageproxy.ImageConfig(nil))
+	usecaseMock.AssertCalled(t, "GetProduct", generics.Must(entities.NewIDFromString(fixtures.ProductID)), true, map[string]imageproxy.ImageConfig(nil))
 }

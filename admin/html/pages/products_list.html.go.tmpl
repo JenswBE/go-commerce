@@ -49,7 +49,7 @@
                 {{ len .Images }}
               </a>
             </td>
-            <td>&euro;{{ formatPrice .Price }}</td>
+            <td>&euro;{{ .Price }}</td>
             <td>{{ (index $.ManufacturersMap .ManufacturerID).Name }}</td>
             <td>{{ .StockCount }}</td>
             <td>{{ .Status }}</td>

@@ -4,13 +4,12 @@ import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
-	"github.com/google/uuid"
 	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) {
 	product := &internal.Product{}
-	err := r.db.Preload("Categories").Preload("Images").Take(product, "id = ?", id).Error
+	err := r.db.Preload("Categories").Preload("Images").Take(product, "id = ?", id.String()).Error
 	if err != nil {
 		return nil, translatePgError(err, product, id.String())
 	}
@@ -28,7 +27,7 @@ func (r *ProductPostgres) ListProducts() ([]*entities.Product, error) {
 
 func (r *ProductPostgres) CreateProduct(e *entities.Product) (*entities.Product, error) {
 	// Check if provided manufacturer ID exists
-	if e.ManufacturerID != uuid.Nil {
+	if !e.ManufacturerID.IsNil() {
 		_, err := r.GetManufacturer(e.ManufacturerID)
 		if err != nil {
 			return nil, err
@@ -46,7 +45,7 @@ func (r *ProductPostgres) CreateProduct(e *entities.Product) (*entities.Product,
 
 func (r *ProductPostgres) UpdateProduct(e *entities.Product) (*entities.Product, error) {
 	// Check if provided manufacturer ID exists
-	if e.ManufacturerID != uuid.Nil {
+	if !e.ManufacturerID.IsNil() {
 		_, err := r.GetManufacturer(e.ManufacturerID)
 		if err != nil {
 			return nil, err

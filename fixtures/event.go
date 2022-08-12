@@ -5,7 +5,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 // #############################
@@ -14,7 +14,7 @@ import (
 
 func Event() *entities.Event {
 	return &entities.Event{
-		ID:          uuid.MustParse(EventID),
+		ID:          generics.Must(entities.NewIDFromString(EventID)),
 		Name:        "test-name",
 		Description: "test-description",
 		EventType:   "test-event-type",

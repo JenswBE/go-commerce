@@ -5,7 +5,6 @@ import (
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
-	"github.com/google/uuid"
 )
 
 type Presenter struct {
@@ -20,25 +19,25 @@ func New(shortIDService shortid.Service, sanitizerService sanitizer.Service) *Pr
 	}
 }
 
-func (p *Presenter) ParseID(id string) (uuid.UUID, error) {
+func (p *Presenter) ParseID(id string) (entities.ID, error) {
 	pID, err := p.shortIDService.Decode(id)
 	if err != nil {
 		// Parsing of short ID failed, try to parse as UUID
 		var uuidErr error
-		pID, uuidErr = uuid.Parse(id)
+		pID, uuidErr = entities.NewIDFromString(id)
 		if uuidErr != nil {
 			// UUID parsing failed => Return original error
-			return uuid.Nil, entities.NewError(400, openapi.GOCOMERRORCODE_INVALID_ID, id, err)
+			return entities.NewNilID(), entities.NewError(400, openapi.GOCOMERRORCODE_INVALID_ID, id, err)
 		}
 	}
 	return pID, nil
 }
 
-func (p *Presenter) EncodeID(id uuid.UUID) string {
+func (p *Presenter) EncodeID(id entities.ID) string {
 	return p.shortIDService.Encode(id)
 }
 
-func (p *Presenter) EncodeIDList(ids []uuid.UUID) []string {
+func (p *Presenter) EncodeIDList(ids []entities.ID) []string {
 	output := make([]string, 0, len(ids))
 	for _, id := range ids {
 		output = append(output, p.shortIDService.Encode(id))

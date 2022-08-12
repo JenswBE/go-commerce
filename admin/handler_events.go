@@ -64,7 +64,7 @@ func (h *Handler) handleEventsFormGET(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse ID parameter
-	id, err := parseUUID(paramID, i18n.ObjectTypeEvent)
+	id, err := parseID(paramID, i18n.ObjectTypeEvent)
 	if err != nil {
 		log.Debug().Err(err).Str("event_id", paramID).Msg("Invalid event ID provided")
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "events/")
@@ -119,7 +119,7 @@ func (h *Handler) handleEventsFormPOST(c *gin.Context) {
 		}
 	} else {
 		// Parse ID parameter
-		eventEntity.ID, err = parseUUID(paramID, i18n.ObjectTypeEvent)
+		eventEntity.ID, err = parseID(paramID, i18n.ObjectTypeEvent)
 		if err != nil {
 			renderEventsFormWithError(c, isNew, event, fmt.Sprintf("Ongeldige evenement ID %s: %v", paramID, err))
 			return
@@ -164,7 +164,7 @@ func (h *Handler) handleEventsDelete(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse parameters
-	id, err := parseUUID(c.Param(paramEventID), i18n.ObjectTypeEvent)
+	id, err := parseID(c.Param(paramEventID), i18n.ObjectTypeEvent)
 	if err != nil {
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "events/")
 		return

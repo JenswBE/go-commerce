@@ -3,7 +3,7 @@ package fixtures
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 // #############################
@@ -12,7 +12,7 @@ import (
 
 func Category() *entities.Category {
 	return &entities.Category{
-		ID:          uuid.MustParse(CategoryID),
+		ID:          generics.Must(entities.NewIDFromString(CategoryID)),
 		Name:        "test-name",
 		Description: "test-description",
 		Order:       1,

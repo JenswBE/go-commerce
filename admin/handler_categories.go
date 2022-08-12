@@ -54,7 +54,7 @@ func (h *Handler) handleCategoriesFormGET(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse ID parameter
-	id, err := parseUUID(paramID, i18n.ObjectTypeCategory)
+	id, err := parseID(paramID, i18n.ObjectTypeCategory)
 	if err != nil {
 		log.Debug().Err(err).Str("category_id", paramID).Msg("Invalid category ID provided")
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "categories/")
@@ -103,7 +103,7 @@ func (h *Handler) handleCategoriesFormPOST(c *gin.Context) {
 		}
 	} else {
 		// Parse ID parameter
-		categoryEntity.ID, err = parseUUID(paramID, i18n.ObjectTypeCategory)
+		categoryEntity.ID, err = parseID(paramID, i18n.ObjectTypeCategory)
 		if err != nil {
 			renderCategoriesFormWithError(c, isNew, category, fmt.Sprintf("Ongeldige categorie ID %s: %v", paramID, err))
 			return
@@ -148,7 +148,7 @@ func (h *Handler) handleCategoriesDelete(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse parameters
-	id, err := parseUUID(c.Param(paramCategoryID), i18n.ObjectTypeCategory)
+	id, err := parseID(c.Param(paramCategoryID), i18n.ObjectTypeCategory)
 	if err != nil {
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "categories/")
 		return

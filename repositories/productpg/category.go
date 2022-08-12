@@ -4,13 +4,12 @@ import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
-	"github.com/google/uuid"
 	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetCategory(id entities.ID) (*entities.Category, error) {
 	category := &internal.Category{}
-	err := r.db.Preload("Products").Preload("Image").Take(category, "id = ?", id).Error
+	err := r.db.Preload("Products").Preload("Image").Take(category, "id = ?", id.String()).Error
 	if err != nil {
 		return nil, translatePgError(err, category, id.String())
 	}
@@ -28,7 +27,7 @@ func (r *ProductPostgres) ListCategories() ([]*entities.Category, error) {
 
 func (r *ProductPostgres) CreateCategory(e *entities.Category) (*entities.Category, error) {
 	// Check if provided parent ID exists
-	if e.ParentID != uuid.Nil {
+	if !e.ParentID.IsNil() {
 		_, err := r.GetCategory(e.ParentID)
 		if err != nil {
 			return nil, err
@@ -46,7 +45,7 @@ func (r *ProductPostgres) CreateCategory(e *entities.Category) (*entities.Catego
 
 func (r *ProductPostgres) UpdateCategory(e *entities.Category) (*entities.Category, error) {
 	// Check if provided parent ID exists
-	if e.ParentID != uuid.Nil {
+	if !e.ParentID.IsNil() {
 		_, err := r.GetCategory(e.ParentID)
 		if err != nil {
 			return nil, err

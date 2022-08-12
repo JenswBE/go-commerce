@@ -3,8 +3,8 @@ package fixtures
 import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
-	"github.com/google/uuid"
 )
 
 // #############################
@@ -13,7 +13,7 @@ import (
 
 func Image() *entities.Image {
 	return &entities.Image{
-		ID:        uuid.MustParse(ImageID),
+		ID:        generics.Must(entities.NewIDFromString(ImageID)),
 		Extension: ".jpg",
 		Order:     1,
 		URLs:      map[string]string{ImageConfigString: "http://image.test"},

@@ -1,7 +1,7 @@
 package shortid
 
 import (
-	"github.com/google/uuid"
+	"github.com/JenswBE/go-commerce/entities"
 )
 
 // Fake returns the input unchanged
@@ -13,11 +13,11 @@ func NewFakeService() *Fake {
 }
 
 // Encode converts an UUID to a short ID
-func (f *Fake) Encode(input uuid.UUID) string {
+func (f *Fake) Encode(input entities.ID) string {
 	return input.String()
 }
 
 // Decode converts a short ID to an UUID
-func (f *Fake) Decode(input string) (uuid.UUID, error) {
-	return uuid.Parse(input)
+func (f *Fake) Decode(input string) (entities.ID, error) {
+	return entities.NewIDFromString(input)
 }

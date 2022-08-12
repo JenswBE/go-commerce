@@ -16,7 +16,7 @@ type Product struct {
 	DescriptionLong  string
 
 	// Price of a single product in cents (1/100)
-	Price int
+	Price AmountInCents
 
 	CategoryIDs    []ID
 	ManufacturerID ID
@@ -40,7 +40,7 @@ func (c *Product) Validate() error {
 	if c.Name == "" {
 		return NewError(400, openapi.GOCOMERRORCODE_PRODUCT_NAME_EMPTY, c.ID.String(), nil)
 	}
-	if c.Price < 0 {
+	if c.Price.Int() < 0 {
 		return NewError(400, openapi.GOCOMERRORCODE_PRODUCT_PRICE_NEGATIVE, c.ID.String(), nil)
 	}
 

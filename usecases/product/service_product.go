@@ -4,7 +4,6 @@ import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
-	"github.com/google/uuid"
 )
 
 // GetProduct fetches a single product by ID
@@ -26,7 +25,7 @@ func (s *Service) GetProduct(id entities.ID, resolved bool, imageConfigs map[str
 	// Resolve product
 	resolvedProduct := &entities.ResolvedProduct{Product: *product}
 	if resolved {
-		if product.ManufacturerID != uuid.Nil {
+		if !product.ManufacturerID.IsNil() {
 			resolvedProduct.Manufacturer, err = s.GetManufacturer(product.ManufacturerID, imageConfigs)
 			if err != nil {
 				return nil, err

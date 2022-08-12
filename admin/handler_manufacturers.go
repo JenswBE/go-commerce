@@ -54,7 +54,7 @@ func (h *Handler) handleManufacturersFormGET(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse ID parameter
-	id, err := parseUUID(paramID, i18n.ObjectTypeManufacturer)
+	id, err := parseID(paramID, i18n.ObjectTypeManufacturer)
 	if err != nil {
 		log.Debug().Err(err).Str("manufacturer_id", paramID).Msg("Invalid manufacturer ID provided")
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "manufacturers/")
@@ -103,7 +103,7 @@ func (h *Handler) handleManufacturersFormPOST(c *gin.Context) {
 		}
 	} else {
 		// Parse ID parameter
-		manufacturerEntity.ID, err = parseUUID(paramID, i18n.ObjectTypeManufacturer)
+		manufacturerEntity.ID, err = parseID(paramID, i18n.ObjectTypeManufacturer)
 		if err != nil {
 			renderManufacturersFormWithError(c, isNew, manufacturer, fmt.Sprintf("Ongeldige merk ID %s: %v", paramID, err))
 			return
@@ -148,7 +148,7 @@ func (h *Handler) handleManufacturersDelete(c *gin.Context) {
 	session := sessions.Default(c)
 
 	// Parse parameters
-	id, err := parseUUID(c.Param(paramManufacturerID), i18n.ObjectTypeManufacturer)
+	id, err := parseID(c.Param(paramManufacturerID), i18n.ObjectTypeManufacturer)
 	if err != nil {
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "manufacturers/")
 		return

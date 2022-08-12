@@ -4,7 +4,6 @@ import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 	"github.com/rs/zerolog/log"
 )
@@ -13,7 +12,7 @@ const defaultStatus = openapi.PRODUCTSTATUS_ARCHIVED
 
 func ProductFromEntity(p *presenter.Presenter, input *entities.Product) openapi.Product {
 	// Set basic fields
-	output := openapi.NewProduct(p.String(input.Name), int64(input.Price))
+	output := openapi.NewProduct(p.String(input.Name), int64(input.Price.Int()))
 	output.SetId(p.EncodeID(input.ID))
 	output.SetCreatedAt(input.CreatedAt)
 	output.SetUpdatedAt(input.UpdatedAt)
@@ -32,7 +31,7 @@ func ProductFromEntity(p *presenter.Presenter, input *entities.Product) openapi.
 	output.SetStatus(*status)
 
 	// Set manufacturer ID
-	if input.ManufacturerID != uuid.Nil {
+	if !input.ManufacturerID.IsNil() {
 		output.SetManufacturerId(p.EncodeID(input.ManufacturerID))
 	}
 	return *output

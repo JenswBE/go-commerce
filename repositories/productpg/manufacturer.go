@@ -9,7 +9,7 @@ import (
 
 func (r *ProductPostgres) GetManufacturer(id entities.ID) (*entities.Manufacturer, error) {
 	manufacturer := &internal.Manufacturer{}
-	err := r.db.Preload("Image").Take(manufacturer, "id = ?", id).Error
+	err := r.db.Preload("Image").Take(manufacturer, "id = ?", id.String()).Error
 	if err != nil {
 		return nil, translatePgError(err, manufacturer, id.String())
 	}

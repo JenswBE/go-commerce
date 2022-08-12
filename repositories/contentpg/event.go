@@ -9,7 +9,7 @@ import (
 
 func (r *ContentPostgres) GetEvent(id entities.ID) (*entities.Event, error) {
 	event := &internal.Event{}
-	err := r.db.Take(event, "id = ?", id).Error
+	err := r.db.Take(event, "id = ?", id.String()).Error
 	if err != nil {
 		return nil, translatePgError(err, event, id.String())
 	}

@@ -1,12 +1,14 @@
 package shortid
 
-import "github.com/google/uuid"
+import (
+	"github.com/JenswBE/go-commerce/entities"
+)
 
 //Service interface
 type Service interface {
 	// Encode converts an UUID to a short ID
-	Encode(input uuid.UUID) string
+	Encode(input entities.ID) string
 
 	// Decode converts a short ID to an UUID
-	Decode(input string) (uuid.UUID, error)
+	Decode(input string) (entities.ID, error)
 }

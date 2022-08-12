@@ -10,12 +10,12 @@ import (
 	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
 	"github.com/JenswBE/go-commerce/config"
+	baseEntities "github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 const PrefixAdmin = "/admin/"
@@ -104,10 +104,10 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	}
 }
 
-func parseUUID(input string, objectType i18n.ObjectType) (uuid.UUID, error) {
-	output, err := uuid.Parse(input)
+func parseID(uuidInput string, objectType i18n.ObjectType) (baseEntities.ID, error) {
+	output, err := baseEntities.NewIDFromString(uuidInput)
 	if err != nil {
-		return uuid.Nil, errors.New(i18n.InvalidUUID(objectType, input))
+		return baseEntities.NewNilID(), errors.New(i18n.InvalidUUID(objectType, uuidInput))
 	}
 	return output, nil
 }
