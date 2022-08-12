@@ -18,7 +18,7 @@ func Test_parseFilesFromMultipart_Success(t *testing.T) {
 	// Setup test
 	body, writer := fixtures.MultipartMultipleFiles()
 	req, _ := http.NewRequest("", "", body)
-	req.Header.Set("Content-Type", writer.FormTemplateContentType())
+	req.Header.Set("Content-Type", writer.FormDataContentType())
 
 	// Call function
 	files, err := parseFilesFromMultipart(req)

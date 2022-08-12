@@ -40,8 +40,9 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("admin/html/%s.html.go.tmpl", i) })
 		templateName := filepath.Base(generics.Last(templatePaths))
 		tmpl := template.New(templateName).Funcs(template.FuncMap{
-			"getURL":       getURL,
-			"getStaticURL": getStaticURL,
+			"getURL":           getURL,
+			"getStaticURL":     getStaticURL,
+			"isFeatureEnabled": h.isFeatureEnabled,
 		})
 
 		// Parse and add templates
@@ -70,4 +71,22 @@ func getStaticURL(parts ...string) string {
 	}
 	parts = append([]string{PrefixAdmin, "static"}, parts...)
 	return path.Join(parts...)
+}
+
+func (h *Handler) isFeatureEnabled(featureName string) bool {
+	switch featureName {
+	case "categories":
+		return h.features.Categories.Enabled
+	case "manufacturers":
+		return h.features.Manufacturers.Enabled
+	case "products":
+		return h.features.Products.Enabled
+	case "content":
+		return h.features.Content.Enabled
+	case "events":
+		return h.features.Events.Enabled
+	default:
+		log.Error().Str("feature", featureName).Msg("Unknown feature provided to isFeatureEnabled")
+		return false
+	}
 }
