@@ -15,9 +15,17 @@ import (
 const paramEventID = "event_id"
 
 func (h *Handler) handleEventsList(c *gin.Context) {
+	// Define base data
+	baseData := entities.BaseData{
+		Title:      "Evenementen",
+		ParentPath: "events",
+	}
+
 	// Get ShowPastEvents state
 	showPastEvents, err := handleStatefulBoolFlag(c, "show_past_events")
 	if err != nil {
+		baseData.AddMessage(entities.MessageTypeError, "Verwerken van show_past_events mislukt: %v", err)
+		html(c, http.StatusBadRequest, &entities.EventsListTemplate{BaseData: baseData})
 		redirectWithMessage(c, sessions.Default(c), entities.MessageTypeError, err.Error(), "events/")
 		return
 	}
@@ -28,7 +36,7 @@ func (h *Handler) handleEventsList(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Ophalen van evenementen mislukt: %v", err)
 	}
 
-	htmlWithFlashes(c, http.StatusOK, "eventsList", &entities.EventsListData{
+	htmlWithFlashes(c, http.StatusOK, &entities.EventsListTemplate{
 		BaseData: entities.BaseData{
 			Title:      "Evenementen",
 			ParentPath: "events",
@@ -42,7 +50,7 @@ func (h *Handler) handleEventsFormGET(c *gin.Context) {
 	// Check if new event
 	paramID := c.Param(paramEventID)
 	if paramID == "new" {
-		c.HTML(http.StatusOK, "eventsForm", entities.EventsFormData{
+		html(c, http.StatusOK, &entities.EventsFormTemplate{
 			BaseData: entities.BaseData{
 				Title:      eventsFormTitle(true),
 				ParentPath: "events",
@@ -72,7 +80,7 @@ func (h *Handler) handleEventsFormGET(c *gin.Context) {
 	}
 
 	// Render page
-	c.HTML(http.StatusOK, "eventsForm", entities.EventsFormData{
+	html(c, http.StatusOK, &entities.EventsFormTemplate{
 		BaseData: entities.BaseData{
 			Title:      eventsFormTitle(false),
 			ParentPath: "events",
@@ -137,7 +145,7 @@ func eventsFormTitle(isNew bool) string {
 }
 
 func renderEventsFormWithError(c *gin.Context, isNew bool, event entities.Event, message string) {
-	c.HTML(http.StatusOK, "eventsForm", &entities.EventsFormData{
+	html(c, http.StatusOK, &entities.EventsFormTemplate{
 		BaseData: entities.BaseData{
 			Title:      eventsFormTitle(isNew),
 			ParentPath: "events",

@@ -19,7 +19,10 @@
     </h1>
   </div>
 
-  <div id="editor">{{ .Content.BodyHTML }}</div>
+  {{ if .IsHTMLContent }}
+    <div id="editor">{{ .Content.BodyHTML }}</div>
+  {{ end }}
+
 
   <form method="post">
     {{ if .IsHTMLContent }}

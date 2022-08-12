@@ -1,7 +1,6 @@
 package admin
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/JenswBE/go-commerce/admin/auth"
@@ -33,7 +32,7 @@ func (h *Handler) handleLogin(c *gin.Context) {
 
 	// Default action (non-POST) is to show the template
 	if c.Request.Method != http.MethodPost {
-		c.HTML(200, "login", entities.BaseData{Title: "Inloggen"})
+		html(c, http.StatusOK, &entities.LoginTemplate{BaseData: entities.BaseData{Title: "Inloggen"}})
 		return
 	}
 
@@ -56,10 +55,9 @@ func (h *Handler) handleLogin(c *gin.Context) {
 }
 
 func handleLoginFailed(c *gin.Context, status int, message string, err error) {
-	c.HTML(status, "login", entities.BaseData{Title: "Inloggen", Messages: []entities.Message{{
-		Type:    entities.MessageTypeError,
-		Content: fmt.Sprintf("%s: %v", message, err.Error()),
-	}}})
+	baseData := entities.BaseData{Title: "Inloggen"}
+	baseData.AddMessage(entities.MessageTypeError, "%s: %v", message, err)
+	html(c, status, &entities.LoginTemplate{BaseData: baseData})
 }
 
 func (h *Handler) handleLogout(c *gin.Context) {

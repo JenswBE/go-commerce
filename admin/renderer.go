@@ -26,6 +26,7 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 		pages["eventsList"] = []string{"pages/events_list"}
 	}
 	if h.features.Manufacturers.Enabled {
+		pages["manufacturersForm"] = []string{"pages/manufacturers_form"}
 		pages["manufacturersList"] = []string{"pages/manufacturers_list"}
 	}
 	if h.features.Products.Enabled {

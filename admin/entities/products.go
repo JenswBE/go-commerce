@@ -1,5 +1,5 @@
 package entities
 
-type ProductsListData struct {
+type ProductsListTemplate struct {
 	BaseData
 }

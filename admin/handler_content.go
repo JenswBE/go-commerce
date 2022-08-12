@@ -21,7 +21,7 @@ func (h *Handler) handleContentList(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Ophalen van inhoud mislukt: %v", err)
 	}
 
-	htmlWithFlashes(c, http.StatusOK, "contentList", &entities.ContentListData{
+	htmlWithFlashes(c, http.StatusOK, &entities.ContentListTemplate{
 		BaseData: entities.BaseData{
 			Title:      "Inhoud",
 			ParentPath: "content",
@@ -39,7 +39,7 @@ func (h *Handler) handleContentFormGET(c *gin.Context) {
 	}
 
 	// Render page
-	c.HTML(http.StatusOK, "contentForm", entities.ContentFormData{
+	html(c, http.StatusOK, &entities.ContentFormTemplate{
 		BaseData: entities.BaseData{
 			Title:      "Inhoud aanpassen",
 			ParentPath: "content",
@@ -89,7 +89,7 @@ func (h *Handler) handleContentFormPOST(c *gin.Context) {
 }
 
 func renderContentFormWithError(c *gin.Context, content entities.Content, contentName string, isHTMLContent bool, message string) {
-	c.HTML(http.StatusOK, "contentForm", &entities.ContentFormData{
+	html(c, http.StatusOK, &entities.ContentFormTemplate{
 		BaseData: entities.BaseData{
 			Title:      "Inhoud aanpassen",
 			ParentPath: "content",

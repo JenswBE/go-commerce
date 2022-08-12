@@ -4,16 +4,24 @@ import (
 	"github.com/JenswBE/go-commerce/entities"
 )
 
-type EventsListData struct {
+type EventsListTemplate struct {
 	BaseData
 	Events         []*entities.Event
 	ShowPastEvents bool
 }
 
-type EventsFormData struct {
+func (t EventsListTemplate) GetTemplateName() string {
+	return "eventsList"
+}
+
+type EventsFormTemplate struct {
 	BaseData
 	IsNew bool
 	Event Event
+}
+
+func (t EventsFormTemplate) GetTemplateName() string {
+	return "eventsForm"
 }
 
 type Event struct {

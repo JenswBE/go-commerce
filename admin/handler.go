@@ -86,7 +86,8 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	}
 	if h.features.Manufacturers.Enabled {
 		rg.GET("manufacturers/", h.handleManufacturersList)
-		rg.GET("manufacturers/:manufacturer_id/", h.handleManufacturersEdit)
+		rg.GET("manufacturers/:manufacturer_id/", h.handleManufacturersFormGET)
+		rg.POST("manufacturers/:manufacturer_id/", h.handleManufacturersFormPOST)
 		rg.POST("manufacturers/:manufacturer_id/delete/", h.handleManufacturersDelete)
 	}
 	// if h.features.Products.Enabled {
@@ -103,7 +104,11 @@ func parseUUID(input string, objectType i18n.ObjectType) (uuid.UUID, error) {
 	return output, nil
 }
 
-func htmlWithFlashes(c *gin.Context, code int, name string, obj entities.WithBaseData) {
+func html(c *gin.Context, code int, template entities.Template) {
+	c.HTML(code, template.GetTemplateName(), template)
+}
+
+func htmlWithFlashes(c *gin.Context, code int, template entities.Template) {
 	// Get and convert flashes
 	session := sessions.Default(c)
 	flashes := session.Flashes()
@@ -111,7 +116,7 @@ func htmlWithFlashes(c *gin.Context, code int, name string, obj entities.WithBas
 	for _, flash := range flashes {
 		messages = append(messages, entities.ParseMessage(flash.(string)))
 	}
-	obj.SetMessages(messages)
+	template.SetMessages(messages)
 
 	// Save session
 	err := session.Save()
@@ -121,7 +126,7 @@ func htmlWithFlashes(c *gin.Context, code int, name string, obj entities.WithBas
 	}
 
 	// Display page
-	c.HTML(code, name, obj)
+	c.HTML(code, template.GetTemplateName(), template)
 }
 
 func redirectWithMessage(c *gin.Context, session sessions.Session, messageType entities.MessageType, message, adminRedirectLocation string) {
