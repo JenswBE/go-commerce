@@ -19,6 +19,7 @@ func (h *Handler) handleContentList(c *gin.Context) {
 	content, err := h.contentService.ListContent()
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Ophalen van inhoud mislukt: %v", err)
+		return
 	}
 
 	htmlWithFlashes(c, http.StatusOK, &entities.ContentListTemplate{

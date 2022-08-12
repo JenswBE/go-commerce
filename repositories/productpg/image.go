@@ -12,7 +12,7 @@ import (
 
 func (r *ProductPostgres) GetImage(id entities.ID) (*entities.Image, error) {
 	image := &internal.Image{}
-	err := r.db.Take(image, "id = ?", id).Error
+	err := r.db.Take(image, "id = ?", id.String()).Error
 	if err != nil {
 		return nil, translatePgError(err, image, id.String())
 	}
@@ -22,7 +22,7 @@ func (r *ProductPostgres) GetImage(id entities.ID) (*entities.Image, error) {
 func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOrder int) ([]*entities.Image, error) {
 	// Fetch image
 	image := &internal.Image{}
-	err := r.db.Take(image, "id = ? AND owner_id = ?", id, ownerID).Error
+	err := r.db.Take(image, "id = ? AND owner_id = ?", id.String(), ownerID.String()).Error
 	if err != nil {
 		return nil, translatePgError(err, image, id.String())
 	}
@@ -34,7 +34,7 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 
 	// Fetch image with same new order (if any)
 	imageSameOrder := &internal.Image{}
-	err = r.db.Take(imageSameOrder, `owner_id = ? AND "order" = ?`, ownerID, newOrder).Error
+	err = r.db.Take(imageSameOrder, `owner_id = ? AND "order" = ?`, ownerID.String(), newOrder).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, translatePgError(err, imageSameOrder, "")
 	}
@@ -74,7 +74,7 @@ func (r *ProductPostgres) DeleteImage(id entities.ID) error {
 	var images []internal.Image
 	err := r.db.
 		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
-		Delete(&images, "id = ?", id).
+		Delete(&images, "id = ?", id.String()).
 		Error
 	if err != nil {
 		return translatePgError(err, &internal.Image{}, id.String())

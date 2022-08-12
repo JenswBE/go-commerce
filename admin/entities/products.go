@@ -29,6 +29,15 @@ func (t ProductsFormTemplate) GetTemplateName() string {
 	return "productsForm"
 }
 
+type ProductsImagesTemplate struct {
+	BaseData
+	Product entities.Product
+}
+
+func (t ProductsImagesTemplate) GetTemplateName() string {
+	return "productsImages"
+}
+
 type Product struct {
 	Name             string   `form:"name"`
 	Price            string   `form:"price"`

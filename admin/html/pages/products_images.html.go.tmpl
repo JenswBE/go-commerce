@@ -1,0 +1,117 @@
+{{ template "base.html.go.tmpl" . }}
+
+{{ define "base_head" }}
+  <style>
+    td {
+      vertical-align: middle;
+    }
+  </style>
+{{ end }}
+
+{{ define "base_content" }}
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="h2">Product foto&apos;s: {{ .Product.Name }}</h1>
+  </div>
+
+  <div class="border-bottom">
+    {{ range $i, $img := .Product.Images }}
+      <div class="row pb-5">
+        <div class="col-12 col-md-3 text-center">
+          <img src="{{ index $img.URLs "200" }}" />
+        </div>
+        <div class="col-9 col-md-1">
+          {{ if ne $i 0 }}
+            <form
+              method="post"
+              action="{{ getURL "products" $.Product.ID.String "images" $img.ID.String "update_order" }}"
+              class="d-inline-block"
+            >
+              <input
+                type="hidden"
+                value="{{ substract $img.Order 1 }}"
+                name="new_order"
+              />
+              <button
+                type="submit"
+                class="btn btn-primary"
+                title="Foto eerder tonen op product pagina"
+              >
+                <i class="bi bi-arrow-up-circle"></i>
+              </button>
+            </form>
+          {{ end }}
+          {{ if ne $i (substract (len $.Product.Images) 1) }}
+            <form
+              method="post"
+              action="{{ getURL "products" $.Product.ID.String "images" $img.ID.String "update_order" }}"
+              class="d-inline-block"
+            >
+              <input
+                type="hidden"
+                value="{{ add .Order 1 }}"
+                name="new_order"
+              />
+              <button
+                type="submit"
+                class="btn btn-primary"
+                title="Foto later tonen op product pagina"
+              >
+                <i class="bi bi-arrow-down-circle"></i>
+              </button>
+            </form>
+          {{ end }}
+        </div>
+        <div class="col-3 col-md-8">
+          <form
+            method="post"
+            action="{{ getURL "products" $.Product.ID.String "images" $img.ID.String "delete" }}"
+            onsubmit="return confirm('Ben je zeker dat je deze foto wilt verwijderen?');"
+            class="d-inline-block"
+          >
+            <button
+              type="submit"
+              class="btn btn-danger"
+              title="Foto verwijderen"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    {{ else }}
+      <p>Dit product heeft nog geen foto&apos;s.</p>
+    {{ end }}
+  </div>
+
+  <div
+    class="d-flex justify-content-center align-items-center pt-3 pb-3 mb-3 border-bottom"
+  >
+    <form
+      method="post"
+      enctype="multipart/form-data"
+      class="row row-cols-lg-auto g-3 align-items-center"
+    >
+      <div class="col-12">
+        <input
+          multiple
+          required
+          type="file"
+          class="form-control"
+          name="images"
+          accept="image/*"
+        />
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-sm btn-success">Toevoegen</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="row pt-2 pb-3">
+    <a href="{{ getURL "products" }}" class="btn btn-primary">
+      Terug naar productenlijst
+    </a>
+  </div>
+{{ end }}

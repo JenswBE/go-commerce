@@ -25,6 +25,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/rs/zerolog/pkgerrors"
+	"golang.org/x/exp/maps"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -79,6 +80,7 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to parse allowed image configs")
 	}
+	allowedImageConfigs = append(allowedImageConfigs, maps.Values(admin.ProductImageConfigs)...)
 	imageProxyService, err := imageproxy.NewImgProxyService(svcConfig.ImageProxy.BaseURL, svcConfig.ImageProxy.Key, svcConfig.ImageProxy.Salt, allowedImageConfigs)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create image proxy service")

@@ -32,6 +32,7 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 	}
 	if h.features.Products.Enabled {
 		pages["productsForm"] = []string{"pages/products_form"}
+		pages["productsImages"] = []string{"pages/products_images"}
 		pages["productsList"] = []string{"pages/products_list"}
 	}
 
@@ -42,9 +43,11 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("admin/html/%s.html.go.tmpl", i) })
 		templateName := filepath.Base(generics.Last(templatePaths))
 		tmpl := template.New(templateName).Funcs(template.FuncMap{
+			"add":              add,
 			"getURL":           getURL,
 			"getStaticURL":     getStaticURL,
 			"isFeatureEnabled": h.isFeatureEnabled,
+			"substract":        substract,
 		})
 
 		// Parse and add templates
@@ -57,6 +60,14 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 		r.Add(pageName, tmpl)
 	}
 	return r
+}
+
+func add(a, b int) int {
+	return a + b
+}
+
+func substract(a, b int) int {
+	return a - b
 }
 
 func getURL(parts ...string) string {

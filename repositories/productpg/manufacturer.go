@@ -48,7 +48,7 @@ func (r *ProductPostgres) DeleteManufacturer(id entities.ID) error {
 	var manufacturers []internal.Manufacturer
 	err := r.db.
 		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
-		Delete(&manufacturers, "id = ?", id).
+		Delete(&manufacturers, "id = ?", id.String()).
 		Error
 	if err != nil {
 		return translatePgError(err, &internal.Manufacturer{}, id.String())

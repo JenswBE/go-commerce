@@ -4,12 +4,20 @@ import (
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) {
 	product := &internal.Product{}
-	err := r.db.Preload("Categories").Preload("Images").Take(product, "id = ?", id.String()).Error
+	err := r.db.
+		Preload("Categories", func(db *gorm.DB) *gorm.DB {
+			return db.Order(`"order"`)
+		}).
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order(`"order"`)
+		}).
+		Take(product, "id = ?", id.String()).Error
 	if err != nil {
 		return nil, translatePgError(err, product, id.String())
 	}
@@ -18,7 +26,15 @@ func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) 
 
 func (r *ProductPostgres) ListProducts() ([]*entities.Product, error) {
 	products := []*internal.Product{}
-	err := r.db.Preload("Categories").Preload("Images").Order("name").Find(&products).Error
+	err := r.db.
+		Preload("Categories", func(db *gorm.DB) *gorm.DB {
+			return db.Order(`"order"`)
+		}).
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order(`"order"`)
+		}).
+		Order("name").
+		Find(&products).Error
 	if err != nil {
 		return nil, translatePgError(err, products, "")
 	}
@@ -81,7 +97,7 @@ func (r *ProductPostgres) DeleteProduct(id entities.ID) error {
 	err := r.db.
 		Select("Images").
 		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
-		Delete(&products, "id = ?", id).
+		Delete(&products, "id = ?", id.String()).
 		Error
 	if err != nil {
 		return translatePgError(err, &internal.Product{}, id.String())

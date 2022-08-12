@@ -26,7 +26,6 @@ func (h *Handler) handleEventsList(c *gin.Context) {
 	if err != nil {
 		baseData.AddMessage(entities.MessageTypeError, "Verwerken van show_past_events mislukt: %v", err)
 		html(c, http.StatusBadRequest, &entities.EventsListTemplate{BaseData: baseData})
-		redirectWithMessage(c, sessions.Default(c), entities.MessageTypeError, err.Error(), "events/")
 		return
 	}
 
@@ -34,6 +33,7 @@ func (h *Handler) handleEventsList(c *gin.Context) {
 	events, err := h.contentService.ListEvents(showPastEvents)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Ophalen van evenementen mislukt: %v", err)
+		return
 	}
 
 	htmlWithFlashes(c, http.StatusOK, &entities.EventsListTemplate{

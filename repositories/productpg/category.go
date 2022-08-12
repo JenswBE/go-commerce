@@ -66,7 +66,7 @@ func (r *ProductPostgres) DeleteCategory(id entities.ID) error {
 	var categories []internal.Category
 	err := r.db.
 		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
-		Delete(&categories, "id = ?", id).
+		Delete(&categories, "id = ?", id.String()).
 		Error
 	if err != nil {
 		return translatePgError(err, &internal.Category{}, id.String())

@@ -52,7 +52,7 @@ func (r *ContentPostgres) DeleteEvent(id entities.ID) error {
 	var events []internal.Event
 	err := r.db.
 		Clauses(clause.Returning{Columns: []clause.Column{{Name: "id"}}}).
-		Delete(&events, "id = ?", id).
+		Delete(&events, "id = ?", id.String()).
 		Error
 	if err != nil {
 		return translatePgError(err, &internal.Event{}, id.String())

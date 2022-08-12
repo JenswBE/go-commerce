@@ -1,9 +1,6 @@
 package product
 
 import (
-	"errors"
-	"io"
-	"net/http"
 	"strings"
 
 	"github.com/JenswBE/go-commerce/api/presenter"
@@ -40,38 +37,6 @@ func (h *ProductHandler) RegisterRoutes(rg *gin.RouterGroup) {
 	groupProducts := rg.Group(pathPrefixProducts)
 	groupProducts.GET("/", h.listProducts)
 	groupProducts.GET("/:id/", h.getProduct)
-}
-
-func parseFilesFromMultipart(req *http.Request) (map[string][]byte, error) {
-	// Create reader from request
-	reader, err := req.MultipartReader()
-	if err != nil {
-		return nil, err
-	}
-
-	// Parse images
-	images := map[string][]byte{}
-	for {
-		// Parse part
-		part, err := reader.NextPart()
-		if err != nil {
-			if errors.Is(err, io.EOF) {
-				break
-			} else {
-				return nil, err
-			}
-		}
-
-		// Add to images
-		imageBytes, err := io.ReadAll(part)
-		if err != nil {
-			return nil, err
-		}
-		images[part.FileName()] = imageBytes
-	}
-
-	// Parsing successful
-	return images, nil
 }
 
 func parseImageConfigsParam(c *gin.Context) (map[string]imageproxy.ImageConfig, error) {

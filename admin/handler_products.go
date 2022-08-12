@@ -3,18 +3,23 @@ package admin
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
 	baseEntities "github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/rs/zerolog/log"
 )
 
-const paramProductID = "product_id"
+const (
+	paramProductID = "product_id"
+	paramImageID   = "image_id"
+)
 
 func (h *Handler) handleProductsList(c *gin.Context) {
 	// Define base data
@@ -220,4 +225,158 @@ func (h *Handler) handleProductsDelete(c *gin.Context) {
 	// Call successful
 	msg := i18n.DeleteSuccessful(i18n.ObjectTypeProduct)
 	redirectWithMessage(c, session, entities.MessageTypeSuccess, msg, "products/")
+}
+
+var ProductImageConfigs map[string]imageproxy.ImageConfig = map[string]imageproxy.ImageConfig{"200": {
+	Width:        200,
+	Height:       200,
+	ResizingType: imageproxy.ResizingTypeFit,
+}}
+
+func (h *Handler) handleProductsImagesGET(c *gin.Context) {
+	// Get session
+	session := sessions.Default(c)
+
+	// Parse ID parameter
+	paramID := c.Param(paramProductID)
+	id, err := parseID(paramID, i18n.ObjectTypeProduct)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Invalid product ID provided")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
+		return
+	}
+
+	// Fetch product
+	product, err := h.productService.GetProduct(id, true, ProductImageConfigs)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch product")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
+		return
+	}
+
+	// Render page
+	htmlWithFlashes(c, http.StatusOK, &entities.ProductsImagesTemplate{
+		BaseData: entities.BaseData{
+			Title:      "Foto's aanpassen",
+			ParentPath: "products",
+		},
+		Product: product.Product,
+	})
+}
+
+func (h *Handler) handleProductsImagesPOST(c *gin.Context) {
+	// Get session
+	session := sessions.Default(c)
+
+	// Parse ID parameter
+	paramID := c.Param(paramProductID)
+	id, err := parseID(paramID, i18n.ObjectTypeProduct)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Invalid product ID provided")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), c.Request.URL.String())
+		return
+	}
+
+	// Parse body
+	images, err := parseFilesFromMultipart(c.Request)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed parse image files for product from multipart body")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), c.Request.URL.String())
+		return
+	}
+
+	// Add images to product
+	_, err = h.productService.AddProductImages(id, images, ProductImageConfigs)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed add images to product")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), c.Request.URL.String())
+		return
+	}
+
+	// Render page
+	c.Redirect(http.StatusSeeOther, c.Request.URL.String())
+}
+
+func (h *Handler) handleProductsImagesUpdateOrder(c *gin.Context) {
+	// Init handler
+	session := sessions.Default(c)
+	productParamID := c.Param(paramProductID)
+	imageParamID := c.Param(paramImageID)
+	handlerLog := log.With().Str("product_id", productParamID).Str("image_id", imageParamID).Logger()
+
+	// Parse product ID parameter
+	productID, err := parseID(productParamID, i18n.ObjectTypeProduct)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Invalid product ID provided")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "/products")
+		return
+	}
+
+	// Parse image ID parameter
+	imageID, err := parseID(imageParamID, i18n.ObjectTypeProduct)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Invalid image ID provided for product")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), fmt.Sprintf("/products/%s/images/", productID))
+		return
+	}
+
+	// Parse body
+	newOrderString, ok := c.GetPostForm("new_order")
+	if !ok {
+		handlerLog.Debug().Err(err).Msg("handleProductsImagesUpdateOrder: Form field new_order missing")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), fmt.Sprintf("/products/%s/images/", productID))
+		return
+	}
+	newOrder, err := strconv.Atoi(newOrderString)
+	if err != nil {
+		handlerLog.Debug().Err(err).Str("new_order", newOrderString).Msg("handleProductsImagesUpdateOrder: new_order is not a number")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), fmt.Sprintf("/products/%s/images/", productID))
+		return
+	}
+
+	// Update product image
+	_, err = h.productService.UpdateProductImage(productID, imageID, newOrder)
+	if err != nil {
+		handlerLog.Debug().Err(err).Int("new_order", newOrder).Msg("handleProductsImagesUpdateOrder: Failed update order of product image")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), fmt.Sprintf("/products/%s/images/", productID))
+		return
+	}
+
+	// Render page
+	redirect(c, fmt.Sprintf("/products/%s/images/", productID))
+}
+
+func (h *Handler) handleProductsImagesDelete(c *gin.Context) {
+	// Init handler
+	session := sessions.Default(c)
+	productParamID := c.Param(paramProductID)
+	imageParamID := c.Param(paramImageID)
+	handlerLog := log.With().Str("product_id", productParamID).Str("image_id", imageParamID).Logger()
+
+	// Parse product ID parameter
+	productID, err := parseID(productParamID, i18n.ObjectTypeProduct)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Invalid product ID provided")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "/products")
+		return
+	}
+
+	// Parse image ID parameter
+	imageID, err := parseID(imageParamID, i18n.ObjectTypeProduct)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Invalid image ID provided for product")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), fmt.Sprintf("/products/%s/images/", productID))
+		return
+	}
+
+	// Remove image to product
+	err = h.productService.DeleteProductImage(productID, imageID)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Failed to delete image of product")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), fmt.Sprintf("/products/%s/images/", productID))
+		return
+	}
+
+	// Render page
+	redirect(c, fmt.Sprintf("/products/%s/images/", productID))
 }

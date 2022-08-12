@@ -2,6 +2,7 @@ package admin
 
 import (
 	"errors"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -101,6 +102,10 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 		rg.GET("products/:product_id/", h.handleProductsFormGET)
 		rg.POST("products/:product_id/", h.handleProductsFormPOST)
 		rg.POST("products/:product_id/delete/", h.handleProductsDelete)
+		rg.GET("products/:product_id/images/", h.handleProductsImagesGET)
+		rg.POST("products/:product_id/images/", h.handleProductsImagesPOST)
+		rg.POST("products/:product_id/images/:image_id/update_order", h.handleProductsImagesUpdateOrder)
+		rg.POST("products/:product_id/images/:image_id/delete", h.handleProductsImagesDelete)
 	}
 }
 
@@ -137,6 +142,10 @@ func htmlWithFlashes(c *gin.Context, code int, template entities.Template) {
 	c.HTML(code, template.GetTemplateName(), template)
 }
 
+func redirect(c *gin.Context, adminRedirectLocation string) {
+	c.Redirect(http.StatusSeeOther, PrefixAdmin+adminRedirectLocation)
+}
+
 func redirectWithMessage(c *gin.Context, session sessions.Session, messageType entities.MessageType, message, adminRedirectLocation string) {
 	session.AddFlash(entities.Message{
 		Type:    messageType,
@@ -148,4 +157,36 @@ func redirectWithMessage(c *gin.Context, session sessions.Session, messageType e
 		return
 	}
 	c.Redirect(http.StatusSeeOther, PrefixAdmin+adminRedirectLocation)
+}
+
+func parseFilesFromMultipart(req *http.Request) (map[string][]byte, error) {
+	// Create reader from request
+	reader, err := req.MultipartReader()
+	if err != nil {
+		return nil, err
+	}
+
+	// Parse images
+	images := map[string][]byte{}
+	for {
+		// Parse part
+		part, err := reader.NextPart()
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			} else {
+				return nil, err
+			}
+		}
+
+		// Add to images
+		imageBytes, err := io.ReadAll(part)
+		if err != nil {
+			return nil, err
+		}
+		images[part.FileName()] = imageBytes
+	}
+
+	// Parsing successful
+	return images, nil
 }
