@@ -104,7 +104,7 @@ func (s *E2ETestSuite) TestProductCRUD() {
 	// require.Equal(s.T(), http.StatusNotFound, rspRaw.StatusCode)
 }
 
-// func ignoreFields(typ interface{}, fields ...string) cmp.Option {
+// func ignoreFields(typ any, fields ...string) cmp.Option {
 // 	ignoredFields := make([]string, 0, len(fields)+2)
 // 	ignoredFields = append(ignoredFields, "CreatedAt", "UpdatedAt")
 // 	ignoredFields = append(ignoredFields, fields...)

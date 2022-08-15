@@ -24,10 +24,11 @@
     {{ block "empty_head" . }}{{ end }}
   </head>
   <body>
-    {{ range .Messages }}
+    {{ range $i, $msg := .Messages }}
       <div
         class="alert alert-{{ .Type }} alert-fixed alert-dismissible"
         role="alert"
+        style="top: {{ add 10 (product $i 50) }}px;"
       >
         {{ .Content }}
         <button

@@ -47,6 +47,7 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 			"getURL":           getURL,
 			"getStaticURL":     getStaticURL,
 			"isFeatureEnabled": h.isFeatureEnabled,
+			"product":          productFunc,
 			"substract":        substract,
 		})
 
@@ -68,6 +69,10 @@ func add(a, b int) int {
 
 func substract(a, b int) int {
 	return a - b
+}
+
+func productFunc(a, b int) int { // To prevent naming conflict with package "product"
+	return a * b
 }
 
 func getURL(parts ...string) string {

@@ -78,6 +78,7 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 		rg.GET("categories/", h.handleCategoriesList)
 		rg.GET("categories/:category_id/", h.handleCategoriesFormGET)
 		rg.POST("categories/:category_id/", h.handleCategoriesFormPOST)
+		rg.POST("categories/:category_id/update_order/", h.handleCategoriesUpdateOrder)
 		rg.POST("categories/:category_id/delete/", h.handleCategoriesDelete)
 	}
 	if h.features.Content.Enabled {
@@ -104,8 +105,8 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 		rg.POST("products/:product_id/delete/", h.handleProductsDelete)
 		rg.GET("products/:product_id/images/", h.handleProductsImagesGET)
 		rg.POST("products/:product_id/images/", h.handleProductsImagesPOST)
-		rg.POST("products/:product_id/images/:image_id/update_order", h.handleProductsImagesUpdateOrder)
-		rg.POST("products/:product_id/images/:image_id/delete", h.handleProductsImagesDelete)
+		rg.POST("products/:product_id/images/:image_id/update_order/", h.handleProductsImagesUpdateOrder)
+		rg.POST("products/:product_id/images/:image_id/delete/", h.handleProductsImagesDelete)
 	}
 }
 

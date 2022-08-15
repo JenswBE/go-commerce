@@ -20,8 +20,8 @@ func contentListHook() mapstructure.DecodeHookFuncType {
 	return func(
 		f reflect.Type,
 		t reflect.Type,
-		data interface{},
-	) (interface{}, error) {
+		data any,
+	) (any, error) {
 		// Check that the data is string
 		if f.Kind() != reflect.String {
 			return data, nil

@@ -75,7 +75,7 @@ func SetupGinTest(t *testing.T, method, path string, params gin.Params, body []b
 
 // RequireEqualJSON unmarshals the body from the provided recorder to the same type as expected.
 // Next, it asserts this result against the expected value.
-func RequireEqualJSON(t *testing.T, expected interface{}, recorder *httptest.ResponseRecorder) {
+func RequireEqualJSON(t *testing.T, expected any, recorder *httptest.ResponseRecorder) {
 	actual := reflect.New(reflect.TypeOf(expected))
 	body := recorder.Body.Bytes()
 	err := json.Unmarshal(body, actual.Interface())

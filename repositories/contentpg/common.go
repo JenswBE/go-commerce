@@ -29,7 +29,7 @@ func NewContentPostgres(db *gorm.DB) (*ContentPostgres, error) {
 // translatePgError converts well-known errors (e.g. ErrRecordNotFound)
 // to a more specific GoComError. Otherwise, provided error is returned
 // as-is.
-func translatePgError(err error, object interface{}, instance string) error {
+func translatePgError(err error, object any, instance string) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		switch object.(type) {
 		case *internal.Content, []*internal.Content:

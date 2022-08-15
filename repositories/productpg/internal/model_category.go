@@ -47,8 +47,12 @@ func CategoriesListPgToEntity(c []*Category) []*entities.Category {
 }
 
 func CategoryEntityToPg(e *entities.Category) *Category {
+	var id string
+	if !e.ID.IsNil() {
+		id = e.ID.String()
+	}
 	cat := &Category{
-		Base:        Base{ID: e.ID.String()},
+		Base:        Base{ID: id},
 		Name:        e.Name,
 		Description: e.Description,
 		ParentID:    nil,

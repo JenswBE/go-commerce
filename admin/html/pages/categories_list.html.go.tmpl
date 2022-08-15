@@ -27,16 +27,67 @@
       <thead>
         <tr>
           <th scope="col">Naam</th>
+          <th scope="col">Volgorde</th>
           <th scope="col">Acties</th>
         </tr>
       </thead>
       <tbody>
-        {{ range .Categories }}
+        {{ range $i, $cat := .Categories }}
           <tr>
-            <td>{{ .Name }}</td>
+            <td>{{ $cat.Name }}</td>
+            <td>
+              {{ if ne $i 0 }}
+                <form
+                  method="post"
+                  action="{{ getURL "categories" $cat.ID.String "update_order" }}"
+                  class="d-inline-block"
+                >
+                  <input
+                    type="hidden"
+                    value="{{ substract $cat.Order 1 }}"
+                    name="new_order"
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    title="Categorie eerder tonen op product pagina"
+                  >
+                    <i class="bi bi-arrow-up-circle"></i>
+                  </button>
+                </form>
+              {{ else }}
+                <button type="button" class="btn btn-primary" disabled>
+                  <i class="bi bi-arrow-up-circle"></i>
+                </button>
+              {{ end }}
+              {{ if ne $i (substract (len $.Categories) 1) }}
+                <form
+                  method="post"
+                  action="{{ getURL "categories" $cat.ID.String "update_order" }}"
+                  class="d-inline-block"
+                >
+                  <input
+                    type="hidden"
+                    value="{{ add $cat.Order 1 }}"
+                    name="new_order"
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    title="Categorie later tonen op product pagina"
+                  >
+                    <i class="bi bi-arrow-down-circle"></i>
+                  </button>
+                </form>
+              {{ else }}
+                <button type="button" class="btn btn-primary" disabled>
+                  <i class="bi bi-arrow-down-circle"></i>
+                </button>
+              {{ end }}
+            </td>
             <td>
               <a
-                href="{{ getURL "categories" .ID.String }}"
+                href="{{ getURL "categories" $cat.ID.String }}"
                 title="Aanpassen"
                 class="btn btn-primary me-2"
               >
@@ -44,7 +95,7 @@
               </a>
               <form
                 method="post"
-                action="{{ getURL "categories" .ID.String "delete" }}"
+                action="{{ getURL "categories" $cat.ID.String "delete" }}"
                 onsubmit="return confirm('Ben je zeker dat je deze categorie wilt verwijderen?');"
                 class="d-inline-block"
               >

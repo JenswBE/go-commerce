@@ -29,7 +29,7 @@ func NewProductPostgres(db *gorm.DB) (*ProductPostgres, error) {
 // translatePgError converts well-known errors (e.g. ErrRecordNotFound)
 // to a more specific GoComError. Otherwise, provided error is returned
 // as-is.
-func translatePgError(err error, object interface{}, instance string) error {
+func translatePgError(err error, object any, instance string) error {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		switch object.(type) {
 		case *internal.Category, []*internal.Category:
@@ -46,4 +46,10 @@ func translatePgError(err error, object interface{}, instance string) error {
 		}
 	}
 	return err
+}
+
+// takeWithConditions fetches a single DB entry with the provided conditions and args.
+// Provided conditions are AND-ed.
+func takeWithConditions(db *gorm.DB, dest any, conditions *internal.ConditionsGroup) error {
+	return db.Take(dest, conditions.GetGORMConds()...).Error
 }

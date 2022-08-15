@@ -19,6 +19,7 @@ import (
 	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
+	"github.com/JenswBE/go-commerce/utils/logging"
 	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
 	"github.com/gin-gonic/gin"
@@ -47,6 +48,7 @@ func main() {
 	// Setup Debug logging if enabled
 	if svcConfig.Server.Debug {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		log.Logger = log.Logger.Hook(logging.CallerInfoHook{})
 		gin.SetMode(gin.DebugMode)
 		log.Debug().Msg("Debug logging enabled")
 	}

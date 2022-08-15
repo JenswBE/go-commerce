@@ -12,8 +12,8 @@ func byteArrayFromBase64StringHook() mapstructure.DecodeHookFuncType {
 	return func(
 		f reflect.Type,
 		t reflect.Type,
-		data interface{},
-	) (interface{}, error) {
+		data any,
+	) (any, error) {
 		// Check that the target type is a byte array
 		if !(t.Kind() == reflect.Array && t.Elem().Kind() == reflect.Uint8) {
 			return data, nil

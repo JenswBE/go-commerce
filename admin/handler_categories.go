@@ -3,6 +3,7 @@ package admin
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
@@ -34,6 +35,55 @@ func (h *Handler) handleCategoriesList(c *gin.Context) {
 		BaseData:   baseData,
 		Categories: categories,
 	})
+}
+
+func (h *Handler) handleCategoriesUpdateOrder(c *gin.Context) {
+	// Init handler
+	session := sessions.Default(c)
+	categoryParamID := c.Param(paramCategoryID)
+	handlerLog := log.With().Str("category_id", categoryParamID).Logger()
+
+	// Parse category ID parameter
+	categoryID, err := parseID(categoryParamID, i18n.ObjectTypeCategory)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Invalid category ID provided")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "/categories")
+		return
+	}
+
+	// Parse body
+	newOrderString, ok := c.GetPostForm("new_order")
+	if !ok {
+		handlerLog.Debug().Err(err).Msg("Form field new_order missing")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "/categories")
+		return
+	}
+	newOrder, err := strconv.Atoi(newOrderString)
+	if err != nil {
+		handlerLog.Debug().Err(err).Str("new_order", newOrderString).Msg("new_order is not a number")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "/categories")
+		return
+	}
+
+	// Fetch category
+	category, err := h.productService.GetCategory(categoryID, nil)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Failed to get category to update order")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "/categories")
+		return
+	}
+
+	// Update category order
+	category.Order = newOrder
+	_, err = h.productService.UpdateCategory(category)
+	if err != nil {
+		handlerLog.Debug().Err(err).Int("new_order", newOrder).Msg("Failed update order of product image")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "/categories")
+		return
+	}
+
+	// Render page
+	redirect(c, "/categories")
 }
 
 func (h *Handler) handleCategoriesFormGET(c *gin.Context) {
@@ -103,14 +153,23 @@ func (h *Handler) handleCategoriesFormPOST(c *gin.Context) {
 		}
 	} else {
 		// Parse ID parameter
-		categoryEntity.ID, err = parseID(paramID, i18n.ObjectTypeCategory)
+		categoryID, err := parseID(paramID, i18n.ObjectTypeCategory)
 		if err != nil {
 			renderCategoriesFormWithError(c, isNew, category, fmt.Sprintf("Ongeldige categorie ID %s: %v", paramID, err))
 			return
 		}
 
+		// Fetch category
+		current, err := h.productService.GetCategory(categoryID, nil)
+		if err != nil {
+			renderCategoriesFormWithError(c, isNew, category, fmt.Sprintf("Categorie %s niet gevonden: %v", paramID, err))
+			return
+		}
+
 		// Update category
-		_, err := h.productService.UpdateCategory(&categoryEntity)
+		current.Name = categoryEntity.Name
+		current.Description = categoryEntity.Description
+		_, err = h.productService.UpdateCategory(current)
 		if err != nil {
 			renderCategoriesFormWithError(c, isNew, category, fmt.Sprintf("Aanpassen van categorie mislukt: %v", err))
 			return
@@ -125,7 +184,7 @@ func categoriesFormTitle(isNew bool) string {
 	if isNew {
 		return "Categorie toevoegen"
 	}
-	return "Categoryement aanpassen"
+	return "Categorie aanpassen"
 }
 
 func renderCategoriesFormWithError(c *gin.Context, isNew bool, category entities.Category, message string) {
