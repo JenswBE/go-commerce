@@ -1,7 +1,9 @@
 package main
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"os"
 	"strconv"
@@ -30,6 +32,10 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+//go:embed docs/index.html
+//go:embed docs/openapi.yml
+var docsContent embed.FS
 
 func main() {
 	// Setup logging
@@ -107,10 +113,12 @@ func main() {
 
 	// Setup API routes
 	apiGroup := router.Group("/api")
-	apiGroup.StaticFile("", "docs/index.html")
-	apiGroup.StaticFile("/", "docs/index.html")
-	apiGroup.StaticFile("/index.html", "docs/index.html")
-	apiGroup.StaticFile("/openapi.yml", "docs/openapi.yml")
+	apiGroup.GET("/", func(c *gin.Context) { c.Redirect(http.StatusTemporaryRedirect, "/api/docs/") })
+	docsFS, err := fs.Sub(docsContent, "docs")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to define sub FS for docs content")
+	}
+	apiGroup.StaticFS("/docs", http.FS(docsFS))
 	contentHandler.NewContentHandler(presenter, contentService).RegisterRoutes(apiGroup)
 	productHandler.NewProductHandler(presenter, productService).RegisterRoutes(apiGroup)
 

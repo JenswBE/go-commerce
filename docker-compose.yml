@@ -5,6 +5,7 @@ x-defaults: &defaults
     - "host.docker.internal:host-gateway"
 
 services:
+  # Defined in local/traefik.yml
   # backend:
   #   build: .
   #   ports:
