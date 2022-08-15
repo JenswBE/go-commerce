@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"embed"
 	"errors"
 	"fmt"
 	"html/template"
@@ -11,6 +12,9 @@ import (
 	"github.com/gin-contrib/multitemplate"
 	"github.com/rs/zerolog/log"
 )
+
+//go:embed html
+var htmlContent embed.FS
 
 func (h *Handler) NewRenderer() multitemplate.Renderer {
 	pages := map[string][]string{
@@ -43,7 +47,7 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 	for pageName, templates := range pages {
 		// Create new template with functions
 		templates = append([]string{"layouts/empty", "layouts/base"}, templates...)
-		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("admin/html/%s.html.go.tmpl", i) })
+		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("html/%s.html.go.tmpl", i) })
 		templateName := filepath.Base(generics.Last(templatePaths))
 		tmpl := template.New(templateName).Funcs(template.FuncMap{
 			"add":              add,
@@ -55,7 +59,7 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 		})
 
 		// Parse and add templates
-		_, err := tmpl.ParseFiles(templatePaths...)
+		_, err := tmpl.ParseFS(htmlContent, templatePaths...)
 		if err != nil {
 			log.Fatal().Err(err).Strs("template_paths", templatePaths).Msg("Failed to parse template files")
 		}

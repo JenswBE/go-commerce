@@ -3,6 +3,7 @@ package admin
 import (
 	"errors"
 	"io"
+	"io/fs"
 	"net/http"
 	"strings"
 	"time"
@@ -17,6 +18,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 const PrefixAdmin = "/admin/"
@@ -67,7 +69,11 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	}
 
 	// Register static routes
-	notAuthenticatedGroup.Static("static", "admin/html/static")
+	staticFS, err := fs.Sub(htmlContent, "html/static")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to define sub FS for static content")
+	}
+	notAuthenticatedGroup.StaticFS("static", http.FS(staticFS))
 
 	// Register dynamic routes
 	rg.GET("/", func(c *gin.Context) {
