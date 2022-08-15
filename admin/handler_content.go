@@ -104,3 +104,24 @@ func renderContentFormWithError(c *gin.Context, content entities.Content, conten
 		IsHTMLContent: isHTMLContent,
 	})
 }
+
+func (h *Handler) handleContentClear(c *gin.Context) {
+	// Fetch content
+	contentName := c.Param(paramContentName)
+	currentContent, err := h.contentService.GetContent(contentName)
+	if err != nil {
+		redirectWithMessage(c, sessions.Default(c), entities.MessageTypeError, fmt.Sprintf("Inhoud %s niet gevonden", contentName), "content/")
+		return
+	}
+
+	// Update content
+	currentContent.Body = ""
+	_, err = h.contentService.UpdateContent(currentContent)
+	if err != nil {
+		redirectWithMessage(c, sessions.Default(c), entities.MessageTypeError, fmt.Sprintf("Aanpassen van inhoud %s mislukt: %v", contentName, err), "content/")
+		return
+	}
+
+	// Update successful
+	redirectWithMessage(c, sessions.Default(c), entities.MessageTypeSuccess, "Inhoud successvol leeggemaakt.", "content/")
+}

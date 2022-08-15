@@ -35,6 +35,16 @@
               >
                 <i class="bi bi-pencil-square"></i>
               </a>
+              <form
+                method="post"
+                action="{{ getURL "content" .Name "clear" }}"
+                onsubmit="return confirm('Ben je zeker dat je deze inhoud leeg wilt maken?');"
+                class="d-inline-block"
+              >
+                <button type="submit" class="btn btn-danger" title="Leegmaken">
+                  <i class="bi bi-file-earmark-x"></i>
+                </button>
+              </form>
             </td>
           </tr>
         {{ else }}

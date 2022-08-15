@@ -94,6 +94,7 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 		rg.GET("content/", h.handleContentList)
 		rg.GET("content/:content_name/", h.handleContentFormGET)
 		rg.POST("content/:content_name/", h.handleContentFormPOST)
+		rg.POST("content/:content_name/clear", h.handleContentClear)
 	}
 	if h.features.Events.Enabled {
 		rg.GET("events/", h.handleEventsList)
