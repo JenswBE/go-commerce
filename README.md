@@ -23,9 +23,10 @@ If both are defined, the environment variables take precedence.
 
 | Config key                            | Env variable                          | Description                                                                                                | Default value  |
 | ------------------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
-| Authentication.Type                   | AUTH_TYPE                             | Switch between OIDC and NONE (latter should only be used for testing)                                      |                |
+| Authentication.Type                   | AUTH_TYPE                             | Switch between OIDC and NONE (latter should only be used for testing)                                      | OIDC           |
 | Authentication.OIDC.IssuerURL         | AUTH_OIDC_ISSUER_URL                  | URL to OpenID Configuration Issuer (without `.well-known/openid-configuration`)                            |                |
 | Authentication.OIDC.ClientID          | AUTH_OIDC_CLIENT_ID                   | Client ID for OIDC                                                                                         |                |
+| Authentication.OIDC.ClientSecret      | AUTH_OIDC_CLIENT_SECRET               | Client secret for OIDC                                                                                     |                |
 | Authentication.SessionAuthKey         | AUTH_SESSION_AUTH_KEY                 | Authentication key for session tokens. Mandatory and must be a base64 encoded string of 64 bytes.          |                |
 |                                       |                                       | Can be generated using `openssl rand -base64 64 \| paste --delimiters '' --serial`                         |                |
 | Authentication.SessionEncKey          | AUTH_SESSION_ENC_KEY                  | Encryption key for session tokens. Mandatory and must be a base64 encoded string of 32 bytes.              |                |

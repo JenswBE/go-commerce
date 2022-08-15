@@ -29,22 +29,22 @@ type Handler struct {
 	features             config.Features
 	contentService       content.Usecase
 	productService       product.Usecase
-	authVerifier         auth.Verifier
+	oidcClient           *auth.OIDCClient
 	sessionAuthenticator *auth.SessionAuthenticator
 	sessionAuthKey       [64]byte
 	sessionEncKey        [32]byte
 }
 
-func NewHandler(features config.Features, productService product.Usecase, contentService content.Usecase, authVerifier auth.Verifier, sessionAuthKey [64]byte, sessionEncKey [32]byte) *Handler {
+func NewHandler(features config.Features, productService product.Usecase, contentService content.Usecase, oidcClient *auth.OIDCClient, sessionAuthKey [64]byte, sessionEncKey [32]byte) *Handler {
 	handler := &Handler{
 		features:       features,
 		productService: productService,
 		contentService: contentService,
-		authVerifier:   authVerifier,
+		oidcClient:     oidcClient,
 		sessionAuthKey: sessionAuthKey,
 		sessionEncKey:  sessionEncKey,
 	}
-	if authVerifier != nil {
+	if oidcClient != nil {
 		handler.sessionAuthenticator = auth.NewSessionAuthenticator(time.Hour * 24 * 7)
 	}
 	return handler
@@ -56,7 +56,9 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	cookieStore := cookie.NewStore(h.sessionAuthKey[:], h.sessionEncKey[:])
 	cookieStore.Options(sessions.Options{
 		HttpOnly: true,
-		SameSite: http.SameSiteStrictMode,
+		SameSite: http.SameSiteLaxMode,
+		Secure:   true,
+		Path:     "/",
 	})
 	notAuthenticatedGroup.Use(sessions.Sessions("gocom", cookieStore))
 	rg := notAuthenticatedGroup.Group("")
@@ -65,7 +67,7 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	}
 
 	// Register static routes
-	rg.Static("static", "admin/html/static")
+	notAuthenticatedGroup.Static("static", "admin/html/static")
 
 	// Register dynamic routes
 	rg.GET("/", func(c *gin.Context) {
@@ -73,6 +75,7 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	})
 	notAuthenticatedGroup.GET(pathLogin, h.handleLogin)
 	notAuthenticatedGroup.POST(pathLogin, h.handleLogin)
+	notAuthenticatedGroup.GET(pathLogin+"oidc_redirect/", h.handleLoginOIDCRedirect)
 	rg.GET("logout/", h.handleLogout)
 	if h.features.Categories.Enabled {
 		rg.GET("categories/", h.handleCategoriesList)

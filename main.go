@@ -115,12 +115,12 @@ func main() {
 	productHandler.NewProductHandler(presenter, productService).RegisterRoutes(apiGroup)
 
 	// Setup admin authentication
-	var authVerifier auth.Verifier
+	var oidcClient *auth.OIDCClient
 	switch svcConfig.Authentication.Type {
 	case config.AuthTypeNone:
 		log.Warn().Msg("Authentication disabled because of Authentication type NONE. This should only be used for testing or with an external service to enforce authentication!")
 	case config.AuthTypeOIDC:
-		authVerifier, err = auth.NewOIDCVerifier(svcConfig.Authentication.OIDC.IssuerURL, svcConfig.Authentication.OIDC.ClientID)
+		oidcClient, err = auth.NewOIDCClient(svcConfig.Authentication.OIDC.IssuerURL, svcConfig.Authentication.OIDC.ClientID, svcConfig.Authentication.OIDC.ClientSecret)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to create OIDC verifier")
 		}
@@ -129,7 +129,7 @@ func main() {
 	}
 
 	// Setup admin GUI
-	adminHandler := admin.NewHandler(svcConfig.Features, productService, contentService, authVerifier, svcConfig.Authentication.SessionAuthKey, svcConfig.Authentication.SessionEncKey)
+	adminHandler := admin.NewHandler(svcConfig.Features, productService, contentService, oidcClient, svcConfig.Authentication.SessionAuthKey, svcConfig.Authentication.SessionEncKey)
 	adminHandler.RegisterRoutes(router)
 	router.HTMLRender = adminHandler.NewRenderer()
 

@@ -1,9 +1,10 @@
 package entities
 
-type LoginTemplate struct {
+type LoginFailedTemplate struct {
 	BaseData
+	Reason string
 }
 
-func (t LoginTemplate) GetTemplateName() string {
-	return "login"
+func (t LoginFailedTemplate) GetTemplateName() string {
+	return "loginFailed"
 }

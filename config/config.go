@@ -20,8 +20,9 @@ type Config struct {
 	Authentication struct {
 		Type AuthType
 		OIDC struct {
-			IssuerURL string
-			ClientID  string
+			IssuerURL    string
+			ClientID     string
+			ClientSecret string
 		}
 		SessionAuthKey [64]byte
 		SessionEncKey  [32]byte
@@ -141,6 +142,7 @@ func ParseConfig() (*Config, error) {
 		{"Authentication.Type", "AUTH_TYPE"},
 		{"Authentication.OIDC.IssuerURL", "AUTH_OIDC_ISSUER_URL"},
 		{"Authentication.OIDC.ClientID", "AUTH_OIDC_CLIENT_ID"},
+		{"Authentication.OIDC.ClientSecret", "AUTH_OIDC_CLIENT_SECRET"},
 		{"Authentication.SessionAuthKey", "AUTH_SESSION_AUTH_KEY"},
 		{"Authentication.SessionEncKey", "AUTH_SESSION_ENC_KEY"},
 		{"Database.Default.Host", "DATABASE_DEFAULT_HOST"},
@@ -216,6 +218,9 @@ func ParseConfig() (*Config, error) {
 		}
 		if config.Authentication.OIDC.ClientID == "" {
 			return nil, errors.New("client ID is required for authentication type OIDC")
+		}
+		if config.Authentication.OIDC.ClientSecret == "" {
+			return nil, errors.New("client secret is required for authentication type OIDC")
 		}
 	default:
 		return nil, fmt.Errorf("unknown authentication type %s", config.Authentication.Type)

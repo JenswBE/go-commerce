@@ -1,0 +1,12 @@
+{{ template "empty.html.go.tmpl" . }}
+
+{{ define "empty_content" }}
+  <div class="d-flex flex-column justify-content-center align-items-center">
+    <p>Inloggen mislukt: {{ .Reason }}</p>
+    <p>
+      <a href="{{ getURL "login" }}" class="btn btn-primary">
+        Opnieuw proberen
+      </a>
+    </p>
+  </div>
+{{ end }}
