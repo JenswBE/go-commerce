@@ -36,43 +36,51 @@
         placeholder="15.99"
       />
     </div>
-    <div class="mb-3">
-      <label for="inputManufacturer" class="form-label">Merk</label>
-      <select class="form-select" id="inputManufacturer" name="manufacturer_id">
-        <option
-          value=""
-          {{ if eq (len $.Product.ManufacturerID) 0 }}selected{{ end }}
+    {{ if isFeatureEnabled "manufacturers" }}
+      <div class="mb-3">
+        <label for="inputManufacturer" class="form-label">Merk</label>
+        <select
+          class="form-select"
+          id="inputManufacturer"
+          name="manufacturer_id"
         >
-          - Merkloos -
-        </option>
-        {{ range .Manufacturers }}
           <option
-            value="{{ .ID.String }}"
-            {{ if eq $.Product.ManufacturerID .ID.String }}selected{{ end }}
+            value=""
+            {{ if eq (len $.Product.ManufacturerID) 0 }}selected{{ end }}
           >
-            {{ .Name }}
+            - Merkloos -
           </option>
+          {{ range .Manufacturers }}
+            <option
+              value="{{ .ID.String }}"
+              {{ if eq $.Product.ManufacturerID .ID.String }}selected{{ end }}
+            >
+              {{ .Name }}
+            </option>
+          {{ end }}
+        </select>
+      </div>
+    {{ end }}
+    {{ if isFeatureEnabled "categories" }}
+      <div class="mb-3">
+        <p>Categorie&euml;n</p>
+        {{ range .Categories }}
+          <div class="form-check">
+            <input
+              {{ if $.Product.HasCategoryID .ID.String }}checked{{ end }}
+              class="form-check-input"
+              type="checkbox"
+              value="{{ .ID.String }}"
+              id="inputCategory{{ .ID.String }}"
+              name="category_ids"
+            />
+            <label class="form-check-label" for="inputCategory{{ .ID.String }}">
+              {{ .Name }}
+            </label>
+          </div>
         {{ end }}
-      </select>
-    </div>
-    <div class="mb-3">
-      <p>Categorie&euml;n</p>
-      {{ range .Categories }}
-        <div class="form-check">
-          <input
-            {{ if $.Product.HasCategoryID .ID.String }}checked{{ end }}
-            class="form-check-input"
-            type="checkbox"
-            value="{{ .ID.String }}"
-            id="inputCategory{{ .ID.String }}"
-            name="category_ids"
-          />
-          <label class="form-check-label" for="inputCategory{{ .ID.String }}">
-            {{ .Name }}
-          </label>
-        </div>
-      {{ end }}
-    </div>
+      </div>
+    {{ end }}
     <div class="mb-3">
       <label for="inputStockCount" class="form-label">In voorraad</label>
       <input

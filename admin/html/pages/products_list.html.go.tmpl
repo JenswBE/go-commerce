@@ -29,9 +29,10 @@
           <th scope="col">Naam</th>
           <th scope="col">Foto&apos;s</th>
           <th scope="col">Prijs</th>
-          <th scope="col">Merk</th>
+          {{ if isFeatureEnabled "manufacturers" }}
+            <th scope="col">Merk</th>
+          {{ end }}
           <th scope="col">In voorraad</th>
-          <th scope="col">Status</th>
           <th scope="col">Acties</th>
         </tr>
       </thead>
@@ -50,9 +51,10 @@
               </a>
             </td>
             <td>&euro;{{ .Price }}</td>
-            <td>{{ (index $.ManufacturersMap .ManufacturerID).Name }}</td>
+            {{ if isFeatureEnabled "manufacturers" }}
+              <td>{{ (index $.ManufacturersMap .ManufacturerID).Name }}</td>
+            {{ end }}
             <td>{{ .StockCount }}</td>
-            <td>{{ .Status }}</td>
             <td>
               {{ if ne (index $.PublicURLMap .ID) "" }}
                 <a
