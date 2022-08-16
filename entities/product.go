@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"strings"
 	"time"
 
 	"github.com/JenswBE/go-commerce/api/openapi"
@@ -34,14 +35,23 @@ func (status ProductStatus) String() string {
 	return string(status)
 }
 
-// Validate validates the product data
-func (c *Product) Validate() error {
+func (p *Product) Clean() {
+	p.Name = strings.TrimSpace(p.Name)
+	p.DescriptionShort = strings.TrimSpace(p.DescriptionShort)
+	p.DescriptionLong = strings.TrimSpace(p.DescriptionLong)
+}
+
+// Validate cleans and validates the product data
+func (p *Product) Validate() error {
+	// Clean entity
+	p.Clean()
+
 	// Validate simple fields
-	if c.Name == "" {
-		return NewError(400, openapi.GOCOMERRORCODE_PRODUCT_NAME_EMPTY, c.ID.String(), nil)
+	if p.Name == "" {
+		return NewError(400, openapi.GOCOMERRORCODE_PRODUCT_NAME_EMPTY, p.ID.String(), nil)
 	}
-	if c.Price.Int() < 0 {
-		return NewError(400, openapi.GOCOMERRORCODE_PRODUCT_PRICE_NEGATIVE, c.ID.String(), nil)
+	if p.Price.Int() < 0 {
+		return NewError(400, openapi.GOCOMERRORCODE_PRODUCT_PRICE_NEGATIVE, p.ID.String(), nil)
 	}
 
 	// Entity is valid

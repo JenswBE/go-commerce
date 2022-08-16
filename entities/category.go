@@ -1,6 +1,8 @@
 package entities
 
 import (
+	"strings"
+
 	"github.com/JenswBE/go-commerce/api/openapi"
 )
 
@@ -23,8 +25,16 @@ type Category struct {
 	Image *Image
 }
 
-// Validate validates the category data
+func (c *Category) Clean() {
+	c.Name = strings.TrimSpace(c.Name)
+	c.Description = strings.TrimSpace(c.Description)
+}
+
+// Validate cleans and validates the category data
 func (c *Category) Validate() error {
+	// Clean entity
+	c.Clean()
+
 	// Validate simple fields
 	if c.Name == "" {
 		return NewError(400, openapi.GOCOMERRORCODE_CATEGORY_NAME_EMPTY, c.ID.String(), nil)
