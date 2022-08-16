@@ -73,21 +73,40 @@ func (h *Handler) handleProductsList(c *gin.Context) {
 }
 
 func (h *Handler) handleProductsFormGET(c *gin.Context) {
-	// Check if new product
+	// Get session
+	session := sessions.Default(c)
+
+	// Fetch categories
 	paramID := c.Param(paramProductID)
+	categories, err := h.productService.ListCategories(nil)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch categories for product form")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
+		return
+	}
+
+	// Fetch manufacturers
+	manufacturers, err := h.productService.ListManufacturers(nil)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch manufacturers for product form")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
+		return
+	}
+
+	// Check if new product
 	if paramID == "new" {
 		html(c, http.StatusOK, &entities.ProductsFormTemplate{
 			BaseData: entities.BaseData{
 				Title:      productsFormTitle(true),
 				ParentPath: "products",
 			},
-			IsNew: true,
+			IsNew:         true,
+			Product:       entities.Product{},
+			Categories:    categories,
+			Manufacturers: manufacturers,
 		})
 		return
 	}
-
-	// Get session
-	session := sessions.Default(c)
 
 	// Parse ID parameter
 	id, err := parseID(paramID, i18n.ObjectTypeProduct)
@@ -101,22 +120,6 @@ func (h *Handler) handleProductsFormGET(c *gin.Context) {
 	product, err := h.productService.GetProduct(id, true, nil)
 	if err != nil {
 		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch product")
-		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
-		return
-	}
-
-	// Fetch manufacturers
-	manufacturers, err := h.productService.ListManufacturers(nil)
-	if err != nil {
-		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch manufacturers for product form")
-		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
-		return
-	}
-
-	// Fetch categories
-	categories, err := h.productService.ListCategories(nil)
-	if err != nil {
-		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch categories for product form")
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
 		return
 	}
