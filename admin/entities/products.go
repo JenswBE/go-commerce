@@ -19,10 +19,11 @@ func (t ProductsListTemplate) GetTemplateName() string {
 
 type ProductsFormTemplate struct {
 	BaseData
-	IsNew         bool
-	Product       Product
-	Categories    []*entities.Category
-	Manufacturers []*entities.Manufacturer
+	IsNew                bool
+	ShortDescriptionOnly bool
+	Product              Product
+	Categories           []*entities.Category
+	Manufacturers        []*entities.Manufacturer
 }
 
 func (t ProductsFormTemplate) GetTemplateName() string {

@@ -105,19 +105,19 @@
 {{- .Product.DescriptionShort -}}</textarea
       >
     </div>
-    <div class="mb-3">
-      <label for="inputDescriptionLong" class="form-label">
-        Lange beschrijving
-      </label>
-      <textarea
-        name="description_long"
-        class="form-control"
-        id="inputDescriptionLong"
-        rows="5"
-      >
-{{- .Product.DescriptionLong -}}</textarea
-      >
-    </div>
+    {{ if not .ShortDescriptionOnly }}
+      <div class="mb-3">
+        <label for="inputDescriptionLong" class="form-label">
+          Lange beschrijving
+        </label>
+        <textarea
+          name="description_long"
+          class="form-control"
+          id="inputDescriptionLong"
+          rows="5"
+        >{{- .Product.DescriptionLong -}}</textarea>
+      </div>
+    {{ end }}
 
     <a href="{{ getURL "products" }}" class="btn btn-danger">Annuleren</a>
     <button type="submit" id="buttonSave" class="btn btn-success">Opslaan</button>

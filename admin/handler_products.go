@@ -101,10 +101,11 @@ func (h *Handler) handleProductsFormGET(c *gin.Context) {
 				Title:      productsFormTitle(true),
 				ParentPath: "products",
 			},
-			IsNew:         true,
-			Product:       entities.Product{},
-			Categories:    categories,
-			Manufacturers: manufacturers,
+			IsNew:                true,
+			ShortDescriptionOnly: h.features.Products.ShortDescriptionOnly,
+			Product:              entities.Product{},
+			Categories:           categories,
+			Manufacturers:        manufacturers,
 		})
 		return
 	}
@@ -131,30 +132,50 @@ func (h *Handler) handleProductsFormGET(c *gin.Context) {
 			Title:      productsFormTitle(false),
 			ParentPath: "products",
 		},
-		IsNew:         false,
-		Product:       entities.ProductFromEntity(product),
-		Categories:    categories,
-		Manufacturers: manufacturers,
+		IsNew:                false,
+		ShortDescriptionOnly: h.features.Products.ShortDescriptionOnly,
+		Product:              entities.ProductFromEntity(product),
+		Categories:           categories,
+		Manufacturers:        manufacturers,
 	})
 }
 
 func (h *Handler) handleProductsFormPOST(c *gin.Context) {
+	// Get session
+	session := sessions.Default(c)
+
 	// Check if new product
 	paramID := c.Param(paramProductID)
 	isNew := paramID == "new"
 
+	// Fetch categories
+	categories, err := h.productService.ListCategories(nil)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch categories for product form")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
+		return
+	}
+
+	// Fetch manufacturers
+	manufacturers, err := h.productService.ListManufacturers(nil)
+	if err != nil {
+		log.Debug().Err(err).Str("product_id", paramID).Msg("Failed to fetch manufacturers for product form")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "products/")
+		return
+	}
+
 	// Parse body
 	product := entities.Product{}
-	err := c.MustBindWith(&product, binding.FormPost)
+	err = c.MustBindWith(&product, binding.FormPost)
 	if err != nil {
-		renderProductsFormWithError(c, isNew, product, fmt.Sprintf("Ongeldige data ontvangen: %v", err))
+		h.renderProductsFormWithError(c, isNew, product, categories, manufacturers, fmt.Sprintf("Ongeldige data ontvangen: %v", err))
 		return
 	}
 
 	// Convert to entity
 	productEntity, err := product.ToEntity()
 	if err != nil {
-		renderProductsFormWithError(c, isNew, product, fmt.Sprintf("Ongeldige data ontvangen: %v", err))
+		h.renderProductsFormWithError(c, isNew, product, categories, manufacturers, fmt.Sprintf("Ongeldige data ontvangen: %v", err))
 		return
 	}
 
@@ -162,21 +183,21 @@ func (h *Handler) handleProductsFormPOST(c *gin.Context) {
 	if isNew {
 		_, err := h.productService.CreateProduct(&productEntity)
 		if err != nil {
-			renderProductsFormWithError(c, isNew, product, fmt.Sprintf("Toevoegen van product mislukt: %v", err))
+			h.renderProductsFormWithError(c, isNew, product, categories, manufacturers, fmt.Sprintf("Toevoegen van product mislukt: %v", err))
 			return
 		}
 	} else {
 		// Parse ID parameter
 		productEntity.ID, err = parseID(paramID, i18n.ObjectTypeProduct)
 		if err != nil {
-			renderProductsFormWithError(c, isNew, product, fmt.Sprintf("Ongeldige product ID %s: %v", paramID, err))
+			h.renderProductsFormWithError(c, isNew, product, categories, manufacturers, fmt.Sprintf("Ongeldige product ID %s: %v", paramID, err))
 			return
 		}
 
 		// Update product
 		_, err := h.productService.UpdateProduct(&productEntity)
 		if err != nil {
-			renderProductsFormWithError(c, isNew, product, fmt.Sprintf("Aanpassen van product mislukt: %v", err))
+			h.renderProductsFormWithError(c, isNew, product, categories, manufacturers, fmt.Sprintf("Aanpassen van product mislukt: %v", err))
 			return
 		}
 	}
@@ -192,7 +213,7 @@ func productsFormTitle(isNew bool) string {
 	return "Product aanpassen"
 }
 
-func renderProductsFormWithError(c *gin.Context, isNew bool, product entities.Product, message string) {
+func (h *Handler) renderProductsFormWithError(c *gin.Context, isNew bool, product entities.Product, categories []*baseEntities.Category, manufacturers []*baseEntities.Manufacturer, message string) {
 	html(c, http.StatusOK, &entities.ProductsFormTemplate{
 		BaseData: entities.BaseData{
 			Title:      productsFormTitle(isNew),
@@ -202,8 +223,11 @@ func renderProductsFormWithError(c *gin.Context, isNew bool, product entities.Pr
 				Content: message,
 			}},
 		},
-		IsNew:   isNew,
-		Product: product,
+		IsNew:                isNew,
+		ShortDescriptionOnly: h.features.Products.ShortDescriptionOnly,
+		Product:              product,
+		Categories:           categories,
+		Manufacturers:        manufacturers,
 	})
 }
 

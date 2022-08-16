@@ -9,11 +9,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/JenswBE/go-commerce/entities"
 	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
+
+	"github.com/JenswBE/go-commerce/entities"
 )
 
 type Config struct {
@@ -89,6 +90,7 @@ type Features struct {
 		Enabled                 bool
 		PublicURLTemplate       string
 		PublicURLTemplateParsed *template.Template
+		ShortDescriptionOnly    bool
 	}
 	Content struct {
 		Enabled bool
@@ -165,6 +167,7 @@ func ParseConfig() (*Config, error) {
 		{"Features.Manufacturers.Enabled", "FEATURES_MANUFACTURERS_ENABLED"},
 		{"Features.Products.Enabled", "FEATURES_PRODUCTS_ENABLED"},
 		{"Features.Products.PublicURLTemplate", "FEATURES_PRODUCTS_PUBLIC_URL_TEMPLATE"},
+		{"Features.Products.ShortDescriptionOnly", "FEATURES_PRODUCTS_SHORT_DESCRIPTION_ONLY"},
 		{"Features.Content.Enabled", "FEATURES_CONTENT_ENABLED"},
 		{"Features.Content.List", "FEATURES_CONTENT_LIST"},
 		{"Features.Events.Enabled", "FEATURES_EVENTS_ENABLED"},
