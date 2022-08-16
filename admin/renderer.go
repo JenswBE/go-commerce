@@ -36,6 +36,7 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 	}
 	if h.features.Manufacturers.Enabled {
 		pages["manufacturersForm"] = []string{"pages/manufacturers_form"}
+		pages["manufacturersImage"] = []string{"pages/manufacturers_image"}
 		pages["manufacturersList"] = []string{"pages/manufacturers_list"}
 	}
 	if h.features.Products.Enabled {

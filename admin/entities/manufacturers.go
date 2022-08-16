@@ -23,6 +23,15 @@ func (t ManufacturersFormTemplate) GetTemplateName() string {
 	return "manufacturersForm"
 }
 
+type ManufacturersImageTemplate struct {
+	BaseData
+	Manufacturer entities.Manufacturer
+}
+
+func (t ManufacturersImageTemplate) GetTemplateName() string {
+	return "manufacturersImage"
+}
+
 type Manufacturer struct {
 	Name       string `form:"name"`
 	WebsiteURL string `form:"website_url"`

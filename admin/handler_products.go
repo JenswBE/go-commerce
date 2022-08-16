@@ -6,14 +6,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/JenswBE/go-commerce/admin/entities"
-	"github.com/JenswBE/go-commerce/admin/i18n"
-	baseEntities "github.com/JenswBE/go-commerce/entities"
-	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/rs/zerolog/log"
+
+	"github.com/JenswBE/go-commerce/admin/entities"
+	"github.com/JenswBE/go-commerce/admin/i18n"
+	baseEntities "github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/utils/imageproxy"
 )
 
 const (
@@ -230,11 +231,18 @@ func (h *Handler) handleProductsDelete(c *gin.Context) {
 	redirectWithMessage(c, session, entities.MessageTypeSuccess, msg, "products/")
 }
 
-var ProductImageConfigs map[string]imageproxy.ImageConfig = map[string]imageproxy.ImageConfig{"200": {
-	Width:        200,
-	Height:       200,
-	ResizingType: imageproxy.ResizingTypeFit,
-}}
+var ProductImageConfigs map[string]imageproxy.ImageConfig = map[string]imageproxy.ImageConfig{
+	"100": {
+		Width:        100,
+		Height:       100,
+		ResizingType: imageproxy.ResizingTypeFit,
+	},
+	"200": {
+		Width:        200,
+		Height:       200,
+		ResizingType: imageproxy.ResizingTypeFit,
+	},
+}
 
 func (h *Handler) handleProductsImagesGET(c *gin.Context) {
 	// Get session
@@ -372,7 +380,7 @@ func (h *Handler) handleProductsImagesDelete(c *gin.Context) {
 		return
 	}
 
-	// Remove image to product
+	// Remove image from product
 	err = h.productService.DeleteProductImage(productID, imageID)
 	if err != nil {
 		handlerLog.Debug().Err(err).Msg("Failed to delete image of product")

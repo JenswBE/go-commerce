@@ -31,6 +31,7 @@
         <tr>
           <th scope="col">Naam</th>
           <th scope="col">Website</th>
+          <th scope="col">Logo</th>
           <th scope="col">Acties</th>
         </tr>
       </thead>
@@ -42,6 +43,17 @@
             {{ if .WebsiteURL }}
             <a target="_blank" referrerpolicy="no-referrer" href="{{.WebsiteURL}}">{{.WebsiteURL}}</a>
             {{end}}
+            </td>
+            <td>
+              {{ if .Image }}
+                <a href="{{ getURL "manufacturers" .ID.String "image"}}">
+                  <img src="{{ index .Image.URLs "100" }}" />
+                </a>
+              {{ else }}
+                <a href="{{ getURL "manufacturers" .ID.String "image"}}" class="btn btn-primary">
+                    <i class="bi bi-image"></i>
+                </a>
+              {{end}}
             </td>
             <td>
               <a

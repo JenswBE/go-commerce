@@ -8,6 +8,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
+
 	"github.com/JenswBE/go-commerce/admin/auth"
 	"github.com/JenswBE/go-commerce/admin/entities"
 	"github.com/JenswBE/go-commerce/admin/i18n"
@@ -15,10 +20,6 @@ import (
 	baseEntities "github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/usecases/content"
 	"github.com/JenswBE/go-commerce/usecases/product"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
-	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog/log"
 )
 
 const PrefixAdmin = "/admin/"
@@ -107,6 +108,9 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 		rg.GET("manufacturers/:manufacturer_id/", h.handleManufacturersFormGET)
 		rg.POST("manufacturers/:manufacturer_id/", h.handleManufacturersFormPOST)
 		rg.POST("manufacturers/:manufacturer_id/delete/", h.handleManufacturersDelete)
+		rg.GET("manufacturers/:manufacturer_id/image/", h.handleManufacturersImageGET)
+		rg.POST("manufacturers/:manufacturer_id/image/", h.handleManufacturersImagePOST)
+		rg.POST("manufacturers/:manufacturer_id/image/:image_id/delete/", h.handleManufacturersImageDelete)
 	}
 	if h.features.Products.Enabled {
 		rg.GET("products/", h.handleProductsList)

@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/JenswBE/go-commerce/admin/entities"
-	"github.com/JenswBE/go-commerce/admin/i18n"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/rs/zerolog/log"
+
+	"github.com/JenswBE/go-commerce/admin/entities"
+	"github.com/JenswBE/go-commerce/admin/i18n"
 )
 
 const paramManufacturerID = "manufacturer_id"
@@ -22,7 +23,7 @@ func (h *Handler) handleManufacturersList(c *gin.Context) {
 	}
 
 	// Fetch manufacturers
-	manufacturers, err := h.productService.ListManufacturers(nil)
+	manufacturers, err := h.productService.ListManufacturers(ProductImageConfigs)
 	if err != nil {
 		baseData.AddMessage(entities.MessageTypeError, "Ophalen van merken mislukt: %v", err)
 		html(c, http.StatusOK, &entities.ManufacturersListTemplate{BaseData: baseData})
@@ -165,4 +166,103 @@ func (h *Handler) handleManufacturersDelete(c *gin.Context) {
 	// Call successful
 	msg := i18n.DeleteSuccessful(i18n.ObjectTypeManufacturer)
 	redirectWithMessage(c, session, entities.MessageTypeSuccess, msg, "manufacturers/")
+}
+
+func (h *Handler) handleManufacturersImageGET(c *gin.Context) {
+	// Init handler
+	session := sessions.Default(c)
+	paramID := c.Param(paramManufacturerID)
+	handlerLog := log.With().Str("manufacturer_id", paramID).Logger()
+
+	// Parse ID parameter
+	id, err := parseID(paramID, i18n.ObjectTypeManufacturer)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Invalid manufacturer ID provided")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "manufacturers/")
+		return
+	}
+
+	// Fetch product
+	manufacturer, err := h.productService.GetManufacturer(id, ProductImageConfigs)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Failed to fetch manufacturer")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "manufacturers/")
+		return
+	}
+
+	// Render page
+	htmlWithFlashes(c, http.StatusOK, &entities.ManufacturersImageTemplate{
+		BaseData: entities.BaseData{
+			Title:      "Foto aanpassen",
+			ParentPath: "manufacturers",
+		},
+		Manufacturer: *manufacturer,
+	})
+}
+
+func (h *Handler) handleManufacturersImagePOST(c *gin.Context) {
+	// Init handler
+	session := sessions.Default(c)
+	paramID := c.Param(paramManufacturerID)
+	handlerLog := log.With().Str("manufacturer_id", paramID).Logger()
+
+	// Parse ID parameter
+	id, err := parseID(paramID, i18n.ObjectTypeManufacturer)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Invalid manufacturer ID provided")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), c.Request.URL.String())
+		return
+	}
+
+	// Parse body
+	images, err := parseFilesFromMultipart(c.Request)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Failed parse image files for manufacturer from multipart body")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), c.Request.URL.String())
+		return
+	}
+	if len(images) != 1 {
+		handlerLog.Debug().Err(err).Int("image_count", len(images)).Msg("Expected exactly 1 image file for manufacturer from multipart body")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), c.Request.URL.String())
+		return
+	}
+
+	// Add images to product
+	for imageName, imageBytes := range images {
+		_, err = h.productService.UpsertManufacturerImage(id, imageName, imageBytes, ProductImageConfigs)
+		if err != nil {
+			handlerLog.Debug().Err(err).Str("product_id", paramID).Msg("Failed upsert image to manufacturer")
+			redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), c.Request.URL.String())
+			return
+		}
+	}
+
+	// Render page
+	c.Redirect(http.StatusSeeOther, c.Request.URL.String())
+}
+
+func (h *Handler) handleManufacturersImageDelete(c *gin.Context) {
+	// Init handler
+	session := sessions.Default(c)
+	paramID := c.Param(paramManufacturerID)
+	handlerLog := log.With().Str("manufacturer_id", paramID).Logger()
+
+	// Parse manufacturer ID parameter
+	id, err := parseID(paramID, i18n.ObjectTypeManufacturer)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Invalid manufacturer ID provided")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "/manufacturers")
+		return
+	}
+
+	// Remove image to product
+	err = h.productService.DeleteManufacturerImage(id)
+	if err != nil {
+		handlerLog.Debug().Err(err).Msg("Failed to delete image of manufacturer")
+		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), fmt.Sprintf("/manufacturers/%s/image/", id))
+		return
+	}
+
+	// Render page
+	redirect(c, fmt.Sprintf("/manufacturers/%s/image/", id))
 }
