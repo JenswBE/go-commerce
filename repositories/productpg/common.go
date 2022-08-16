@@ -4,11 +4,12 @@ import (
 	"errors"
 	"reflect"
 
+	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
+
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
-	"github.com/rs/zerolog/log"
-	"gorm.io/gorm"
 )
 
 type ProductPostgres struct {

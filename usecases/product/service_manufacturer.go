@@ -1,9 +1,10 @@
 package product
 
 import (
+	"github.com/rs/zerolog/log"
+
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
-	"github.com/rs/zerolog/log"
 )
 
 // GetManufacturer fetches a single manufacturer by ID

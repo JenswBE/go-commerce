@@ -1,10 +1,11 @@
 package productpg
 
 import (
+	"gorm.io/gorm/clause"
+
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
-	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetManufacturer(id entities.ID) (*entities.Manufacturer, error) {

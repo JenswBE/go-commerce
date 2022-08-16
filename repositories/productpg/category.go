@@ -4,11 +4,12 @@ import (
 	"errors"
 	"net/http"
 
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
-	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetCategory(id entities.ID) (*entities.Category, error) {

@@ -1,9 +1,10 @@
 package product
 
 import (
+	"github.com/rs/zerolog/log"
+
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
-	"github.com/rs/zerolog/log"
 )
 
 // GetCategory fetches a single category by ID

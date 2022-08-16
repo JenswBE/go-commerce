@@ -1,11 +1,12 @@
 package productpg
 
 import (
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
-	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) {
@@ -17,6 +18,7 @@ func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) 
 		Preload("Images", func(db *gorm.DB) *gorm.DB {
 			return db.Order(`"order"`)
 		}).
+		Order("name").
 		Take(product, "id = ?", id.String()).Error
 	if err != nil {
 		return nil, translatePgError(err, product, id.String())
