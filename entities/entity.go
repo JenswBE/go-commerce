@@ -32,11 +32,21 @@ func NewIDFromBytes(b []byte) (ID, error) {
 	return ID{id: id}, err
 }
 
+// String converts the ID to a string.
+// Returns an empty string in case the ID is Nil.
 func (id ID) String() string {
+	if id.IsNil() {
+		return ""
+	}
 	return id.id.String()
 }
 
+// Bytes converts the ID to a byte slice.
+// Returns an empty slice in case the ID is Nil.
 func (id ID) Bytes() []byte {
+	if id.IsNil() {
+		return []byte{}
+	}
 	return id.id[:]
 }
 

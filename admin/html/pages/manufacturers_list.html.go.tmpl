@@ -38,7 +38,11 @@
         {{ range .Manufacturers }}
           <tr>
             <td>{{ .Name }}</td>
-            <td>{{ .WebsiteURL }}</td>
+            <td>
+            {{ if .WebsiteURL }}
+            <a target="_blank" referrerpolicy="no-referrer" href="{{.WebsiteURL}}">{{.WebsiteURL}}</a>
+            {{end}}
+            </td>
             <td>
               <a
                 href="{{ getURL "manufacturers" .ID.String }}"

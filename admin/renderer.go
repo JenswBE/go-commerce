@@ -8,9 +8,10 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/gin-contrib/multitemplate"
 	"github.com/rs/zerolog/log"
+
+	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 //go:embed html

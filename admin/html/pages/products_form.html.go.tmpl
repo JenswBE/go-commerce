@@ -46,7 +46,7 @@
         >
           <option
             value=""
-            {{ if eq (len $.Product.ManufacturerID) 0 }}selected{{ end }}
+            {{ if not .Product.ManufacturerID }}selected{{ end }}
           >
             - Merkloos -
           </option>
