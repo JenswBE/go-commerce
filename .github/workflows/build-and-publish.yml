@@ -90,3 +90,10 @@ jobs:
           username: ${{ env.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           repository: ${{ env.DOCKER_HUB_REPO }}
+
+      - name: Start E2E services
+        run: docker compose -f docker-compose.e2e.yml up -d
+
+      - name: Run E2E tests
+        working-directory: e2e
+        run: go test --tags e2e ./...

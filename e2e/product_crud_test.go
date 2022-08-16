@@ -2,31 +2,37 @@
 
 package e2e
 
+import (
+	"context"
+
+	"github.com/stretchr/testify/require"
+	"github.com/tebeka/selenium"
+)
+
 // var imageConfigs = []string{"100_100_FIT"} // See config file
 
 func (s *E2ETestSuite) TestProductCRUD() {
-	// // Get products before AddProduct
-	// ctx := context.Background()
-	// rspProductList, rspRaw, err := s.publicClient.ProductsApi.ListProducts(ctx).Execute()
-	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
-	// productCountBeforeAdd := len(rspProductList.GetProducts())
+	// Get categories
+	ctx := context.Background()
+	rspCategoriesList, rspRaw, err := s.apiClient.CategoriesApi.ListCategories(ctx).Execute()
+	require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
+	require.Empty(s.T(), rspCategoriesList.GetCategories(), "Test should have been started with an empty DB")
 
-	// // Add a new product
-	// product := fixtures.ProductOpenAPI()
-	// product.CategoryIds = nil
-	// product.ManufacturerId = nil
-	// rspProduct, rspRaw, err := s.authClient.ProductsApi.AddProduct(ctx).Product(*product).Execute()
-	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
-	// require.NotNil(s.T(), rspProduct)
-	// productID := rspProduct.GetId()
+	// Add a new category
+	s.swdMustGet("categories/new")
+	s.must(s.swdMustFindElement(selenium.ByID, "inputName").SendKeys("Test cat 1"))
+	s.must(s.swdMustFindElement(selenium.ByID, "buttonSave").Click())
+	currentURL, err := s.swd.CurrentURL()
+	s.must(err)
+	require.Equal(s.T(), s.adminURL("categories"), currentURL)
 
 	// // Get resolved product for later comparison
-	// rspResolvedProduct, rspRaw, err := s.publicClient.ProductsApi.GetProduct(ctx, productID).Execute()
+	// rspResolvedProduct, rspRaw, err := s.apiClient.ProductsApi.GetProduct(ctx, productID).Execute()
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	// require.Equal(s.T(), productID, rspResolvedProduct.GetId())
 
 	// // Refetch products after AddProduct
-	// rspProductListAfterAdd, rspRaw, err := s.publicClient.ProductsApi.ListProducts(ctx).Execute()
+	// rspProductListAfterAdd, rspRaw, err := s.apiClient.ProductsApi.ListProducts(ctx).Execute()
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	// require.Len(s.T(), rspProductListAfterAdd.GetProducts(), productCountBeforeAdd+1)
 
@@ -41,7 +47,7 @@ func (s *E2ETestSuite) TestProductCRUD() {
 	// require.Len(s.T(), rspProductImages.GetImages(), 2)
 
 	// // Refetch product after AddProductImages
-	// rspResolvedProductRefetch, rspRaw, err := s.publicClient.ProductsApi.GetProduct(ctx, productID).Img(imageConfigs).Execute()
+	// rspResolvedProductRefetch, rspRaw, err := s.apiClient.ProductsApi.GetProduct(ctx, productID).Img(imageConfigs).Execute()
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	// require.Len(s.T(), rspResolvedProductRefetch.ImageUrls, 2)
 	// require.Empty(s.T(), cmp.Diff(rspResolvedProduct, rspResolvedProductRefetch, ignoreResolvedProductFields("ImageUrls")))
@@ -55,13 +61,13 @@ func (s *E2ETestSuite) TestProductCRUD() {
 	// require.Len(s.T(), rspProductImages.GetImages(), 3)
 
 	// // Refetch product after AddProductImages
-	// rspResolvedProductRefetch, rspRaw, err = s.publicClient.ProductsApi.GetProduct(ctx, productID).Img(imageConfigs).Execute()
+	// rspResolvedProductRefetch, rspRaw, err = s.apiClient.ProductsApi.GetProduct(ctx, productID).Img(imageConfigs).Execute()
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	// require.Len(s.T(), rspResolvedProductRefetch.ImageUrls, 3)
 	// require.Empty(s.T(), cmp.Diff(rspResolvedProduct, rspResolvedProductRefetch, ignoreResolvedProductFields("ImageUrls")))
 
 	// // Refetch product images
-	// rspProductImagesRefetch, rspRaw, err := s.publicClient.ProductsApi.ListProductImages(ctx, productID).Img(imageConfigs).Execute()
+	// rspProductImagesRefetch, rspRaw, err := s.apiClient.ProductsApi.ListProductImages(ctx, productID).Img(imageConfigs).Execute()
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	// require.Equal(s.T(), rspProductImages, rspProductImagesRefetch)
 
@@ -70,7 +76,7 @@ func (s *E2ETestSuite) TestProductCRUD() {
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 
 	// // Refetch product images
-	// rspProductImagesRefetch, rspRaw, err = s.publicClient.ProductsApi.ListProductImages(ctx, productID).Img(imageConfigs).Execute()
+	// rspProductImagesRefetch, rspRaw, err = s.apiClient.ProductsApi.ListProductImages(ctx, productID).Img(imageConfigs).Execute()
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	// expected := openapi.NewImageList([]openapi.Image{rspProductImages.Images[0], rspProductImages.Images[2]})
 	// require.Equal(s.T(), expected, rspProductImagesRefetch)
@@ -83,7 +89,7 @@ func (s *E2ETestSuite) TestProductCRUD() {
 	// require.Empty(s.T(), cmp.Diff(&updatedProduct, rspUpdatedProduct, ignoreProductFields()))
 
 	// // Refetch product after UpdateProduct
-	// rspResolvedProductRefetch, rspRaw, err = s.publicClient.ProductsApi.GetProduct(ctx, productID).Img(imageConfigs).Execute()
+	// rspResolvedProductRefetch, rspRaw, err = s.apiClient.ProductsApi.GetProduct(ctx, productID).Img(imageConfigs).Execute()
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	// require.Len(s.T(), rspResolvedProductRefetch.ImageUrls, 2)
 	// rspResolvedProduct.Name = updatedProduct.Name
@@ -94,12 +100,12 @@ func (s *E2ETestSuite) TestProductCRUD() {
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 
 	// // Refetch products after DeleteProduct
-	// rspProductListAfterDelete, rspRaw, err := s.publicClient.ProductsApi.ListProducts(ctx).Execute()
+	// rspProductListAfterDelete, rspRaw, err := s.apiClient.ProductsApi.ListProducts(ctx).Execute()
 	// require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	// require.Len(s.T(), rspProductListAfterDelete.GetProducts(), productCountBeforeAdd)
 
 	// // Get product should return 404
-	// _, rspRaw, err = s.publicClient.ProductsApi.GetProduct(ctx, productID).Img(imageConfigs).Execute()
+	// _, rspRaw, err = s.apiClient.ProductsApi.GetProduct(ctx, productID).Img(imageConfigs).Execute()
 	// require.NotNil(s.T(), rspRaw, err.Error())
 	// require.Equal(s.T(), http.StatusNotFound, rspRaw.StatusCode)
 }

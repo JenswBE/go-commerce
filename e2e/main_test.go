@@ -3,25 +3,30 @@
 package e2e
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
+	"path"
 	"testing"
 
-	"github.com/JenswBE/go-commerce/api/openapi"
-	"github.com/JenswBE/go-commerce/config"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-)
+	"github.com/tebeka/selenium"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
-const BaseURL = "http://127.0.0.1:8090/api/"
+	"github.com/JenswBE/go-commerce/admin"
+	"github.com/JenswBE/go-commerce/api/openapi"
+	"github.com/JenswBE/go-commerce/config"
+	"github.com/JenswBE/go-commerce/usecases"
+)
 
 type E2ETestSuite struct {
 	suite.Suite
-	publicClient *openapi.APIClient // Unauthenticated client
-	authClient   *openapi.APIClient // Authenticated client
+	config    *config.Config
+	db        *gorm.DB
+	apiClient *openapi.APIClient
+	swd       selenium.WebDriver
 }
 
 func Test_E2ETestSuite(t *testing.T) {
@@ -30,39 +35,56 @@ func Test_E2ETestSuite(t *testing.T) {
 
 func (s *E2ETestSuite) SetupSuite() {
 	// Parse config
-	apiConfig, err := config.ParseConfig()
+	svcConfig, err := config.ParseConfig()
 	require.NoError(s.T(), err)
+	s.config = svcConfig
 
-	// Create public client
-	s.publicClient = openapi.NewAPIClient(newE2EConfig(*apiConfig))
+	// Update config
+	svcConfig.Authentication.Type = config.AuthTypeNone
+	svcConfig.Server.Port = 9999
+	svcConfig.Database.Default.Port = 5433
+	svcConfig.Database.Default.Database = "e2e"
+	svcConfig.Database.Default.User = "e2e"
+	svcConfig.Database.Default.Password = "e2e"
 
-	// Setup authenticated client
-	authConfig := newE2EConfig(*apiConfig)
-	switch apiConfig.Authentication.Type {
-	case config.AuthTypeOIDC:
-		// Get token
-		formData := url.Values{}
-		formData.Add("grant_type", "password")
-		formData.Add("client_id", "go-commerce-admin")
-		formData.Add("username", "e2e")
-		formData.Add("password", "e2e")
-		res, err := http.PostForm("http://127.0.0.1:9001/realms/go-commerce/protocol/openid-connect/token", formData)
+	// Connect to DB
+	e2eDSN := config.BuildDSN(svcConfig.Database.Default, svcConfig.Database.Default)
+	s.db, err = gorm.Open(postgres.Open(e2eDSN), &gorm.Config{})
+	if err != nil {
 		require.NoError(s.T(), err)
-
-		// Parse token
-		type tokenResponse struct {
-			AccessToken string `json:"access_token"`
-		}
-		var tokenData tokenResponse
-		err = json.NewDecoder(res.Body).Decode(&tokenData)
-		require.NoError(s.T(), err)
-		require.NotEmpty(s.T(), tokenData.AccessToken, "A valid access token should have been returned")
-		authConfig.AddDefaultHeader("Authorization", "Bearer "+tokenData.AccessToken)
 	}
-	s.authClient = openapi.NewAPIClient(authConfig)
+
+	// Start GoCommerce service
+	go usecases.StartService(svcConfig)
+
+	// Create API client
+	s.apiClient = openapi.NewAPIClient(newAPIConfig(*svcConfig))
+
+	// Connect to Selenium
+	caps := selenium.Capabilities{"browserName": "firefox"}
+	s.swd, err = selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", 4444))
+	if err != nil {
+		require.NoError(s.T(), err)
+	}
 }
 
-func newE2EConfig(apiConfig config.Config) *openapi.Configuration {
+func (s *E2ETestSuite) SetupTest() {
+	for _, table := range []string{
+		"categories",
+		"contents",
+		"events",
+		"manufacturers",
+		"products",
+	} {
+		require.NoError(s.T(), s.db.Exec(fmt.Sprintf("TRUNCATE %s CASCADE", table)).Error)
+	}
+}
+
+func (s *E2ETestSuite) TearDownSuite() {
+	s.must(s.swd.Quit())
+}
+
+func newAPIConfig(apiConfig config.Config) *openapi.Configuration {
 	config := openapi.NewConfiguration()
 	config.Scheme = "http"
 	config.Host = fmt.Sprintf("127.0.0.1:%d", apiConfig.Server.Port)
@@ -77,4 +99,24 @@ func extractHTTPBody(t *testing.T, r *http.Response) string {
 	body, err := io.ReadAll(r.Body)
 	require.NoError(t, err)
 	return string(body)
+}
+
+func (s *E2ETestSuite) adminURL(pathParts ...string) string {
+	host := fmt.Sprintf("http://host.docker.internal:%d", s.config.Server.Port)
+	parts := append([]string{admin.PrefixAdmin}, pathParts...)
+	return host + path.Join(parts...) + "/"
+}
+
+func (s *E2ETestSuite) must(err error) {
+	require.NoError(s.T(), err)
+}
+
+func (s *E2ETestSuite) swdMustGet(adminURL string) {
+	s.must(s.swd.Get(s.adminURL(adminURL)))
+}
+
+func (s *E2ETestSuite) swdMustFindElement(by, value string) selenium.WebElement {
+	elem, err := s.swd.FindElement(by, value)
+	require.NoError(s.T(), err)
+	return elem
 }

@@ -1,0 +1,19 @@
+services:
+  e2e-selenium:
+    image: selenium/standalone-firefox:4.4.0-20220812
+    ports:
+      - "127.0.0.1:4444:4444"
+      - "127.0.0.1:7900:7900"
+    shm_size: 2gb
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  e2e-db:
+    image: postgres:13-alpine # Keep in sync with GitHub Actions ("services" section)
+    environment:
+      - "POSTGRES_USER=e2e"
+      - "POSTGRES_PASSWORD=e2e"
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - "./local/postgres-init-00-structure.sh:/docker-entrypoint-initdb.d/00-init-structure.sh"
