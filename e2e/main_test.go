@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"path"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -101,17 +102,21 @@ func extractHTTPBody(t *testing.T, r *http.Response) string {
 	return string(body)
 }
 
+func (s *E2ETestSuite) rootURL(pathParts ...string) string {
+	host := fmt.Sprintf("http://host.docker.internal:%d/", s.config.Server.Port)
+	return host + path.Join(pathParts...) + "/"
+}
+
 func (s *E2ETestSuite) adminURL(pathParts ...string) string {
-	host := fmt.Sprintf("http://host.docker.internal:%d", s.config.Server.Port)
-	parts := append([]string{admin.PrefixAdmin}, pathParts...)
-	return host + path.Join(parts...) + "/"
+	pathParts = append([]string{strings.TrimPrefix(admin.PrefixAdmin, "/")}, pathParts...)
+	return s.rootURL(pathParts...)
 }
 
 func (s *E2ETestSuite) must(err error) {
 	require.NoError(s.T(), err)
 }
 
-func (s *E2ETestSuite) swdMustGet(adminURL string) {
+func (s *E2ETestSuite) swdMustGetAdmin(adminURL string) {
 	s.must(s.swd.Get(s.adminURL(adminURL)))
 }
 

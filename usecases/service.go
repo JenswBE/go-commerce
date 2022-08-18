@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"fmt"
-	"io/fs"
 	"net/http"
 	"os"
 	"strconv"
@@ -105,11 +104,7 @@ func StartService(svcConfig *config.Config) {
 	// Setup API routes
 	apiGroup := router.Group("/api")
 	apiGroup.GET("/", func(c *gin.Context) { c.Redirect(http.StatusTemporaryRedirect, "/api/docs/") })
-	docsFS, err := fs.Sub(docs.DocsContent, "docs")
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to define sub FS for docs content")
-	}
-	apiGroup.StaticFS("/docs", http.FS(docsFS))
+	apiGroup.StaticFS("/docs", http.FS(docs.DocsContent))
 	contentHandler.NewContentHandler(presenter, contentService).RegisterRoutes(apiGroup)
 	productHandler.NewProductHandler(presenter, productService).RegisterRoutes(apiGroup)
 

@@ -19,7 +19,7 @@ func (s *E2ETestSuite) TestProductCRUD() {
 	require.Empty(s.T(), rspCategoriesList.GetCategories(), "Test should have been started with an empty DB")
 
 	// Add a new category
-	s.swdMustGet("categories/new")
+	s.swdMustGetAdmin("categories/new")
 	s.must(s.swdMustFindElement(selenium.ByID, "inputName").SendKeys("Test cat 1"))
 	s.must(s.swdMustFindElement(selenium.ByID, "buttonSave").Click())
 	currentURL, err := s.swd.CurrentURL()
