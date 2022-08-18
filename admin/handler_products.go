@@ -245,7 +245,7 @@ func (h *Handler) handleProductsDelete(c *gin.Context) {
 	// Call service
 	err = h.productService.DeleteProduct(id)
 	if err != nil {
-		msg := i18n.DeleteFailed(i18n.ObjectTypeProduct, id, err)
+		msg := i18n.DeleteFailed(i18n.ObjectTypeProduct, "", err)
 		redirectWithMessage(c, session, entities.MessageTypeError, msg, "products/")
 		return
 	}

@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
-	"github.com/JenswBE/go-commerce/admin/entities"
-	"github.com/JenswBE/go-commerce/admin/i18n"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/rs/zerolog/log"
+
+	"github.com/JenswBE/go-commerce/admin/entities"
+	"github.com/JenswBE/go-commerce/admin/i18n"
 )
 
 const paramCategoryID = "category_id"
@@ -216,7 +218,10 @@ func (h *Handler) handleCategoriesDelete(c *gin.Context) {
 	// Call service
 	err = h.productService.DeleteCategory(id)
 	if err != nil {
-		msg := i18n.DeleteFailed(i18n.ObjectTypeCategory, id, err)
+		if strings.Contains(err.Error(), "foreign") {
+			err = fmt.Errorf("deze categorie wordt nog gebruikt door producten. Verwijder eerst de categorie van de producten voordat je de categorie zelf verwijderd. (%w)", err)
+		}
+		msg := i18n.DeleteFailed(i18n.ObjectTypeCategory, "", err)
 		redirectWithMessage(c, session, entities.MessageTypeError, msg, "categories/")
 		return
 	}

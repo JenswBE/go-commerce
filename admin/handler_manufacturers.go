@@ -3,6 +3,7 @@ package admin
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -158,7 +159,10 @@ func (h *Handler) handleManufacturersDelete(c *gin.Context) {
 	// Call service
 	err = h.productService.DeleteManufacturer(id)
 	if err != nil {
-		msg := i18n.DeleteFailed(i18n.ObjectTypeManufacturer, id, err)
+		if strings.Contains(err.Error(), "foreign") {
+			err = fmt.Errorf("dit merk wordt nog gebruikt door producten. Verwijder eerst het merk van de producten voordat je het merk zelf verwijderd. (%w)", err)
+		}
+		msg := i18n.DeleteFailed(i18n.ObjectTypeManufacturer, "", err)
 		redirectWithMessage(c, session, entities.MessageTypeError, msg, "manufacturers/")
 		return
 	}

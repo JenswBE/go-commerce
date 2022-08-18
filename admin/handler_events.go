@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/JenswBE/go-commerce/admin/entities"
-	"github.com/JenswBE/go-commerce/admin/i18n"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/rs/zerolog/log"
+
+	"github.com/JenswBE/go-commerce/admin/entities"
+	"github.com/JenswBE/go-commerce/admin/i18n"
 )
 
 const paramEventID = "event_id"
@@ -173,7 +174,7 @@ func (h *Handler) handleEventsDelete(c *gin.Context) {
 	// Call service
 	err = h.contentService.DeleteEvent(id)
 	if err != nil {
-		msg := i18n.DeleteFailed(i18n.ObjectTypeEvent, id, err)
+		msg := i18n.DeleteFailed(i18n.ObjectTypeEvent, "", err)
 		redirectWithMessage(c, session, entities.MessageTypeError, msg, "events/")
 		return
 	}

@@ -3,16 +3,17 @@ package i18n
 import (
 	"fmt"
 	"unicode"
-
-	"github.com/JenswBE/go-commerce/entities"
 )
 
 func InvalidUUID(objectType ObjectType, value string) string {
 	return fmt.Sprintf(`Ongeldige ID "%s" voor %s`, value, objectType)
 }
 
-func DeleteFailed(objectType ObjectType, objectID entities.ID, err error) string {
-	return fmt.Sprintf(`Verwijderen van %s "%s" mislukt: %v`, objectType, objectID, err)
+func DeleteFailed(objectType ObjectType, name string, err error) string {
+	if name == "" {
+		return fmt.Sprintf(`Verwijderen van %s mislukt: %v`, objectType, err)
+	}
+	return fmt.Sprintf(`Verwijderen van %s "%s" mislukt: %v`, objectType, name, err)
 }
 
 func DeleteSuccessful(objectType ObjectType) string {
