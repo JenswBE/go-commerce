@@ -25,7 +25,16 @@
   </head>
   <body>
     {{ range $i, $msg := .Messages }}
+      {{ if eq .Type "success" }}
+        <script>
+          setTimeout(() => {
+            var alert = document.getElementById("alert-{{ $i }}");
+            alert.parentNode.removeChild(alert);
+          }, 2000);
+        </script>
+      {{ end }}
       <div
+        id="alert-{{ $i }}"
         class="alert alert-{{ .Type }} alert-fixed alert-dismissible"
         role="alert"
         style="top: {{ add 10 (product $i 50) }}px;"
