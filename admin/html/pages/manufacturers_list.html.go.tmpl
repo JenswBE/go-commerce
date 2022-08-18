@@ -6,6 +6,15 @@
       vertical-align: middle;
     }
   </style>
+
+  <script>
+    window.onpageshow = function (event) {
+      if (event.persisted) {
+        window.location.reload();
+        console.log("Page reloaded because it was persisted");
+      }
+    };
+  </script>
 {{ end }}
 
 {{ define "base_content" }}
@@ -40,20 +49,28 @@
           <tr>
             <td>{{ .Name }}</td>
             <td>
-            {{ if .WebsiteURL }}
-            <a target="_blank" referrerpolicy="no-referrer" href="{{.WebsiteURL}}">{{.WebsiteURL}}</a>
-            {{end}}
+              {{ if .WebsiteURL }}
+                <a
+                  target="_blank"
+                  referrerpolicy="no-referrer"
+                  href="{{ .WebsiteURL }}"
+                  >{{ .WebsiteURL }}</a
+                >
+              {{ end }}
             </td>
             <td>
               {{ if .Image }}
-                <a href="{{ getURL "manufacturers" .ID.String "image"}}">
+                <a href="{{ getURL "manufacturers" .ID.String "image" }}">
                   <img src="{{ index .Image.URLs "100" }}" />
                 </a>
               {{ else }}
-                <a href="{{ getURL "manufacturers" .ID.String "image"}}" class="btn btn-primary">
-                    <i class="bi bi-image"></i>
+                <a
+                  href="{{ getURL "manufacturers" .ID.String "image" }}"
+                  class="btn btn-primary"
+                >
+                  <i class="bi bi-image"></i>
                 </a>
-              {{end}}
+              {{ end }}
             </td>
             <td>
               <a
