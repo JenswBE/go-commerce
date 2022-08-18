@@ -16,7 +16,7 @@ func (r *ContentPostgres) GetContent(name string) (*entities.Content, error) {
 
 func (r *ContentPostgres) ListContent() ([]*entities.Content, error) {
 	contents := []*internal.Content{}
-	err := r.db.Order("name").Find(&contents).Error
+	err := r.db.Order("LOWER(name)").Find(&contents).Error
 	if err != nil {
 		return nil, translatePgError(err, contents, "")
 	}

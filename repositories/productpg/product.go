@@ -18,7 +18,6 @@ func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) 
 		Preload("Images", func(db *gorm.DB) *gorm.DB {
 			return db.Order(`"order"`)
 		}).
-		Order("name").
 		Take(product, "id = ?", id.String()).Error
 	if err != nil {
 		return nil, translatePgError(err, product, id.String())
@@ -35,7 +34,7 @@ func (r *ProductPostgres) ListProducts() ([]*entities.Product, error) {
 		Preload("Images", func(db *gorm.DB) *gorm.DB {
 			return db.Order(`"order"`)
 		}).
-		Order("name").
+		Order("LOWER(name)").
 		Find(&products).Error
 	if err != nil {
 		return nil, translatePgError(err, products, "")

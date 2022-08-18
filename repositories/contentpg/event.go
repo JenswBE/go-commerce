@@ -1,10 +1,11 @@
 package contentpg
 
 import (
+	"gorm.io/gorm/clause"
+
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/repositories/contentpg/internal"
-	"gorm.io/gorm/clause"
 )
 
 func (r *ContentPostgres) GetEvent(id entities.ID) (*entities.Event, error) {
@@ -18,7 +19,7 @@ func (r *ContentPostgres) GetEvent(id entities.ID) (*entities.Event, error) {
 
 func (r *ContentPostgres) ListEvents(includePastEvents bool) ([]*entities.Event, error) {
 	events := []*internal.Event{}
-	query := r.db.Order(`"start", "end", "name"`)
+	query := r.db.Order(`"start", "end", "LOWER(name)"`)
 	if !includePastEvents {
 		query = query.Where(`"end" > now()`)
 	}
