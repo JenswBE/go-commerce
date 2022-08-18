@@ -10,11 +10,13 @@ func TestAmountInCents_String(t *testing.T) {
 	testCases := map[int]string{
 		-1234: "-12.34",
 		-123:  "-1.23",
+		-120:  "-1.20",
 		-12:   "-0.12",
 		-1:    "-0.01",
 		0:     "0.00",
 		1:     "0.01",
 		12:    "0.12",
+		120:   "1.20",
 		123:   "1.23",
 		1234:  "12.34",
 	}
@@ -40,6 +42,10 @@ func TestAmountInCents_NewAmountInCentsFromString(t *testing.T) {
 			expectedResult: -123,
 			expectedError:  false,
 		},
+		"-1.20": {
+			expectedResult: -120,
+			expectedError:  false,
+		},
 		"-0.12": {
 			expectedResult: -12,
 			expectedError:  false,
@@ -60,6 +66,10 @@ func TestAmountInCents_NewAmountInCentsFromString(t *testing.T) {
 			expectedResult: 12,
 			expectedError:  false,
 		},
+		"1.20": {
+			expectedResult: 120,
+			expectedError:  false,
+		},
 		"1.23": {
 			expectedResult: 123,
 			expectedError:  false,
@@ -74,12 +84,24 @@ func TestAmountInCents_NewAmountInCentsFromString(t *testing.T) {
 			expectedResult: 2500,
 			expectedError:  false,
 		},
+		".0": {
+			expectedResult: 0,
+			expectedError:  false,
+		},
 		".00": {
 			expectedResult: 0,
 			expectedError:  false,
 		},
 		"-0.00": {
 			expectedResult: 0,
+			expectedError:  false,
+		},
+		"-1.2": {
+			expectedResult: -120,
+			expectedError:  false,
+		},
+		"1.2": {
+			expectedResult: 120,
 			expectedError:  false,
 		},
 
@@ -89,6 +111,10 @@ func TestAmountInCents_NewAmountInCentsFromString(t *testing.T) {
 			expectedError:  true,
 		},
 		"invalid": {
+			expectedResult: 0,
+			expectedError:  true,
+		},
+		"0.123": {
 			expectedResult: 0,
 			expectedError:  true,
 		},

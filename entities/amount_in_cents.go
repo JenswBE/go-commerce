@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"strconv"
@@ -62,7 +63,7 @@ func NewAmountInCentsFromString(amount string) (AmountInCents, error) {
 		return AmountInCents{}, fmt.Errorf("expected decimal string with exactly a single dot as separator, received: %s", amount)
 	}
 
-	// Parse parts
+	// Parse integer parts
 	var intPart int
 	var err error
 	if amountParts[0] != "" && amountParts[0] != "0" {
@@ -71,7 +72,17 @@ func NewAmountInCentsFromString(amount string) (AmountInCents, error) {
 			return AmountInCents{}, fmt.Errorf("failed to parse integer part of decimal string: %w", err)
 		}
 	}
+
+	// Parse decimal part
 	var decPart int
+	switch len(amountParts[1]) {
+	case 1:
+		amountParts[1] += "0"
+	case 2:
+		// No action required
+	default:
+		return AmountInCents{}, errors.New("decimal part of decimal string must not have more than 2 numbers precision")
+	}
 	amountParts[1] = strings.TrimLeft(amountParts[1], "0")
 	if amountParts[1] != "" {
 		decPart, err = strconv.Atoi(amountParts[1])
