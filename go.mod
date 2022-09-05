@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/btcsuite/btcutil v1.0.2
-	github.com/coreos/go-oidc/v3 v3.2.0
+	github.com/coreos/go-oidc/v3 v3.3.0
 	github.com/gin-contrib/multitemplate v0.0.0-20220705015713-e21a0ba39de3
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.8.1
@@ -20,7 +20,7 @@ require (
 	github.com/stretchr/testify v1.8.0
 	github.com/tebeka/selenium v0.9.9
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
-	golang.org/x/oauth2 v0.0.0-20220808172628-8227340efae7
+	golang.org/x/oauth2 v0.0.0-20220822191816-0ebed06d0094
 	gorm.io/driver/postgres v1.3.9
 	gorm.io/gorm v1.23.8
 )
@@ -75,7 +75,7 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
-	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
+	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
