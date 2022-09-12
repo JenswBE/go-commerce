@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/btcsuite/btcutil v1.0.2
-	github.com/coreos/go-oidc/v3 v3.3.0
+	github.com/coreos/go-oidc/v3 v3.4.0
 	github.com/gin-contrib/multitemplate v0.0.0-20220705015713-e21a0ba39de3
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.8.1
