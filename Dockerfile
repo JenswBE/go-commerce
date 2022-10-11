@@ -4,6 +4,8 @@ WORKDIR /src/
 COPY . .
 RUN go install github.com/nishanths/exhaustive/...@latest
 RUN exhaustive ./...
+RUN go install golang.org/x/vuln/cmd/govulncheck@latest
+RUN govulncheck ./...
 RUN CGO_ENABLED=0 go build -ldflags='-extldflags=-static' -o /bin/go-commerce-api
 
 FROM alpine
