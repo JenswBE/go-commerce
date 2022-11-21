@@ -22,7 +22,7 @@ require (
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
 	golang.org/x/oauth2 v0.2.0
 	gorm.io/driver/postgres v1.4.5
-	gorm.io/gorm v1.24.1
+	gorm.io/gorm v1.24.2
 )
 
 require (
