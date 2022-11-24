@@ -83,7 +83,7 @@ func StartService(svcConfig *config.Config) {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create image proxy service")
 	}
-	contentService, err := content.NewService(contentDatabase, svcConfig.Features.Content.List.ToEntity())
+	contentService, err := content.NewService(contentDatabase, svcConfig.Features.Content.List.ToEntity(), svcConfig.Features.Events.WholeDaysOnly)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create content service")
 	}

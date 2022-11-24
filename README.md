@@ -73,7 +73,16 @@ If both are defined, the environment variables take precedence.
 ## Running locally
 
 ```bash
-docker compose up -d
+sudo docker compose up -d
 go run .
-docker compose down
+sudo docker compose down
+```
+
+## Run end-to-end tests
+
+```bash
+sudo docker compose -f docker-compose.yml -f docker-compose.e2e.yml up -d
+go run . &
+go test --tags e2e ./...
+sudo docker compose -f docker-compose.yml -f docker-compose.e2e.yml down
 ```

@@ -32,6 +32,9 @@ func (s *Service) ListEvents(includePastEvents bool) ([]*entities.Event, error) 
 func (s *Service) CreateEvent(event *entities.Event) (*entities.Event, error) {
 	// Generate new ID
 	event.ID = entities.NewID()
+	if s.eventsWholeDaysOnly {
+		event.WholeDay = true
+	}
 
 	// Validate entity
 	err := event.Validate()

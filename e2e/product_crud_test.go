@@ -5,6 +5,7 @@ package e2e
 import (
 	"context"
 
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/tebeka/selenium"
 )
@@ -20,11 +21,9 @@ func (s *E2ETestSuite) TestProductCRUD() {
 
 	// Add a new category
 	s.swdMustGetAdmin("categories/new")
-	s.must(s.swdMustFindElement(selenium.ByID, "inputName").SendKeys("Test cat 1"))
-	s.must(s.swdMustFindElement(selenium.ByID, "buttonSave").Click())
-	currentURL, err := s.swd.CurrentURL()
-	s.must(err)
-	require.Equal(s.T(), s.adminURL("categories"), currentURL)
+	lo.Must0(s.swdMustFindElement(selenium.ByID, "inputName").SendKeys("Test cat 1"))
+	lo.Must0(s.swdMustFindElement(selenium.ByID, "buttonSave").Click())
+	require.Equal(s.T(), s.adminURL("categories"), lo.Must(s.swd.CurrentURL()))
 
 	// // Get resolved product for later comparison
 	// rspResolvedProduct, rspRaw, err := s.apiClient.ProductsApi.GetProduct(ctx, productID).Execute()
