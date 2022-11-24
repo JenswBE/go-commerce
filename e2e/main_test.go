@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/tebeka/selenium"
@@ -82,7 +83,7 @@ func (s *E2ETestSuite) SetupTest() {
 }
 
 func (s *E2ETestSuite) TearDownSuite() {
-	s.must(s.swd.Quit())
+	lo.Must0(s.swd.Quit())
 }
 
 func newAPIConfig(apiConfig config.Config) *openapi.Configuration {
@@ -112,16 +113,27 @@ func (s *E2ETestSuite) adminURL(pathParts ...string) string {
 	return s.rootURL(pathParts...)
 }
 
-func (s *E2ETestSuite) must(err error) {
+func must(s *E2ETestSuite, err error) {
 	require.NoError(s.T(), err)
 }
 
+func must1[T any](s *E2ETestSuite, result T, err error) T {
+	require.NoError(s.T(), err)
+	return result
+}
+
 func (s *E2ETestSuite) swdMustGetAdmin(adminURL string) {
-	s.must(s.swd.Get(s.adminURL(adminURL)))
+	lo.Must0(s.swd.Get(s.adminURL(adminURL)))
 }
 
 func (s *E2ETestSuite) swdMustFindElement(by, value string) selenium.WebElement {
 	elem, err := s.swd.FindElement(by, value)
 	require.NoError(s.T(), err)
 	return elem
+}
+
+func (s *E2ETestSuite) swdMustFindElements(by, value string) []selenium.WebElement {
+	elems, err := s.swd.FindElements(by, value)
+	require.NoError(s.T(), err)
+	return elems
 }
