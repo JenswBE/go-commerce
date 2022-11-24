@@ -5,12 +5,16 @@ import "github.com/JenswBE/go-commerce/entities"
 var _ Usecase = &Service{}
 
 type Service struct {
-	db DatabaseRepository
+	db                  DatabaseRepository
+	eventsWholeDaysOnly bool
 }
 
-func NewService(db DatabaseRepository, content []entities.Content) (*Service, error) {
+func NewService(db DatabaseRepository, content []entities.Content, eventsWholeDaysOnly bool) (*Service, error) {
 	// Build service
-	service := &Service{db: db}
+	service := &Service{
+		db:                  db,
+		eventsWholeDaysOnly: eventsWholeDaysOnly,
+	}
 
 	// Ensure content is present in DB
 	err := service.alignContentWithDB(content)
