@@ -1,13 +1,16 @@
 package content
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/usecases/content"
-	"github.com/gin-gonic/gin"
 )
 
-const pathPrefixContent = "/content"
-const pathPrefixEvents = "/events"
+const (
+	pathPrefixContent = "/content"
+	pathPrefixEvents  = "/events"
+)
 
 type ContentHandler struct {
 	presenter *presenter.Presenter

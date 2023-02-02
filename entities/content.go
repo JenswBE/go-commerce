@@ -27,8 +27,10 @@ func (c *Content) Validate() error {
 
 type ContentType string
 
-const ContentTypeSimple = "SIMPLE"
-const ContentTypeHTML = "HTML"
+const (
+	ContentTypeSimple = "SIMPLE"
+	ContentTypeHTML   = "HTML"
+)
 
 func (contentType ContentType) String() string {
 	return string(contentType)

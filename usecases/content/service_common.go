@@ -38,8 +38,8 @@ func (s *Service) alignContentWithDB(contentList []entities.Content) error {
 		currentContent := findContent(currentContentList, newContent.Name)
 		if currentContent == nil {
 			// Content not found => Create
+			newContent := newContent
 			_, err = s.CreateContent(&newContent)
-
 		} else {
 			// Content type is same => Skip
 			if currentContent.ContentType == newContent.ContentType {

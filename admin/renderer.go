@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 
 	"github.com/JenswBE/go-commerce/utils/generics"
 )
@@ -50,14 +51,15 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 		// Create new template with functions
 		templates = append([]string{"layouts/empty", "layouts/base"}, templates...)
 		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("html/%s.html.go.tmpl", i) })
-		templateName := filepath.Base(generics.Last(templatePaths))
+		lastTemplatePath, _ := lo.Last(templatePaths) // Variable "templates" can never be empty
+		templateName := filepath.Base(lastTemplatePath)
 		tmpl := template.New(templateName).Funcs(template.FuncMap{
 			"add":              add,
 			"getURL":           getURL,
 			"getStaticURL":     getStaticURL,
 			"isFeatureEnabled": h.isFeatureEnabled,
 			"product":          productFunc,
-			"substract":        substract,
+			"subtract":         subtract,
 		})
 
 		// Parse and add templates
@@ -76,7 +78,7 @@ func add(a, b int) int {
 	return a + b
 }
 
-func substract(a, b int) int {
+func subtract(a, b int) int {
 	return a - b
 }
 

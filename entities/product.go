@@ -28,8 +28,10 @@ type Product struct {
 
 type ProductStatus string
 
-const ProductStatusAvailable = "AVAILABLE"
-const ProductStatusArchived = "ARCHIVED"
+const (
+	ProductStatusAvailable = "AVAILABLE"
+	ProductStatusArchived  = "ARCHIVED"
+)
 
 func (status ProductStatus) String() string {
 	return string(status)

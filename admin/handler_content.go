@@ -5,11 +5,12 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/JenswBE/go-commerce/admin/entities"
-	baseEntities "github.com/JenswBE/go-commerce/entities"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+
+	"github.com/JenswBE/go-commerce/admin/entities"
+	baseEntities "github.com/JenswBE/go-commerce/entities"
 )
 
 const paramContentName = "content_name"
@@ -22,7 +23,7 @@ func (h *Handler) handleContentList(c *gin.Context) {
 		return
 	}
 
-	htmlWithFlashes(c, http.StatusOK, &entities.ContentListTemplate{
+	htmlWithFlashes(c, &entities.ContentListTemplate{
 		BaseData: entities.BaseData{
 			Title:      "Inhoud",
 			ParentPath: "content",
@@ -49,7 +50,9 @@ func (h *Handler) handleContentFormGET(c *gin.Context) {
 		IsHTMLContent: content.ContentType == baseEntities.ContentTypeHTML,
 		Content: entities.Content{
 			BodySimple: content.Body,
-			BodyHTML:   template.HTML(content.Body),
+			//#nosec G203 -- Body is sanitized before being stored
+			// in the DB and used below.
+			BodyHTML: template.HTML(content.Body),
 		},
 	})
 }

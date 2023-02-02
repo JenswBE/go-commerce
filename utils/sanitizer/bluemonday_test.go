@@ -4,8 +4,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/stretchr/testify/require"
+
+	"github.com/JenswBE/go-commerce/utils/sanitizer"
 )
 
 func Test_Sanitize(t *testing.T) {

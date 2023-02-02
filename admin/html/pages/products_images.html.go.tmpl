@@ -30,7 +30,7 @@
             >
               <input
                 type="hidden"
-                value="{{ substract $img.Order 1 }}"
+                value="{{ subtract $img.Order 1 }}"
                 name="new_order"
               />
               <button
@@ -46,7 +46,7 @@
               <i class="bi bi-arrow-up-circle"></i>
             </button>
           {{ end }}
-          {{ if ne $i (substract (len $.Product.Images) 1) }}
+          {{ if ne $i (subtract (len $.Product.Images) 1) }}
             <form
               method="post"
               action="{{ getURL "products" $.Product.ID.String "images" $img.ID.String "update_order" }}"

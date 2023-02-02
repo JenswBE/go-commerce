@@ -6,10 +6,3 @@ func Map[T any](slice []T, mapFunc func(T) T) []T {
 	}
 	return slice
 }
-
-func Last[T any](slice []T) T {
-	if len(slice) == 0 {
-		return *new(T)
-	}
-	return slice[len(slice)-1]
-}

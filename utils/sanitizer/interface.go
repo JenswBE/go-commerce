@@ -1,6 +1,6 @@
 package sanitizer
 
-//Service interface
+// Service interface
 type Service interface {
 	// Sanitizes input to a plain string
 	String(input string) string

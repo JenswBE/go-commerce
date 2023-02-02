@@ -40,8 +40,10 @@ func ImageConfigMap() map[string]imageproxy.ImageConfig {
 	}
 }
 
-const ImageConfigString = "300_200_FILL"
-const ImageConfigQuery = "img=" + ImageConfigString
+const (
+	ImageConfigString = "300_200_FILL"
+	ImageConfigQuery  = "img=" + ImageConfigString
+)
 
 // #############################
 // #          OPENAPI          #

@@ -60,14 +60,13 @@ func (r *ProductPostgres) UpdateImage(id entities.ID, ownerID entities.ID, newOr
 	if imageSameOrder.ID == "" {
 		// No order swapped
 		return []*entities.Image{image.ToEntity()}, nil
-	} else {
-		// Order swapped
-		images := []*entities.Image{
-			image.ToEntity(),
-			imageSameOrder.ToEntity(),
-		}
-		return images, nil
 	}
+	// Order swapped
+	images := []*entities.Image{
+		image.ToEntity(),
+		imageSameOrder.ToEntity(),
+	}
+	return images, nil
 }
 
 func (r *ProductPostgres) DeleteImage(id entities.ID) error {

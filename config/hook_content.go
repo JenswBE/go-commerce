@@ -5,8 +5,9 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/JenswBE/go-commerce/entities"
 	"github.com/mitchellh/mapstructure"
+
+	"github.com/JenswBE/go-commerce/entities"
 )
 
 type Content struct {
@@ -32,8 +33,10 @@ func contentListHook() mapstructure.DecodeHookFuncType {
 			return data, nil
 		}
 
-		// Split content string in chunks
-		contentChunks := strings.Split(data.(string), ",")
+		// Split content string in chunks.
+		// Type of "data" is already checked.
+		content, _ := data.(string)
+		contentChunks := strings.Split(content, ",")
 
 		// Build content list
 		contentList := make([]Content, 0, len(contentChunks))

@@ -5,7 +5,7 @@ import (
 )
 
 func (s *LocalStorage) SaveFile(filename string, content []byte) error {
-	return os.WriteFile(s.pathFromName(filename), content, 0444)
+	return os.WriteFile(s.pathFromName(filename), content, 0o444)
 }
 
 func (s *LocalStorage) DeleteFile(filename string) error {

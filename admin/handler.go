@@ -22,7 +22,10 @@ import (
 	"github.com/JenswBE/go-commerce/usecases/product"
 )
 
-const PrefixAdmin = "/admin/"
+const (
+	PrefixAdmin = "/admin/"
+	IDNew       = "new"
+)
 
 const (
 	pathLogin = "login/"
@@ -136,13 +139,17 @@ func html(c *gin.Context, code int, template entities.Template) {
 	c.HTML(code, template.GetTemplateName(), template)
 }
 
-func htmlWithFlashes(c *gin.Context, code int, template entities.Template) {
+func htmlWithFlashes(c *gin.Context, template entities.Template) {
 	// Get and convert flashes
 	session := sessions.Default(c)
 	flashes := session.Flashes()
 	messages := make([]entities.Message, 0, len(flashes))
 	for _, flash := range flashes {
-		messages = append(messages, entities.ParseMessage(flash.(string)))
+		flashString, ok := flash.(string)
+		if !ok {
+			c.String(http.StatusInternalServerError, "Unable to cast flash value to string. Flash type is %T. Flashes: %v", flash, flashes)
+		}
+		messages = append(messages, entities.ParseMessage(flashString))
 	}
 	template.SetMessages(messages)
 
@@ -154,7 +161,7 @@ func htmlWithFlashes(c *gin.Context, code int, template entities.Template) {
 	}
 
 	// Display page
-	c.HTML(code, template.GetTemplateName(), template)
+	c.HTML(http.StatusOK, template.GetTemplateName(), template)
 }
 
 func redirect(c *gin.Context, adminRedirectLocation string) {

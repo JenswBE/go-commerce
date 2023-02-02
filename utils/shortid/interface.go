@@ -4,7 +4,7 @@ import (
 	"github.com/JenswBE/go-commerce/entities"
 )
 
-//Service interface
+// Service interface
 type Service interface {
 	// Encode converts an UUID to a short ID
 	Encode(input entities.ID) string

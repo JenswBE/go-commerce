@@ -32,7 +32,7 @@ func (h *Handler) handleManufacturersList(c *gin.Context) {
 	}
 
 	// Render page
-	htmlWithFlashes(c, http.StatusOK, &entities.ManufacturersListTemplate{
+	htmlWithFlashes(c, &entities.ManufacturersListTemplate{
 		BaseData:      baseData,
 		Manufacturers: manufacturers,
 	})
@@ -41,7 +41,7 @@ func (h *Handler) handleManufacturersList(c *gin.Context) {
 func (h *Handler) handleManufacturersFormGET(c *gin.Context) {
 	// Check if new manufacturer
 	paramID := c.Param(paramManufacturerID)
-	if paramID == "new" {
+	if paramID == IDNew {
 		html(c, http.StatusOK, &entities.ManufacturersFormTemplate{
 			BaseData: entities.BaseData{
 				Title:      manufacturersFormTitle(true),
@@ -85,7 +85,7 @@ func (h *Handler) handleManufacturersFormGET(c *gin.Context) {
 func (h *Handler) handleManufacturersFormPOST(c *gin.Context) {
 	// Check if new manufacturer
 	paramID := c.Param(paramManufacturerID)
-	isNew := paramID == "new"
+	isNew := paramID == IDNew
 
 	// Parse body
 	manufacturer := entities.Manufacturer{}
@@ -195,7 +195,7 @@ func (h *Handler) handleManufacturersImageGET(c *gin.Context) {
 	}
 
 	// Render page
-	htmlWithFlashes(c, http.StatusOK, &entities.ManufacturersImageTemplate{
+	htmlWithFlashes(c, &entities.ManufacturersImageTemplate{
 		BaseData: entities.BaseData{
 			Title:      "Foto aanpassen",
 			ParentPath: "manufacturers",

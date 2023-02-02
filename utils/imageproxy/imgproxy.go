@@ -20,7 +20,7 @@ type ImgProxy struct {
 	salt           []byte
 }
 
-// NewImgProxyService creates a new ImgProxy service
+// NewImgProxyService creates a new ImgProxy service.
 func NewImgProxyService(baseURL, keyHex, saltHex string, allowedConfigs []ImageConfig) (*ImgProxy, error) {
 	// Restructure allowed configs for better lookup performance
 	allowedConfigsMap := make(map[ImageConfig]bool, len(allowedConfigs))
@@ -31,19 +31,19 @@ func NewImgProxyService(baseURL, keyHex, saltHex string, allowedConfigs []ImageC
 	// Validate base URL
 	_, err := url.Parse(baseURL)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse base URL: %s", err.Error())
+		return nil, fmt.Errorf("failed to parse base URL: %w", err)
 	}
 
 	// Parse key
 	key, err := hex.DecodeString(keyHex)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode hex-encoded key: %s", err.Error())
+		return nil, fmt.Errorf("failed to decode hex-encoded key: %w", err)
 	}
 
 	// Parse salt
 	salt, err := hex.DecodeString(saltHex)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode hex-encoded salt: %s", err.Error())
+		return nil, fmt.Errorf("failed to decode hex-encoded salt: %w", err)
 	}
 
 	// Build service

@@ -3,15 +3,18 @@ package product
 import (
 	"strings"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/usecases/product"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
-	"github.com/gin-gonic/gin"
 )
 
-const pathPrefixCategories = "/categories"
-const pathPrefixManufacturers = "/manufacturers"
-const pathPrefixProducts = "/products"
+const (
+	pathPrefixCategories    = "/categories"
+	pathPrefixManufacturers = "/manufacturers"
+	pathPrefixProducts      = "/products"
+)
 
 type ProductHandler struct {
 	presenter *presenter.Presenter

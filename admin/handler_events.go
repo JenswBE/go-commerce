@@ -37,7 +37,7 @@ func (h *Handler) handleEventsList(c *gin.Context) {
 		return
 	}
 
-	htmlWithFlashes(c, http.StatusOK, &entities.EventsListTemplate{
+	htmlWithFlashes(c, &entities.EventsListTemplate{
 		BaseData: entities.BaseData{
 			Title:      "Evenementen",
 			ParentPath: "events",
@@ -50,7 +50,7 @@ func (h *Handler) handleEventsList(c *gin.Context) {
 func (h *Handler) handleEventsFormGET(c *gin.Context) {
 	// Check if new event
 	paramID := c.Param(paramEventID)
-	if paramID == "new" {
+	if paramID == IDNew {
 		html(c, http.StatusOK, &entities.EventsFormTemplate{
 			BaseData: entities.BaseData{
 				Title:      eventsFormTitle(true),
@@ -94,7 +94,7 @@ func (h *Handler) handleEventsFormGET(c *gin.Context) {
 func (h *Handler) handleEventsFormPOST(c *gin.Context) {
 	// Check if new event
 	paramID := c.Param(paramEventID)
-	isNew := paramID == "new"
+	isNew := paramID == IDNew
 
 	// Parse body
 	event := entities.Event{}

@@ -2,10 +2,10 @@ package imageproxy
 
 import "fmt"
 
-// Fake returns the input unchanged
+// Fake returns the input unchanged.
 type Fake struct{}
 
-// NewFakeService creates a new fake image proxy service
+// NewFakeService creates a new fake image proxy service.
 func NewFakeService() *Fake {
 	return &Fake{}
 }

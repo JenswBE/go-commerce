@@ -13,7 +13,7 @@ env:
 
 jobs:
   build-and-publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,10 +35,17 @@ jobs:
           check-latest: true
           go-version: ${{ env.GO_VERSION }}
 
+      - name: Pull common linter configs
+        run: wget -O .golangci.yml https://raw.githubusercontent.com/JenswBE/setup/main/programming_configs/golang/.golangci.yml
+
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          args: --timeout=5m
+          args: >-
+            --timeout=5m
+            --disable errorlint,goerr113,nestif,noctx,wrapcheck
+            --exclude 'name will be used as .+ by other packages'
+            --exclude 'reassigning variable ErrorStackMarshaler in other package zerolog'
           version: latest
 
       - name: Run coverage

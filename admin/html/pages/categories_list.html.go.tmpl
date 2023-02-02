@@ -44,7 +44,7 @@
                 >
                   <input
                     type="hidden"
-                    value="{{ substract $cat.Order 1 }}"
+                    value="{{ subtract $cat.Order 1 }}"
                     name="new_order"
                   />
                   <button
@@ -60,7 +60,7 @@
                   <i class="bi bi-arrow-up-circle"></i>
                 </button>
               {{ end }}
-              {{ if ne $i (substract (len $.Categories) 1) }}
+              {{ if ne $i (subtract (len $.Categories) 1) }}
                 <form
                   method="post"
                   action="{{ getURL "categories" $cat.ID.String "update_order" }}"

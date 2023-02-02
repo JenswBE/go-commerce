@@ -65,7 +65,7 @@ func (h *Handler) handleProductsList(c *gin.Context) {
 	}
 
 	// Render page
-	htmlWithFlashes(c, http.StatusOK, &entities.ProductsListTemplate{
+	htmlWithFlashes(c, &entities.ProductsListTemplate{
 		BaseData:         baseData,
 		Products:         products,
 		ManufacturersMap: manufacturersMap,
@@ -95,7 +95,7 @@ func (h *Handler) handleProductsFormGET(c *gin.Context) {
 	}
 
 	// Check if new product
-	if paramID == "new" {
+	if paramID == IDNew {
 		html(c, http.StatusOK, &entities.ProductsFormTemplate{
 			BaseData: entities.BaseData{
 				Title:      productsFormTitle(true),
@@ -146,7 +146,7 @@ func (h *Handler) handleProductsFormPOST(c *gin.Context) {
 
 	// Check if new product
 	paramID := c.Param(paramProductID)
-	isNew := paramID == "new"
+	isNew := paramID == IDNew
 
 	// Fetch categories
 	categories, err := h.productService.ListCategories(nil)
@@ -290,7 +290,7 @@ func (h *Handler) handleProductsImagesGET(c *gin.Context) {
 	}
 
 	// Render page
-	htmlWithFlashes(c, http.StatusOK, &entities.ProductsImagesTemplate{
+	htmlWithFlashes(c, &entities.ProductsImagesTemplate{
 		BaseData: entities.BaseData{
 			Title:      "Foto's aanpassen",
 			ParentPath: "products",

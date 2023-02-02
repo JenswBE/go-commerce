@@ -33,7 +33,7 @@ func (h *Handler) handleCategoriesList(c *gin.Context) {
 	}
 
 	// Render page
-	htmlWithFlashes(c, http.StatusOK, &entities.CategoriesListTemplate{
+	htmlWithFlashes(c, &entities.CategoriesListTemplate{
 		BaseData:   baseData,
 		Categories: categories,
 	})
@@ -91,7 +91,7 @@ func (h *Handler) handleCategoriesUpdateOrder(c *gin.Context) {
 func (h *Handler) handleCategoriesFormGET(c *gin.Context) {
 	// Check if new category
 	paramID := c.Param(paramCategoryID)
-	if paramID == "new" {
+	if paramID == IDNew {
 		html(c, http.StatusOK, &entities.CategoriesFormTemplate{
 			BaseData: entities.BaseData{
 				Title:      categoriesFormTitle(true),
@@ -135,7 +135,7 @@ func (h *Handler) handleCategoriesFormGET(c *gin.Context) {
 func (h *Handler) handleCategoriesFormPOST(c *gin.Context) {
 	// Check if new category
 	paramID := c.Param(paramCategoryID)
-	isNew := paramID == "new"
+	isNew := paramID == IDNew
 
 	// Parse body
 	category := entities.Category{}

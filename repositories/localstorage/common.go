@@ -27,7 +27,7 @@ func NewLocalStorage(rootPath string) (*LocalStorage, error) {
 	}
 
 	// Folder doesn't exist => Create
-	err = os.MkdirAll(rootAbs, 0755)
+	err = os.MkdirAll(rootAbs, 0o755)
 	if err != nil {
 		return nil, err
 	}

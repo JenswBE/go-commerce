@@ -3,9 +3,10 @@ package shortid_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/shortid"
-	"github.com/stretchr/testify/require"
 )
 
 func Test_Fake_RoundTrip_Success(t *testing.T) {

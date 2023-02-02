@@ -34,7 +34,7 @@ func (e *GoComError) Error() string {
 }
 
 // NewError returns a new GoComError
-func NewError(status int, code openapi.GocomErrorCode, instance string, err error) error {
+func NewError(status int, code openapi.GocomErrorCode, instance string, err error) *GoComError {
 	return &GoComError{
 		Status:   status,
 		Err:      err,

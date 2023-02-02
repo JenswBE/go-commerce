@@ -32,7 +32,7 @@ func byteArrayFromBase64StringHook() mapstructure.DecodeHookFuncType {
 
 		// Validate data length
 		if len(value) != t.Len() {
-			return nil, fmt.Errorf("provided base64 has lenght %d, but lenght %d is expected", len(value), t.Len())
+			return nil, fmt.Errorf("provided base64 has length %d, but length %d is expected", len(value), t.Len())
 		}
 
 		// Convert slice to array

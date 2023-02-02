@@ -8,23 +8,24 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/JenswBE/go-commerce/api/openapi"
-	"github.com/JenswBE/go-commerce/api/presenter"
-	"github.com/JenswBE/go-commerce/entities"
 	"github.com/gin-gonic/gin"
 	"github.com/google/go-cmp/cmp"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
+
+	"github.com/JenswBE/go-commerce/api/openapi"
+	"github.com/JenswBE/go-commerce/api/presenter"
+	"github.com/JenswBE/go-commerce/entities"
 )
 
 // ParseIDParam tries to parse parameter with the given name as an UUID or short ID.
 // On failure, an error is set on the Gin context.
 //
-//   p := presenter.New()
-//   id, ok := ParseIDParam(c, "id", p)
-//   if !ok {
-// 	   return // Response already set on Gin context
-//   }
+//	  p := presenter.New()
+//	  id, ok := ParseIDParam(c, "id", p)
+//	  if !ok {
+//		   return // Response already set on Gin context
+//	  }
 func ParseIDParam(c *gin.Context, name string, p *presenter.Presenter) (entities.ID, bool) {
 	// Parse param
 	pID, ok := c.Params.Get(name)
@@ -53,7 +54,7 @@ func ErrToResponse(e error) (int, *entities.GoComError) {
 		return err.Status, err
 	}
 	log.Warn().Err(e).Stringer("error_type", reflect.TypeOf(e)).Msg("API received an non-GoComError error")
-	return 500, entities.NewError(500, openapi.GOCOMERRORCODE_UNKNOWN_ERROR, "", e).(*entities.GoComError)
+	return 500, entities.NewError(500, openapi.GOCOMERRORCODE_UNKNOWN_ERROR, "", e)
 }
 
 // ###########################
@@ -61,6 +62,7 @@ func ErrToResponse(e error) (int, *entities.GoComError) {
 // ###########################
 
 func SetupGinTest(t *testing.T, method, path string, params gin.Params, body []byte) (*gin.Context, *httptest.ResponseRecorder) {
+	t.Helper()
 	w := httptest.NewRecorder()
 	gin.SetMode(gin.ReleaseMode)
 	c, _ := gin.CreateTestContext(w)
@@ -76,6 +78,7 @@ func SetupGinTest(t *testing.T, method, path string, params gin.Params, body []b
 // RequireEqualJSON unmarshals the body from the provided recorder to the same type as expected.
 // Next, it asserts this result against the expected value.
 func RequireEqualJSON(t *testing.T, expected any, recorder *httptest.ResponseRecorder) {
+	t.Helper()
 	actual := reflect.New(reflect.TypeOf(expected))
 	body := recorder.Body.Bytes()
 	err := json.Unmarshal(body, actual.Interface())
