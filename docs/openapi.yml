@@ -254,8 +254,7 @@ components:
             product_ids:
               type: array
               items:
-                type: string
-                format: uuid
+                $ref: "#/components/schemas/ShortID"
               readOnly: True
             image_urls:
               $ref: "#/components/schemas/ImageUrlMap"
@@ -528,11 +527,9 @@ components:
             category_ids:
               type: array
               items:
-                type: string
-                format: uuid
+                $ref: "#/components/schemas/ShortID"
             manufacturer_id:
-              type: string
-              format: uuid
+              $ref: "#/components/schemas/ShortID"
             status:
               $ref: "#/components/schemas/ProductStatus"
             stock_count:
