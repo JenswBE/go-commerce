@@ -21,7 +21,7 @@ require (
 	github.com/stretchr/testify v1.8.1
 	github.com/tebeka/selenium v0.9.9
 	golang.org/x/exp v0.0.0-20230202163644-54bba9f4231b
-	golang.org/x/oauth2 v0.4.0
+	golang.org/x/oauth2 v0.6.0
 	gorm.io/driver/postgres v1.4.6
 	gorm.io/gorm v1.24.4
 )
@@ -65,9 +65,9 @@ require (
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	golang.org/x/crypto v0.5.0 // indirect
-	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/net v0.8.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/text v0.8.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
