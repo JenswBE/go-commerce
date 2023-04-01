@@ -4,6 +4,7 @@ on:
     branches: [main]
     tags:
       - "*"
+  pull_request:
 
 env:
   GO_VERSION: "1.20" # Also update Dockerfile when bumping
@@ -70,10 +71,11 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           platforms: ${{ env.PLATFORMS }}
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.DOCKER_HUB_REPO }}:${{ steps.vars.outputs.docker_tag }}
 
       - name: Update repo description
+        if: github.event_name != 'pull_request'
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ env.DOCKER_HUB_USER }}

@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the GocomError type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GocomError{}
+
 // GocomError struct for GocomError
 type GocomError struct {
 	// HTTP status code
@@ -46,7 +49,7 @@ func NewGocomErrorWithDefaults() *GocomError {
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *GocomError) GetStatus() int32 {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		var ret int32
 		return ret
 	}
@@ -56,7 +59,7 @@ func (o *GocomError) GetStatus() int32 {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GocomError) GetStatusOk() (*int32, bool) {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
 	return o.Status, true
@@ -64,7 +67,7 @@ func (o *GocomError) GetStatusOk() (*int32, bool) {
 
 // HasStatus returns a boolean if a field has been set.
 func (o *GocomError) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
@@ -126,7 +129,7 @@ func (o *GocomError) SetMessage(v string) {
 
 // GetInstance returns the Instance field value if set, zero value otherwise.
 func (o *GocomError) GetInstance() string {
-	if o == nil || o.Instance == nil {
+	if o == nil || IsNil(o.Instance) {
 		var ret string
 		return ret
 	}
@@ -136,7 +139,7 @@ func (o *GocomError) GetInstance() string {
 // GetInstanceOk returns a tuple with the Instance field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GocomError) GetInstanceOk() (*string, bool) {
-	if o == nil || o.Instance == nil {
+	if o == nil || IsNil(o.Instance) {
 		return nil, false
 	}
 	return o.Instance, true
@@ -144,7 +147,7 @@ func (o *GocomError) GetInstanceOk() (*string, bool) {
 
 // HasInstance returns a boolean if a field has been set.
 func (o *GocomError) HasInstance() bool {
-	if o != nil && o.Instance != nil {
+	if o != nil && !IsNil(o.Instance) {
 		return true
 	}
 
@@ -157,20 +160,24 @@ func (o *GocomError) SetInstance(v string) {
 }
 
 func (o GocomError) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Status != nil {
-		toSerialize["status"] = o.Status
-	}
-	if true {
-		toSerialize["code"] = o.Code
-	}
-	if true {
-		toSerialize["message"] = o.Message
-	}
-	if o.Instance != nil {
-		toSerialize["instance"] = o.Instance
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o GocomError) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
+	}
+	toSerialize["code"] = o.Code
+	toSerialize["message"] = o.Message
+	if !IsNil(o.Instance) {
+		toSerialize["instance"] = o.Instance
+	}
+	return toSerialize, nil
 }
 
 type NullableGocomError struct {

@@ -1,21 +1,25 @@
 package product
 
 import (
+	"github.com/jinzhu/copier"
+	"github.com/rs/zerolog/log"
+
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/jinzhu/copier"
-	"github.com/rs/zerolog/log"
 )
 
 const defaultStatus = openapi.PRODUCTSTATUS_ARCHIVED
 
 func ProductFromEntity(p *presenter.Presenter, input *entities.Product) openapi.Product {
 	// Set basic fields
-	output := openapi.NewProduct(p.String(input.Name), int64(input.Price.Int()))
-	output.SetId(p.EncodeID(input.ID))
-	output.SetCreatedAt(input.CreatedAt)
-	output.SetUpdatedAt(input.UpdatedAt)
+	output := openapi.NewProduct(
+		p.EncodeID(input.ID),
+		input.CreatedAt,
+		input.UpdatedAt,
+		p.String(input.Name),
+		int64(input.Price.Int()),
+	)
 	output.SetDescriptionShort(p.String(input.DescriptionShort))
 	output.SetDescriptionLong(p.String(input.DescriptionLong))
 	output.SetCategoryIds(p.EncodeIDList(input.CategoryIDs))

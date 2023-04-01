@@ -196,9 +196,8 @@ func parseFilesFromMultipart(req *http.Request) (map[string][]byte, error) {
 		if err != nil {
 			if errors.Is(err, io.EOF) {
 				break
-			} else {
-				return nil, err
 			}
+			return nil, err
 		}
 
 		// Add to images

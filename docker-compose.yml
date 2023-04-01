@@ -15,7 +15,7 @@ services:
 
   traefik:
     <<: *defaults
-    image: traefik:latest
+    image: docker.io/library/traefik:latest
     command:
       - "--api=true"
       - "--api.insecure=true"
@@ -38,7 +38,7 @@ services:
 
   db:
     <<: *defaults
-    image: postgres:13-alpine # Keep in sync with GitHub Actions ("services" section)
+    image: docker.io/library/postgres:13-alpine # Keep in sync with GitHub Actions ("services" section)
     environment:
       - "POSTGRES_USER=go_commerce"
       - "POSTGRES_PASSWORD=go_commerce"
@@ -50,13 +50,13 @@ services:
 
   adminer:
     <<: *defaults
-    image: adminer
+    image: docker.io/library/adminer
     ports:
       - "127.0.0.1:8032:8080"
 
   imgproxy:
     <<: *defaults
-    image: darthsim/imgproxy
+    image: docker.io/darthsim/imgproxy
     environment:
       - "IMGPROXY_KEY=8f2fd7184ad28abe1b2cd3b6bb0f74dff4765659260f72eff6bea4b9c065bb7d64cbe75e4cd89ca98693f6c24fd670d50b1556b1b307700c7bd4a7dc9e66a72d"
       - "IMGPROXY_SALT=efab808e2a395eb3032e7906bdc83efebe216a4fc05a833690b7f48b5f39c8ba78f651513beb08056510e71eeea951b9ce7fb50ce6dbac372ab1d8603d8ee9d4"
@@ -96,7 +96,7 @@ services:
   # Update DB dump for init:
   # docker compose exec keycloak-db pg_dump -U keycloak --format custom keycloak > ./local/keycloak.pgdump
   keycloak-db:
-    image: postgres:12-alpine
+    image: docker.io/library/postgres:12-alpine
     networks:
       - keycloak
     environment:

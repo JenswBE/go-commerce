@@ -14,10 +14,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the Manufacturer type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Manufacturer{}
+
 // Manufacturer struct for Manufacturer
 type Manufacturer struct {
 	// Compressed representation of ID
-	Id *string `json:"id,omitempty"`
+	Id string `json:"id"`
 	Name string `json:"name"`
 	WebsiteUrl *string `json:"website_url,omitempty"`
 	ImageUrls *map[string]string `json:"image_urls,omitempty"`
@@ -27,8 +30,9 @@ type Manufacturer struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewManufacturer(name string) *Manufacturer {
+func NewManufacturer(id string, name string) *Manufacturer {
 	this := Manufacturer{}
+	this.Id = id
 	this.Name = name
 	return &this
 }
@@ -41,36 +45,28 @@ func NewManufacturerWithDefaults() *Manufacturer {
 	return &this
 }
 
-// GetId returns the Id field value if set, zero value otherwise.
+// GetId returns the Id field value
 func (o *Manufacturer) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Id
+
+	return o.Id
 }
 
-// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *Manufacturer) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil {
 		return nil, false
 	}
-	return o.Id, true
+	return &o.Id, true
 }
 
-// HasId returns a boolean if a field has been set.
-func (o *Manufacturer) HasId() bool {
-	if o != nil && o.Id != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetId gets a reference to the given string and assigns it to the Id field.
+// SetId sets field value
 func (o *Manufacturer) SetId(v string) {
-	o.Id = &v
+	o.Id = v
 }
 
 // GetName returns the Name field value
@@ -99,7 +95,7 @@ func (o *Manufacturer) SetName(v string) {
 
 // GetWebsiteUrl returns the WebsiteUrl field value if set, zero value otherwise.
 func (o *Manufacturer) GetWebsiteUrl() string {
-	if o == nil || o.WebsiteUrl == nil {
+	if o == nil || IsNil(o.WebsiteUrl) {
 		var ret string
 		return ret
 	}
@@ -109,7 +105,7 @@ func (o *Manufacturer) GetWebsiteUrl() string {
 // GetWebsiteUrlOk returns a tuple with the WebsiteUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Manufacturer) GetWebsiteUrlOk() (*string, bool) {
-	if o == nil || o.WebsiteUrl == nil {
+	if o == nil || IsNil(o.WebsiteUrl) {
 		return nil, false
 	}
 	return o.WebsiteUrl, true
@@ -117,7 +113,7 @@ func (o *Manufacturer) GetWebsiteUrlOk() (*string, bool) {
 
 // HasWebsiteUrl returns a boolean if a field has been set.
 func (o *Manufacturer) HasWebsiteUrl() bool {
-	if o != nil && o.WebsiteUrl != nil {
+	if o != nil && !IsNil(o.WebsiteUrl) {
 		return true
 	}
 
@@ -131,7 +127,7 @@ func (o *Manufacturer) SetWebsiteUrl(v string) {
 
 // GetImageUrls returns the ImageUrls field value if set, zero value otherwise.
 func (o *Manufacturer) GetImageUrls() map[string]string {
-	if o == nil || o.ImageUrls == nil {
+	if o == nil || IsNil(o.ImageUrls) {
 		var ret map[string]string
 		return ret
 	}
@@ -141,7 +137,7 @@ func (o *Manufacturer) GetImageUrls() map[string]string {
 // GetImageUrlsOk returns a tuple with the ImageUrls field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Manufacturer) GetImageUrlsOk() (*map[string]string, bool) {
-	if o == nil || o.ImageUrls == nil {
+	if o == nil || IsNil(o.ImageUrls) {
 		return nil, false
 	}
 	return o.ImageUrls, true
@@ -149,7 +145,7 @@ func (o *Manufacturer) GetImageUrlsOk() (*map[string]string, bool) {
 
 // HasImageUrls returns a boolean if a field has been set.
 func (o *Manufacturer) HasImageUrls() bool {
-	if o != nil && o.ImageUrls != nil {
+	if o != nil && !IsNil(o.ImageUrls) {
 		return true
 	}
 
@@ -162,20 +158,24 @@ func (o *Manufacturer) SetImageUrls(v map[string]string) {
 }
 
 func (o Manufacturer) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.WebsiteUrl != nil {
-		toSerialize["website_url"] = o.WebsiteUrl
-	}
-	if o.ImageUrls != nil {
-		toSerialize["image_urls"] = o.ImageUrls
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Manufacturer) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.WebsiteUrl) {
+		toSerialize["website_url"] = o.WebsiteUrl
+	}
+	if !IsNil(o.ImageUrls) {
+		toSerialize["image_urls"] = o.ImageUrls
+	}
+	return toSerialize, nil
 }
 
 type NullableManufacturer struct {

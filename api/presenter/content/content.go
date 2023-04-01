@@ -1,10 +1,11 @@
 package content
 
 import (
+	"github.com/rs/zerolog/log"
+
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
-	"github.com/rs/zerolog/log"
 )
 
 const defaultContentType = openapi.CONTENTTYPE_SIMPLE

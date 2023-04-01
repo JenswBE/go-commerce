@@ -13,7 +13,7 @@ package openapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -80,17 +80,17 @@ func (a *ProductsApiService) GetProductExecute(r ApiGetProductRequest) (*Resolve
 	}
 
 	localVarPath := localBasePath + "/products/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.img != nil {
-		localVarQueryParams.Add("img", parameterToString(*r.img, "csv"))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "img", r.img, "csv")
 	}
 	if r.resolve != nil {
-		localVarQueryParams.Add("resolve", parameterToString(*r.resolve, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "resolve", r.resolve, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -119,9 +119,9 @@ func (a *ProductsApiService) GetProductExecute(r ApiGetProductRequest) (*Resolve
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -137,7 +137,8 @@ func (a *ProductsApiService) GetProductExecute(r ApiGetProductRequest) (*Resolve
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -206,7 +207,7 @@ func (a *ProductsApiService) ListProductsExecute(r ApiListProductsRequest) (*Pro
 	localVarFormParams := url.Values{}
 
 	if r.img != nil {
-		localVarQueryParams.Add("img", parameterToString(*r.img, "csv"))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "img", r.img, "csv")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -235,9 +236,9 @@ func (a *ProductsApiService) ListProductsExecute(r ApiListProductsRequest) (*Pro
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -253,7 +254,8 @@ func (a *ProductsApiService) ListProductsExecute(r ApiListProductsRequest) (*Pro
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

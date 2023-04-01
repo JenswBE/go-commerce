@@ -1,9 +1,10 @@
 package content
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/JenswBE/go-commerce/api/handler"
 	presenter "github.com/JenswBE/go-commerce/api/presenter/content"
-	"github.com/gin-gonic/gin"
 )
 
 func (h *ContentHandler) getContent(c *gin.Context) {
@@ -15,5 +16,6 @@ func (h *ContentHandler) getContent(c *gin.Context) {
 	}
 
 	// Handle success
-	c.JSON(200, presenter.ContentFromEntity(h.presenter, content))
+	response := presenter.ContentFromEntity(h.presenter, content)
+	c.JSON(200, response)
 }

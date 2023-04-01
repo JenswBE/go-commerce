@@ -14,10 +14,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the Category type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Category{}
+
 // Category struct for Category
 type Category struct {
 	// Compressed representation of ID
-	Id *string `json:"id,omitempty"`
+	Id string `json:"id"`
 	Name string `json:"name"`
 	Description *string `json:"description,omitempty"`
 	// Compressed representation of ID
@@ -32,8 +35,9 @@ type Category struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCategory(name string, order int64) *Category {
+func NewCategory(id string, name string, order int64) *Category {
 	this := Category{}
+	this.Id = id
 	this.Name = name
 	this.Order = order
 	return &this
@@ -47,36 +51,28 @@ func NewCategoryWithDefaults() *Category {
 	return &this
 }
 
-// GetId returns the Id field value if set, zero value otherwise.
+// GetId returns the Id field value
 func (o *Category) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Id
+
+	return o.Id
 }
 
-// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *Category) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil {
 		return nil, false
 	}
-	return o.Id, true
+	return &o.Id, true
 }
 
-// HasId returns a boolean if a field has been set.
-func (o *Category) HasId() bool {
-	if o != nil && o.Id != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetId gets a reference to the given string and assigns it to the Id field.
+// SetId sets field value
 func (o *Category) SetId(v string) {
-	o.Id = &v
+	o.Id = v
 }
 
 // GetName returns the Name field value
@@ -105,7 +101,7 @@ func (o *Category) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *Category) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -115,7 +111,7 @@ func (o *Category) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Category) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -123,7 +119,7 @@ func (o *Category) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *Category) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -137,7 +133,7 @@ func (o *Category) SetDescription(v string) {
 
 // GetParentId returns the ParentId field value if set, zero value otherwise.
 func (o *Category) GetParentId() string {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		var ret string
 		return ret
 	}
@@ -147,7 +143,7 @@ func (o *Category) GetParentId() string {
 // GetParentIdOk returns a tuple with the ParentId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Category) GetParentIdOk() (*string, bool) {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		return nil, false
 	}
 	return o.ParentId, true
@@ -155,7 +151,7 @@ func (o *Category) GetParentIdOk() (*string, bool) {
 
 // HasParentId returns a boolean if a field has been set.
 func (o *Category) HasParentId() bool {
-	if o != nil && o.ParentId != nil {
+	if o != nil && !IsNil(o.ParentId) {
 		return true
 	}
 
@@ -193,7 +189,7 @@ func (o *Category) SetOrder(v int64) {
 
 // GetProductIds returns the ProductIds field value if set, zero value otherwise.
 func (o *Category) GetProductIds() []string {
-	if o == nil || o.ProductIds == nil {
+	if o == nil || IsNil(o.ProductIds) {
 		var ret []string
 		return ret
 	}
@@ -203,7 +199,7 @@ func (o *Category) GetProductIds() []string {
 // GetProductIdsOk returns a tuple with the ProductIds field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Category) GetProductIdsOk() ([]string, bool) {
-	if o == nil || o.ProductIds == nil {
+	if o == nil || IsNil(o.ProductIds) {
 		return nil, false
 	}
 	return o.ProductIds, true
@@ -211,7 +207,7 @@ func (o *Category) GetProductIdsOk() ([]string, bool) {
 
 // HasProductIds returns a boolean if a field has been set.
 func (o *Category) HasProductIds() bool {
-	if o != nil && o.ProductIds != nil {
+	if o != nil && !IsNil(o.ProductIds) {
 		return true
 	}
 
@@ -225,7 +221,7 @@ func (o *Category) SetProductIds(v []string) {
 
 // GetImageUrls returns the ImageUrls field value if set, zero value otherwise.
 func (o *Category) GetImageUrls() map[string]string {
-	if o == nil || o.ImageUrls == nil {
+	if o == nil || IsNil(o.ImageUrls) {
 		var ret map[string]string
 		return ret
 	}
@@ -235,7 +231,7 @@ func (o *Category) GetImageUrls() map[string]string {
 // GetImageUrlsOk returns a tuple with the ImageUrls field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Category) GetImageUrlsOk() (*map[string]string, bool) {
-	if o == nil || o.ImageUrls == nil {
+	if o == nil || IsNil(o.ImageUrls) {
 		return nil, false
 	}
 	return o.ImageUrls, true
@@ -243,7 +239,7 @@ func (o *Category) GetImageUrlsOk() (*map[string]string, bool) {
 
 // HasImageUrls returns a boolean if a field has been set.
 func (o *Category) HasImageUrls() bool {
-	if o != nil && o.ImageUrls != nil {
+	if o != nil && !IsNil(o.ImageUrls) {
 		return true
 	}
 
@@ -256,29 +252,31 @@ func (o *Category) SetImageUrls(v map[string]string) {
 }
 
 func (o Category) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.ParentId != nil {
-		toSerialize["parent_id"] = o.ParentId
-	}
-	if true {
-		toSerialize["order"] = o.Order
-	}
-	if o.ProductIds != nil {
-		toSerialize["product_ids"] = o.ProductIds
-	}
-	if o.ImageUrls != nil {
-		toSerialize["image_urls"] = o.ImageUrls
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Category) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.ParentId) {
+		toSerialize["parent_id"] = o.ParentId
+	}
+	toSerialize["order"] = o.Order
+	if !IsNil(o.ProductIds) {
+		toSerialize["product_ids"] = o.ProductIds
+	}
+	if !IsNil(o.ImageUrls) {
+		toSerialize["image_urls"] = o.ImageUrls
+	}
+	return toSerialize, nil
 }
 
 type NullableCategory struct {

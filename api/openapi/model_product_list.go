@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ProductList type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ProductList{}
+
 // ProductList struct for ProductList
 type ProductList struct {
 	Products []Product `json:"products"`
@@ -62,11 +65,17 @@ func (o *ProductList) SetProducts(v []Product) {
 }
 
 func (o ProductList) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["products"] = o.Products
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ProductList) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["products"] = o.Products
+	return toSerialize, nil
 }
 
 type NullableProductList struct {

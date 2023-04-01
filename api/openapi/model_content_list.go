@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ContentList type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ContentList{}
+
 // ContentList struct for ContentList
 type ContentList struct {
 	Content []Content `json:"content"`
@@ -62,11 +65,17 @@ func (o *ContentList) SetContent(v []Content) {
 }
 
 func (o ContentList) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["content"] = o.Content
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ContentList) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["content"] = o.Content
+	return toSerialize, nil
 }
 
 type NullableContentList struct {

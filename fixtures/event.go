@@ -36,7 +36,7 @@ func EventSlice() []*entities.Event {
 
 func EventOpenAPI() *openapi.Event {
 	return &openapi.Event{
-		Id:          openapi.PtrString(EventID),
+		Id:          EventID,
 		Name:        "test-name",
 		Description: openapi.PtrString("test-description"),
 		EventType:   "test-event-type",

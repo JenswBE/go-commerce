@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the Content type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Content{}
+
 // Content struct for Content
 type Content struct {
 	Name string `json:"name"`
@@ -114,17 +117,19 @@ func (o *Content) SetBody(v string) {
 }
 
 func (o Content) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["content_type"] = o.ContentType
-	}
-	if true {
-		toSerialize["body"] = o.Body
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Content) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["content_type"] = o.ContentType
+	toSerialize["body"] = o.Body
+	return toSerialize, nil
 }
 
 type NullableContent struct {

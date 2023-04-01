@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the CategoryList type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CategoryList{}
+
 // CategoryList struct for CategoryList
 type CategoryList struct {
 	Categories []Category `json:"categories"`
@@ -62,11 +65,17 @@ func (o *CategoryList) SetCategories(v []Category) {
 }
 
 func (o CategoryList) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["categories"] = o.Categories
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CategoryList) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["categories"] = o.Categories
+	return toSerialize, nil
 }
 
 type NullableCategoryList struct {

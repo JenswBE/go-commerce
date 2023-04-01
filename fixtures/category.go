@@ -32,7 +32,7 @@ func CategorySlice() []*entities.Category {
 
 func CategoryOpenAPI() *openapi.Category {
 	return &openapi.Category{
-		Id:          openapi.PtrString(CategoryID),
+		Id:          CategoryID,
 		Name:        "test-name",
 		Description: openapi.PtrString("test-description"),
 		Order:       1,
