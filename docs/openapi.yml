@@ -233,31 +233,30 @@ components:
 
   schemas:
     Category:
-      allOf:
-        - $ref: "#/components/schemas/Header"
-        - type: object
-          required:
-            - name
-            - order
-          properties:
-            name:
-              type: string
-              example: Makeup & Cosmetica
-            description:
-              type: string
-            parent_id:
-              $ref: "#/components/schemas/ShortID"
-            order:
-              description: Should be sorted ascending by this column
-              type: integer
-              format: int64
-            product_ids:
-              type: array
-              items:
-                $ref: "#/components/schemas/ShortID"
-              readOnly: True
-            image_urls:
-              $ref: "#/components/schemas/ImageUrlMap"
+      required:
+        - id
+        - name
+        - order
+      properties:
+        id:
+          $ref: "#/components/schemas/ShortID"
+        name:
+          type: string
+          example: Makeup & Cosmetica
+        description:
+          type: string
+        parent_id:
+          $ref: "#/components/schemas/ShortID"
+        order:
+          description: Should be sorted ascending by this column
+          type: integer
+          format: int64
+        product_ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShortID"
+        image_urls:
+          $ref: "#/components/schemas/ImageUrlMap"
 
     CategoryList:
       type: object
@@ -279,7 +278,6 @@ components:
         name:
           type: string
           example: about
-          readOnly: true
         content_type:
           $ref: "#/components/schemas/ContentType"
         body:
@@ -291,7 +289,6 @@ components:
       enum:
         - SIMPLE
         - HTML
-      readOnly: true
 
     ContentList:
       type: object
@@ -303,36 +300,41 @@ components:
           items:
             $ref: "#/components/schemas/Content"
 
+    CreatedAt:
+      type: string
+      format: date-time
+      example: "2020-12-23T10:00:00Z"
+
     Event:
       required:
+        - id
         - name
         - event_type
         - start
         - end
-      allOf:
-        - $ref: "#/components/schemas/Header"
-        - type: object
-          properties:
-            name:
-              type: string
-              example: Winter sale
-            description:
-              type: string
-              example: Extended shopping during this winter day!
-            event_type:
-              type: string
-              description: Type of event. Types should be defined in GoCommerce config file.
-              example: sale
-            start:
-              type: string
-              format: date-time
-              description: Start of the event. In case "whole_day" is true, only the date part is considered.
-            end:
-              type: string
-              format: date-time
-              description: End of the event, could be same as start. In case "whole_day" is true, only the date part is considered.
-            whole_day:
-              type: boolean
+      properties:
+        id:
+          $ref: "#/components/schemas/ShortID"
+        name:
+          type: string
+          example: Winter sale
+        description:
+          type: string
+          example: Extended shopping during this winter day!
+        event_type:
+          type: string
+          description: Type of event. Types should be defined in GoCommerce config file.
+          example: sale
+        start:
+          type: string
+          format: date-time
+          description: Start of the event. In case "whole_day" is true, only the date part is considered.
+        end:
+          type: string
+          format: date-time
+          description: End of the event, could be same as start. In case "whole_day" is true, only the date part is considered.
+        whole_day:
+          type: boolean
 
     EventList:
       type: object
@@ -405,43 +407,16 @@ components:
         - UNKNOWN_MANUFACTURER
         - UNKNOWN_PRODUCT
 
-    Header:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Compressed representation of ID
-          example: "AneTxNh7GB5uD2HoXvwF2E"
-          readOnly: True
-
-    HeaderTimestamped:
-      allOf:
-        - $ref: "#/components/schemas/Header"
-        - type: object
-          properties:
-            created_at:
-              type: string
-              format: date-time
-              example: "2020-12-23T10:00:00Z"
-              readOnly: True
-            updated_at:
-              type: string
-              format: date-time
-              example: "2020-12-24T11:30:00Z"
-              readOnly: True
-
     Image:
       type: object
       properties:
         id:
           type: string
           format: uuid
-          readOnly: true
         ext:
           type: string
           description: Extension of the image
           example: png
-          readOnly: true
         urls:
           $ref: "#/components/schemas/ImageUrlMap"
         order:
@@ -470,7 +445,6 @@ components:
       type: string
       description: Signed URL pointing to the image
       example: "https://images.jensw.be/.../fill/300/200/.../anBn.png"
-      readOnly: true
 
     ImageUrlMap:
       type: object
@@ -478,24 +452,23 @@ components:
         $ref: "#/components/schemas/ImageUrl"
       example:
         300_200_FIT: "https://images.jensw.be/.../fill/300/200/.../anBn.png"
-      readOnly: true
 
     Manufacturer:
       required:
+        - id
         - name
-      allOf:
-        - $ref: "#/components/schemas/Header"
-        - type: object
-          properties:
-            name:
-              type: string
-              example: Bjoetiek Y
-            website_url:
-              type: string
-              format: url
-              example: https://bjoetiek-y.be
-            image_urls:
-              $ref: "#/components/schemas/ImageUrlMap"
+      properties:
+        id:
+          $ref: "#/components/schemas/ShortID"
+        name:
+          type: string
+          example: Bjoetiek Y
+        website_url:
+          type: string
+          format: url
+          example: https://bjoetiek-y.be
+        image_urls:
+          $ref: "#/components/schemas/ImageUrlMap"
 
     ManufacturerList:
       type: object
@@ -508,41 +481,47 @@ components:
             $ref: "#/components/schemas/Manufacturer"
 
     Product:
-      allOf:
-        - $ref: "#/components/schemas/HeaderTimestamped"
-        - type: object
-          properties:
-            name:
-              type: string
-              example: Gezichtsmasker
-            description_short:
-              type: string
-            description_long:
-              type: string
-            price:
-              description: Price in cents
-              type: integer
-              format: int64
-              example: 1500
-            category_ids:
-              type: array
-              items:
-                $ref: "#/components/schemas/ShortID"
-            manufacturer_id:
-              $ref: "#/components/schemas/ShortID"
-            status:
-              $ref: "#/components/schemas/ProductStatus"
-            stock_count:
-              type: integer
-              format: int64
-            image_urls:
-              type: array
-              items:
-                $ref: "#/components/schemas/ImageUrlMap"
-              readOnly: true
-          required:
-            - name
-            - price
+      type: object
+      required:
+        - id
+        - created_at
+        - updated_at
+        - name
+        - price
+      properties:
+        id:
+          $ref: "#/components/schemas/ShortID"
+        created_at:
+          $ref: "#/components/schemas/CreatedAt"
+        updated_at:
+          $ref: "#/components/schemas/UpdatedAt"
+        name:
+          type: string
+          example: Gezichtsmasker
+        description_short:
+          type: string
+        description_long:
+          type: string
+        price:
+          description: Price in cents
+          type: integer
+          format: int64
+          example: 1500
+        category_ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShortID"
+        manufacturer_id:
+          $ref: "#/components/schemas/ShortID"
+        status:
+          $ref: "#/components/schemas/ProductStatus"
+        stock_count:
+          type: integer
+          format: int64
+        image_urls:
+          type: array
+          items:
+            $ref: "#/components/schemas/ImageUrlMap"
 
     ProductStatus:
       type: string
@@ -576,6 +555,11 @@ components:
       type: string
       description: Compressed representation of ID
       example: "AneTxNh7GB5uD2HoXvwF2E"
+
+    UpdatedAt:
+      type: string
+      format: date-time
+      example: "2020-12-24T11:30:00Z"
 
   responses:
     Error:

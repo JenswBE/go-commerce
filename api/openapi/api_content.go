@@ -13,7 +13,7 @@ package openapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -66,7 +66,7 @@ func (a *ContentApiService) GetContentExecute(r ApiGetContentRequest) (*Content,
 	}
 
 	localVarPath := localBasePath + "/content/{content_name}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"content_name"+"}", url.PathEscape(parameterToString(r.contentName, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"content_name"+"}", url.PathEscape(parameterValueToString(r.contentName, "contentName")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -99,9 +99,9 @@ func (a *ContentApiService) GetContentExecute(r ApiGetContentRequest) (*Content,
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -117,7 +117,8 @@ func (a *ContentApiService) GetContentExecute(r ApiGetContentRequest) (*Content,
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

@@ -15,10 +15,13 @@ import (
 	"time"
 )
 
+// checks if the Event type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Event{}
+
 // Event struct for Event
 type Event struct {
 	// Compressed representation of ID
-	Id *string `json:"id,omitempty"`
+	Id string `json:"id"`
 	Name string `json:"name"`
 	Description *string `json:"description,omitempty"`
 	// Type of event. Types should be defined in GoCommerce config file.
@@ -34,8 +37,9 @@ type Event struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEvent(name string, eventType string, start time.Time, end time.Time) *Event {
+func NewEvent(id string, name string, eventType string, start time.Time, end time.Time) *Event {
 	this := Event{}
+	this.Id = id
 	this.Name = name
 	this.EventType = eventType
 	this.Start = start
@@ -51,36 +55,28 @@ func NewEventWithDefaults() *Event {
 	return &this
 }
 
-// GetId returns the Id field value if set, zero value otherwise.
+// GetId returns the Id field value
 func (o *Event) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Id
+
+	return o.Id
 }
 
-// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
 func (o *Event) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil {
 		return nil, false
 	}
-	return o.Id, true
+	return &o.Id, true
 }
 
-// HasId returns a boolean if a field has been set.
-func (o *Event) HasId() bool {
-	if o != nil && o.Id != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetId gets a reference to the given string and assigns it to the Id field.
+// SetId sets field value
 func (o *Event) SetId(v string) {
-	o.Id = &v
+	o.Id = v
 }
 
 // GetName returns the Name field value
@@ -109,7 +105,7 @@ func (o *Event) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *Event) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -119,7 +115,7 @@ func (o *Event) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Event) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -127,7 +123,7 @@ func (o *Event) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *Event) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -213,7 +209,7 @@ func (o *Event) SetEnd(v time.Time) {
 
 // GetWholeDay returns the WholeDay field value if set, zero value otherwise.
 func (o *Event) GetWholeDay() bool {
-	if o == nil || o.WholeDay == nil {
+	if o == nil || IsNil(o.WholeDay) {
 		var ret bool
 		return ret
 	}
@@ -223,7 +219,7 @@ func (o *Event) GetWholeDay() bool {
 // GetWholeDayOk returns a tuple with the WholeDay field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Event) GetWholeDayOk() (*bool, bool) {
-	if o == nil || o.WholeDay == nil {
+	if o == nil || IsNil(o.WholeDay) {
 		return nil, false
 	}
 	return o.WholeDay, true
@@ -231,7 +227,7 @@ func (o *Event) GetWholeDayOk() (*bool, bool) {
 
 // HasWholeDay returns a boolean if a field has been set.
 func (o *Event) HasWholeDay() bool {
-	if o != nil && o.WholeDay != nil {
+	if o != nil && !IsNil(o.WholeDay) {
 		return true
 	}
 
@@ -244,29 +240,27 @@ func (o *Event) SetWholeDay(v bool) {
 }
 
 func (o Event) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["event_type"] = o.EventType
-	}
-	if true {
-		toSerialize["start"] = o.Start
-	}
-	if true {
-		toSerialize["end"] = o.End
-	}
-	if o.WholeDay != nil {
-		toSerialize["whole_day"] = o.WholeDay
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Event) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["event_type"] = o.EventType
+	toSerialize["start"] = o.Start
+	toSerialize["end"] = o.End
+	if !IsNil(o.WholeDay) {
+		toSerialize["whole_day"] = o.WholeDay
+	}
+	return toSerialize, nil
 }
 
 type NullableEvent struct {

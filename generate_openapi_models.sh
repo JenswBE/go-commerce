@@ -9,9 +9,9 @@ USER_ID=${SUDO_UID}
 fi
 
 # Run linter
-docker run --pull always --user ${USER_ID:?} --rm -v "$(pwd)/docs:/data" \
+podman run --pull always --user ${USER_ID:?} --rm -v "$(pwd)/docs:/data:z" \
 -e "NO_UPDATE_NOTIFIER=true" \
-jamescooke/openapi-validator:latest \
+docker.io/jamescooke/openapi-validator:latest \
 --errors_only \
 --verbose \
 openapi.yml
@@ -20,14 +20,15 @@ openapi.yml
 rm api/openapi/* || true
 
 # Generate models
-docker run --pull always --user ${USER_ID:?} --rm -v "$(pwd):/local" \
+podman run --pull always --user ${USER_ID:?} --rm -v "$(pwd):/local:z" \
 -e "GO_POST_PROCESS_FILE=gofmt -s -w" \
-openapitools/openapi-generator-cli generate \
+docker.io/openapitools/openapi-generator-cli generate \
 --input-spec /local/docs/openapi.yml \
 --generator-name go \
 --output /local/api/openapi \
 --additional-properties enumClassPrefix=true
 
 # Remove unused files
-rm api/openapi/go.mod api/openapi/go.sum 
+find ./api/openapi ! -name '*.go' -delete || true
+rm -rf ./api/openapi/test
 go mod tidy

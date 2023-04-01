@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the Image type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Image{}
+
 // Image struct for Image
 type Image struct {
 	Id string `json:"id"`
@@ -142,20 +145,20 @@ func (o *Image) SetOrder(v int64) {
 }
 
 func (o Image) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["ext"] = o.Ext
-	}
-	if true {
-		toSerialize["urls"] = o.Urls
-	}
-	if true {
-		toSerialize["order"] = o.Order
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Image) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["ext"] = o.Ext
+	toSerialize["urls"] = o.Urls
+	toSerialize["order"] = o.Order
+	return toSerialize, nil
 }
 
 type NullableImage struct {

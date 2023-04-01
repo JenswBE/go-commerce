@@ -8,8 +8,11 @@ import (
 
 func CategoryFromEntity(p *presenter.Presenter, input *entities.Category) openapi.Category {
 	// Set basic fields
-	output := openapi.NewCategory(p.String(input.Name), int64(input.Order))
-	output.SetId(p.EncodeID(input.ID))
+	output := openapi.NewCategory(
+		p.EncodeID(input.ID),
+		p.String(input.Name),
+		int64(input.Order),
+	)
 	output.SetDescription(p.String(input.Description))
 	output.SetProductIds(p.EncodeIDList(input.ProductIDs))
 

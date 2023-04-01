@@ -31,7 +31,7 @@ func ManufacturerSlice() []*entities.Manufacturer {
 
 func ManufacturerOpenAPI() *openapi.Manufacturer {
 	return &openapi.Manufacturer{
-		Id:         openapi.PtrString(ManufacturerID),
+		Id:         ManufacturerID,
 		Name:       "test-name",
 		WebsiteUrl: openapi.PtrString("https://manufacturer.test"),
 		ImageUrls:  &Image().URLs,

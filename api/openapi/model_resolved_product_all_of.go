@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ResolvedProductAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ResolvedProductAllOf{}
+
 // ResolvedProductAllOf struct for ResolvedProductAllOf
 type ResolvedProductAllOf struct {
 	Manufacturer *Manufacturer `json:"manufacturer,omitempty"`
@@ -39,7 +42,7 @@ func NewResolvedProductAllOfWithDefaults() *ResolvedProductAllOf {
 
 // GetManufacturer returns the Manufacturer field value if set, zero value otherwise.
 func (o *ResolvedProductAllOf) GetManufacturer() Manufacturer {
-	if o == nil || o.Manufacturer == nil {
+	if o == nil || IsNil(o.Manufacturer) {
 		var ret Manufacturer
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *ResolvedProductAllOf) GetManufacturer() Manufacturer {
 // GetManufacturerOk returns a tuple with the Manufacturer field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ResolvedProductAllOf) GetManufacturerOk() (*Manufacturer, bool) {
-	if o == nil || o.Manufacturer == nil {
+	if o == nil || IsNil(o.Manufacturer) {
 		return nil, false
 	}
 	return o.Manufacturer, true
@@ -57,7 +60,7 @@ func (o *ResolvedProductAllOf) GetManufacturerOk() (*Manufacturer, bool) {
 
 // HasManufacturer returns a boolean if a field has been set.
 func (o *ResolvedProductAllOf) HasManufacturer() bool {
-	if o != nil && o.Manufacturer != nil {
+	if o != nil && !IsNil(o.Manufacturer) {
 		return true
 	}
 
@@ -71,7 +74,7 @@ func (o *ResolvedProductAllOf) SetManufacturer(v Manufacturer) {
 
 // GetCategories returns the Categories field value if set, zero value otherwise.
 func (o *ResolvedProductAllOf) GetCategories() []Category {
-	if o == nil || o.Categories == nil {
+	if o == nil || IsNil(o.Categories) {
 		var ret []Category
 		return ret
 	}
@@ -81,7 +84,7 @@ func (o *ResolvedProductAllOf) GetCategories() []Category {
 // GetCategoriesOk returns a tuple with the Categories field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ResolvedProductAllOf) GetCategoriesOk() ([]Category, bool) {
-	if o == nil || o.Categories == nil {
+	if o == nil || IsNil(o.Categories) {
 		return nil, false
 	}
 	return o.Categories, true
@@ -89,7 +92,7 @@ func (o *ResolvedProductAllOf) GetCategoriesOk() ([]Category, bool) {
 
 // HasCategories returns a boolean if a field has been set.
 func (o *ResolvedProductAllOf) HasCategories() bool {
-	if o != nil && o.Categories != nil {
+	if o != nil && !IsNil(o.Categories) {
 		return true
 	}
 
@@ -102,14 +105,22 @@ func (o *ResolvedProductAllOf) SetCategories(v []Category) {
 }
 
 func (o ResolvedProductAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Manufacturer != nil {
-		toSerialize["manufacturer"] = o.Manufacturer
-	}
-	if o.Categories != nil {
-		toSerialize["categories"] = o.Categories
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ResolvedProductAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Manufacturer) {
+		toSerialize["manufacturer"] = o.Manufacturer
+	}
+	if !IsNil(o.Categories) {
+		toSerialize["categories"] = o.Categories
+	}
+	return toSerialize, nil
 }
 
 type NullableResolvedProductAllOf struct {

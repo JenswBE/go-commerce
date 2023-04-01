@@ -49,9 +49,9 @@ func ResolvedProduct() *entities.ResolvedProduct {
 
 func ProductOpenAPI() *openapi.Product {
 	return &openapi.Product{
-		Id:               openapi.PtrString(ProductID),
-		CreatedAt:        openapi.PtrTime(time.Date(2021, 8, 6, 10, 0, 0, 0, time.UTC)),
-		UpdatedAt:        openapi.PtrTime(time.Date(2021, 8, 7, 14, 0, 0, 0, time.UTC)),
+		Id:               ProductID,
+		CreatedAt:        time.Date(2021, 8, 6, 10, 0, 0, 0, time.UTC),
+		UpdatedAt:        time.Date(2021, 8, 7, 14, 0, 0, 0, time.UTC),
 		Name:             "test-name",
 		DescriptionShort: openapi.PtrString("test-description-short"),
 		DescriptionLong:  openapi.PtrString("test-description-long"),
@@ -76,9 +76,9 @@ func ProductListOpenAPI() *openapi.ProductList {
 
 func ResolvedProductOpenAPI() *openapi.ResolvedProduct {
 	return &openapi.ResolvedProduct{
-		Id:               openapi.PtrString(ProductID),
-		CreatedAt:        openapi.PtrTime(time.Date(2021, 8, 6, 10, 0, 0, 0, time.UTC)),
-		UpdatedAt:        openapi.PtrTime(time.Date(2021, 8, 7, 14, 0, 0, 0, time.UTC)),
+		Id:               ProductID,
+		CreatedAt:        time.Date(2021, 8, 6, 10, 0, 0, 0, time.UTC),
+		UpdatedAt:        time.Date(2021, 8, 7, 14, 0, 0, 0, time.UTC),
 		Name:             "test-name",
 		DescriptionShort: openapi.PtrString("test-description-short"),
 		DescriptionLong:  openapi.PtrString("test-description-long"),
