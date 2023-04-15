@@ -79,6 +79,7 @@ podman-compose down
 ## Run end-to-end tests
 
 ```bash
+# For Docker Compose use: "-f docker-compose.e2e.yml -f docker-compose.e2e.docker.yml"
 podman-compose -f docker-compose.e2e.yml up -d
 go test --tags e2e ./...
 podman-compose -f docker-compose.e2e.yml down

@@ -49,11 +49,17 @@ jobs:
             --exclude 'reassigning variable ErrorStackMarshaler in other package zerolog'
           version: latest
 
-      - name: Run coverage
-        run: go test -coverprofile=coverage.out -covermode=atomic ./...
+      - name: Run unit tests
+        run: go test ./...
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+      - name: Start E2E services
+        run: |
+          docker compose -f docker-compose.e2e.yml -f docker-compose.e2e.docker.yml up -d
+          sleep 10s
+
+      - name: Run E2E tests
+        working-directory: e2e
+        run: go test --tags e2e ./...
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -81,12 +87,3 @@ jobs:
           username: ${{ env.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           repository: ${{ env.DOCKER_HUB_REPO }}
-
-      - name: Start E2E services
-        run: |
-          docker compose -f docker-compose.e2e.yml up -d
-          sleep 10s
-
-      - name: Run E2E tests
-        working-directory: e2e
-        run: go test --tags e2e ./...
