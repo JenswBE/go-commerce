@@ -3,13 +3,24 @@ http:
     api:
       loadBalancer:
         servers:
-          - url: http://host.docker.internal:8091
+          - url: http://host.containers.internal:8091
+
+    images:
+      loadBalancer:
+        servers:
+          - url: http://imgproxy:8080
 
   routers:
     api:
       entrypoints: ["web"]
       rule: "!PathPrefix(`/images`)"
       service: api
+
+    images:
+      entrypoints: ["web"]
+      rule: "PathPrefix(`/images`)"
+      service: images
+      middlewares: ["strip-images-prefix"]
 
   middlewares:
     cors:
@@ -19,3 +30,7 @@ http:
         accessControlAllowMethods: "*"
         accessControlAllowOriginListRegex: '^https?://(localhost|127.0.0.1|192\.168\.\d+\.\d+)(:\d+)$'
         addVaryHeader: true
+
+    strip-images-prefix:
+      stripPrefix:
+        prefixes: ["/images"]
