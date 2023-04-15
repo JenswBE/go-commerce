@@ -1,7 +1,5 @@
 [![GitHub](https://img.shields.io/github/license/JenswBE/go-commerce)](https://github.com/JenswBE/go-commerce)
 [![Docker Pulls](https://img.shields.io/docker/pulls/jenswbe/go-commerce)](https://hub.docker.com/r/jenswbe/go-commerce)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=JenswBE_go-commerce&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=JenswBE_go-commerce)
-[![codecov](https://codecov.io/gh/JenswBE/go-commerce/branch/main/graph/badge.svg?token=S2oyV1sTWU)](https://codecov.io/gh/JenswBE/go-commerce)
 
 # GoCommerce
 
@@ -73,16 +71,16 @@ If both are defined, the environment variables take precedence.
 ## Running locally
 
 ```bash
-sudo docker compose up -d
+podman-compose up -d
 go run .
-sudo docker compose down
+podman-compose down
 ```
 
 ## Run end-to-end tests
 
 ```bash
-sudo docker compose -f docker-compose.yml -f docker-compose.e2e.yml up -d
-go run . &
+# For Docker Compose use: "-f docker-compose.e2e.yml -f docker-compose.e2e.docker.yml"
+podman-compose -f docker-compose.e2e.yml up -d
 go test --tags e2e ./...
-sudo docker compose -f docker-compose.yml -f docker-compose.e2e.yml down
+podman-compose -f docker-compose.e2e.yml down
 ```

@@ -104,7 +104,7 @@ func extractHTTPBody(t *testing.T, r *http.Response) string {
 }
 
 func (s *E2ETestSuite) rootURL(pathParts ...string) string {
-	host := fmt.Sprintf("http://host.docker.internal:%d/", s.config.Server.Port)
+	host := fmt.Sprintf("http://host.containers.internal:%d/", s.config.Server.Port)
 	return host + path.Join(pathParts...) + "/"
 }
 

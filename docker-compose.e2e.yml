@@ -1,17 +1,15 @@
 services:
   e2e-selenium:
-    image: docker.io/selenium/standalone-firefox:4.6
+    image: docker.io/selenium/standalone-firefox:latest
     ports:
       - "127.0.0.1:4444:4444"
       - "127.0.0.1:7900:7900" # Password: secret
     shm_size: 2gb
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     environment:
       TZ: Europe/Brussels
 
   e2e-db:
-    image: docker.io/library/postgres:13-alpine # Keep in sync with GitHub Actions ("services" section)
+    image: docker.io/library/postgres:13-alpine
     environment:
       - "POSTGRES_USER=e2e"
       - "POSTGRES_PASSWORD=e2e"

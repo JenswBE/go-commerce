@@ -1,0 +1,4 @@
+services:
+  e2e-selenium:
+    extra_hosts:
+      - "host.containers.internal:host-gateway"
