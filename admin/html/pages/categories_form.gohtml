@@ -1,4 +1,4 @@
-{{ template "base.html.go.tmpl" . }}
+{{ template "base.gohtml" . }}
 
 {{ define "base_content" }}
   <div
@@ -23,14 +23,14 @@
     </div>
     <div class="mb-3">
       <label for="inputDescription" class="form-label">Beschrijving</label>
-      <textarea
-        name="description"
-        class="form-control"
-        id="inputDescription"
-      >{{- .Category.Description -}}</textarea>
+      <textarea name="description" class="form-control" id="inputDescription">
+{{- .Category.Description -}}</textarea
+      >
     </div>
 
     <a href="{{ getURL "categories" }}" class="btn btn-danger">Annuleren</a>
-    <button type="submit" id="buttonSave" class="btn btn-success">Opslaan</button>
+    <button type="submit" id="buttonSave" class="btn btn-success">
+      Opslaan
+    </button>
   </form>
 {{ end }}

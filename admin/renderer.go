@@ -50,7 +50,7 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 	for pageName, templates := range pages {
 		// Create new template with functions
 		templates = append([]string{"layouts/empty", "layouts/base"}, templates...)
-		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("html/%s.html.go.tmpl", i) })
+		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("html/%s.gohtml", i) })
 		lastTemplatePath, _ := lo.Last(templatePaths) // Variable "templates" can never be empty
 		templateName := filepath.Base(lastTemplatePath)
 		tmpl := template.New(templateName).Funcs(template.FuncMap{

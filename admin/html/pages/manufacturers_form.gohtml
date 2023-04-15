@@ -1,4 +1,4 @@
-{{ template "base.html.go.tmpl" . }}
+{{ template "base.gohtml" . }}
 
 {{ define "base_content" }}
   <div
@@ -35,6 +35,8 @@
     </div>
 
     <a href="{{ getURL "manufacturers" }}" class="btn btn-danger">Annuleren</a>
-    <button type="submit" id="buttonSave" class="btn btn-success">Opslaan</button>
+    <button type="submit" id="buttonSave" class="btn btn-success">
+      Opslaan
+    </button>
   </form>
 {{ end }}

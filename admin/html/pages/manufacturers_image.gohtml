@@ -1,4 +1,4 @@
-{{ template "base.html.go.tmpl" . }}
+{{ template "base.gohtml" . }}
 
 {{ define "base_head" }}
   <style>
@@ -27,11 +27,7 @@
           onsubmit="return confirm('Ben je zeker dat je deze foto wilt verwijderen?');"
           class="d-inline-block"
         >
-          <button
-            type="submit"
-            class="btn btn-danger"
-            title="Foto verwijderen"
-          >
+          <button type="submit" class="btn btn-danger" title="Foto verwijderen">
             <i class="bi bi-trash"></i>
           </button>
         </form>
@@ -40,6 +36,7 @@
   {{ else }}
     <p>Dit merk heeft nog geen foto&apos;s.</p>
   {{ end }}
+
 
   <div
     class="d-flex justify-content-center align-items-center pt-3 pb-3 mb-3 border-bottom"
@@ -61,11 +58,11 @@
       </div>
       <div class="col-12">
         <button type="submit" class="btn btn-sm btn-success">
-        {{ if .Manufacturer.Image }}
-        Vervangen
-        {{else}}
-        Toevoegen
-        {{end}}
+          {{ if .Manufacturer.Image }}
+            Vervangen
+          {{ else }}
+            Toevoegen
+          {{ end }}
         </button>
       </div>
     </form>

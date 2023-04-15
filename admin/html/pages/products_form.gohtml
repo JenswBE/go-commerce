@@ -1,4 +1,4 @@
-{{ template "base.html.go.tmpl" . }}
+{{ template "base.gohtml" . }}
 
 {{ define "base_content" }}
   <div
@@ -115,11 +115,16 @@
           class="form-control"
           id="inputDescriptionLong"
           rows="5"
-        >{{- .Product.DescriptionLong -}}</textarea>
+        >
+{{- .Product.DescriptionLong -}}</textarea
+        >
       </div>
     {{ end }}
 
+
     <a href="{{ getURL "products" }}" class="btn btn-danger">Annuleren</a>
-    <button type="submit" id="buttonSave" class="btn btn-success">Opslaan</button>
+    <button type="submit" id="buttonSave" class="btn btn-success">
+      Opslaan
+    </button>
   </form>
 {{ end }}
