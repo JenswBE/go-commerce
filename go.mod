@@ -8,7 +8,7 @@ require (
 	github.com/gin-contrib/multitemplate v0.0.0-20230212012517-45920c92c271
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.9.1
-	github.com/go-gormigrate/gormigrate/v2 v2.0.2
+	github.com/go-gormigrate/gormigrate/v2 v2.1.0
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/google/go-cmp v0.5.9
 	github.com/google/uuid v1.3.0
@@ -18,11 +18,11 @@ require (
 	github.com/rs/zerolog v1.29.1
 	github.com/samber/lo v1.38.1
 	github.com/spf13/viper v1.16.0
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	github.com/tebeka/selenium v0.9.9
 	golang.org/x/exp v0.0.0-20230321023759-10a507213a29
 	golang.org/x/oauth2 v0.8.0
-	gorm.io/driver/postgres v1.5.0
+	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.1
 )
 
@@ -47,7 +47,7 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
-	github.com/jackc/pgx/v5 v5.3.0 // indirect
+	github.com/jackc/pgx/v5 v5.3.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
