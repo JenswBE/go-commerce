@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"slices"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
-	"golang.org/x/exp/slices"
 	"golang.org/x/oauth2"
 )
 
