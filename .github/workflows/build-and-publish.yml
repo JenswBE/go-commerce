@@ -7,7 +7,7 @@ on:
   pull_request:
 
 env:
-  GO_VERSION: "1.20" # Also update Dockerfile when bumping
+  GO_VERSION: "1.21" # Also update Dockerfile when bumping
   DOCKER_HUB_USER: jenswbebot
   DOCKER_HUB_REPO: jenswbe/go-commerce
   PLATFORMS: linux/amd64,linux/arm64
