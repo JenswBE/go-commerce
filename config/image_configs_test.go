@@ -3,8 +3,9 @@ package config
 import (
 	"testing"
 
-	"github.com/JenswBE/go-commerce/utils/imageproxy"
 	"github.com/stretchr/testify/require"
+
+	"github.com/JenswBE/go-commerce/utils/imageproxy"
 )
 
 func Test_ParseAllowedImageConfigs_MultipleConfigs_Success(t *testing.T) {
@@ -40,5 +41,5 @@ func Test_ParseAllowedImageConfigs_Wildcard_Success(t *testing.T) {
 
 	// Assert results
 	require.NoError(t, err)
-	require.Len(t, result, 0)
+	require.Empty(t, result)
 }

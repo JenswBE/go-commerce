@@ -38,7 +38,7 @@ type StorageRepository interface {
 type Usecase interface {
 	GetCategory(id entities.ID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Category, error)
 	ListCategories(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Category, error)
-	CreateCategory(*entities.Category) (*entities.Category, error)
+	CreateCategory(e *entities.Category) (*entities.Category, error)
 	UpdateCategory(e *entities.Category) (*entities.Category, error)
 	DeleteCategory(id entities.ID) error
 	UpsertCategoryImage(categoryID entities.ID, imageName string, imageContent []byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Category, error)
@@ -46,7 +46,7 @@ type Usecase interface {
 
 	GetManufacturer(id entities.ID, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Manufacturer, error)
 	ListManufacturers(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Manufacturer, error)
-	CreateManufacturer(*entities.Manufacturer) (*entities.Manufacturer, error)
+	CreateManufacturer(e *entities.Manufacturer) (*entities.Manufacturer, error)
 	UpdateManufacturer(e *entities.Manufacturer) (*entities.Manufacturer, error)
 	DeleteManufacturer(id entities.ID) error
 	UpsertManufacturerImage(manufacturerID entities.ID, imageName string, imageContent []byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Manufacturer, error)
@@ -54,7 +54,7 @@ type Usecase interface {
 
 	GetProduct(id entities.ID, resolved bool, imageConfigs map[string]imageproxy.ImageConfig) (*entities.ResolvedProduct, error)
 	ListProducts(imageConfigs map[string]imageproxy.ImageConfig) ([]*entities.Product, error)
-	CreateProduct(*entities.Product) (*entities.Product, error)
+	CreateProduct(e *entities.Product) (*entities.Product, error)
 	UpdateProduct(e *entities.Product) (*entities.Product, error)
 	DeleteProduct(id entities.ID) error
 	AddProductImages(id entities.ID, images map[string][]byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Product, error)
