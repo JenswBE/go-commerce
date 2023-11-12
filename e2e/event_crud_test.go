@@ -19,7 +19,7 @@ func (s *E2ETestSuite) TestEventCRUD() {
 
 	// No events should exist - API
 	ctx := context.Background()
-	rspEventsList, rspRaw, err := s.apiClient.EventsApi.ListEvents(ctx).Execute()
+	rspEventsList, rspRaw, err := s.apiClient.EventsAPI.ListEvents(ctx).Execute()
 	require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	require.Empty(s.T(), rspEventsList.GetEvents(), "Test should have been started with an empty DB")
 
@@ -45,7 +45,7 @@ func (s *E2ETestSuite) TestEventCRUD() {
 	require.Equal(s.T(), "Test event 1", lo.Must(eventColumns[2].Text()))
 
 	// Event should exist - API
-	rspEventsList, rspRaw, err = s.apiClient.EventsApi.ListEvents(ctx).Execute()
+	rspEventsList, rspRaw, err = s.apiClient.EventsAPI.ListEvents(ctx).Execute()
 	require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	require.Len(s.T(), rspEventsList.GetEvents(), 1)
 	event := rspEventsList.GetEvents()[0]
@@ -67,7 +67,7 @@ func (s *E2ETestSuite) TestEventCRUD() {
 	require.Equal(s.T(), "Geen evenementen gevonden", tableText, "Event should have been deleted")
 
 	// Check event deleted - API
-	rspEventsList, rspRaw, err = s.apiClient.EventsApi.ListEvents(ctx).Execute()
+	rspEventsList, rspRaw, err = s.apiClient.EventsAPI.ListEvents(ctx).Execute()
 	require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
 	require.Empty(s.T(), rspEventsList.GetEvents(), "Event should have been deleted")
 }

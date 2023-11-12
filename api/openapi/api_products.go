@@ -20,12 +20,12 @@ import (
 )
 
 
-// ProductsApiService ProductsApi service
-type ProductsApiService service
+// ProductsAPIService ProductsAPI service
+type ProductsAPIService service
 
 type ApiGetProductRequest struct {
 	ctx context.Context
-	ApiService *ProductsApiService
+	ApiService *ProductsAPIService
 	id string
 	img *[]string
 	resolve *bool
@@ -56,7 +56,7 @@ Get product details
  @param id ID
  @return ApiGetProductRequest
 */
-func (a *ProductsApiService) GetProduct(ctx context.Context, id string) ApiGetProductRequest {
+func (a *ProductsAPIService) GetProduct(ctx context.Context, id string) ApiGetProductRequest {
 	return ApiGetProductRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -66,7 +66,7 @@ func (a *ProductsApiService) GetProduct(ctx context.Context, id string) ApiGetPr
 
 // Execute executes the request
 //  @return ResolvedProduct
-func (a *ProductsApiService) GetProductExecute(r ApiGetProductRequest) (*ResolvedProduct, *http.Response, error) {
+func (a *ProductsAPIService) GetProductExecute(r ApiGetProductRequest) (*ResolvedProduct, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -74,7 +74,7 @@ func (a *ProductsApiService) GetProductExecute(r ApiGetProductRequest) (*Resolve
 		localVarReturnValue  *ResolvedProduct
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsApiService.GetProduct")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsAPIService.GetProduct")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -91,6 +91,9 @@ func (a *ProductsApiService) GetProductExecute(r ApiGetProductRequest) (*Resolve
 	}
 	if r.resolve != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "resolve", r.resolve, "")
+	} else {
+		var defaultValue bool = false
+		r.resolve = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -156,7 +159,7 @@ func (a *ProductsApiService) GetProductExecute(r ApiGetProductRequest) (*Resolve
 
 type ApiListProductsRequest struct {
 	ctx context.Context
-	ApiService *ProductsApiService
+	ApiService *ProductsAPIService
 	img *[]string
 }
 
@@ -178,7 +181,7 @@ List products
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListProductsRequest
 */
-func (a *ProductsApiService) ListProducts(ctx context.Context) ApiListProductsRequest {
+func (a *ProductsAPIService) ListProducts(ctx context.Context) ApiListProductsRequest {
 	return ApiListProductsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -187,7 +190,7 @@ func (a *ProductsApiService) ListProducts(ctx context.Context) ApiListProductsRe
 
 // Execute executes the request
 //  @return ProductList
-func (a *ProductsApiService) ListProductsExecute(r ApiListProductsRequest) (*ProductList, *http.Response, error) {
+func (a *ProductsAPIService) ListProductsExecute(r ApiListProductsRequest) (*ProductList, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -195,7 +198,7 @@ func (a *ProductsApiService) ListProductsExecute(r ApiListProductsRequest) (*Pro
 		localVarReturnValue  *ProductList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsApiService.ListProducts")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsAPIService.ListProducts")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

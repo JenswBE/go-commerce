@@ -12,6 +12,7 @@ package openapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the ContentList type satisfies the MappedNullable interface at compile time
@@ -21,6 +22,8 @@ var _ MappedNullable = &ContentList{}
 type ContentList struct {
 	Content []Content `json:"content"`
 }
+
+type _ContentList ContentList
 
 // NewContentList instantiates a new ContentList object
 // This constructor will assign default values to properties that have it defined,
@@ -76,6 +79,41 @@ func (o ContentList) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["content"] = o.Content
 	return toSerialize, nil
+}
+
+func (o *ContentList) UnmarshalJSON(bytes []byte) (err error) {
+    // This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"content",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varContentList := _ContentList{}
+
+	err = json.Unmarshal(bytes, &varContentList)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ContentList(varContentList)
+
+	return err
 }
 
 type NullableContentList struct {

@@ -20,12 +20,12 @@ import (
 )
 
 
-// CategoriesApiService CategoriesApi service
-type CategoriesApiService service
+// CategoriesAPIService CategoriesAPI service
+type CategoriesAPIService service
 
 type ApiGetCategoryRequest struct {
 	ctx context.Context
-	ApiService *CategoriesApiService
+	ApiService *CategoriesAPIService
 	id string
 	img *[]string
 }
@@ -49,7 +49,7 @@ Get category details
  @param id ID
  @return ApiGetCategoryRequest
 */
-func (a *CategoriesApiService) GetCategory(ctx context.Context, id string) ApiGetCategoryRequest {
+func (a *CategoriesAPIService) GetCategory(ctx context.Context, id string) ApiGetCategoryRequest {
 	return ApiGetCategoryRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -59,7 +59,7 @@ func (a *CategoriesApiService) GetCategory(ctx context.Context, id string) ApiGe
 
 // Execute executes the request
 //  @return Category
-func (a *CategoriesApiService) GetCategoryExecute(r ApiGetCategoryRequest) (*Category, *http.Response, error) {
+func (a *CategoriesAPIService) GetCategoryExecute(r ApiGetCategoryRequest) (*Category, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -67,7 +67,7 @@ func (a *CategoriesApiService) GetCategoryExecute(r ApiGetCategoryRequest) (*Cat
 		localVarReturnValue  *Category
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoriesApiService.GetCategory")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoriesAPIService.GetCategory")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -146,7 +146,7 @@ func (a *CategoriesApiService) GetCategoryExecute(r ApiGetCategoryRequest) (*Cat
 
 type ApiListCategoriesRequest struct {
 	ctx context.Context
-	ApiService *CategoriesApiService
+	ApiService *CategoriesAPIService
 	img *[]string
 }
 
@@ -168,7 +168,7 @@ List categories
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListCategoriesRequest
 */
-func (a *CategoriesApiService) ListCategories(ctx context.Context) ApiListCategoriesRequest {
+func (a *CategoriesAPIService) ListCategories(ctx context.Context) ApiListCategoriesRequest {
 	return ApiListCategoriesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -177,7 +177,7 @@ func (a *CategoriesApiService) ListCategories(ctx context.Context) ApiListCatego
 
 // Execute executes the request
 //  @return CategoryList
-func (a *CategoriesApiService) ListCategoriesExecute(r ApiListCategoriesRequest) (*CategoryList, *http.Response, error) {
+func (a *CategoriesAPIService) ListCategoriesExecute(r ApiListCategoriesRequest) (*CategoryList, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -185,7 +185,7 @@ func (a *CategoriesApiService) ListCategoriesExecute(r ApiListCategoriesRequest)
 		localVarReturnValue  *CategoryList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoriesApiService.ListCategories")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoriesAPIService.ListCategories")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
