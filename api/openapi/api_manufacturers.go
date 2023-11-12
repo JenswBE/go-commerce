@@ -20,12 +20,12 @@ import (
 )
 
 
-// ManufacturersApiService ManufacturersApi service
-type ManufacturersApiService service
+// ManufacturersAPIService ManufacturersAPI service
+type ManufacturersAPIService service
 
 type ApiGetManufacturerRequest struct {
 	ctx context.Context
-	ApiService *ManufacturersApiService
+	ApiService *ManufacturersAPIService
 	id string
 	img *[]string
 }
@@ -49,7 +49,7 @@ Get manufacturer details
  @param id ID
  @return ApiGetManufacturerRequest
 */
-func (a *ManufacturersApiService) GetManufacturer(ctx context.Context, id string) ApiGetManufacturerRequest {
+func (a *ManufacturersAPIService) GetManufacturer(ctx context.Context, id string) ApiGetManufacturerRequest {
 	return ApiGetManufacturerRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -59,7 +59,7 @@ func (a *ManufacturersApiService) GetManufacturer(ctx context.Context, id string
 
 // Execute executes the request
 //  @return Manufacturer
-func (a *ManufacturersApiService) GetManufacturerExecute(r ApiGetManufacturerRequest) (*Manufacturer, *http.Response, error) {
+func (a *ManufacturersAPIService) GetManufacturerExecute(r ApiGetManufacturerRequest) (*Manufacturer, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -67,7 +67,7 @@ func (a *ManufacturersApiService) GetManufacturerExecute(r ApiGetManufacturerReq
 		localVarReturnValue  *Manufacturer
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ManufacturersApiService.GetManufacturer")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ManufacturersAPIService.GetManufacturer")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -146,7 +146,7 @@ func (a *ManufacturersApiService) GetManufacturerExecute(r ApiGetManufacturerReq
 
 type ApiListManufacturersRequest struct {
 	ctx context.Context
-	ApiService *ManufacturersApiService
+	ApiService *ManufacturersAPIService
 	img *[]string
 }
 
@@ -168,7 +168,7 @@ List manufacturers
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListManufacturersRequest
 */
-func (a *ManufacturersApiService) ListManufacturers(ctx context.Context) ApiListManufacturersRequest {
+func (a *ManufacturersAPIService) ListManufacturers(ctx context.Context) ApiListManufacturersRequest {
 	return ApiListManufacturersRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -177,7 +177,7 @@ func (a *ManufacturersApiService) ListManufacturers(ctx context.Context) ApiList
 
 // Execute executes the request
 //  @return ManufacturerList
-func (a *ManufacturersApiService) ListManufacturersExecute(r ApiListManufacturersRequest) (*ManufacturerList, *http.Response, error) {
+func (a *ManufacturersAPIService) ListManufacturersExecute(r ApiListManufacturersRequest) (*ManufacturerList, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -185,7 +185,7 @@ func (a *ManufacturersApiService) ListManufacturersExecute(r ApiListManufacturer
 		localVarReturnValue  *ManufacturerList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ManufacturersApiService.ListManufacturers")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ManufacturersAPIService.ListManufacturers")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

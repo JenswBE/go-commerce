@@ -9,12 +9,12 @@ const {
 module.exports = {
   extends: ibmCloudValidationRules,
   rules: {
-    "ibm-property-casing-convention": {
+    "ibm-enum-casing-convention": {
       description: "Enum names must follow uppercase snake convention",
       message: "{{error}}",
       resolved: true,
       given: schemas,
-      severity: "warn",ratnearsoenrtsoenst
+      severity: "warn",
       then: {
         function: propertyCasingConvention,
         functionOptions: {

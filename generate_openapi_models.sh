@@ -11,9 +11,8 @@ fi
 # Run linter
 podman run --pull always --user ${USER_ID:?} --rm -v "$(pwd)/docs:/data:z" \
 -e "NO_UPDATE_NOTIFIER=true" \
-docker.io/jamescooke/openapi-validator:latest \
---errors_only \
---verbose \
+docker.io/ibmdevxsdk/openapi-validator:latest \
+--errors-only \
 openapi.yml
 
 # Clean directory if exists

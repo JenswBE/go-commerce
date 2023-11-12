@@ -20,12 +20,12 @@ import (
 )
 
 
-// EventsApiService EventsApi service
-type EventsApiService service
+// EventsAPIService EventsAPI service
+type EventsAPIService service
 
 type ApiGetEventRequest struct {
 	ctx context.Context
-	ApiService *EventsApiService
+	ApiService *EventsAPIService
 	id string
 }
 
@@ -42,7 +42,7 @@ Get event details
  @param id ID
  @return ApiGetEventRequest
 */
-func (a *EventsApiService) GetEvent(ctx context.Context, id string) ApiGetEventRequest {
+func (a *EventsAPIService) GetEvent(ctx context.Context, id string) ApiGetEventRequest {
 	return ApiGetEventRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -52,7 +52,7 @@ func (a *EventsApiService) GetEvent(ctx context.Context, id string) ApiGetEventR
 
 // Execute executes the request
 //  @return Event
-func (a *EventsApiService) GetEventExecute(r ApiGetEventRequest) (*Event, *http.Response, error) {
+func (a *EventsAPIService) GetEventExecute(r ApiGetEventRequest) (*Event, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -60,7 +60,7 @@ func (a *EventsApiService) GetEventExecute(r ApiGetEventRequest) (*Event, *http.
 		localVarReturnValue  *Event
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EventsApiService.GetEvent")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EventsAPIService.GetEvent")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -136,7 +136,7 @@ func (a *EventsApiService) GetEventExecute(r ApiGetEventRequest) (*Event, *http.
 
 type ApiListEventsRequest struct {
 	ctx context.Context
-	ApiService *EventsApiService
+	ApiService *EventsAPIService
 	includePastEvents *bool
 }
 
@@ -158,7 +158,7 @@ List events
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListEventsRequest
 */
-func (a *EventsApiService) ListEvents(ctx context.Context) ApiListEventsRequest {
+func (a *EventsAPIService) ListEvents(ctx context.Context) ApiListEventsRequest {
 	return ApiListEventsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -167,7 +167,7 @@ func (a *EventsApiService) ListEvents(ctx context.Context) ApiListEventsRequest 
 
 // Execute executes the request
 //  @return EventList
-func (a *EventsApiService) ListEventsExecute(r ApiListEventsRequest) (*EventList, *http.Response, error) {
+func (a *EventsAPIService) ListEventsExecute(r ApiListEventsRequest) (*EventList, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -175,7 +175,7 @@ func (a *EventsApiService) ListEventsExecute(r ApiListEventsRequest) (*EventList
 		localVarReturnValue  *EventList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EventsApiService.ListEvents")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EventsAPIService.ListEvents")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -188,6 +188,9 @@ func (a *EventsApiService) ListEventsExecute(r ApiListEventsRequest) (*EventList
 
 	if r.includePastEvents != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "include_past_events", r.includePastEvents, "")
+	} else {
+		var defaultValue bool = false
+		r.includePastEvents = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

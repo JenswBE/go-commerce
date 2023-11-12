@@ -20,12 +20,12 @@ import (
 )
 
 
-// ContentApiService ContentApi service
-type ContentApiService service
+// ContentAPIService ContentAPI service
+type ContentAPIService service
 
 type ApiGetContentRequest struct {
 	ctx context.Context
-	ApiService *ContentApiService
+	ApiService *ContentAPIService
 	contentName string
 }
 
@@ -42,7 +42,7 @@ Get content
  @param contentName Content name
  @return ApiGetContentRequest
 */
-func (a *ContentApiService) GetContent(ctx context.Context, contentName string) ApiGetContentRequest {
+func (a *ContentAPIService) GetContent(ctx context.Context, contentName string) ApiGetContentRequest {
 	return ApiGetContentRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -52,7 +52,7 @@ func (a *ContentApiService) GetContent(ctx context.Context, contentName string) 
 
 // Execute executes the request
 //  @return Content
-func (a *ContentApiService) GetContentExecute(r ApiGetContentRequest) (*Content, *http.Response, error) {
+func (a *ContentAPIService) GetContentExecute(r ApiGetContentRequest) (*Content, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -60,7 +60,7 @@ func (a *ContentApiService) GetContentExecute(r ApiGetContentRequest) (*Content,
 		localVarReturnValue  *Content
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentApiService.GetContent")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentAPIService.GetContent")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

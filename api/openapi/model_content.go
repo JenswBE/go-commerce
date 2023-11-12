@@ -12,6 +12,7 @@ package openapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the Content type satisfies the MappedNullable interface at compile time
@@ -23,6 +24,8 @@ type Content struct {
 	ContentType ContentType `json:"content_type"`
 	Body string `json:"body"`
 }
+
+type _Content Content
 
 // NewContent instantiates a new Content object
 // This constructor will assign default values to properties that have it defined,
@@ -130,6 +133,43 @@ func (o Content) ToMap() (map[string]interface{}, error) {
 	toSerialize["content_type"] = o.ContentType
 	toSerialize["body"] = o.Body
 	return toSerialize, nil
+}
+
+func (o *Content) UnmarshalJSON(bytes []byte) (err error) {
+    // This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"content_type",
+		"body",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varContent := _Content{}
+
+	err = json.Unmarshal(bytes, &varContent)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Content(varContent)
+
+	return err
 }
 
 type NullableContent struct {
