@@ -10,6 +10,7 @@ services:
   #     - "DATABASE_HOST=db"
 
   traefik:
+    container_name: gocom-traefik
     image: docker.io/library/traefik:latest
     command:
       - "--api=true"
@@ -26,6 +27,7 @@ services:
       - "./local/traefik.yml:/config/traefik.yml:ro"
 
   db:
+    container_name: gocom-db
     image: docker.io/library/postgres:13-alpine # Keep in sync with GitHub Actions ("services" section)
     environment:
       - "POSTGRES_USER=go_commerce"
@@ -37,11 +39,13 @@ services:
       - "./local/postgres-init-10-data.sh:/docker-entrypoint-initdb.d/10-init-data.sh"
 
   adminer:
+    container_name: gocom-adminer
     image: docker.io/library/adminer
     ports:
       - "127.0.0.1:8032:8080"
 
   imgproxy:
+    container_name: gocom-imgproxy
     image: docker.io/darthsim/imgproxy
     environment:
       - "IMGPROXY_KEY=8f2fd7184ad28abe1b2cd3b6bb0f74dff4765659260f72eff6bea4b9c065bb7d64cbe75e4cd89ca98693f6c24fd670d50b1556b1b307700c7bd4a7dc9e66a72d"
@@ -52,7 +56,8 @@ services:
       - "./files/images:/images:ro"
 
   keycloak:
-    image: quay.io/keycloak/keycloak:17.0.0
+    container_name: gocom-keycloak
+    image: quay.io/keycloak/keycloak:23.0
     command:
       - "start-dev"
     environment:
@@ -72,6 +77,7 @@ services:
   # Update DB dump for init:
   # podman compose exec keycloak-db pg_dump -U keycloak --format custom keycloak > ./local/keycloak.pgdump
   keycloak-db:
+    container_name: gocom-keycloak-db
     image: docker.io/library/postgres:15-alpine
     environment:
       - "POSTGRES_USER=keycloak"
