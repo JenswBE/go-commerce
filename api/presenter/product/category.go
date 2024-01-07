@@ -28,14 +28,6 @@ func CategoryFromEntity(p *presenter.Presenter, input *entities.Category) openap
 	return *output
 }
 
-func CategorySliceFromEntity(p *presenter.Presenter, input []*entities.Category) []openapi.Category {
-	output := make([]openapi.Category, 0, len(input))
-	for _, category := range input {
-		output = append(output, CategoryFromEntity(p, category))
-	}
-	return output
-}
-
 func CategoryListFromEntity(p *presenter.Presenter, input []*entities.Category) openapi.CategoryList {
-	return *openapi.NewCategoryList(CategorySliceFromEntity(p, input))
+	return *openapi.NewCategoryList(presenter.SliceFromEntity(p, input, CategoryFromEntity))
 }

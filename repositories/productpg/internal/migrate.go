@@ -75,6 +75,38 @@ func Migrate(db *gorm.DB) error {
 				})
 			},
 		},
+		{
+			// Add services and service categories
+			ID: "202401051920",
+			Migrate: func(db *gorm.DB) error {
+				type Service struct {
+					Base
+					Name              string
+					Description       string
+					Price             int
+					ServiceCategoryID string `gorm:"type:uuid"`
+					Order             int
+				}
+				type ServiceCategory struct {
+					Base
+					Name     string
+					Order    int
+					Services []Service
+				}
+				err := db.AutoMigrate(
+					&ServiceCategory{},
+					&Service{},
+				)
+				if err != nil {
+					return err
+				}
+				return runStatements(db, []string{
+					"ALTER TABLE services DROP CONSTRAINT IF EXISTS fk_services_service_category",
+					"ALTER TABLE services ADD CONSTRAINT fk_services_service_category FOREIGN KEY (service_category_id) REFERENCES service_categories (id) ON UPDATE RESTRICT ON DELETE CASCADE",
+					`ALTER TABLE services ADD CONSTRAINT uniq_service_category_order UNIQUE (service_category_id,"order") DEFERRABLE INITIALLY IMMEDIATE`,
+				})
+			},
+		},
 	})
 
 	// Run migrations

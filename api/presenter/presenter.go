@@ -56,3 +56,11 @@ func (p *Presenter) String(input string) string {
 func (p *Presenter) ContentHTML(input string) string {
 	return p.sanitizerService.ContentHTML(input)
 }
+
+func SliceFromEntity[T any, R any](p *Presenter, input []T, convFunc func(p *Presenter, input T) R) []R {
+	output := make([]R, len(input))
+	for i, item := range input {
+		output[i] = convFunc(p, item)
+	}
+	return output
+}

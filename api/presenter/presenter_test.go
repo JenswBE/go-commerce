@@ -3,12 +3,13 @@ package presenter_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
-	"github.com/stretchr/testify/require"
 )
 
 func Test_ParseID_ShortID_Success(t *testing.T) {

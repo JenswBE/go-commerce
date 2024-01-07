@@ -4,11 +4,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/JenswBE/go-commerce/api/handler"
-	"github.com/JenswBE/go-commerce/fixtures"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	"github.com/JenswBE/go-commerce/api/handler"
+	"github.com/JenswBE/go-commerce/fixtures"
 )
 
 func Test_getContent_Success(t *testing.T) {

@@ -70,13 +70,13 @@ services:
       - keycloak-db
 
   # Update DB dump for init:
-  # podman-compose exec keycloak-db pg_dump -U keycloak --format custom keycloak > ./local/keycloak.pgdump
+  # podman compose exec keycloak-db pg_dump -U keycloak --format custom keycloak > ./local/keycloak.pgdump
   keycloak-db:
-    image: docker.io/library/postgres:12-alpine
+    image: docker.io/library/postgres:15-alpine
     environment:
       - "POSTGRES_USER=keycloak"
       - "POSTGRES_PASSWORD=keycloak"
       - "POSTGRES_DB=keycloak"
     volumes:
-      - "./local/keycloak.pgdump:/init.pgdump:ro"
-      - "./local/keycloak-db-restore.sh:/docker-entrypoint-initdb.d/restore.sh:ro"
+      - "./local/keycloak.pgdump:/init.pgdump:ro,z"
+      - "./local/keycloak-db-restore.sh:/docker-entrypoint-initdb.d/restore.sh:ro,z"

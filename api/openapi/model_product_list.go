@@ -12,6 +12,7 @@ package openapi
 
 import (
 	"encoding/json"
+	"bytes"
 	"fmt"
 )
 
@@ -81,8 +82,8 @@ func (o ProductList) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *ProductList) UnmarshalJSON(bytes []byte) (err error) {
-    // This validates that all required properties are included in the JSON object
+func (o *ProductList) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
@@ -91,7 +92,7 @@ func (o *ProductList) UnmarshalJSON(bytes []byte) (err error) {
 
 	allProperties := make(map[string]interface{})
 
-	err = json.Unmarshal(bytes, &allProperties)
+	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
 		return err;
@@ -105,7 +106,9 @@ func (o *ProductList) UnmarshalJSON(bytes []byte) (err error) {
 
 	varProductList := _ProductList{}
 
-	err = json.Unmarshal(bytes, &varProductList)
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varProductList)
 
 	if err != nil {
 		return err

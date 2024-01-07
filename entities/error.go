@@ -66,6 +66,16 @@ func translateCodeToMessage(code openapi.GocomErrorCode) string {
 		return `Product name is required and cannot be empty`
 	case openapi.GOCOMERRORCODE_PRODUCT_PRICE_NEGATIVE:
 		return `Product price should be a positive integer`
+	case openapi.GOCOMERRORCODE_SERVICE_NAME_EMPTY:
+		return `Service name is required and cannot be empty`
+	case openapi.GOCOMERRORCODE_SERVICE_PRICE_NEGATIVE:
+		return `Service price should be a positive integer`
+	case openapi.GOCOMERRORCODE_SERVICE_ORDER_NEGATIVE:
+		return `Service order should be a positive integer`
+	case openapi.GOCOMERRORCODE_SERVICE_CATEGORY_NAME_EMPTY:
+		return `Service category name is required and cannot be empty`
+	case openapi.GOCOMERRORCODE_SERVICE_CATEGORY_ORDER_NEGATIVE:
+		return `Service category order should be a positive integer`
 	case openapi.GOCOMERRORCODE_UNKNOWN_CATEGORY:
 		return `The category does not exist`
 	case openapi.GOCOMERRORCODE_UNKNOWN_CONTENT:
@@ -80,6 +90,10 @@ func translateCodeToMessage(code openapi.GocomErrorCode) string {
 		return `The manufacturer does not exist`
 	case openapi.GOCOMERRORCODE_UNKNOWN_PRODUCT:
 		return `The product does not exist`
+	case openapi.GOCOMERRORCODE_UNKNOWN_SERVICE:
+		return `The service does not exist`
+	case openapi.GOCOMERRORCODE_UNKNOWN_SERVICE_CATEGORY:
+		return `The service category does not exist`
 	}
 	return "" // Covered by exhaustive check
 }

@@ -28,11 +28,3 @@ func ContentFromEntity(p *presenter.Presenter, input *entities.Content) openapi.
 	}
 	return *openapi.NewContent(p.String(input.Name), *contentType, body)
 }
-
-func ContentSliceFromEntity(p *presenter.Presenter, input []*entities.Content) []openapi.Content {
-	output := make([]openapi.Content, 0, len(input))
-	for _, content := range input {
-		output = append(output, ContentFromEntity(p, content))
-	}
-	return output
-}

@@ -11,9 +11,10 @@ import (
 )
 
 const (
-	pathPrefixCategories    = "/categories"
-	pathPrefixManufacturers = "/manufacturers"
-	pathPrefixProducts      = "/products"
+	pathPrefixCategories        = "/categories"
+	pathPrefixManufacturers     = "/manufacturers"
+	pathPrefixProducts          = "/products"
+	pathPrefixServiceCategories = "/service_categories"
 )
 
 type ProductHandler struct {
@@ -40,6 +41,9 @@ func (h *ProductHandler) RegisterRoutes(rg *gin.RouterGroup) {
 	groupProducts := rg.Group(pathPrefixProducts)
 	groupProducts.GET("/", h.listProducts)
 	groupProducts.GET("/:id/", h.getProduct)
+
+	groupServiceCategories := rg.Group(pathPrefixServiceCategories)
+	groupServiceCategories.GET("/", h.listServiceCategories)
 }
 
 func parseImageConfigsParam(c *gin.Context) (map[string]imageproxy.ImageConfig, error) {

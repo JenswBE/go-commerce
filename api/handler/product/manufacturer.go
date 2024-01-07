@@ -1,9 +1,10 @@
 package product
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/JenswBE/go-commerce/api/handler"
 	presenter "github.com/JenswBE/go-commerce/api/presenter/product"
-	"github.com/gin-gonic/gin"
 )
 
 func (h *ProductHandler) listManufacturers(c *gin.Context) {
