@@ -3,13 +3,14 @@ package product
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/JenswBE/go-commerce/api/handler"
 	"github.com/JenswBE/go-commerce/api/presenter"
 	"github.com/JenswBE/go-commerce/fixtures"
 	mocks "github.com/JenswBE/go-commerce/mocks/usecases/product"
 	"github.com/JenswBE/go-commerce/utils/sanitizer"
 	"github.com/JenswBE/go-commerce/utils/shortid"
-	"github.com/stretchr/testify/require"
 )
 
 func Test_parseImageConfigsParam_AllParamsSet_Success(t *testing.T) {

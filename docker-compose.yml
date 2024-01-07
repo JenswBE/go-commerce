@@ -10,6 +10,7 @@ services:
   #     - "DATABASE_HOST=db"
 
   traefik:
+    container_name: gocom-traefik
     image: docker.io/library/traefik:latest
     command:
       - "--api=true"
@@ -26,7 +27,8 @@ services:
       - "./local/traefik.yml:/config/traefik.yml:ro"
 
   db:
-    image: docker.io/library/postgres:13-alpine # Keep in sync with GitHub Actions ("services" section)
+    container_name: gocom-db
+    image: docker.io/library/postgres:16-alpine # Keep in sync with docker-compose.e2e.yml
     environment:
       - "POSTGRES_USER=go_commerce"
       - "POSTGRES_PASSWORD=go_commerce"
@@ -37,11 +39,13 @@ services:
       - "./local/postgres-init-10-data.sh:/docker-entrypoint-initdb.d/10-init-data.sh"
 
   adminer:
+    container_name: gocom-adminer
     image: docker.io/library/adminer
     ports:
       - "127.0.0.1:8032:8080"
 
   imgproxy:
+    container_name: gocom-imgproxy
     image: docker.io/darthsim/imgproxy
     environment:
       - "IMGPROXY_KEY=8f2fd7184ad28abe1b2cd3b6bb0f74dff4765659260f72eff6bea4b9c065bb7d64cbe75e4cd89ca98693f6c24fd670d50b1556b1b307700c7bd4a7dc9e66a72d"
@@ -51,10 +55,15 @@ services:
     volumes:
       - "./files/images:/images:ro"
 
+  # Realm can be re-exported with:
+  # podman compose exec keycloak /opt/keycloak/bin/kc.sh export --dir /tmp --users realm_file --realm go-commerce
+  # podman cp gocom-keycloak:/tmp/go-commerce-realm.json local/keycloak-import/realm-go-commerce.json
   keycloak:
-    image: quay.io/keycloak/keycloak:17.0.0
+    container_name: gocom-keycloak
+    image: quay.io/keycloak/keycloak:23.0
     command:
       - "start-dev"
+      - "--import-realm"
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: keycloak-db
@@ -68,15 +77,13 @@ services:
       - 9001:8080
     depends_on:
       - keycloak-db
+    volumes:
+      - "./local/keycloak-import:/opt/keycloak/data/import:ro,z"
 
-  # Update DB dump for init:
-  # podman-compose exec keycloak-db pg_dump -U keycloak --format custom keycloak > ./local/keycloak.pgdump
   keycloak-db:
-    image: docker.io/library/postgres:12-alpine
+    container_name: gocom-keycloak-db
+    image: docker.io/library/postgres:16-alpine
     environment:
       - "POSTGRES_USER=keycloak"
       - "POSTGRES_PASSWORD=keycloak"
       - "POSTGRES_DB=keycloak"
-    volumes:
-      - "./local/keycloak.pgdump:/init.pgdump:ro"
-      - "./local/keycloak-db-restore.sh:/docker-entrypoint-initdb.d/restore.sh:ro"

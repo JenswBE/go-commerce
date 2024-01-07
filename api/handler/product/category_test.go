@@ -4,14 +4,15 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
+
 	"github.com/JenswBE/go-commerce/api/handler"
 	"github.com/JenswBE/go-commerce/entities"
 	"github.com/JenswBE/go-commerce/fixtures"
 	"github.com/JenswBE/go-commerce/utils/generics"
 	"github.com/JenswBE/go-commerce/utils/imageproxy"
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 )
 
 func Test_listCategories_Success(t *testing.T) {

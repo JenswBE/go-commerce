@@ -12,6 +12,7 @@ tags:
   - name: categories
   - name: manufacturers
   - name: products
+  - name: services
 
   # Content
   - name: content
@@ -127,6 +128,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResolvedProduct"
+        "default":
+          $ref: "#/components/responses/Error"
+
+  /service_categories/:
+    get:
+      operationId: list_service_categories
+      description: List service categories
+      tags: ["services"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResolvedServiceCategoryList"
         "default":
           $ref: "#/components/responses/Error"
 
@@ -379,6 +395,11 @@ components:
         - PARAMETER_MISSING: A required URL parameter is missing
         - PRODUCT_NAME_EMPTY: Product name is required and cannot be empty
         - PRODUCT_PRICE_NEGATIVE: Product price should be a positive integer
+        - SERVICE_NAME_EMPTY: Service name is required and cannot be empty
+        - SERVICE_PRICE_NEGATIVE: Service price should be a positive integer
+        - SERVICE_ORDER_NEGATIVE: Service order should be a positive integer
+        - SERVICE_CATEGORY_NAME_EMPTY: Service category name is required and cannot be empty
+        - SERVICE_CATEGORY_ORDER_NEGATIVE: Service category order should be a positive integer
         - UNKNOWN_CATEGORY: The category does not exist
         - UNKNOWN_CONTENT: The content does not exist
         - UNKNOWN_ERROR: An unknown error occurred
@@ -386,6 +407,8 @@ components:
         - UNKNOWN_IMAGE: The image does not exist
         - UNKNOWN_MANUFACTURER: The manufacturer does not exist
         - UNKNOWN_PRODUCT: The product does not exist
+        - UNKNOWN_SERVICE: The service does not exist
+        - UNKNOWN_SERVICE_CATEGORY: The service category does not exist
       type: string
       example: INVALID_ID
       enum:
@@ -399,6 +422,11 @@ components:
         - PARAMETER_MISSING
         - PRODUCT_NAME_EMPTY
         - PRODUCT_PRICE_NEGATIVE
+        - SERVICE_NAME_EMPTY
+        - SERVICE_PRICE_NEGATIVE
+        - SERVICE_ORDER_NEGATIVE
+        - SERVICE_CATEGORY_NAME_EMPTY
+        - SERVICE_CATEGORY_ORDER_NEGATIVE
         - UNKNOWN_CATEGORY
         - UNKNOWN_CONTENT
         - UNKNOWN_ERROR
@@ -406,6 +434,8 @@ components:
         - UNKNOWN_IMAGE
         - UNKNOWN_MANUFACTURER
         - UNKNOWN_PRODUCT
+        - UNKNOWN_SERVICE
+        - UNKNOWN_SERVICE_CATEGORY
 
     Image:
       type: object
@@ -550,6 +580,70 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Product"
+
+    Service:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - price
+        - order
+      properties:
+        id:
+          $ref: "#/components/schemas/ShortID"
+        name:
+          type: string
+          example: Gelaatsmassage
+        description:
+          type: string
+          example: Reiniging - massage 25 min
+        price:
+          description: Price in cents
+          type: integer
+          format: int64
+          example: 1500
+        order:
+          description: Should be sorted ascending by this column
+          type: integer
+          format: int64
+
+    ServiceCategory:
+      type: object
+      required:
+        - id
+        - name
+        - order
+      properties:
+        id:
+          $ref: "#/components/schemas/ShortID"
+        name:
+          type: string
+          example: Gelaat
+        order:
+          description: Should be sorted ascending by this column
+          type: integer
+          format: int64
+
+    ResolvedServiceCategory:
+      allOf:
+        - $ref: "#/components/schemas/ServiceCategory"
+        - type: object
+          properties:
+            services:
+              type: array
+              items:
+                $ref: "#/components/schemas/Service"
+
+    ResolvedServiceCategoryList:
+      type: object
+      required:
+        - service_categories
+      properties:
+        service_categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResolvedServiceCategory"
 
     ShortID:
       type: string

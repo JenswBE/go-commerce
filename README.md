@@ -51,6 +51,7 @@ If both are defined, the environment variables take precedence.
 | Features.Products.PublicURLTemplate    | FEATURES_PRODUCTS_PUBLIC_URL_TEMPLATE    | Optional template for showing link to product page on public site. Button is omitted in                    |                |
 |                                        |                                          | list if not provided. String is parsed into a Go HTML template. Product is available as `.`.               |                |
 | Features.Products.ShortDescriptionOnly | FEATURES_PRODUCTS_SHORT_DESCRIPTION_ONLY | Support for long descriptions for products is disabled                                                     | true           |
+| Features.Services.Enabled              | FEATURES_SERVICES_ENABLED                | Support for services is enabled                                                                            | true           |
 | Features.Content.Enabled               | FEATURES_CONTENT_ENABLED                 | Support for content is enabled                                                                             | true           |
 | Features.Content.List                  | FEATURES_CONTENT_LIST                    | List of content. New content is automatically added to the DB. Missing content is not removed from the DB. |                |
 |                                        |                                          | Config: Object with fields `Name` and `ContentType`                                                        |                |
@@ -71,9 +72,9 @@ If both are defined, the environment variables take precedence.
 ## Running locally
 
 ```bash
-podman-compose up -d
-go run .
-podman-compose down
+podman compose up -d
+go run . # Or: reflex -R files/images/write_test.tmp -vs go run .
+podman compose down
 ```
 
 ## Run end-to-end tests

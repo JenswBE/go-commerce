@@ -41,6 +41,10 @@ func translatePgError(err error, object any, instance string) error {
 			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_MANUFACTURER, instance, err)
 		case *internal.Product, []*internal.Product:
 			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_PRODUCT, instance, err)
+		case *internal.Service, []*internal.Service:
+			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_SERVICE, instance, err)
+		case *internal.ServiceCategory, []*internal.ServiceCategory:
+			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_SERVICE_CATEGORY, instance, err)
 		default:
 			log.Warn().Err(err).Stringer("object", reflect.TypeOf(object)).Msg("Unknown object in translatePgError.ErrRecordNotFound")
 			return entities.NewError(404, openapi.GOCOMERRORCODE_UNKNOWN_ERROR, instance, err)

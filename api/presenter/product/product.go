@@ -41,16 +41,8 @@ func ProductFromEntity(p *presenter.Presenter, input *entities.Product) openapi.
 	return *output
 }
 
-func ProductSliceFromEntity(p *presenter.Presenter, input []*entities.Product) []openapi.Product {
-	output := make([]openapi.Product, 0, len(input))
-	for _, product := range input {
-		output = append(output, ProductFromEntity(p, product))
-	}
-	return output
-}
-
 func ProductListFromEntity(p *presenter.Presenter, input []*entities.Product) openapi.ProductList {
-	return *openapi.NewProductList(ProductSliceFromEntity(p, input))
+	return *openapi.NewProductList(presenter.SliceFromEntity(p, input, ProductFromEntity))
 }
 
 func ResolvedProductFromEntity(p *presenter.Presenter, input *entities.ResolvedProduct) (openapi.ResolvedProduct, error) {
@@ -69,10 +61,6 @@ func ResolvedProductFromEntity(p *presenter.Presenter, input *entities.ResolvedP
 	}
 
 	// Set categories
-	categories := make([]openapi.Category, 0, len(input.Categories))
-	for _, category := range input.Categories {
-		categories = append(categories, CategoryFromEntity(p, category))
-	}
-	output.Categories = categories
+	output.Categories = presenter.SliceFromEntity(p, input.Categories, CategoryFromEntity)
 	return output, nil
 }

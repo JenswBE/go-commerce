@@ -83,7 +83,7 @@ func (r *ProductPostgres) UpdateCategory(e *entities.Category) (*entities.Catego
 				}
 			}
 
-			// Image with same new order exists => Update with old order
+			// Category with same new order exists => Update with old order
 			if categorySameOrder != nil {
 				categorySameOrder.Order = currentCategory.Order
 				err = tx.Save(categorySameOrder).Error
@@ -91,13 +91,13 @@ func (r *ProductPostgres) UpdateCategory(e *entities.Category) (*entities.Catego
 					return translatePgError(err, categorySameOrder, categorySameOrder.ID)
 				}
 			}
-		}
 
-		// Update category
-		m = internal.CategoryEntityToPg(e)
-		err := tx.Save(m).Error
-		if err != nil {
-			return translatePgError(err, m, e.ID.String())
+			// Update category
+			m = internal.CategoryEntityToPg(e)
+			err = tx.Save(m).Error
+			if err != nil {
+				return translatePgError(err, m, e.ID.String())
+			}
 		}
 		return nil
 	})

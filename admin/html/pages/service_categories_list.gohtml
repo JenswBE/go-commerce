@@ -1,0 +1,129 @@
+{{ template "base.gohtml" . }}
+
+{{ define "base_head" }}
+  <style>
+    td {
+      vertical-align: middle;
+    }
+  </style>
+{{ end }}
+
+{{ define "base_content" }}
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="h2">Dienstsoorten</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="me-2">
+        <a href="{{ getURL "service_categories/new" }}" class="btn btn-sm btn-success">
+          Toevoegen
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Naam</th>
+          <th scope="col">Diensten</th>
+          <th scope="col">Volgorde</th>
+          <th scope="col">Acties</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range $i, $cat := .ServiceCategories }}
+          <tr>
+            <td>{{ $cat.Name }}</td>
+            <td>
+              <a
+                href="{{ getURL "service_categories" .ID.String "services" }}"
+                title="Diensten"
+                class="btn btn-primary me-2"
+                style="font-family: mono;"
+              >
+                {{ len .ServiceIDs }}
+              </a>
+            </td>
+            <td>
+              {{ if ne $i 0 }}
+                <form
+                  method="post"
+                  action="{{ getURL "service_categories" $cat.ID.String "update_order" }}"
+                  class="d-inline-block"
+                >
+                  <input
+                    type="hidden"
+                    value="{{ (index $.ServiceCategories (subtract $i 1)).Order }}"
+                    name="new_order"
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    title="Dienstensoort eerder tonen op diensten pagina"
+                  >
+                    <i class="bi bi-arrow-up-circle"></i>
+                  </button>
+                </form>
+              {{ else }}
+                <button type="button" class="btn btn-primary" disabled>
+                  <i class="bi bi-arrow-up-circle"></i>
+                </button>
+              {{ end }}
+              {{ if ne $i (subtract (len $.ServiceCategories) 1) }}
+                <form
+                  method="post"
+                  action="{{ getURL "service_categories" $cat.ID.String "update_order" }}"
+                  class="d-inline-block"
+                >
+                  <input
+                    type="hidden"
+                    value="{{ (index $.ServiceCategories (add $i 1)).Order }}"
+                    name="new_order"
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    title="Dienstensoort later tonen op diensten pagina"
+                  >
+                    <i class="bi bi-arrow-down-circle"></i>
+                  </button>
+                </form>
+              {{ else }}
+                <button type="button" class="btn btn-primary" disabled>
+                  <i class="bi bi-arrow-down-circle"></i>
+                </button>
+              {{ end }}
+            </td>
+            <td>
+              <a
+                href="{{ getURL "service_categories" $cat.ID.String }}"
+                title="Aanpassen"
+                class="btn btn-primary me-2"
+              >
+                <i class="bi bi-pencil-square"></i>
+              </a>
+              <form
+                method="post"
+                action="{{ getURL "service_categories" $cat.ID.String "delete" }}"
+                onsubmit="return confirm('Ben je zeker dat je deze dienstensoort wilt verwijderen? Dit is inclusief bijhorende diensten!');"
+                class="d-inline-block"
+              >
+                <button type="submit" class="btn btn-danger">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        {{ else }}
+          <tr>
+            <td colspan="4" class="text-center">
+              Geen dienstsoorten gevonden
+            </td>
+          </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+{{ end }}

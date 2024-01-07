@@ -125,6 +125,18 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 		rg.POST("products/:product_id/images/:image_id/update_order/", h.handleProductsImagesUpdateOrder)
 		rg.POST("products/:product_id/images/:image_id/delete/", h.handleProductsImagesDelete)
 	}
+	if h.features.Services.Enabled {
+		rg.GET("service_categories/", h.handleServiceCategoriesList)
+		rg.GET("service_categories/:service_category_id/", h.handleServiceCategoriesFormGET)
+		rg.POST("service_categories/:service_category_id/", h.handleServiceCategoriesFormPOST)
+		rg.POST("service_categories/:service_category_id/update_order/", h.handleServiceCategoriesUpdateOrder)
+		rg.POST("service_categories/:service_category_id/delete/", h.handleServiceCategoriesDelete)
+		rg.GET("service_categories/:service_category_id/services/", h.handleServicesList)
+		rg.GET("service_categories/:service_category_id/services/:service_id/", h.handleServicesFormGET)
+		rg.POST("service_categories/:service_category_id/services/:service_id/", h.handleServicesFormPOST)
+		rg.POST("service_categories/:service_category_id/services/:service_id/update_order/", h.handleServicesUpdateOrder)
+		rg.POST("service_categories/:service_category_id/services/:service_id/delete/", h.handleServicesDelete)
+	}
 }
 
 func parseID(uuidInput string, objectType i18n.ObjectType) (baseEntities.ID, error) {

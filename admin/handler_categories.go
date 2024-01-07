@@ -79,7 +79,7 @@ func (h *Handler) handleCategoriesUpdateOrder(c *gin.Context) {
 	category.Order = newOrder
 	_, err = h.productService.UpdateCategory(category)
 	if err != nil {
-		handlerLog.Debug().Err(err).Int("new_order", newOrder).Msg("Failed update order of product image")
+		handlerLog.Debug().Err(err).Int("new_order", newOrder).Msg("Failed update order of category")
 		redirectWithMessage(c, session, entities.MessageTypeError, err.Error(), "/categories")
 		return
 	}

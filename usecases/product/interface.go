@@ -25,6 +25,18 @@ type DatabaseRepository interface {
 	UpdateProductImages(id entities.ID, images []*entities.Image) ([]*entities.Image, error)
 	DeleteProduct(id entities.ID) error
 
+	GetService(id entities.ID) (*entities.Service, error)
+	ListServices(optionalServiceCategoryID entities.ID) ([]*entities.Service, error)
+	CreateService(e *entities.Service) (*entities.Service, error)
+	UpdateService(e *entities.Service) (*entities.Service, error)
+	DeleteService(id entities.ID) error
+
+	GetServiceCategory(id entities.ID) (*entities.ServiceCategory, error)
+	ListServiceCategories() ([]*entities.ServiceCategory, error)
+	CreateServiceCategory(e *entities.ServiceCategory) (*entities.ServiceCategory, error)
+	UpdateServiceCategory(e *entities.ServiceCategory) (*entities.ServiceCategory, error)
+	DeleteServiceCategory(id entities.ID) error
+
 	GetImage(id entities.ID) (*entities.Image, error)
 	UpdateImage(id entities.ID, ownerID entities.ID, newOrder int) ([]*entities.Image, error)
 	DeleteImage(id entities.ID) error
@@ -60,4 +72,15 @@ type Usecase interface {
 	AddProductImages(id entities.ID, images map[string][]byte, imageConfigs map[string]imageproxy.ImageConfig) (*entities.Product, error)
 	UpdateProductImage(productID, imageID entities.ID, order int) ([]*entities.Image, error)
 	DeleteProductImage(productID, imageID entities.ID) error
+
+	GetService(id entities.ID) (*entities.Service, error)
+	CreateService(e *entities.Service) (*entities.Service, error)
+	UpdateService(e *entities.Service) (*entities.Service, error)
+	DeleteService(id entities.ID) error
+
+	GetServiceCategory(id entities.ID, resolved bool) (*entities.ResolvedServiceCategory, error)
+	ListServiceCategories(resolved bool) ([]*entities.ResolvedServiceCategory, error)
+	CreateServiceCategory(e *entities.ServiceCategory) (*entities.ServiceCategory, error)
+	UpdateServiceCategory(e *entities.ServiceCategory) (*entities.ServiceCategory, error)
+	DeleteServiceCategory(id entities.ID) error
 }

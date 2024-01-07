@@ -20,14 +20,6 @@ func EventFromEntity(p *presenter.Presenter, input *entities.Event) openapi.Even
 	return *output
 }
 
-func EventSliceFromEntity(p *presenter.Presenter, input []*entities.Event) []openapi.Event {
-	output := make([]openapi.Event, 0, len(input))
-	for _, event := range input {
-		output = append(output, EventFromEntity(p, event))
-	}
-	return output
-}
-
 func EventListFromEntity(p *presenter.Presenter, input []*entities.Event) openapi.EventList {
-	return *openapi.NewEventList(EventSliceFromEntity(p, input))
+	return *openapi.NewEventList(presenter.SliceFromEntity(p, input, EventFromEntity))
 }

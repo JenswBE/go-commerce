@@ -15,7 +15,7 @@ import (
 	"fmt"
 )
 
-// GocomErrorCode - CATEGORY_NAME_EMPTY: Category name is required and cannot be empty - CATEGORY_ORDER_NEGATIVE: Category order should be a positive integer - CONTENT_NAME_EMPTY: Content name is required and cannot be empty - CONTENT_TYPE_INVALID: Content type is empty or has an invalid value - EVENT_END_BEFORE_START: The end date of the event should be equal to or after the start date - IMAGE_ORDER_NEGATIVE: Image order should be a positive integer - INVALID_ID: Provided short ID or UUID is invalid - PARAMETER_MISSING: A required URL parameter is missing - PRODUCT_NAME_EMPTY: Product name is required and cannot be empty - PRODUCT_PRICE_NEGATIVE: Product price should be a positive integer - UNKNOWN_CATEGORY: The category does not exist - UNKNOWN_CONTENT: The content does not exist - UNKNOWN_ERROR: An unknown error occurred - UNKNOWN_EVENT: The event does not exist - UNKNOWN_IMAGE: The image does not exist - UNKNOWN_MANUFACTURER: The manufacturer does not exist - UNKNOWN_PRODUCT: The product does not exist 
+// GocomErrorCode - CATEGORY_NAME_EMPTY: Category name is required and cannot be empty - CATEGORY_ORDER_NEGATIVE: Category order should be a positive integer - CONTENT_NAME_EMPTY: Content name is required and cannot be empty - CONTENT_TYPE_INVALID: Content type is empty or has an invalid value - EVENT_END_BEFORE_START: The end date of the event should be equal to or after the start date - IMAGE_ORDER_NEGATIVE: Image order should be a positive integer - INVALID_ID: Provided short ID or UUID is invalid - PARAMETER_MISSING: A required URL parameter is missing - PRODUCT_NAME_EMPTY: Product name is required and cannot be empty - PRODUCT_PRICE_NEGATIVE: Product price should be a positive integer - SERVICE_NAME_EMPTY: Service name is required and cannot be empty - SERVICE_PRICE_NEGATIVE: Service price should be a positive integer - SERVICE_ORDER_NEGATIVE: Service order should be a positive integer - SERVICE_CATEGORY_NAME_EMPTY: Service category name is required and cannot be empty - SERVICE_CATEGORY_ORDER_NEGATIVE: Service category order should be a positive integer - UNKNOWN_CATEGORY: The category does not exist - UNKNOWN_CONTENT: The content does not exist - UNKNOWN_ERROR: An unknown error occurred - UNKNOWN_EVENT: The event does not exist - UNKNOWN_IMAGE: The image does not exist - UNKNOWN_MANUFACTURER: The manufacturer does not exist - UNKNOWN_PRODUCT: The product does not exist - UNKNOWN_SERVICE: The service does not exist - UNKNOWN_SERVICE_CATEGORY: The service category does not exist 
 type GocomErrorCode string
 
 // List of GocomErrorCode
@@ -30,6 +30,11 @@ const (
 	GOCOMERRORCODE_PARAMETER_MISSING GocomErrorCode = "PARAMETER_MISSING"
 	GOCOMERRORCODE_PRODUCT_NAME_EMPTY GocomErrorCode = "PRODUCT_NAME_EMPTY"
 	GOCOMERRORCODE_PRODUCT_PRICE_NEGATIVE GocomErrorCode = "PRODUCT_PRICE_NEGATIVE"
+	GOCOMERRORCODE_SERVICE_NAME_EMPTY GocomErrorCode = "SERVICE_NAME_EMPTY"
+	GOCOMERRORCODE_SERVICE_PRICE_NEGATIVE GocomErrorCode = "SERVICE_PRICE_NEGATIVE"
+	GOCOMERRORCODE_SERVICE_ORDER_NEGATIVE GocomErrorCode = "SERVICE_ORDER_NEGATIVE"
+	GOCOMERRORCODE_SERVICE_CATEGORY_NAME_EMPTY GocomErrorCode = "SERVICE_CATEGORY_NAME_EMPTY"
+	GOCOMERRORCODE_SERVICE_CATEGORY_ORDER_NEGATIVE GocomErrorCode = "SERVICE_CATEGORY_ORDER_NEGATIVE"
 	GOCOMERRORCODE_UNKNOWN_CATEGORY GocomErrorCode = "UNKNOWN_CATEGORY"
 	GOCOMERRORCODE_UNKNOWN_CONTENT GocomErrorCode = "UNKNOWN_CONTENT"
 	GOCOMERRORCODE_UNKNOWN_ERROR GocomErrorCode = "UNKNOWN_ERROR"
@@ -37,6 +42,8 @@ const (
 	GOCOMERRORCODE_UNKNOWN_IMAGE GocomErrorCode = "UNKNOWN_IMAGE"
 	GOCOMERRORCODE_UNKNOWN_MANUFACTURER GocomErrorCode = "UNKNOWN_MANUFACTURER"
 	GOCOMERRORCODE_UNKNOWN_PRODUCT GocomErrorCode = "UNKNOWN_PRODUCT"
+	GOCOMERRORCODE_UNKNOWN_SERVICE GocomErrorCode = "UNKNOWN_SERVICE"
+	GOCOMERRORCODE_UNKNOWN_SERVICE_CATEGORY GocomErrorCode = "UNKNOWN_SERVICE_CATEGORY"
 )
 
 // All allowed values of GocomErrorCode enum
@@ -51,6 +58,11 @@ var AllowedGocomErrorCodeEnumValues = []GocomErrorCode{
 	"PARAMETER_MISSING",
 	"PRODUCT_NAME_EMPTY",
 	"PRODUCT_PRICE_NEGATIVE",
+	"SERVICE_NAME_EMPTY",
+	"SERVICE_PRICE_NEGATIVE",
+	"SERVICE_ORDER_NEGATIVE",
+	"SERVICE_CATEGORY_NAME_EMPTY",
+	"SERVICE_CATEGORY_ORDER_NEGATIVE",
 	"UNKNOWN_CATEGORY",
 	"UNKNOWN_CONTENT",
 	"UNKNOWN_ERROR",
@@ -58,6 +70,8 @@ var AllowedGocomErrorCodeEnumValues = []GocomErrorCode{
 	"UNKNOWN_IMAGE",
 	"UNKNOWN_MANUFACTURER",
 	"UNKNOWN_PRODUCT",
+	"UNKNOWN_SERVICE",
+	"UNKNOWN_SERVICE_CATEGORY",
 }
 
 func (v *GocomErrorCode) UnmarshalJSON(src []byte) error {

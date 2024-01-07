@@ -45,6 +45,12 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 		pages["productsImages"] = []string{"pages/products_images"}
 		pages["productsList"] = []string{"pages/products_list"}
 	}
+	if h.features.Services.Enabled {
+		pages["serviceCategoriesForm"] = []string{"pages/service_categories_form"}
+		pages["serviceCategoriesList"] = []string{"pages/service_categories_list"}
+		pages["servicesForm"] = []string{"pages/services_form"}
+		pages["servicesList"] = []string{"pages/services_list"}
+	}
 
 	r := multitemplate.NewRenderer()
 	for pageName, templates := range pages {
@@ -110,6 +116,8 @@ func (h *Handler) isFeatureEnabled(featureName string) bool {
 		return h.features.Manufacturers.Enabled
 	case "products":
 		return h.features.Products.Enabled
+	case "services":
+		return h.features.Services.Enabled
 	case "content":
 		return h.features.Content.Enabled
 	case "events":

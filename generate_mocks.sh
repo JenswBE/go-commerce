@@ -6,4 +6,4 @@ set -euo pipefail
 rm -rf mocks/
 
 # Regenerate mocks
-mockery --all --keeptree
+mockery

@@ -58,6 +58,8 @@ type APIClient struct {
 	ManufacturersAPI *ManufacturersAPIService
 
 	ProductsAPI *ProductsAPIService
+
+	ServicesAPI *ServicesAPIService
 }
 
 type service struct {
@@ -81,6 +83,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.EventsAPI = (*EventsAPIService)(&c.common)
 	c.ManufacturersAPI = (*ManufacturersAPIService)(&c.common)
 	c.ProductsAPI = (*ProductsAPIService)(&c.common)
+	c.ServicesAPI = (*ServicesAPIService)(&c.common)
 
 	return c
 }

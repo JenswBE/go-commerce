@@ -3,7 +3,7 @@ Authentication:
   OIDC:
     IssuerURL: "http://127.0.0.1:9001/realms/go-commerce" # See https://github.com/IBM/openapi-validator/issues/338
     ClientID: go-commerce-admin
-    ClientSecret: Kf2exFgL3B1NewpokoSoULcZAmLpT1xb
+    ClientSecret: H8sZabdub3mdsc5ohBWBuXBzpMGape1p
   SessionAuthKey: "CCB6/3qUWsWqj7o4gmssFxV/tg3MJ9Z0d7QW4ASCoNP3jrh7XiPGjJFxAfSd1atpWv0iOJ4/pB/f6Hcj5AJizQ=="
   SessionEncKey: "BvYw0ZqrFsYM+wycEhn2VqZT+xZ9JlU9SB06tJo5Y7w="
 Features:

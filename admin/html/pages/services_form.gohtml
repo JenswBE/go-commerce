@@ -1,0 +1,74 @@
+{{ template "base.gohtml" . }}
+
+{{ define "base_content" }}
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="h2">
+      Dienst {{ if .IsNew }}toevoegen{{ else }}aanpassen{{ end }}
+    </h1>
+  </div>
+
+  <form method="post">
+    <div class="mb-3">
+      <label for="inputServiceCategory" class="form-label">Soort *</label>
+      <select
+        class="form-select"
+        id="inputServiceCategory"
+        name="service_category_id"
+      >
+        {{ range .ServiceCategories }}
+          <option
+            value="{{ .ID.String }}"
+            {{ if eq $.Service.ServiceCategoryID .ID.String }}selected{{ end }}
+          >
+            {{ .Name }}
+          </option>
+        {{ end }}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="inputName" class="form-label">Naam *</label>
+      <input
+        autofocus
+        required
+        type="text"
+        name="name"
+        class="form-control"
+        id="inputName"
+        value="{{ .Service.Name }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="inputPrice" class="form-label">Prijs in EURO *</label>
+      <input
+        required
+        type="number"
+        step="0.01"
+        min="0"
+        name="price"
+        class="form-control"
+        id="inputPrice"
+        value="{{ .Service.Price }}"
+        placeholder="30.50"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="inputDescription" class="form-label">
+        Beschrijving
+      </label>
+      <textarea
+        name="description"
+        class="form-control"
+        id="inputDescription"
+      >
+{{- .Service.Description -}}</textarea
+      >
+    </div>
+
+    <a href="{{ getURL "service_categories" $.Service.ServiceCategoryID "services" }}" class="btn btn-danger">Annuleren</a>
+    <button type="submit" id="buttonSave" class="btn btn-success">
+      Opslaan
+    </button>
+  </form>
+{{ end }}

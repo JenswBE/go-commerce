@@ -74,6 +74,19 @@
                 </a>
               </li>
             {{ end }}
+            {{ if isFeatureEnabled "services" }}
+              <li class="nav-item">
+                <a
+                  class="nav-link {{ if eq .ParentPath "service_categories" }}
+                    active
+                  {{ end }}"
+                  href="{{ getURL "service_categories" }}"
+                >
+                  <i class="bi bi-intersect"></i>
+                  Diensten
+                </a>
+              </li>
+            {{ end }}
             {{ if isFeatureEnabled "events" }}
               <li class="nav-item">
                 <a

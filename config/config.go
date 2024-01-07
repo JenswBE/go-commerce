@@ -74,6 +74,7 @@ const (
 	FeatureCategories    Feature = "Categories"
 	FeatureManufacturers Feature = "Manufacturers"
 	FeatureProducts      Feature = "Products"
+	FeatureServices      Feature = "Services"
 	FeatureContent       Feature = "Content"
 	FeatureEvents        Feature = "Events"
 )
@@ -92,6 +93,10 @@ type Features struct {
 		PublicURLTemplateParsed *template.Template
 		ShortDescriptionOnly    bool
 	}
+	Services struct {
+		Enabled bool
+	}
+
 	Content struct {
 		Enabled bool
 		List    ContentList
@@ -118,6 +123,7 @@ func ParseConfig() (*Config, error) {
 	viper.SetDefault("Features.Manufacturers.Enabled", true)
 	viper.SetDefault("Features.Products.Enabled", true)
 	viper.SetDefault("Features.Products.PublicURLTemplate", "")
+	viper.SetDefault("Features.Services.Enabled", true)
 	viper.SetDefault("Features.Content.Enabled", true)
 	viper.SetDefault("Features.Events.Enabled", true)
 	viper.SetDefault("ImageProxy.BaseURL", "/images/")
@@ -168,6 +174,7 @@ func ParseConfig() (*Config, error) {
 		{"Features.Products.Enabled", "FEATURES_PRODUCTS_ENABLED"},
 		{"Features.Products.PublicURLTemplate", "FEATURES_PRODUCTS_PUBLIC_URL_TEMPLATE"},
 		{"Features.Products.ShortDescriptionOnly", "FEATURES_PRODUCTS_SHORT_DESCRIPTION_ONLY"},
+		{"Features.Services.Enabled", "FEATURES_SERVICES_ENABLED"},
 		{"Features.Content.Enabled", "FEATURES_CONTENT_ENABLED"},
 		{"Features.Content.List", "FEATURES_CONTENT_LIST"},
 		{"Features.Events.Enabled", "FEATURES_EVENTS_ENABLED"},
@@ -229,7 +236,7 @@ func ParseConfig() (*Config, error) {
 		return nil, fmt.Errorf("unknown authentication type %s", config.Authentication.Type)
 	}
 	switch config.Features.StartpageFeature {
-	case FeatureCategories, FeatureContent, FeatureEvents, FeatureManufacturers, FeatureProducts:
+	case FeatureCategories, FeatureContent, FeatureEvents, FeatureManufacturers, FeatureProducts, FeatureServices:
 		// No action required
 	default:
 		return nil, fmt.Errorf("unknown startpage feature %s", config.Features.StartpageFeature)
