@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"strings"
 	"time"
 
 	"github.com/go-gormigrate/gormigrate/v2"
@@ -79,30 +80,31 @@ func Migrate(db *gorm.DB) error {
 			// Add services and service categories
 			ID: "202401051920",
 			Migrate: func(db *gorm.DB) error {
-				type Service struct {
-					Base
-					Name              string
-					Description       string
-					Price             int
-					ServiceCategoryID string `gorm:"type:uuid"`
-					Order             int
-				}
-				type ServiceCategory struct {
-					Base
-					Name     string
-					Order    int
-					Services []Service
-				}
-				err := db.AutoMigrate(
-					&ServiceCategory{},
-					&Service{},
-				)
-				if err != nil {
-					return err
-				}
 				return runStatements(db, []string{
-					"ALTER TABLE services DROP CONSTRAINT IF EXISTS fk_services_service_category",
-					"ALTER TABLE services ADD CONSTRAINT fk_services_service_category FOREIGN KEY (service_category_id) REFERENCES service_categories (id) ON UPDATE RESTRICT ON DELETE CASCADE",
+					joinStatement(
+						`CREATE TABLE service_categories (`,
+						`id uuid NOT NULL,`,
+						`created_at timestamp with time zone,`,
+						`updated_at timestamp with time zone,`,
+						`name text NOT NULL,`,
+						`"order" bigint NOT NULL,`,
+						`CONSTRAINT "service_categories_pkey" PRIMARY KEY ("id")`,
+						`);`,
+					),
+					joinStatement(
+						`CREATE TABLE services (`,
+						`id uuid NOT NULL,`,
+						`created_at timestamp with time zone,`,
+						`updated_at timestamp with time zone,`,
+						`name text NOT NULL,`,
+						`description text NOT NULL,`,
+						`price bigint NOT NULL,`,
+						`service_category_id uuid NOT NULL,`,
+						`"order" bigint NOT NULL,`,
+						`CONSTRAINT "services_pkey" PRIMARY KEY ("id")`,
+						`);`,
+					),
+					"ALTER TABLE services ADD CONSTRAINT fk_service_service_category_id FOREIGN KEY (service_category_id) REFERENCES service_categories (id) ON UPDATE RESTRICT ON DELETE CASCADE NOT DEFERRABLE",
 					`ALTER TABLE services ADD CONSTRAINT uniq_service_category_order UNIQUE (service_category_id,"order") DEFERRABLE INITIALLY IMMEDIATE`,
 				})
 			},
@@ -111,6 +113,10 @@ func Migrate(db *gorm.DB) error {
 
 	// Run migrations
 	return m.Migrate()
+}
+
+func joinStatement(parts ...string) string {
+	return strings.Join(parts, " ")
 }
 
 func runStatements(db *gorm.DB, statements []string) error {

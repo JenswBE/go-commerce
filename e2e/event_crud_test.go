@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/require"
 	"github.com/tebeka/selenium"
 )
 
@@ -15,17 +14,17 @@ func (s *E2ETestSuite) TestEventCRUD() {
 	// No events should exist - GUI
 	s.swdMustGetAdmin("events")
 	tableText := lo.Must(s.swdMustFindElement(selenium.ByCSSSelector, "table tbody tr td").Text())
-	require.Equal(s.T(), "Geen evenementen gevonden", tableText, "Test should have been started with an empty DB")
+	s.Require().Equal("Geen evenementen gevonden", tableText, "Test should have been started with an empty DB")
 
 	// No events should exist - API
 	ctx := context.Background()
 	rspEventsList, rspRaw, err := s.apiClient.EventsAPI.ListEvents(ctx).Execute()
-	require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
-	require.Empty(s.T(), rspEventsList.GetEvents(), "Test should have been started with an empty DB")
+	s.Require().NoError(err, extractHTTPBody(s.T(), rspRaw))
+	s.Require().Empty(rspEventsList.GetEvents(), "Test should have been started with an empty DB")
 
 	// Move to add event page - GUI
 	lo.Must0(s.swdMustFindElement(selenium.ByCSSSelector, "a.btn-success").Click())
-	require.Equal(s.T(), s.adminURL("events/new"), lo.Must(s.swd.CurrentURL()))
+	s.Require().Equal(s.adminURL("events/new"), lo.Must(s.swd.CurrentURL()))
 
 	// Add new event - GUI
 	lo.Must0(s.swdMustFindElement(selenium.ByID, "inputName").SendKeys("Test event 1"))
@@ -37,37 +36,38 @@ func (s *E2ETestSuite) TestEventCRUD() {
 	lo.Must0(s.swdMustFindElement(selenium.ByCSSSelector, "button.btn-success").Click())
 
 	// Validate event is added - GUI
-	require.Equal(s.T(), s.adminURL("events"), lo.Must(s.swd.CurrentURL()))
+	s.Require().Equal(s.adminURL("events"), lo.Must(s.swd.CurrentURL()))
 	events := s.swdMustFindElements(selenium.ByCSSSelector, "table tbody tr")
-	require.Len(s.T(), events, 1, "Expected to find 1 element")
+	s.Require().Len(events, 1, "Expected to find 1 element")
 	eventColumns := lo.Must(events[0].FindElements(selenium.ByTagName, "td"))
-	require.Len(s.T(), eventColumns, 4, "Expected to find 4 columns for an event")
-	require.Equal(s.T(), "Test event 1", lo.Must(eventColumns[2].Text()))
+	s.Require().Len(eventColumns, 4, "Expected to find 4 columns for an event")
+	s.Require().Equal("Test event 1", lo.Must(eventColumns[2].Text()))
 
 	// Event should exist - API
 	rspEventsList, rspRaw, err = s.apiClient.EventsAPI.ListEvents(ctx).Execute()
-	require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
-	require.Len(s.T(), rspEventsList.GetEvents(), 1)
+	s.Require().NoError(err, extractHTTPBody(s.T(), rspRaw))
+	s.Require().Len(rspEventsList.GetEvents(), 1)
 	event := rspEventsList.GetEvents()[0]
-	require.Equal(s.T(), "Test event 1", event.Name)
-	require.NotNil(s.T(), event.WholeDay)
-	require.True(s.T(), *event.WholeDay, "Expected event to be the whole day")
-	require.Equal(s.T(), lo.T3(start.Date()), lo.T3(event.Start.Date()))
-	require.Equal(s.T(), lo.T3(end.Date()), lo.T3(event.End.Date()))
+	s.Require().Equal("Test event 1", event.Name)
+	s.Require().NotNil(event.WholeDay)
+	s.Require().True(*event.WholeDay, "Expected event to be the whole day")
+	s.Require().Equal(lo.T3(start.Date()), lo.T3(event.Start.Date()))
+	s.Require().Equal(lo.T3(end.Date()), lo.T3(event.End.Date()))
 
 	// Delete event - GUI
 	lo.Must(events[0].FindElement(selenium.ByCSSSelector, "button.btn-danger")).Click()
-	require.Contains(s.T(), lo.Must(s.swd.AlertText()), "evenement")
-	require.Contains(s.T(), lo.Must(s.swd.AlertText()), "verwijderen")
+	s.Require().Contains(lo.Must(s.swd.AlertText()), "evenement")
+	s.Require().Contains(lo.Must(s.swd.AlertText()), "verwijderen")
 	lo.Must0(s.swd.AcceptAlert())
+	time.Sleep(100 * time.Millisecond)
 
 	// Check event deleted - GUI
-	require.Equal(s.T(), s.adminURL("events"), lo.Must(s.swd.CurrentURL()))
+	s.Require().Equal(s.adminURL("events"), lo.Must(s.swd.CurrentURL()))
 	tableText = lo.Must(s.swdMustFindElement(selenium.ByCSSSelector, "table tbody tr td").Text())
-	require.Equal(s.T(), "Geen evenementen gevonden", tableText, "Event should have been deleted")
+	s.Require().Equal("Geen evenementen gevonden", tableText, "Event should have been deleted")
 
 	// Check event deleted - API
 	rspEventsList, rspRaw, err = s.apiClient.EventsAPI.ListEvents(ctx).Execute()
-	require.NoError(s.T(), err, extractHTTPBody(s.T(), rspRaw))
-	require.Empty(s.T(), rspEventsList.GetEvents(), "Event should have been deleted")
+	s.Require().NoError(err, extractHTTPBody(s.T(), rspRaw))
+	s.Require().Empty(rspEventsList.GetEvents(), "Event should have been deleted")
 }
