@@ -38,7 +38,7 @@ func Test_E2ETestSuite(t *testing.T) {
 func (s *E2ETestSuite) SetupSuite() {
 	// Parse config
 	svcConfig, err := config.ParseConfig()
-	require.NoError(s.T(), err)
+	s.Require().NoError(err)
 	s.config = svcConfig
 
 	// Update config
@@ -53,7 +53,7 @@ func (s *E2ETestSuite) SetupSuite() {
 	e2eDSN := config.BuildDSN(svcConfig.Database.Default, svcConfig.Database.Default)
 	s.db, err = gorm.Open(postgres.Open(e2eDSN), &gorm.Config{})
 	if err != nil {
-		require.NoError(s.T(), err)
+		s.Require().NoError(err)
 	}
 
 	// Start GoCommerce service
@@ -66,7 +66,7 @@ func (s *E2ETestSuite) SetupSuite() {
 	caps := selenium.Capabilities{"browserName": "firefox"}
 	s.swd, err = selenium.NewRemote(caps, fmt.Sprintf("http://localhost:%d/wd/hub", 4444))
 	if err != nil {
-		require.NoError(s.T(), err)
+		s.Require().NoError(err)
 	}
 }
 
@@ -77,8 +77,10 @@ func (s *E2ETestSuite) SetupTest() {
 		"events",
 		"manufacturers",
 		"products",
+		"services",
+		"service_categories",
 	} {
-		require.NoError(s.T(), s.db.Exec(fmt.Sprintf("TRUNCATE %s CASCADE", table)).Error)
+		s.Require().NoError(s.db.Exec(fmt.Sprintf("TRUNCATE %s CASCADE", table)).Error)
 	}
 }
 
@@ -114,11 +116,11 @@ func (s *E2ETestSuite) adminURL(pathParts ...string) string {
 }
 
 func must(s *E2ETestSuite, err error) {
-	require.NoError(s.T(), err)
+	s.Require().NoError(err)
 }
 
 func must1[T any](s *E2ETestSuite, result T, err error) T {
-	require.NoError(s.T(), err)
+	s.Require().NoError(err)
 	return result
 }
 
@@ -128,12 +130,12 @@ func (s *E2ETestSuite) swdMustGetAdmin(adminURL string) {
 
 func (s *E2ETestSuite) swdMustFindElement(by, value string) selenium.WebElement {
 	elem, err := s.swd.FindElement(by, value)
-	require.NoError(s.T(), err)
+	s.Require().NoError(err)
 	return elem
 }
 
 func (s *E2ETestSuite) swdMustFindElements(by, value string) []selenium.WebElement {
 	elems, err := s.swd.FindElements(by, value)
-	require.NoError(s.T(), err)
+	s.Require().NoError(err)
 	return elems
 }
