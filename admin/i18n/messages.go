@@ -17,7 +17,7 @@ func DeleteFailed(objectType ObjectType, name string, err error) string {
 }
 
 func DeleteSuccessful(objectType ObjectType) string {
-	return fmt.Sprintf(`%s succesvol verwijderd`, capitalFirst(string(objectType)))
+	return capitalFirst(string(objectType)) + " succesvol verwijderd"
 }
 
 func capitalFirst(input string) string {
