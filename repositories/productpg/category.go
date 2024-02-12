@@ -9,6 +9,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 )
 
@@ -27,7 +28,7 @@ func (r *ProductPostgres) ListCategories() ([]*entities.Category, error) {
 	if err != nil {
 		return nil, translatePgError(err, categories, "")
 	}
-	return internal.CategoriesListPgToEntity(categories), nil
+	return repositories.ToEntitiesList(categories, (*internal.Category).ToEntity), nil
 }
 
 func (r *ProductPostgres) CreateCategory(e *entities.Category) (*entities.Category, error) {

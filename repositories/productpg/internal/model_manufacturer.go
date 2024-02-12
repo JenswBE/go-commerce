@@ -21,14 +21,6 @@ func (m *Manufacturer) ToEntity() *entities.Manufacturer {
 	}
 }
 
-func ManufacturersListPgToEntity(m []*Manufacturer) []*entities.Manufacturer {
-	output := make([]*entities.Manufacturer, 0, len(m))
-	for _, man := range m {
-		output = append(output, man.ToEntity())
-	}
-	return output
-}
-
 func ManufacturerEntityToPg(e *entities.Manufacturer) *Manufacturer {
 	return &Manufacturer{
 		Base:       Base{ID: e.ID.String()},

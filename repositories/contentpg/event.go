@@ -5,6 +5,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories"
 	"github.com/JenswBE/go-commerce/repositories/contentpg/internal"
 )
 
@@ -27,7 +28,7 @@ func (r *ContentPostgres) ListEvents(includePastEvents bool) ([]*entities.Event,
 	if err != nil {
 		return nil, translatePgError(err, events, "")
 	}
-	return internal.EventsListPgToEntity(events), nil
+	return repositories.ToEntitiesList(events, (*internal.Event).ToEntity), nil
 }
 
 func (r *ContentPostgres) CreateEvent(e *entities.Event) (*entities.Event, error) {

@@ -37,17 +37,8 @@ func (contentType ContentType) String() string {
 }
 
 func (contentType ContentType) IsValid() bool {
-	// Valid types
-	validContentTypes := []ContentType{
-		ContentTypeSimple,
-		ContentTypeHTML,
-	}
-
-	// Check provided type
-	for _, validType := range validContentTypes {
-		if validType == contentType {
-			return true
-		}
-	}
-	return false
+	return map[ContentType]bool{
+		ContentTypeSimple: true,
+		ContentTypeHTML:   true,
+	}[contentType]
 }

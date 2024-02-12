@@ -8,6 +8,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 )
 
@@ -30,7 +31,7 @@ func (r *ProductPostgres) ListServices(optionalServiceCategoryID entities.ID) ([
 	if err != nil {
 		return nil, translatePgError(err, services, "")
 	}
-	return internal.ServicesListPgToEntity(services), nil
+	return repositories.ToEntitiesList(services, (*internal.Service).ToEntity), nil
 }
 
 func (r *ProductPostgres) CreateService(e *entities.Service) (*entities.Service, error) {

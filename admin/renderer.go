@@ -11,8 +11,6 @@ import (
 	"github.com/gin-contrib/multitemplate"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
-
-	"github.com/JenswBE/go-commerce/utils/generics"
 )
 
 //go:embed html
@@ -56,7 +54,7 @@ func (h *Handler) NewRenderer() multitemplate.Renderer {
 	for pageName, templates := range pages {
 		// Create new template with functions
 		templates = append([]string{"layouts/empty", "layouts/base"}, templates...)
-		templatePaths := generics.Map(templates, func(i string) string { return fmt.Sprintf("html/%s.gohtml", i) })
+		templatePaths := lo.Map(templates, func(i string, _ int) string { return fmt.Sprintf("html/%s.gohtml", i) })
 		lastTemplatePath, _ := lo.Last(templatePaths) // Variable "templates" can never be empty
 		templateName := filepath.Base(lastTemplatePath)
 		tmpl := template.New(templateName).Funcs(template.FuncMap{

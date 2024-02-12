@@ -5,6 +5,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 )
 
@@ -23,7 +24,7 @@ func (r *ProductPostgres) ListManufacturers() ([]*entities.Manufacturer, error) 
 	if err != nil {
 		return nil, translatePgError(err, manufacturers, "")
 	}
-	return internal.ManufacturersListPgToEntity(manufacturers), nil
+	return repositories.ToEntitiesList(manufacturers, (*internal.Manufacturer).ToEntity), nil
 }
 
 func (r *ProductPostgres) CreateManufacturer(e *entities.Manufacturer) (*entities.Manufacturer, error) {
