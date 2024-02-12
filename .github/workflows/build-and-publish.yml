@@ -7,7 +7,7 @@ on:
   pull_request:
 
 env:
-  GO_VERSION: "1.21" # Also update Dockerfile when bumping
+  GO_VERSION: "1.22" # Also update Dockerfile when bumping
   DOCKER_HUB_USER: jenswbebot
   DOCKER_HUB_REPO: jenswbe/go-commerce
   PLATFORMS: linux/amd64,linux/arm64
@@ -40,14 +40,14 @@ jobs:
         run: wget -O .golangci.yml https://raw.githubusercontent.com/JenswBE/setup/main/programming_configs/golang/.golangci.yml
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v4
         with:
+          version: latest
           args: >-
             --timeout=5m
             --disable errorlint,goerr113,nestif,noctx,wrapcheck
             --exclude 'name will be used as .+ by other packages'
             --exclude 'reassigning variable ErrorStackMarshaler in other package zerolog'
-          version: latest
 
       - name: Run unit tests
         run: go test ./...
