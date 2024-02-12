@@ -22,8 +22,8 @@ require (
 	github.com/tebeka/selenium v0.9.9
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 	golang.org/x/oauth2 v0.17.0
-	gorm.io/driver/postgres v1.5.4
-	gorm.io/gorm v1.25.5
+	gorm.io/driver/postgres v1.5.6
+	gorm.io/gorm v1.25.7-0.20240204074919-46816ad31dde
 )
 
 require (
