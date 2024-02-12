@@ -122,7 +122,7 @@ func joinStatement(parts ...string) string {
 func runStatements(db *gorm.DB, statements []string) error {
 	return db.Transaction(func(tx *gorm.DB) error {
 		for _, statement := range statements {
-			if err := db.Exec(statement).Error; err != nil {
+			if err := tx.Exec(statement).Error; err != nil {
 				return err
 			}
 		}
