@@ -6,6 +6,7 @@ import (
 
 	"github.com/JenswBE/go-commerce/api/openapi"
 	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories"
 	"github.com/JenswBE/go-commerce/repositories/productpg/internal"
 )
 
@@ -22,7 +23,7 @@ func (r *ProductPostgres) GetProduct(id entities.ID) (*entities.Product, error) 
 	if err != nil {
 		return nil, translatePgError(err, product, id.String())
 	}
-	return internal.ProductPgToEntity(product), nil
+	return product.ToEntity(), nil
 }
 
 func (r *ProductPostgres) ListProducts() ([]*entities.Product, error) {
@@ -39,7 +40,7 @@ func (r *ProductPostgres) ListProducts() ([]*entities.Product, error) {
 	if err != nil {
 		return nil, translatePgError(err, products, "")
 	}
-	return internal.ProductsListPgToEntity(products), nil
+	return repositories.ToEntitiesList(products, (*internal.Product).ToEntity), nil
 }
 
 func (r *ProductPostgres) CreateProduct(e *entities.Product) (*entities.Product, error) {
@@ -57,7 +58,7 @@ func (r *ProductPostgres) CreateProduct(e *entities.Product) (*entities.Product,
 	if err != nil {
 		return nil, translatePgError(err, m, m.ID)
 	}
-	return internal.ProductPgToEntity(m), nil
+	return m.ToEntity(), nil
 }
 
 func (r *ProductPostgres) UpdateProduct(e *entities.Product) (*entities.Product, error) {
@@ -79,7 +80,7 @@ func (r *ProductPostgres) UpdateProduct(e *entities.Product) (*entities.Product,
 	if err != nil {
 		return nil, translatePgError(err, m, m.ID)
 	}
-	return internal.ProductPgToEntity(m), nil
+	return m.ToEntity(), nil
 }
 
 func (r *ProductPostgres) UpdateProductImages(id entities.ID, images []*entities.Image) ([]*entities.Image, error) {

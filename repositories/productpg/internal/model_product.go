@@ -18,7 +18,7 @@ type Product struct {
 	Images           []Image `gorm:"polymorphic:Owner;"`
 }
 
-func ProductPgToEntity(c *Product) *entities.Product {
+func (c *Product) ToEntity() *entities.Product {
 	product := &entities.Product{
 		ID:               generics.Must(entities.NewIDFromString(c.ID)),
 		CreatedAt:        c.CreatedAt,
@@ -49,14 +49,6 @@ func ProductPgToEntity(c *Product) *entities.Product {
 		}
 	}
 	return product
-}
-
-func ProductsListPgToEntity(p []*Product) []*entities.Product {
-	output := make([]*entities.Product, 0, len(p))
-	for _, product := range p {
-		output = append(output, ProductPgToEntity(product))
-	}
-	return output
 }
 
 func ProductEntityToPg(e *entities.Product) *Product {

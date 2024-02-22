@@ -2,6 +2,7 @@ package contentpg
 
 import (
 	"github.com/JenswBE/go-commerce/entities"
+	"github.com/JenswBE/go-commerce/repositories"
 	"github.com/JenswBE/go-commerce/repositories/contentpg/internal"
 )
 
@@ -20,7 +21,7 @@ func (r *ContentPostgres) ListContent() ([]*entities.Content, error) {
 	if err != nil {
 		return nil, translatePgError(err, contents, "")
 	}
-	return internal.ContentsListPgToEntity(contents), nil
+	return repositories.ToEntitiesList(contents, (*internal.Content).ToEntity), nil
 }
 
 func (r *ContentPostgres) CreateContent(e *entities.Content) (*entities.Content, error) {

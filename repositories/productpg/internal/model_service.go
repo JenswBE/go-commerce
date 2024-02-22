@@ -25,14 +25,6 @@ func (s *Service) ToEntity() *entities.Service {
 	}
 }
 
-func ServicesListPgToEntity(s []*Service) []*entities.Service {
-	output := make([]*entities.Service, 0, len(s))
-	for _, svc := range s {
-		output = append(output, svc.ToEntity())
-	}
-	return output
-}
-
 func ServiceEntityToPg(e *entities.Service) *Service {
 	return &Service{
 		Base:              Base{ID: e.ID.String()},

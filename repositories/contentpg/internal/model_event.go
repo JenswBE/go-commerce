@@ -29,14 +29,6 @@ func (e *Event) ToEntity() *entities.Event {
 	}
 }
 
-func EventsListPgToEntity(e []*Event) []*entities.Event {
-	output := make([]*entities.Event, 0, len(e))
-	for _, event := range e {
-		output = append(output, event.ToEntity())
-	}
-	return output
-}
-
 func EventEntityToPg(e *entities.Event) *Event {
 	return &Event{
 		Base:        Base{ID: e.ID.String()},

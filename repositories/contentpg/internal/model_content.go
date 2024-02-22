@@ -18,14 +18,6 @@ func (c *Content) ToEntity() *entities.Content {
 	}
 }
 
-func ContentsListPgToEntity(c []*Content) []*entities.Content {
-	output := make([]*entities.Content, 0, len(c))
-	for _, content := range c {
-		output = append(output, content.ToEntity())
-	}
-	return output
-}
-
 func ContentEntityToPg(c *entities.Content) *Content {
 	return &Content{
 		Name:        c.Name,

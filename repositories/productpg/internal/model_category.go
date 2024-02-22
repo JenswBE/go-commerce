@@ -38,14 +38,6 @@ func (c *Category) ToEntity() *entities.Category {
 	return cat
 }
 
-func CategoriesListPgToEntity(c []*Category) []*entities.Category {
-	output := make([]*entities.Category, 0, len(c))
-	for _, cat := range c {
-		output = append(output, cat.ToEntity())
-	}
-	return output
-}
-
 func CategoryEntityToPg(e *entities.Category) *Category {
 	cat := &Category{
 		Base:        Base{ID: e.ID.String()},
