@@ -45,7 +45,7 @@ jobs:
           version: latest
           args: >-
             --timeout=5m
-            --disable errorlint,goerr113,nestif,noctx,wrapcheck
+            --disable errorlint,err113,nestif,noctx,wrapcheck
             --exclude 'name will be used as .+ by other packages'
             --exclude 'reassigning variable ErrorStackMarshaler in other package zerolog'
 
