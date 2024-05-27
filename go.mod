@@ -15,7 +15,7 @@ require (
 	github.com/jinzhu/copier v0.4.0
 	github.com/microcosm-cc/bluemonday v1.0.26
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/rs/zerolog v1.32.0
+	github.com/rs/zerolog v1.33.0
 	github.com/samber/lo v1.39.0
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.9.0
