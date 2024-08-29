@@ -1,3 +1,8 @@
+# This project is no longer maintained
+
+> [!TIP]
+> All my original requirements for this project are covered by https://directus.io/.
+
 [![GitHub](https://img.shields.io/github/license/JenswBE/go-commerce)](https://github.com/JenswBE/go-commerce)
 [![Docker Pulls](https://img.shields.io/docker/pulls/jenswbe/go-commerce)](https://hub.docker.com/r/jenswbe/go-commerce)
 
